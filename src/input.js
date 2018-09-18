@@ -70,7 +70,7 @@ function TextBox(x,y,w,h,txt,callback)
   self.drag = function(evt)
   {
     evt.hit_ui = true;
-    self.down = ptWithinObj(self, evt.doX, evt.doY);
+    self.down = ptWithinBox(self, evt.doX, evt.doY);
   }
   self.dragFinish = function()
   {
@@ -282,7 +282,7 @@ function NumberBox(x,y,w,h,val,delta,callback)
     self.number = validateNum(self.number + -self.deltaY*self.delta);
     self.value = ""+self.number;
 
-    self.down = ptWithinObj(self, evt.doX, evt.doY);
+    self.down = ptWithinBox(self, evt.doX, evt.doY);
     callback(self.number);
   }
   self.dragFinish = function()
@@ -717,7 +717,7 @@ function BinBox(x,y,w,h,drag_start_callback,drag_callback,drag_finish_callback,p
   {
     evt.hit_ui = true;
     self.pressed = false;
-    if(ptWithinObj(self, evt.doX, evt.doY))
+    if(ptWithinBox(self, evt.doX, evt.doY))
       release_callback();
   }
 

@@ -139,7 +139,7 @@ var fdisp = function(f,n) //formats float for display (from 8.124512 to 8.12)
   return Math.round(f*n)/n;
 }
 
-function mapPt(from,to,pt)
+function mapPt(from,to,pt) //pt assumes position relative to "to"(box) as it previously was to "from"(box)
 {
   pt.x = ((pt.x-from.x)/from.w)*to.w+to.x;
   pt.y = ((pt.y-from.y)/from.h)*to.h+to.y;
