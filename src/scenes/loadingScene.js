@@ -12,7 +12,7 @@ var LoadingScene = function(game, stage)
     canvas = canv.canvas;
     ctx = canv.context;
 
-    //ctx.font = text_font;
+    ctx.font = "20px Helvetica";
   }
   self.resize(stage);
 
@@ -79,7 +79,7 @@ var LoadingScene = function(game, stage)
   self.ready = function()
   {
     pad = 20;
-    barw = (canv.width-(2*pad));
+    barw = (canv.width/4);
 
     loading_percent_loaded = 0;
     ticks_since_loading_ready = 0;
@@ -104,7 +104,8 @@ var LoadingScene = function(game, stage)
     audios = [];
 
     //put asset paths in loading_img_srcs (for assets used on loading screen itself)
-    //loading_img_srcs.push("assets/loading_img.png");
+    loading_img_srcs.push("assets/logo_fd.png");
+    loading_img_srcs.push("assets/logo_mrsec.png");
     for(var i = 0; i < loading_img_srcs.length; i++)
     {
       loading_imgs[i] = new Image();
@@ -114,7 +115,7 @@ var LoadingScene = function(game, stage)
     loadingImageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put asset paths in img_srcs
-    //img_srcs.push("assets/img.jpg");
+    //img_srcs.push("assets/img.png");
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();
@@ -185,7 +186,7 @@ var LoadingScene = function(game, stage)
     if(percent_loaded >= 1.0) ticks_since_ready++;
     if(ticks_since_ready >= post_load_countdown)
     {
-      if(ticks_since_loading_ready > 1) game.nextScene(); //set 1 = # ticks in preloading sequence
+      if(ticks_since_loading_ready > 550) game.nextScene();
       //game.nextScene();
     }
   };
@@ -196,13 +197,53 @@ var LoadingScene = function(game, stage)
     {
       ctx.fillStyle = "#888888";
       ctx.strokeStyle = "#888888";
-      ctx.fillRect(pad,canv.height/2,chase_percent_loaded*barw,1);
-      ctx.strokeRect(pad-1,(canv.height/2)-1,barw+2,3);
+      ctx.fillRect(pad,canv.height-pad,chase_percent_loaded*barw,1);
+      ctx.strokeRect(pad-1,canv.height-pad-1,barw+2,3);
     }
 
     if(loading_percent_loaded >= 1)
     {
-      //do any special drawing here- use 'ticks_since_loading_ready' as t for preloading sequence
+      //do any special drawing here
+      if(ticks_since_loading_ready < 50)
+      {
+        ctx.globalAlpha = ticks_since_loading_ready/50;
+        drawImageHeightCentered(loading_imgs[0],canv.width/2,canv.height/2,100,ctx);
+      }
+      else if(ticks_since_loading_ready < 200)
+      {
+        drawImageHeightCentered(loading_imgs[0],canv.width/2,canv.height/2,100,ctx);
+      }
+      else if(ticks_since_loading_ready < 250)
+      {
+        ctx.globalAlpha = 1-((ticks_since_loading_ready-200)/50);
+        drawImageHeightCentered(loading_imgs[0],canv.width/2,canv.height/2,100,ctx);
+      }
+      else if(ticks_since_loading_ready < 300)
+      {
+        ctx.globalAlpha = (ticks_since_loading_ready-250)/50;
+        drawImageHeightCentered(loading_imgs[1],canv.width/2,canv.height/2,100,ctx);
+      }
+      else if(ticks_since_loading_ready < 450)
+      {
+        drawImageHeightCentered(loading_imgs[1],canv.width/2,canv.height/2,100,ctx);
+      }
+      else if(ticks_since_loading_ready < 500)
+      {
+        ctx.globalAlpha = 1-((ticks_since_loading_ready-450)/50);
+        drawImageHeightCentered(loading_imgs[1],canv.width/2,canv.height/2,100,ctx);
+      }
+      else if(ticks_since_loading_ready < 550)
+      {
+        ctx.globalAlpha = (ticks_since_loading_ready-500)/50;
+        ctx.fillStyle = black;
+        ctx.fillRect(0,0,canv.width,canv.height);
+      }
+      else
+      {
+        ctx.fillStyle = black;
+        ctx.fillRect(0,0,canv.width,canv.height);
+      }
+      ctx.globalAlpha = 1;
     }
 
 /*
