@@ -30,15 +30,15 @@ var editable_line = function()
     self.ex = self.h_max;
     if(self.sy < self.v_min && self.ey < self.v_min) { self.sy = self.v_min; self.ey = self.v_min; return; }
     if(self.sy > self.v_max && self.ey > self.v_max) { self.sy = self.v_max; self.ey = self.v_max; return; }
-    if(self.sy < self.v_min) { self.sx = (self.v_in-self.b)/self.m; self.sy = self.v_min; }
-    if(self.sy > self.v_max) { self.sx = (self.v_in-self.b)/self.m; self.sy = self.v_max; }
-    if(self.ey < self.v_min) { self.ex = (self.v_in-self.b)/self.m; self.ey = self.v_min; }
-    if(self.ey > self.v_max) { self.ex = (self.v_in-self.b)/self.m; self.ey = self.v_max; }
+    if(self.sy < self.v_min) { self.sx = (self.v_min-self.b)/self.m; self.sy = self.v_min; }
+    if(self.sy > self.v_max) { self.sx = (self.v_max-self.b)/self.m; self.sy = self.v_max; }
+    if(self.ey < self.v_min) { self.ex = (self.v_min-self.b)/self.m; self.ey = self.v_min; }
+    if(self.ey > self.v_max) { self.ex = (self.v_max-self.b)/self.m; self.ey = self.v_max; }
 
     self.sy = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.sy);
     self.ey = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.ey);
-    self.sx = self.x;
-    self.ex = self.x+self.h;
+    self.sx = mapVal(self.h_min, self.h_max, self.x, self.x+self.w, self.sx);
+    self.ex = mapVal(self.h_min, self.h_max, self.x, self.x+self.w, self.ex);
   }
 
   self.tick = function()
@@ -85,7 +85,7 @@ var editable_quadratic = function()
       x = mapVal(0,self.samples-1,self.h_min,self.h_max,i);
       y = self.v(x);
       self.xpts[i] = mapVal(self.h_min, self.h_max, self.x, self.x+self.w, x);
-      self.ypts[i] = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, y);
+      self.ypts[i] = clamp(self.y, self.y+self.h, mapVal(self.v_min, self.v_max, self.y+self.h, self.y, y)); //map then clamp separate because y flipped
     }
   }
 
@@ -97,9 +97,10 @@ var editable_quadratic = function()
   {
     strokeBox(self,gg.ctx);
     self.draw_params();
+    gg.ctx.beginPath();
     gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
-    for(var i = i; i < self.samples; i++)
-      gg.ctx.moveTo(self.xpts[i],self.ypts[i]);
+    for(var i = 0; i < self.samples; i++)
+      gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
     gg.ctx.stroke();
   }
 }

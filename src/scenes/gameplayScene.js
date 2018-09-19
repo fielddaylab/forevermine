@@ -64,24 +64,24 @@ var GamePlayScene = function(game, stage)
     var b;
 
     b = gg.line_m_btn;
-    if(check) check = !keyer.filter(b);
+                       keyer.filter(b);
     if(check) check = !dragger.filter(b);
                        blurer.filter(b);
     b = gg.line_b_btn;
-    if(check) check = !keyer.filter(b);
+                       keyer.filter(b);
     if(check) check = !dragger.filter(b);
                        blurer.filter(b);
 
     b = gg.quadratic_a_btn;
-    if(check) check = !keyer.filter(b);
+                       keyer.filter(b);
     if(check) check = !dragger.filter(b);
                        blurer.filter(b);
     b = gg.quadratic_b_btn;
-    if(check) check = !keyer.filter(b);
+                       keyer.filter(b);
     if(check) check = !dragger.filter(b);
                        blurer.filter(b);
     b = gg.quadratic_c_btn;
-    if(check) check = !keyer.filter(b);
+                       keyer.filter(b);
     if(check) check = !dragger.filter(b);
                        blurer.filter(b);
 
