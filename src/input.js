@@ -303,10 +303,14 @@ function NumberBox(x,y,w,h,val,delta,callback)
     self.focused = true;
     self.highlit = true;
   }
-  self.set = function(n)
+  self.quiet_set = function(n)
   {
     self.number = validateNum(n);
     self.value = ""+self.number;
+  }
+  self.set = function(n)
+  {
+    self.quiet_set(n);
     callback(self.number);
   }
 

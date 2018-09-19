@@ -13,6 +13,23 @@ var editable_line = function()
   self.v_min = 0;
   self.v_max = 0;
 
+  self.m_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.m = v; });
+  self.b_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.b = v; });
+
+  self.size = function()
+  {
+    var btn_s = 20;
+    self.m_btn.w = btn_s;
+    self.m_btn.h = btn_s;
+    self.m_btn.x = self.x+15;
+    self.m_btn.y = self.y+self.h+5;
+
+    self.b_btn.w = btn_s;
+    self.b_btn.h = btn_s;
+    self.b_btn.x = self.x+55;
+    self.b_btn.y = self.y+self.h+5;
+  }
+
   self.v = function(x)
   {
     return self.m*x + self.b;
@@ -41,6 +58,28 @@ var editable_line = function()
     self.ex = mapVal(self.h_min, self.h_max, self.x, self.x+self.w, self.ex);
   }
 
+  self.filter = function(keyer,blurer,dragger)
+  {
+    if(keyer)
+    {
+      keyer.filter(self.m_btn);
+      keyer.filter(self.b_btn);
+    }
+    if(blurer)
+    {
+      blurer.filter(self.m_btn);
+      blurer.filter(self.b_btn);
+    }
+    if(dragger)
+    {
+      var check = 1;
+      if(check) check = !dragger.filter(self.m_btn);
+      if(check) check = !dragger.filter(self.b_btn);
+      return !check;
+    }
+    return 0;
+  }
+
   self.tick = function()
   {
 
@@ -50,6 +89,19 @@ var editable_line = function()
     strokeBox(self,gg.ctx);
     self.draw_params();
     drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
+
+    var x = self.x;
+    var y = self.y+self.h+20;
+    gg.ctx.fillText("y = ",x,y);
+    x += 20;
+    gg.ctx.fillText(self.m,x,y);
+    x += 20;
+    gg.ctx.fillText("x +",x,y);
+    x += 20;
+    gg.ctx.fillText(self.b,x,y);
+
+    //strokeBox(self.m_btn,gg.ctx);
+    //strokeBox(self.b_btn,gg.ctx);
   }
 }
 var editable_quadratic = function()
@@ -68,6 +120,29 @@ var editable_quadratic = function()
   self.v_min = 0;
   self.v_max = 0;
   self.samples = 100;
+
+  self.a_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.a = v; });
+  self.b_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.b = v; });
+  self.c_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.c = v; });
+
+  self.size = function()
+  {
+    var btn_s = 20;
+    self.a_btn.w = btn_s;
+    self.a_btn.h = btn_s;
+    self.a_btn.x = self.x+15;
+    self.a_btn.y = self.y+self.h+5;
+
+    self.b_btn.w = btn_s;
+    self.b_btn.h = btn_s;
+    self.b_btn.x = self.x+60;
+    self.b_btn.y = self.y+self.h+5;
+
+    self.c_btn.w = btn_s;
+    self.c_btn.h = btn_s;
+    self.c_btn.x = self.x+100;
+    self.c_btn.y = self.y+self.h+5;
+  }
 
   self.v = function(x)
   {
@@ -89,6 +164,31 @@ var editable_quadratic = function()
     }
   }
 
+  self.filter = function(keyer,dragger,blurer)
+  {
+    if(keyer)
+    {
+      keyer.filter(self.a_btn);
+      keyer.filter(self.b_btn);
+      keyer.filter(self.c_btn);
+    }
+    if(blurer)
+    {
+      blurer.filter(self.a_btn);
+      blurer.filter(self.b_btn);
+      blurer.filter(self.c_btn);
+    }
+    if(dragger)
+    {
+      var check = 1;
+      if(check) check = !dragger.filter(self.a_btn);
+      if(check) check = !dragger.filter(self.b_btn);
+      if(check) check = !dragger.filter(self.c_btn);
+      return !check;
+    }
+    return 0;
+  }
+
   self.tick = function()
   {
 
@@ -102,6 +202,24 @@ var editable_quadratic = function()
     for(var i = 0; i < self.samples; i++)
       gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
     gg.ctx.stroke();
+
+    var x = self.x;
+    var y = self.y+self.h+20;
+    gg.ctx.fillText("y = ",x,y);
+    x += 20;
+    gg.ctx.fillText(self.a,x,y);
+    x += 20;
+    gg.ctx.fillText("x² +",x,y);
+    x += 25;
+    gg.ctx.fillText(self.b,x,y);
+    x += 20;
+    gg.ctx.fillText("x +",x,y);
+    x += 20;
+    gg.ctx.fillText(self.c,x,y);
+
+    //strokeBox(self.a_btn,gg.ctx);
+    //strokeBox(self.b_btn,gg.ctx);
+    //strokeBox(self.c_btn,gg.ctx);
   }
 }
 

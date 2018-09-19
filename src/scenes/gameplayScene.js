@@ -28,33 +28,32 @@ var GamePlayScene = function(game, stage)
     self.resize(stage);
 
     var b;
+    var graph_s = 100;
+    var btn_s = 20;
 
     gg.line = new editable_line();
     b = gg.line;
-    b.w = 100;
-    b.h = 100;
-    b.x = 100;
-    b.y = 100;
+    b.w = graph_s;
+    b.h = graph_s;
+    b.x = 10;
+    b.y = 10;
     b.v_min = 0;
     b.v_max = 10;
     b.h_min = 0;
     b.h_max = 10;
-    gg.line_m_btn = new NumberBox(b.x,      b.y+b.h+10,10,10,0,0.01,function(v){gg.line.m = v;});
-    gg.line_b_btn = new NumberBox(b.x+10+10,b.y+b.h+10,10,10,0,0.01,function(v){gg.line.b = v;});
+    b.size();
 
     gg.quadratic = new editable_quadratic();
     b = gg.quadratic;
-    b.w = 100;
-    b.h = 100;
-    b.x = 100;
-    b.y = gg.line.y+gg.line.h+10+10+10;
+    b.w = graph_s;
+    b.h = graph_s;
+    b.x = 10;
+    b.y = gg.line.y+gg.line.h+10+btn_s+10;
     b.v_min = 0;
     b.v_max = 10;
     b.h_min = 0;
     b.h_max = 10;
-    gg.quadratic_a_btn = new NumberBox(b.x,            b.y+b.h+10,10,10,0,0.01,function(v){gg.quadratic.a = v;});
-    gg.quadratic_b_btn = new NumberBox(b.x+10+10,      b.y+b.h+10,10,10,0,0.01,function(v){gg.quadratic.b = v;});
-    gg.quadratic_c_btn = new NumberBox(b.x+10+10+10+10,b.y+b.h+10,10,10,0,0.01,function(v){gg.quadratic.c = v;});
+    b.size();
   };
 
   self.tick = function()
@@ -63,27 +62,8 @@ var GamePlayScene = function(game, stage)
 
     var b;
 
-    b = gg.line_m_btn;
-                       keyer.filter(b);
-    if(check) check = !dragger.filter(b);
-                       blurer.filter(b);
-    b = gg.line_b_btn;
-                       keyer.filter(b);
-    if(check) check = !dragger.filter(b);
-                       blurer.filter(b);
-
-    b = gg.quadratic_a_btn;
-                       keyer.filter(b);
-    if(check) check = !dragger.filter(b);
-                       blurer.filter(b);
-    b = gg.quadratic_b_btn;
-                       keyer.filter(b);
-    if(check) check = !dragger.filter(b);
-                       blurer.filter(b);
-    b = gg.quadratic_c_btn;
-                       keyer.filter(b);
-    if(check) check = !dragger.filter(b);
-                       blurer.filter(b);
+    gg.line.filter(keyer,blurer,dragger);
+    gg.quadratic.filter(keyer,blurer,dragger);
 
     gg.line.tick();
     gg.quadratic.tick();
@@ -97,16 +77,11 @@ var GamePlayScene = function(game, stage)
 
   self.draw = function()
   {
-    gg.ctx.fillRect(10,10,10,10);
-
+    gg.ctx.strokeStyle = black;
     gg.line.draw();
-    gg.line_m_btn.draw(gg.canv);
-    gg.line_b_btn.draw(gg.canv);
 
+    gg.ctx.strokeStyle = black;
     gg.quadratic.draw();
-    gg.quadratic_a_btn.draw(gg.canv);
-    gg.quadratic_b_btn.draw(gg.canv);
-    gg.quadratic_c_btn.draw(gg.canv);
   };
 
   self.cleanup = function()
