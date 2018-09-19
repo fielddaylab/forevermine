@@ -54,6 +54,14 @@ var GamePlayScene = function(game, stage)
     b.h_min = 0;
     b.h_max = 10;
     b.size();
+
+    gg.dialog_box = new dialog_box();
+    gg.dialog_box.w = 400;
+    gg.dialog_box.h = 100;
+    gg.dialog_box.x = 300;
+    gg.dialog_box.y = 100;
+    gg.dialog_box.nq("Hey! This is a test. It's really important that you use the boxes on the left to try and match up the red dots. I know they're small, but you can maybe do it. Also, it might be too hard. Who knows.");
+    gg.dialog_box.nq("Yep. You can advance text here. Is it tedious to read all of this text? Quite a bit of it can fit in here. But to be honest, this is going to be rather complex so a lot of text might be necessary.");
   };
 
   self.tick = function()
@@ -64,9 +72,12 @@ var GamePlayScene = function(game, stage)
 
     gg.line.filter(keyer,blurer,dragger);
     gg.quadratic.filter(keyer,blurer,dragger);
+    clicker.filter(gg.dialog_box);
 
     gg.line.tick();
     gg.quadratic.tick();
+
+    gg.dialog_box.tick();
 
     keyer.flush();
     hoverer.flush();
@@ -82,6 +93,8 @@ var GamePlayScene = function(game, stage)
 
     gg.ctx.strokeStyle = black;
     gg.quadratic.draw();
+
+    gg.dialog_box.draw();
   };
 
   self.cleanup = function()

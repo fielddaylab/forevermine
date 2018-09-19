@@ -22,7 +22,7 @@ var editable_line = function()
   {
     self.table.t_data[i] = i;
     if(i < 3) self.table.known_data[i] = 2*i+5;
-    else      self.table.known_data[i] = "?";
+    else      self.table.known_data[i] = "-";
     self.table.predicted_data[i] = 0;
   }
 
@@ -135,7 +135,7 @@ var editable_line = function()
     gg.ctx.fillStyle = red;
     for(var i = 0; i < self.table.n; i++)
     {
-      if(self.table.known_data[i] != "?")
+      if(self.table.known_data[i] != "-")
       {
         x = mapVal(self.h_min,self.h_max,self.x,self.x+self.w,self.table.t_data[i]);
         y = mapVal(self.v_min,self.v_max,self.y+self.h,self.y,self.table.known_data[i]);
@@ -173,7 +173,7 @@ var editable_quadratic = function()
   {
     self.table.t_data[i] = i;
     if(i < 3) self.table.known_data[i] = 0.1*i*i + 0.2*i + 3;
-    else      self.table.known_data[i] = "?";
+    else      self.table.known_data[i] = "-";
     self.table.predicted_data[i] = 0;
   }
 
@@ -295,7 +295,7 @@ var editable_quadratic = function()
     gg.ctx.fillStyle = red;
     for(var i = 0; i < self.table.n; i++)
     {
-      if(self.table.known_data[i] != "?")
+      if(self.table.known_data[i] != "-")
       {
         x = mapVal(self.h_min,self.h_max,self.x,self.x+self.w,self.table.t_data[i]);
         y = mapVal(self.v_min,self.v_max,self.y+self.h,self.y,self.table.known_data[i]);
@@ -352,3 +352,58 @@ var table = function()
   }
 
 }
+
+var dialog_box = function()
+{
+  var self = this;
+  self.w = 0;
+  self.h = 0;
+  self.x = 0;
+  self.y = 0;
+
+  self.pad = 10;
+  self.font_h = 15;
+  self.font = self.font_h+"px Helvetica";
+
+  self.text = [];
+  self.lines = [];
+  self.nq = function(text)
+  {
+    self.text.push(text);
+    self.lines.push(textToLines(self.font,self.w-self.pad-(self.h-self.pad*2)-self.pad-self.pad,text,gg.ctx));
+  }
+
+  self.click = function()
+  {
+    if(self.text.length > 1)
+    {
+      self.text.splice(0,1);
+      self.lines.splice(0,1);
+    }
+  }
+
+  self.tick = function()
+  {
+
+  }
+
+  self.draw = function()
+  {
+    strokeBox(self,gg.ctx);
+    gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,self.h-self.pad*2,self.h-self.pad*2);
+
+    if(!self.text.length) return;
+    gg.ctx.fillStyle = black;
+    gg.ctx.textAlign = "left";
+    gg.ctx.font = self.font;
+    var x = self.x+self.pad+(self.h-self.pad*2)+self.pad;
+    var y = self.y+self.font_h+self.pad;
+    for(var i = 0; i < self.lines[0].length; i++)
+    {
+      gg.ctx.fillText(self.lines[0][i],x,y);
+      y += self.font_h;
+    }
+  }
+}
+
+
