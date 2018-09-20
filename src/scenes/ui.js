@@ -29,14 +29,14 @@ var editable_line = function()
   self.size = function()
   {
     var btn_s = 20;
-    self.m_btn.w = btn_s;
+    self.m_btn.w = btn_s+4;
     self.m_btn.h = btn_s;
-    self.m_btn.x = self.x+15;
+    self.m_btn.x = self.x+18;
     self.m_btn.y = self.y+self.h+5;
 
-    self.b_btn.w = btn_s;
+    self.b_btn.w = btn_s+4;
     self.b_btn.h = btn_s;
-    self.b_btn.x = self.x+55;
+    self.b_btn.x = self.x+58;
     self.b_btn.y = self.y+self.h+5;
 
     self.table.w = 100;
@@ -112,6 +112,7 @@ var editable_line = function()
 
     gg.ctx.strokeStyle = black;
     gg.ctx.fillStyle = black;
+    gg.ctx.font = "12px Helvetica";
 
     strokeBox(self,gg.ctx);
     drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
@@ -122,13 +123,13 @@ var editable_line = function()
     gg.ctx.fillText("y = ",x,y);
     x += 20;
     gg.ctx.fillText(self.m,x,y);
-    x += 20;
-    gg.ctx.fillText("x +",x,y);
-    x += 20;
+    x += 24;
+    gg.ctx.fillText("x+",x,y);
+    x += 17;
     gg.ctx.fillText(self.b,x,y);
 
-    //strokeBox(self.m_btn,gg.ctx);
-    //strokeBox(self.b_btn,gg.ctx);
+    strokeBox(self.m_btn,gg.ctx);
+    strokeBox(self.b_btn,gg.ctx);
 
     self.table.draw();
 
@@ -180,19 +181,19 @@ var editable_quadratic = function()
   self.size = function()
   {
     var btn_s = 20;
-    self.a_btn.w = btn_s;
+    self.a_btn.w = btn_s+4;
     self.a_btn.h = btn_s;
-    self.a_btn.x = self.x+15;
+    self.a_btn.x = self.x+18;
     self.a_btn.y = self.y+self.h+5;
 
-    self.b_btn.w = btn_s;
+    self.b_btn.w = btn_s+4;
     self.b_btn.h = btn_s;
-    self.b_btn.x = self.x+60;
+    self.b_btn.x = self.x+63;
     self.b_btn.y = self.y+self.h+5;
 
-    self.c_btn.w = btn_s;
+    self.c_btn.w = btn_s+4;
     self.c_btn.h = btn_s;
-    self.c_btn.x = self.x+100;
+    self.c_btn.x = self.x+104;
     self.c_btn.y = self.y+self.h+5;
 
     self.table.w = 100;
@@ -263,6 +264,7 @@ var editable_quadratic = function()
 
     gg.ctx.strokeStyle = black;
     gg.ctx.fillStyle = black;
+    gg.ctx.font = "12px Helvetica";
 
     strokeBox(self,gg.ctx);
     gg.ctx.beginPath();
@@ -277,18 +279,18 @@ var editable_quadratic = function()
     gg.ctx.fillText("y = ",x,y);
     x += 20;
     gg.ctx.fillText(self.a,x,y);
+    x += 24;
+    gg.ctx.fillText("x²+",x,y);
     x += 20;
-    gg.ctx.fillText("x² +",x,y);
-    x += 25;
     gg.ctx.fillText(self.b,x,y);
-    x += 20;
-    gg.ctx.fillText("x +",x,y);
-    x += 20;
+    x += 25;
+    gg.ctx.fillText("x+",x,y);
+    x += 17;
     gg.ctx.fillText(self.c,x,y);
 
-    //strokeBox(self.a_btn,gg.ctx);
-    //strokeBox(self.b_btn,gg.ctx);
-    //strokeBox(self.c_btn,gg.ctx);
+    strokeBox(self.a_btn,gg.ctx);
+    strokeBox(self.b_btn,gg.ctx);
+    strokeBox(self.c_btn,gg.ctx);
 
     self.table.draw();
 
@@ -405,5 +407,101 @@ var dialog_box = function()
     }
   }
 }
+
+var module = function()
+{
+  var self = this;
+  self.w = 0;
+  self.h = 0;
+  self.x = 0;
+  self.y = 0;
+
+  self.ww = 0;
+  self.wh = 0;
+  self.wx = 0;
+  self.wy = 0;
+
+  self.val = 0;
+
+  self.dragStart = function(evt)
+  {
+    self.drag_start_x = evt.doX-self.x;
+    self.drag_start_y = evt.doY-self.y;
+  }
+  self.drag = function(evt)
+  {
+    self.x = evt.doX-self.drag_start_x;
+    self.y = evt.doY-self.drag_start_y;
+    worldSpaceCoords(gg.module_board,gg.canv,self);
+  }
+  self.dragFinish = function(evt)
+  {
+
+  }
+
+  self.tick = function()
+  {
+
+  }
+
+  self.draw = function()
+  {
+    strokeBox(self,gg.ctx);
+  }
+}
+
+var module_board = function()
+{
+  var self = this;
+  self.w = 0;
+  self.h = 0;
+  self.x = 0;
+  self.y = 0;
+
+  //this is the cam for the modules
+  self.ww = 0;
+  self.wh = 0;
+  self.wx = 0;
+  self.wy = 0;
+
+  self.selected_module = 0;
+  self.modules = [];
+
+  self.gen_module = function()
+  {
+    var m = new module();
+    m.wx = 0;
+    m.wy = 0;
+    m.ww = 50;
+    m.wh = 50;
+    screenSpace(self,gg.canv,m);
+    self.modules.push(m);
+  }
+
+  self.filter = function(dragger)
+  {
+    for(var i = 0; i < self.modules.length; i++)
+      dragger.filter(self.modules[i]);
+  }
+
+  self.tick = function()
+  {
+    var m;
+    for(var i = 0; i < self.modules.length; i++)
+    {
+      m = self.modules[i];
+      screenSpaceCoords(self,gg.canv,m);
+      m.tick();
+    }
+  }
+
+  self.draw = function()
+  {
+    for(var i = 0; i < self.modules.length; i++)
+      self.modules[i].draw();
+  }
+
+}
+
 
 

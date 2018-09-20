@@ -31,6 +31,19 @@ var GamePlayScene = function(game, stage)
     var graph_s = 100;
     var btn_s = 20;
 
+    gg.module_board = new module_board();
+    b = gg.module_board;
+    b.w = gg.canv.width;
+    b.h = gg.canv.height;
+    b.x = 0;
+    b.y = 0;
+    //acts as module cam
+    b.ww = gg.canv.width;
+    b.wh = gg.canv.height;
+    b.wx = 0;
+    b.wy = 0;
+    b.gen_module();
+
     gg.line = new editable_line();
     b = gg.line;
     b.w = graph_s;
@@ -62,6 +75,7 @@ var GamePlayScene = function(game, stage)
     gg.dialog_box.y = 100;
     gg.dialog_box.nq("Hey! This is a test. It's really important that you use the boxes on the left to try and match up the red dots. I know they're small, but you can maybe do it. Also, it might be too hard. Who knows.");
     gg.dialog_box.nq("Yep. You can advance text here. Is it tedious to read all of this text? Quite a bit of it can fit in here. But to be honest, this is going to be rather complex so a lot of text might be necessary.");
+
   };
 
   self.tick = function()
@@ -73,6 +87,9 @@ var GamePlayScene = function(game, stage)
     gg.line.filter(keyer,blurer,dragger);
     gg.quadratic.filter(keyer,blurer,dragger);
     clicker.filter(gg.dialog_box);
+    gg.module_board.filter(dragger);
+
+    gg.module_board.tick();
 
     gg.line.tick();
     gg.quadratic.tick();
@@ -88,6 +105,8 @@ var GamePlayScene = function(game, stage)
 
   self.draw = function()
   {
+    gg.module_board.draw();
+
     gg.ctx.strokeStyle = black;
     gg.line.draw();
 
