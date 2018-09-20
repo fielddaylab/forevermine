@@ -42,6 +42,10 @@ var GamePlayScene = function(game, stage)
     b.wh = gg.canv.height;
     b.wx = 0;
     b.wy = 0;
+    b.new_module_btn.w = 50;
+    b.new_module_btn.h = 50;
+    b.new_module_btn.x = b.x+b.w-10-b.new_module_btn.w;
+    b.new_module_btn.y = b.y+b.h-10-b.new_module_btn.h;
     b.gen_module();
 
     gg.line = new editable_line();

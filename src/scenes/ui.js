@@ -421,22 +421,67 @@ var module = function()
   self.wx = 0;
   self.wy = 0;
 
-  self.val = 0;
+  self.vals = [];
 
+  self.dragging_body = 0;
+  self.dragging_rel = 0;
+  self.drag_x = 0;
+  self.drag_y = 0;
   self.dragStart = function(evt)
   {
-    self.drag_start_x = evt.doX-self.x;
-    self.drag_start_y = evt.doY-self.y;
+    if(ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
+    {
+      self.dragging_rel = 1;
+      self.drag(evt);
+      return 1;
+    }
+    else
+    {
+      self.dragging_body = 1;
+      self.drag_x = evt.doX-self.x;
+      self.drag_y = evt.doY-self.y;
+      self.drag(evt);
+      return 1;
+    }
+    return 0;
   }
   self.drag = function(evt)
   {
-    self.x = evt.doX-self.drag_start_x;
-    self.y = evt.doY-self.drag_start_y;
-    worldSpaceCoords(gg.module_board,gg.canv,self);
+    if(self.dragging_body)
+    {
+      self.x = evt.doX-self.drag_x;
+      self.y = evt.doY-self.drag_y;
+      worldSpaceCoords(gg.module_board,gg.canv,self);
+    }
+    else if(self.dragging_rel)
+    {
+      self.drag_x = evt.doX;
+      self.drag_y = evt.doY;
+    }
   }
   self.dragFinish = function(evt)
   {
-
+    if(self.dragging_rel)
+    {
+      var m;
+      for(var i = 0; i < gg.module_board.modules.length; i++)
+      {
+        m = gg.module_board.modules[i];
+        if(ptWithinBox(m,self.drag_x,self.drag_y))
+        {
+          var r = gg.module_board.gen_modrel();
+          r.wx = lerp(self.wx,m.wx,0.5);
+          r.wy = lerp(self.wy,m.wy,0.5);
+          screenSpace(gg.module_board,gg.canv,r);
+          r.src = self;
+          r.dst = m;
+          gg.module_board.calculate();
+          break;
+        }
+      }
+    }
+    self.dragging_body = 0;
+    self.dragging_rel = 0;
   }
 
   self.tick = function()
@@ -447,6 +492,106 @@ var module = function()
   self.draw = function()
   {
     strokeBox(self,gg.ctx);
+    gg.ctx.fillText(self.vals[0],self.x+self.w/2,self.y+self.h*2/3);
+    if(self.dragging_rel)
+      drawLine(self.x+self.w,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
+  }
+}
+
+var modrel = function()
+{
+  var self = this;
+  self.w = 0;
+  self.h = 0;
+  self.x = 0;
+  self.y = 0;
+
+  self.ww = 0;
+  self.wh = 0;
+  self.wx = 0;
+  self.wy = 0;
+
+  self.val = 1;
+  self.src = 0;
+  self.dst = 0;
+
+  self.rel
+
+  self.dragging_body = 0;
+  self.dragging_src = 0;
+  self.dragging_dst = 0;
+  self.drag_x = 0;
+  self.drag_y = 0;
+  self.dragStart = function(evt)
+  {
+    if(ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
+    {
+      self.dragging_dst = 1;
+      self.drag(evt);
+      return 1;
+    }
+    else
+    {
+      self.dragging_body = 1;
+      self.drag_x = evt.doX-self.x;
+      self.drag_y = evt.doY-self.y;
+      self.drag(evt);
+      return 1;
+    }
+    return 0;
+  }
+  self.drag = function(evt)
+  {
+    if(self.dragging_body)
+    {
+      self.x = evt.doX-self.drag_x;
+      self.y = evt.doY-self.drag_y;
+      worldSpaceCoords(gg.module_board,gg.canv,self);
+    }
+    else if(self.dragging_src || self.dragging_dst)
+    {
+      self.drag_x = evt.doX;
+      self.drag_y = evt.doY;
+    }
+  }
+  self.dragFinish = function(evt)
+  {
+    if(self.dragging_src || self.dragging_dst)
+    {
+      var m;
+      for(var i = 0; i < gg.module_board.modules.length; i++)
+      {
+        m = gg.module_board.modules[i];
+        if(ptWithinBox(m,self.drag_x,self.drag_y))
+        {
+               if(self.dragging_src) self.src = m;
+          else if(self.dragging_dst) self.dst = m;
+          gg.module_board.calculate();
+          break;
+        }
+      }
+    }
+    self.dragging_body = 0;
+    self.dragging_src = 0;
+    self.dragging_dst = 0;
+  }
+
+  self.tick = function()
+  {
+  }
+
+  self.draw = function()
+  {
+    strokeBox(self,gg.ctx);
+    gg.ctx.fillText(self.val,self.x+self.w/2,self.y+self.h*2/3);
+    if(self.dragging_src)
+      drawLine(self.x,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
+    else if(self.dragging_dst)
+      drawLine(self.x+self.w,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
+    if(self.src && !self.dragging_src)
+      drawLine(self.x,self.y+self.h/2,self.src.x+self.src.w,self.src.y+self.src.h/2,gg.ctx);
+    if(self.dst && !self.dragging_dst)
+      drawLine(self.x+self.w,self.y+self.h/2,self.dst.x,self.dst.y+self.dst.h/2,gg.ctx);
   }
 }
 
@@ -464,8 +609,22 @@ var module_board = function()
   self.wx = 0;
   self.wy = 0;
 
+  self.t = 0;
+  self.max_t = 10;
   self.selected_module = 0;
   self.modules = [];
+  self.modrels = [];
+
+  self.new_module_btn = {x:0,y:0,w:0,h:0,dragStart:function(evt){
+    var m = self.gen_module();
+    m.x = evt.doX-m.w/2;
+    m.y = evt.doY-m.h/2;
+    worldSpace(self,gg.canv,m);
+    if(m.dragStart(evt)) m.dragging = 1;
+    self.new_module_btn.dragging = 0;
+    gg.module_board.calculate();
+    return 0;
+  },drag:function(evt){},dragFinish:function(evt){}};
 
   self.gen_module = function()
   {
@@ -474,14 +633,51 @@ var module_board = function()
     m.wy = 0;
     m.ww = 50;
     m.wh = 50;
+    for(var i = 0; i < self.max_t; i++)
+      m.vals[i] = 0;
     screenSpace(self,gg.canv,m);
     self.modules.push(m);
+    return m;
+  }
+  self.gen_modrel = function()
+  {
+    var m = new modrel();
+    m.wx = 0;
+    m.wy = 0;
+    m.ww = 20;
+    m.wh = 20;
+    screenSpace(self,gg.canv,m);
+    self.modrels.push(m);
+    return m;
+  }
+
+  self.calculate = function()
+  {
+    for(var i = 1; i < self.max_t; i++)
+    {
+      var m;
+      for(var j = 0; j < self.modules.length; j++)
+      {
+        m = self.modules[j];
+        m.vals[i] = m.vals[i-1];
+      }
+      for(var j = 0; j < self.modrels.length; j++)
+      {
+        m = self.modrels[j];
+        if(j.src && j.dst) j.dst.vals[i] += j.src.vals[i-1]*m.val;
+      }
+    }
   }
 
   self.filter = function(dragger)
   {
-    for(var i = 0; i < self.modules.length; i++)
-      dragger.filter(self.modules[i]);
+    var check = 1;
+    for(var i = 0; check && i < self.modules.length; i++)
+      check = !dragger.filter(self.modules[i]);
+    for(var i = 0; check && i < self.modrels.length; i++)
+      check = !dragger.filter(self.modrels[i]);
+    if(check) check = !dragger.filter(self.new_module_btn);
+    return !check
   }
 
   self.tick = function()
@@ -493,12 +689,22 @@ var module_board = function()
       screenSpaceCoords(self,gg.canv,m);
       m.tick();
     }
+    for(var i = 0; i < self.modrels.length; i++)
+    {
+      m = self.modrels[i];
+      screenSpaceCoords(self,gg.canv,m);
+      m.tick();
+    }
   }
 
   self.draw = function()
   {
+    gg.ctx.textAlign = "center";
     for(var i = 0; i < self.modules.length; i++)
       self.modules[i].draw();
+    for(var i = 0; i < self.modrels.length; i++)
+      self.modrels[i].draw();
+    strokeBox(self.new_module_btn,gg.ctx);
   }
 
 }
