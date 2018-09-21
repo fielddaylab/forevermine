@@ -47,6 +47,7 @@ var GamePlayScene = function(game, stage)
     b.new_module_btn.x = b.x+b.w-10-b.new_module_btn.w;
     b.new_module_btn.y = b.y+b.h-10-b.new_module_btn.h;
     b.gen_module();
+    b.calculate();
 
     gg.line = new editable_line();
     b = gg.line;
@@ -91,7 +92,7 @@ var GamePlayScene = function(game, stage)
     gg.line.filter(keyer,blurer,dragger);
     gg.quadratic.filter(keyer,blurer,dragger);
     clicker.filter(gg.dialog_box);
-    gg.module_board.filter(dragger);
+    gg.module_board.filter(keyer,blurer,dragger);
 
     gg.module_board.tick();
 

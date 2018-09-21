@@ -424,7 +424,19 @@ var module = function()
   self.wx = 0;
   self.wy = 0;
 
+  self.val_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.vals[0] = v; gg.module_board.calculate(); });
+
   self.vals = [];
+  self.val_min = 0;
+  self.val_max = 0;
+
+  self.size = function()
+  {
+    self.val_btn.w = self.w/2;
+    self.val_btn.h = self.h/2;
+    self.val_btn.x = self.x+self.w/2-self.val_btn.w/2;
+    self.val_btn.y = self.y+self.h/2-self.val_btn.h/2;
+  }
 
   self.dragging_body = 0;
   self.dragging_rel = 0;
@@ -455,6 +467,7 @@ var module = function()
       self.x = evt.doX-self.drag_x;
       self.y = evt.doY-self.drag_y;
       worldSpaceCoords(gg.module_board,gg.canv,self);
+      self.size();
     }
     else if(self.dragging_rel)
     {
@@ -494,6 +507,21 @@ var module = function()
 
   self.draw = function()
   {
+    var x;
+    var y;
+    gg.ctx.strokeStyle = light_gray;
+    gg.ctx.beginPath();
+    x = self.x;
+    y = mapVal(self.val_min, self.val_max, self.y+self.h, self.y, self.vals[0]);
+    gg.ctx.moveTo(x,y);
+    for(var i = 1; i < gg.module_board.t_max; i++)
+    {
+      x = self.x+(i/(gg.module_board.t_max-1))*self.w;
+      y = mapVal(self.val_min, self.val_max, self.y+self.h, self.y, self.vals[i]);
+      gg.ctx.lineTo(x,y);
+    }
+    gg.ctx.stroke();
+    gg.ctx.strokeStyle = black;
     strokeBox(self,gg.ctx);
     gg.ctx.fillText(self.vals[0],self.x+self.w/2,self.y+self.h*2/3);
     if(self.dragging_rel)
@@ -514,11 +542,19 @@ var modrel = function()
   self.wx = 0;
   self.wy = 0;
 
+  self.val_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.val = v; gg.module_board.calculate(); });
+
   self.val = 1;
   self.src = 0;
   self.dst = 0;
 
-  self.rel
+  self.size = function()
+  {
+    self.val_btn.w = self.w/2;
+    self.val_btn.h = self.h/2;
+    self.val_btn.x = self.x+self.w/2-self.val_btn.w/2;
+    self.val_btn.y = self.y+self.h/2-self.val_btn.h/2;
+  }
 
   self.dragging_body = 0;
   self.dragging_src = 0;
@@ -550,6 +586,7 @@ var modrel = function()
       self.x = evt.doX-self.drag_x;
       self.y = evt.doY-self.drag_y;
       worldSpaceCoords(gg.module_board,gg.canv,self);
+      self.size();
     }
     else if(self.dragging_src || self.dragging_dst)
     {
@@ -613,7 +650,7 @@ var module_board = function()
   self.wy = 0;
 
   self.t = 0;
-  self.max_t = 10;
+  self.t_max = 10;
   self.selected_module = 0;
   self.modules = [];
   self.modrels = [];
@@ -636,9 +673,10 @@ var module_board = function()
     m.wy = 0;
     m.ww = 50;
     m.wh = 50;
-    for(var i = 0; i < self.max_t; i++)
+    for(var i = 0; i < self.t_max; i++)
       m.vals[i] = 0;
     screenSpace(self,gg.canv,m);
+    m.size();
     self.modules.push(m);
     return m;
   }
@@ -656,7 +694,7 @@ var module_board = function()
 
   self.calculate = function()
   {
-    for(var i = 1; i < self.max_t; i++)
+    for(var i = 1; i < self.t_max; i++)
     {
       var m;
       for(var j = 0; j < self.modules.length; j++)
@@ -667,16 +705,40 @@ var module_board = function()
       for(var j = 0; j < self.modrels.length; j++)
       {
         m = self.modrels[j];
-        if(j.src && j.dst) j.dst.vals[i] += j.src.vals[i-1]*m.val;
+        if(m.src && m.dst) m.dst.vals[i] += m.src.vals[i-1]*m.val;
       }
+    }
+    for(var i = 0; i < self.modules.length; i++)
+    {
+      m = self.modules[i];
+      m.val_min = 9999;
+      m.val_max = -9999;
+      for(var j = 0; j < self.t_max; j++)
+      {
+        if(m.vals[j] < m.val_min) m.val_min = m.vals[j];
+        if(m.vals[j] > m.val_max) m.val_max = m.vals[j];
+      }
+      if(m.val_min == m.val_max) { m.val_min--; m.val_max++; }
     }
   }
 
-  self.filter = function(dragger)
+  self.filter = function(keyer, blurer, dragger)
   {
     var check = 1;
+    for(var i = 0; i < self.modules.length; i++)
+      keyer.filter(self.modules[i].val_btn);
+    for(var i = 0; i < self.modules.length; i++)
+      blurer.filter(self.modules[i].val_btn);
+    for(var i = 0; check && i < self.modules.length; i++)
+      check = !dragger.filter(self.modules[i].val_btn);
     for(var i = 0; check && i < self.modules.length; i++)
       check = !dragger.filter(self.modules[i]);
+    for(var i = 0; i < self.modrels.length; i++)
+      keyer.filter(self.modrels[i].val_btn);
+    for(var i = 0; i < self.modrels.length; i++)
+      blurer.filter(self.modrels[i].val_btn);
+    for(var i = 0; check && i < self.modrels.length; i++)
+      check = !dragger.filter(self.modrels[i].val_btn);
     for(var i = 0; check && i < self.modrels.length; i++)
       check = !dragger.filter(self.modrels[i]);
     if(check) check = !dragger.filter(self.new_module_btn);
