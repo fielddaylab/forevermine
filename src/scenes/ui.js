@@ -424,18 +424,18 @@ var module = function()
   self.wx = 0;
   self.wy = 0;
 
-  self.val_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.vals[0] = v; gg.module_board.calculate(); });
+  self.v_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.v[0] = v; gg.module_board.calculate(); });
 
-  self.vals = [];
-  self.val_min = 0;
-  self.val_max = 0;
+  self.v = [];
+  self.v_min = 0;
+  self.v_max = 0;
 
   self.size = function()
   {
-    self.val_btn.w = self.w/2;
-    self.val_btn.h = self.h/2;
-    self.val_btn.x = self.x+self.w/2-self.val_btn.w/2;
-    self.val_btn.y = self.y+self.h/2-self.val_btn.h/2;
+    self.v_btn.w = self.w/2;
+    self.v_btn.h = self.h/2;
+    self.v_btn.x = self.x+self.w/2-self.v_btn.w/2;
+    self.v_btn.y = self.y+self.h/2-self.v_btn.h/2;
   }
 
   self.dragging_body = 0;
@@ -512,18 +512,18 @@ var module = function()
     gg.ctx.strokeStyle = light_gray;
     gg.ctx.beginPath();
     x = self.x;
-    y = mapVal(self.val_min, self.val_max, self.y+self.h, self.y, self.vals[0]);
+    y = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.v[0]);
     gg.ctx.moveTo(x,y);
     for(var i = 1; i < gg.module_board.t_max; i++)
     {
       x = self.x+(i/(gg.module_board.t_max-1))*self.w;
-      y = mapVal(self.val_min, self.val_max, self.y+self.h, self.y, self.vals[i]);
+      y = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.v[i]);
       gg.ctx.lineTo(x,y);
     }
     gg.ctx.stroke();
     gg.ctx.strokeStyle = black;
     strokeBox(self,gg.ctx);
-    gg.ctx.fillText(self.vals[0],self.x+self.w/2,self.y+self.h*2/3);
+    gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h*2/3);
     if(self.dragging_rel)
       drawLine(self.x+self.w,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
   }
@@ -542,18 +542,18 @@ var modrel = function()
   self.wx = 0;
   self.wy = 0;
 
-  self.val_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.val = v; gg.module_board.calculate(); });
+  self.v_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.v = v; gg.module_board.calculate(); });
 
-  self.val = 1;
+  self.v = 1;
   self.src = 0;
   self.dst = 0;
 
   self.size = function()
   {
-    self.val_btn.w = self.w/2;
-    self.val_btn.h = self.h/2;
-    self.val_btn.x = self.x+self.w/2-self.val_btn.w/2;
-    self.val_btn.y = self.y+self.h/2-self.val_btn.h/2;
+    self.v_btn.w = self.w/2;
+    self.v_btn.h = self.h/2;
+    self.v_btn.x = self.x+self.w/2-self.v_btn.w/2;
+    self.v_btn.y = self.y+self.h/2-self.v_btn.h/2;
   }
 
   self.dragging_body = 0;
@@ -623,7 +623,7 @@ var modrel = function()
   self.draw = function()
   {
     strokeBox(self,gg.ctx);
-    gg.ctx.fillText(self.val,self.x+self.w/2,self.y+self.h*2/3);
+    gg.ctx.fillText(self.v,self.x+self.w/2,self.y+self.h*2/3);
     if(self.dragging_src)
       drawLine(self.x,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
     else if(self.dragging_dst)
@@ -655,6 +655,37 @@ var module_board = function()
   self.modules = [];
   self.modrels = [];
 
+  self.graph = {x:0,y:0,w:0,h:0};
+
+  self.table = new table();
+  self.table.n = 5;
+  for(var i = 0; i < self.table.n; i++)
+  {
+    self.table.t_data[i] = i;
+    if(i < 3) self.table.known_data[i] = 2*i+5;
+    else      self.table.known_data[i] = "-";
+    self.table.predicted_data[i] = 0;
+  }
+  self.table_module = 0;
+
+  self.size = function()
+  {
+    self.new_module_btn.w = 50;
+    self.new_module_btn.h = 50;
+    self.new_module_btn.x = self.x+self.w-10-self.new_module_btn.w;
+    self.new_module_btn.y = self.y+self.h-10-self.new_module_btn.h;
+
+    self.graph.w = 100;
+    self.graph.h = 100;
+    self.graph.x = self.x+10;
+    self.graph.y = self.y+300;
+
+    self.table.w = 100;
+    self.table.h = 100;
+    self.table.x = self.graph.x+self.graph.w+10;
+    self.table.y = self.graph.y;
+  }
+
   self.new_module_btn = {x:0,y:0,w:0,h:0,dragStart:function(evt){
     var m = self.gen_module();
     m.x = evt.doX-m.w/2;
@@ -674,7 +705,8 @@ var module_board = function()
     m.ww = 50;
     m.wh = 50;
     for(var i = 0; i < self.t_max; i++)
-      m.vals[i] = 0;
+      m.v[i] = 0;
+    m.v_btn.set(m.v[0]);
     screenSpace(self,gg.canv,m);
     m.size();
     self.modules.push(m);
@@ -687,6 +719,8 @@ var module_board = function()
     m.wy = 0;
     m.ww = 20;
     m.wh = 20;
+    m.v = 1;
+    m.v_btn.set(m.v);
     screenSpace(self,gg.canv,m);
     self.modrels.push(m);
     return m;
@@ -700,25 +734,40 @@ var module_board = function()
       for(var j = 0; j < self.modules.length; j++)
       {
         m = self.modules[j];
-        m.vals[i] = m.vals[i-1];
+        m.v[i] = m.v[i-1];
       }
       for(var j = 0; j < self.modrels.length; j++)
       {
         m = self.modrels[j];
-        if(m.src && m.dst) m.dst.vals[i] += m.src.vals[i-1]*m.val;
+        if(m.src && m.dst) m.dst.v[i] += m.src.v[i-1]*m.v;
+      }
+      for(var j = 0; j < self.modules.length; j++)
+      {
+        m = self.modules[j];
+        m.v[i] = fdisp(m.v[i],1);
       }
     }
     for(var i = 0; i < self.modules.length; i++)
     {
       m = self.modules[i];
-      m.val_min = 9999;
-      m.val_max = -9999;
+      m.v_min = 9999;
+      m.v_max = -9999;
       for(var j = 0; j < self.t_max; j++)
       {
-        if(m.vals[j] < m.val_min) m.val_min = m.vals[j];
-        if(m.vals[j] > m.val_max) m.val_max = m.vals[j];
+        if(m.v[j] < m.v_min) m.v_min = m.v[j];
+        if(m.v[j] > m.v_max) m.v_max = m.v[j];
       }
-      if(m.val_min == m.val_max) { m.val_min--; m.val_max++; }
+      if(m.v_min == m.v_max) { m.v_min--; m.v_max++; }
+    }
+    if(self.table_module)
+    {
+      for(var i = 0; i < self.table.n; i++)
+        self.table.predicted_data[i] = self.table_module.v[i];
+    }
+    else
+    {
+      for(var i = 0; i < self.table.n; i++)
+        self.table.predicted_data[i] = 0;
     }
   }
 
@@ -726,19 +775,19 @@ var module_board = function()
   {
     var check = 1;
     for(var i = 0; i < self.modules.length; i++)
-      keyer.filter(self.modules[i].val_btn);
+      keyer.filter(self.modules[i].v_btn);
     for(var i = 0; i < self.modules.length; i++)
-      blurer.filter(self.modules[i].val_btn);
+      blurer.filter(self.modules[i].v_btn);
     for(var i = 0; check && i < self.modules.length; i++)
-      check = !dragger.filter(self.modules[i].val_btn);
+      check = !dragger.filter(self.modules[i].v_btn);
     for(var i = 0; check && i < self.modules.length; i++)
       check = !dragger.filter(self.modules[i]);
     for(var i = 0; i < self.modrels.length; i++)
-      keyer.filter(self.modrels[i].val_btn);
+      keyer.filter(self.modrels[i].v_btn);
     for(var i = 0; i < self.modrels.length; i++)
-      blurer.filter(self.modrels[i].val_btn);
+      blurer.filter(self.modrels[i].v_btn);
     for(var i = 0; check && i < self.modrels.length; i++)
-      check = !dragger.filter(self.modrels[i].val_btn);
+      check = !dragger.filter(self.modrels[i].v_btn);
     for(var i = 0; check && i < self.modrels.length; i++)
       check = !dragger.filter(self.modrels[i]);
     if(check) check = !dragger.filter(self.new_module_btn);
@@ -770,6 +819,38 @@ var module_board = function()
     for(var i = 0; i < self.modrels.length; i++)
       self.modrels[i].draw();
     strokeBox(self.new_module_btn,gg.ctx);
+
+    strokeBox(self.graph,gg.ctx);
+    self.table.draw();
+
+    if(self.table_module)
+    {
+      var m = self.table_module;
+      var g = self.graph;
+      gg.ctx.strokeStyle = black;
+      gg.ctx.beginPath();
+      x = mapVal(0,self.t_max-1,g.x,g.x+g.w,0);
+      y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,m.v[0]);
+      gg.ctx.moveTo(x,y);
+      for(var i = 1; i < self.t_max; i++)
+      {
+        x = mapVal(0,self.t_max-1,g.x,g.x+g.w,i);
+        y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,m.v[i]);
+        gg.ctx.lineTo(x,y);
+      }
+      gg.ctx.stroke();
+      gg.ctx.fillStyle = red;
+      for(var i = 0; i < self.table.n; i++)
+      {
+        if(self.table.known_data[i] != "-")
+        {
+          x = mapVal(0,self.t_max-1,g.x,g.x+g.w,i);
+          y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,self.table.known_data[i]);
+          y = clamp(g.y,g.y+g.h,y);
+          gg.ctx.fillRect(x-1,y-1,2,2);
+        }
+      }
+    }
   }
 
 }

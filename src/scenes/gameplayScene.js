@@ -10,6 +10,8 @@ var GamePlayScene = function(game, stage)
     gg.canvas = gg.canv.canvas;
     gg.ctx = gg.canv.context;
 
+    if(gg.module_board) { gg.module_board.ww = gg.canv.width; gg.module_board.wh = gg.canv.height; }
+
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
     if(hoverer) hoverer.detach(); hoverer = new PersistentHoverer({source:gg.canvas});
     if(clicker) clicker.detach(); clicker = new Clicker({source:gg.canvas});
@@ -42,12 +44,10 @@ var GamePlayScene = function(game, stage)
     b.wh = gg.canv.height;
     b.wx = 0;
     b.wy = 0;
-    b.new_module_btn.w = 50;
-    b.new_module_btn.h = 50;
-    b.new_module_btn.x = b.x+b.w-10-b.new_module_btn.w;
-    b.new_module_btn.y = b.y+b.h-10-b.new_module_btn.h;
+    b.size();
     b.gen_module();
     b.calculate();
+    b.table_module = b.modules[0];
 
     gg.line = new editable_line();
     b = gg.line;
