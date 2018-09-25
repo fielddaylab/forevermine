@@ -435,7 +435,7 @@ var module = function()
     self.v_btn.w = self.w/2;
     self.v_btn.h = self.h/2;
     self.v_btn.x = self.x+self.w/2-self.v_btn.w/2;
-    self.v_btn.y = self.y+self.h/2-self.v_btn.h/2;
+    self.v_btn.y = self.y+self.h-self.v_btn.h;
   }
 
   self.dragging_body = 0;
@@ -525,7 +525,10 @@ var module = function()
     drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
     gg.ctx.strokeStyle = black;
     strokeBox(self,gg.ctx);
-    gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h*2/3);
+    gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h-1);
+    gg.ctx.fillStyle = gray;
+    if(floor(gg.module_board.t) != 0) gg.ctx.fillText(self.v[floor(gg.module_board.t)],self.x+self.w/2,self.y+self.h*2/3);
+    gg.ctx.fillStyle = black;
     if(self.dragging_rel)
       drawLine(self.x+self.w,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
   }
@@ -640,6 +643,35 @@ var modrel = function()
       drawLine(self.x,self.y+self.h/2,self.src.x+self.src.w,self.src.y+self.src.h/2,gg.ctx);
     if(self.dst && !self.dragging_dst)
       drawLine(self.x+self.w,self.y+self.h/2,self.dst.x,self.dst.y+self.dst.h/2,gg.ctx);
+    var t = gg.module_board.t;
+    var td = t%1;
+    if(td != 0)
+    {
+      t = round(t-td);
+      td *= 2;
+      var x;
+      var y;
+      var s = 20;
+      if(self.src && td < 1)
+      {
+        x = lerp(self.src.x+self.src.w,self.x,td);
+        y = lerp(self.src.y+self.src.h/2,self.y+self.h/2,td);
+        gg.ctx.fillStyle = white;
+        gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+        gg.ctx.fillStyle = black;
+        gg.ctx.fillText(self.src.v[t],x,y+s/2);
+      }
+      if(self.dst && td > 1)
+      {
+        td -= 1;
+        x = lerp(self.x+self.w,self.dst.x,td);
+        y = lerp(self.y+self.h/2,self.dst.y+self.dst.h/2,td);
+        gg.ctx.fillStyle = white;
+        gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+        gg.ctx.fillStyle = black;
+        gg.ctx.fillText(self.src.v[t]*self.v,x,y+s/2);
+      }
+    }
   }
 }
 
