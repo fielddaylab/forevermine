@@ -521,6 +521,8 @@ var module = function()
       gg.ctx.lineTo(x,y);
     }
     gg.ctx.stroke();
+    var t_x = mapVal(0,gg.module_board.t_max,self.x,self.x+self.w,gg.module_board.t);
+    drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
     gg.ctx.strokeStyle = black;
     strokeBox(self,gg.ctx);
     gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h*2/3);
@@ -566,6 +568,12 @@ var modrel = function()
     if(ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
     {
       self.dragging_dst = 1;
+      self.drag(evt);
+      return 1;
+    }
+    else if(ptWithin(self.x,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
+    {
+      self.dragging_src = 1;
       self.drag(evt);
       return 1;
     }
@@ -650,12 +658,30 @@ var module_board = function()
   self.wy = 0;
 
   self.t = 0;
+  self.t_target = 0;
   self.t_max = 10;
   self.selected_module = 0;
   self.modules = [];
   self.modrels = [];
 
   self.graph = {x:0,y:0,w:0,h:0};
+
+  self.timeline = {x:0,y:0,w:0,h:0,
+  dragStart:function(evt)
+  {
+    self.timeline.drag(evt);
+  },
+  drag:function(evt)
+  {
+    var t = clampMapVal(self.timeline.x,self.timeline.x+self.timeline.w,0,self.t_max,evt.doX);
+    self.t_target = ceil(t);
+    self.t = t;
+  },dragFinish:function(evt){}};
+
+  self.advance_btn = {x:0,y:0,w:0,h:0,dragStart:function(evt){
+    self.t_target++;
+    if(self.t_target > self.t_max) self.t_target = self.t._max;
+  },drag:function(evt){},dragFinish:function(evt){}};
 
   self.table = new table();
   self.table.n = 5;
@@ -668,24 +694,6 @@ var module_board = function()
   }
   self.table_module = 0;
 
-  self.size = function()
-  {
-    self.new_module_btn.w = 50;
-    self.new_module_btn.h = 50;
-    self.new_module_btn.x = self.x+self.w-10-self.new_module_btn.w;
-    self.new_module_btn.y = self.y+self.h-10-self.new_module_btn.h;
-
-    self.graph.w = 100;
-    self.graph.h = 100;
-    self.graph.x = self.x+10;
-    self.graph.y = self.y+300;
-
-    self.table.w = 100;
-    self.table.h = 100;
-    self.table.x = self.graph.x+self.graph.w+10;
-    self.table.y = self.graph.y;
-  }
-
   self.new_module_btn = {x:0,y:0,w:0,h:0,dragStart:function(evt){
     var m = self.gen_module();
     m.x = evt.doX-m.w/2;
@@ -696,6 +704,34 @@ var module_board = function()
     gg.module_board.calculate();
     return 0;
   },drag:function(evt){},dragFinish:function(evt){}};
+
+  self.size = function()
+  {
+    self.graph.w = 100;
+    self.graph.h = 100;
+    self.graph.x = self.x+10;
+    self.graph.y = self.y+300;
+
+    self.timeline.w = self.w;
+    self.timeline.h = 30;
+    self.timeline.x = 0;
+    self.timeline.y = self.h-self.timeline.h;
+
+    self.table.w = 100;
+    self.table.h = 100;
+    self.table.x = self.graph.x+self.graph.w+10;
+    self.table.y = self.graph.y;
+
+    self.advance_btn.w = 50;
+    self.advance_btn.h = 50;
+    self.advance_btn.x = self.x+10;
+    self.advance_btn.y = self.timeline.y-10-self.advance_btn.h;
+
+    self.new_module_btn.w = 50;
+    self.new_module_btn.h = 50;
+    self.new_module_btn.x = self.x+self.w-10-self.new_module_btn.w;
+    self.new_module_btn.y = self.timeline.y-10-self.new_module_btn.h;
+  }
 
   self.gen_module = function()
   {
@@ -791,6 +827,8 @@ var module_board = function()
     for(var i = 0; check && i < self.modrels.length; i++)
       check = !dragger.filter(self.modrels[i]);
     if(check) check = !dragger.filter(self.new_module_btn);
+    if(check) check = !dragger.filter(self.advance_btn);
+    if(check) check = !dragger.filter(self.timeline);
     return !check
   }
 
@@ -809,6 +847,8 @@ var module_board = function()
       screenSpaceCoords(self,gg.canv,m);
       m.tick();
     }
+    if(self.t < self.t_target && !self.timeline.dragging) self.t += 0.01;
+    if(self.t > self.t_target) self.t = self.t_target;
   }
 
   self.draw = function()
@@ -821,6 +861,23 @@ var module_board = function()
     strokeBox(self.new_module_btn,gg.ctx);
 
     strokeBox(self.graph,gg.ctx);
+    strokeBox(self.timeline,gg.ctx);
+    var t_x;
+    gg.ctx.strokeStyle = gray;
+    gg.ctx.beginPath();
+    for(var i = 1; i < self.t_max; i++)
+    {
+      t_x = mapVal(0,self.t_max,self.timeline.x,self.timeline.x+self.timeline.w,i);
+      gg.ctx.moveTo(t_x,self.timeline.y);
+      gg.ctx.lineTo(t_x,self.timeline.y+self.timeline.h);
+    }
+    gg.ctx.stroke();
+
+    gg.ctx.strokeStyle = black;
+    t_x = mapVal(0,self.t_max,self.timeline.x,self.timeline.x+self.timeline.w,self.t);
+    drawLine(t_x,self.timeline.y,t_x,self.timeline.y+self.timeline.h,gg.ctx);
+
+    strokeBox(self.advance_btn,gg.ctx);
     self.table.draw();
 
     if(self.table_module)
@@ -839,6 +896,11 @@ var module_board = function()
         gg.ctx.lineTo(x,y);
       }
       gg.ctx.stroke();
+
+      gg.ctx.strokeStyle = gray;
+      var t_x = mapVal(0,self.t_max,self.graph.x,self.graph.x+self.graph.w,self.t);
+      drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
+
       gg.ctx.fillStyle = red;
       for(var i = 0; i < self.table.n; i++)
       {
