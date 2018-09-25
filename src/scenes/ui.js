@@ -712,7 +712,7 @@ var module_board = function()
 
   self.advance_btn = {x:0,y:0,w:0,h:0,dragStart:function(evt){
     self.t_target++;
-    if(self.t_target > self.t_max) self.t_target = self.t._max;
+    if(self.t_target > self.t_max) self.t_target = self.t_max;
   },drag:function(evt){},dragFinish:function(evt){}};
 
   self.table = new table();
@@ -796,7 +796,7 @@ var module_board = function()
 
   self.calculate = function()
   {
-    for(var i = 1; i < self.t_max; i++)
+    for(var i = 1; i <= self.t_max; i++)
     {
       var m;
       for(var j = 0; j < self.modules.length; j++)
@@ -820,7 +820,7 @@ var module_board = function()
       m = self.modules[i];
       m.v_min = 9999;
       m.v_max = -9999;
-      for(var j = 0; j < self.t_max; j++)
+      for(var j = 0; j <= self.t_max; j++)
       {
         if(m.v[j] < m.v_min) m.v_min = m.v[j];
         if(m.v[j] > m.v_max) m.v_max = m.v[j];
