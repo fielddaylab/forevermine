@@ -13,21 +13,22 @@ var Game = function(init)
   doMapInitDefaults(init,init,default_init);
 
   var stage = new Stage({width:init.width,height:init.height,container:init.container});
-  var scenes = [
+  self.scenes = [
     new NullScene(self, stage),
     new LoadingScene(self, stage),
+    new MenuScene(self, stage),
     new GamePlayScene(self, stage),
   ];
-  var cur_scene     =  0;
-  var old_cur_scene = -1;
+  self.cur_scene     =  0;
+  self.old_cur_scene = -1;
 
   self.resize = function(args)
   {
     document.getElementById(init.container).removeChild(stage.canv.canvas);
     if(args.stage) stage = args.stage;
     else stage = new Stage({width:args.width,height:args.height,container:init.container});
-    for(var i = 0; i < scenes.length; i++)
-      scenes[i].resize(stage);
+    for(var i = 0; i < self.scenes.length; i++)
+      self.scenes[i].resize(stage);
   }
 
   var flip;
@@ -42,37 +43,37 @@ var Game = function(init)
   var tick = function()
   {
     requestAnimFrame(tick,stage.canv.canvas);
-    scenes[cur_scene].tick();
+    self.scenes[self.cur_scene].tick();
     var slow = false;
     flop = Date.now();
     slow = flop-flip > 25;
     flip = flop;
-    if(old_cur_scene == cur_scene && (DOUBLETIME || slow))
+    if(self.old_cur_scene == self.cur_scene && (DOUBLETIME || slow))
     {
-      scenes[cur_scene].tick();
+      self.scenes[self.cur_scene].tick();
       if(DOUBLETIME)
       {
-        scenes[cur_scene].tick();
+        self.scenes[self.cur_scene].tick();
       }
     }
-    if(old_cur_scene == cur_scene) //still in same scene- draw
+    if(self.old_cur_scene == self.cur_scene) //still in same scene- draw
     {
       stage.clear();
-      scenes[cur_scene].draw();
+      self.scenes[self.cur_scene].draw();
     }
-    old_cur_scene = cur_scene;
+    self.old_cur_scene = self.cur_scene;
   };
 
   self.nextScene = function()
   {
-    self.setScene(cur_scene+1);
+    self.setScene(self.cur_scene+1);
   };
 
   self.setScene = function(i)
   {
-    scenes[cur_scene].cleanup();
-    cur_scene = i;
-    scenes[cur_scene].ready();
+    self.scenes[self.cur_scene].cleanup();
+    self.cur_scene = i;
+    self.scenes[self.cur_scene].ready();
   }
 };
 
