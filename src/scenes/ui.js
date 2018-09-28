@@ -8,6 +8,8 @@ var editable_line = function()
 
   self.m = 0;
   self.b = 0;
+  self.correct_m = 0;
+  self.correct_b = 0;
   self.h_min = 0;
   self.h_max = 0;
   self.v_min = 0;
@@ -18,13 +20,17 @@ var editable_line = function()
 
   self.table = new table();
   self.table.n = 5;
-  for(var i = 0; i < self.table.n; i++)
+  self.calculate_table = function()
   {
-    self.table.t_data[i] = i;
-    if(i < 3) self.table.known_data[i] = 2*i+5;
-    else      self.table.known_data[i] = "-";
-    self.table.predicted_data[i] = 0;
+    for(var i = 0; i < self.table.n; i++)
+    {
+      self.table.t_data[i] = i;
+      if(i < 3) self.table.known_data[i] = self.correct_m*i+self.correct_b;
+      else      self.table.known_data[i] = "-";
+      self.table.predicted_data[i] = 0;
+    }
   }
+  self.calculate_table();
 
   self.size = function()
   {
@@ -162,6 +168,9 @@ var editable_quadratic = function()
   self.a = 0;
   self.b = 0;
   self.c = 0;
+  self.correct_a = 0;
+  self.correct_b = 0;
+  self.correct_c = 0;
   self.h_min = 0;
   self.h_max = 0;
   self.v_min = 0;
@@ -176,7 +185,7 @@ var editable_quadratic = function()
   for(var i = 0; i < self.table.n; i++)
   {
     self.table.t_data[i] = i;
-    if(i < 3) self.table.known_data[i] = 0.1*i*i + 0.2*i + 3;
+    if(i < 3) self.table.known_data[i] = self.correct_a*i*i + self.correct_b*i + self.correct_c;
     else      self.table.known_data[i] = "-";
     self.table.predicted_data[i] = 0;
   }
@@ -427,6 +436,7 @@ var module = function()
   self.v_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.v[0] = v; gg.module_board.calculate(); });
 
   self.v = [];
+  self.correct_v = [];
   self.v_min = 0;
   self.v_max = 0;
 
@@ -550,6 +560,7 @@ var modrel = function()
   self.v_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.v = v; gg.module_board.calculate(); });
 
   self.v = 1;
+  self.correct_v = 1;
   self.src = 0;
   self.dst = 0;
 
@@ -792,6 +803,39 @@ var module_board = function()
     screenSpace(self,gg.canv,m);
     self.modrels.push(m);
     return m;
+  }
+
+  self.calculate_table = function()
+  {
+    for(var i = 1; i <= self.t_max; i++)
+    {
+      var m;
+      for(var j = 0; j < self.modules.length; j++)
+      {
+        m = self.modules[j];
+        m.correct_v[i] = m.correct_v[i-1];
+      }
+      for(var j = 0; j < self.modrels.length; j++)
+      {
+        m = self.modrels[j];
+        if(m.src && m.dst) m.dst.correct_v[i] += m.src.correct_v[i-1]*m.correct_v;
+      }
+      for(var j = 0; j < self.modules.length; j++)
+      {
+        m = self.modules[j];
+        m.correct_v[i] = fdisp(m.correct_v[i],1);
+      }
+    }
+    if(self.table_module)
+    {
+      for(var i = 0; i < self.table.n; i++)
+        self.table.known_data[i] = self.table_module.correct_v[i];
+    }
+    else
+    {
+      for(var i = 0; i < self.table.n; i++)
+        self.table.known_data[i] = 0;
+    }
   }
 
   self.calculate = function()
