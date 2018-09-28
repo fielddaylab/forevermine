@@ -38,5 +38,6 @@ var level = function()
   self.modparams = [];
   self.relparams = [];
 
+  self.text = [];
 }
 

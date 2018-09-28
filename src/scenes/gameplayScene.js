@@ -74,6 +74,8 @@ var GamePlayScene = function(game, stage)
         break;
     }
 
+    for(var i = 0; i < gg.cur_level.text.length; i++)
+      gg.dialog_box.nq(gg.cur_level.text[i]);
   }
 
   self.ready = function()
@@ -126,8 +128,8 @@ var GamePlayScene = function(game, stage)
     gg.dialog_box.h = 100;
     gg.dialog_box.x = 300;
     gg.dialog_box.y = 100;
-    gg.dialog_box.nq("Hey! This is a test. It's really important that you use the boxes on the left to try and match up the red dots. I know they're small, but you can maybe do it. Also, it might be too hard. Who knows.");
-    gg.dialog_box.nq("Yep. You can advance text here. Is it tedious to read all of this text? Quite a bit of it can fit in here. But to be honest, this is going to be rather complex so a lot of text might be necessary.");
+    //gg.dialog_box.nq("Hey! This is a test. It's really important that you use the boxes on the left to try and match up the red dots. I know they're small, but you can maybe do it. Also, it might be too hard. Who knows.");
+    //gg.dialog_box.nq("Yep. You can advance text here. Is it tedious to read all of this text? Quite a bit of it can fit in here. But to be honest, this is going to be rather complex so a lot of text might be necessary.");
 
     gg.levels = [];
     var l;
@@ -142,6 +144,9 @@ var GamePlayScene = function(game, stage)
     l.b = 0;
     l.correct_m = 2;
     l.correct_b = 1;
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
@@ -155,6 +160,9 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0.1;
     l.correct_b = 0.2;
     l.correct_c = 3;
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
@@ -178,6 +186,9 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
@@ -201,6 +212,9 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
@@ -224,6 +238,9 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
@@ -247,6 +264,9 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
@@ -270,6 +290,9 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
@@ -304,6 +327,9 @@ var GamePlayScene = function(game, stage)
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
@@ -349,6 +375,9 @@ var GamePlayScene = function(game, stage)
     m.src_i = 3;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.text = [
+      "Hey! This is a level!",
+    ];
     gg.levels.push(l);
     i++;
 
