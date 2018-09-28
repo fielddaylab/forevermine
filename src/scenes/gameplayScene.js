@@ -134,6 +134,7 @@ var GamePlayScene = function(game, stage)
     var m;
     var i = 0;
 
+    //line
     l = new level();
     l.i = i;
     l.type = LEVEL_LINEAR;
@@ -144,9 +145,10 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
+    //quadratic
     l = new level();
     l.i = i;
-    l.type = LEVEL_LINEAR;
+    l.type = LEVEL_QUADRATIC;
     l.a = 0;
     l.b = 0;
     l.c = 0;
@@ -156,6 +158,7 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
+    //charge rate
     l = new level();
     l.i = i;
     l.type = LEVEL_MODULE;
@@ -178,7 +181,211 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    self.set_level(2);
+    //charge starting
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_MODULE;
+    m = new modparam();
+    m.title = "Charge";
+    m.v = 1;
+    m.correct_v = 2;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Charge Rate";
+    m.v = 2;
+    m.correct_v = 2;
+    l.modparams.push(m);
+    m = new relparam();
+    m.v = 1;
+    m.correct_v = 1;
+    m.src_i = 1;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    gg.levels.push(l);
+    i++;
+
+    //charge conversion
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_MODULE;
+    m = new modparam();
+    m.title = "Charge";
+    m.v = 2;
+    m.correct_v = 2;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Charge Rate";
+    m.v = 2;
+    m.correct_v = 2;
+    l.modparams.push(m);
+    m = new relparam();
+    m.v = 1;
+    m.correct_v = 0.8;
+    m.src_i = 1;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    gg.levels.push(l);
+    i++;
+
+    //charge engineering
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_MODULE;
+    m = new modparam();
+    m.title = "Charge";
+    m.v = 2;
+    m.correct_v = 2;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Charge Rate";
+    m.v = 2;
+    m.correct_v = 3;
+    l.modparams.push(m);
+    m = new relparam();
+    m.v = 0.8;
+    m.correct_v = 0.8;
+    m.src_i = 1;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    gg.levels.push(l);
+    i++;
+
+    //discharge
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_MODULE;
+    m = new modparam();
+    m.title = "Charge";
+    m.v = 10;
+    m.correct_v = 10;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Motor";
+    m.v = 1;
+    m.correct_v = 1;
+    l.modparams.push(m);
+    m = new relparam();
+    m.v = -0.5;
+    m.correct_v = -0.4;
+    m.src_i = 1;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    gg.levels.push(l);
+    i++;
+
+    //multiple discharge
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_MODULE;
+    m = new modparam();
+    m.title = "Charge";
+    m.v = 10;
+    m.correct_v = 10;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Motor";
+    m.v = 1;
+    m.correct_v = 1;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Drill";
+    m.v = 1;
+    m.correct_v = 1;
+    l.modparams.push(m);
+    m = new relparam();
+    m.v = -0.4;
+    m.correct_v = -0.4;
+    m.src_i = 1;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    m = new relparam();
+    m.v = 0;
+    m.correct_v = -0.2;
+    m.src_i = 2;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    gg.levels.push(l);
+    i++;
+
+    //conflicting discharge
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_MODULE;
+    m = new modparam();
+    m.title = "Charge";
+    m.v = 10;
+    m.correct_v = 10;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Motor";
+    m.v = 1;
+    m.correct_v = 1;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Drill";
+    m.v = 1;
+    m.correct_v = 1;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Solar Panel";
+    m.v = 1;
+    m.correct_v = 1;
+    l.modparams.push(m);
+    m = new relparam();
+    m.v = -0.4;
+    m.correct_v = -0.4;
+    m.src_i = 1;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    m = new relparam();
+    m.v = -0.2;
+    m.correct_v = -0.2;
+    m.src_i = 2;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    m = new relparam();
+    m.v = 0;
+    m.correct_v = 0.3;
+    m.src_i = 3;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    gg.levels.push(l);
+    i++;
+
+    //shipments
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_MODULE;
+    m = new modparam();
+    m.title = "Crystals";
+    m.v = 0;
+    m.correct_v = 0;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Robots";
+    m.v = 1;
+    m.correct_v = 1;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Shipments";
+    m.v = 1;
+    m.correct_v = 4;
+    l.modparams.push(m);
+    m = new relparam();
+    m.v = 10;
+    m.correct_v = 10;
+    m.src_i = 1;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    m = new relparam();
+    m.v = 1;
+    m.correct_v = 3;
+    m.src_i = 2;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    i++;
+
+    self.set_level(0);
   };
 
   self.tick = function()
