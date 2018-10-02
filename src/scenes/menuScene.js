@@ -45,6 +45,8 @@ var MenuScene = function(game, stage)
   self.draw = function()
   {
     start_btn.draw(gg.canv);
+    gg.ctx.fillStyle = black;
+    gg.ctx.fillText("This is a placeholder menu screen",10,20);
   };
 
   self.cleanup = function()

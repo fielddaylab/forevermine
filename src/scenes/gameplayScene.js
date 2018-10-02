@@ -28,6 +28,8 @@ var GamePlayScene = function(game, stage)
   self.set_level = function(i)
   {
     gg.cur_level = gg.levels[i];
+    gg.cur_level.submitted = 0;
+    gg.cur_level.correct = 0;
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:
@@ -39,16 +41,19 @@ var GamePlayScene = function(game, stage)
         gg.line.draw_params();
         break;
       case LEVEL_QUADRATIC:
-        gg.line.m = gg.cur_level.m;
-        gg.line.b = gg.cur_level.b;
-        gg.line.correct_m = gg.cur_level.correct_m;
-        gg.line.correct_b = gg.cur_level.correct_b;
-        gg.line.calculate_table();
-        gg.line.draw_params();
+        gg.quadratic.a = gg.cur_level.a;
+        gg.quadratic.b = gg.cur_level.b;
+        gg.quadratic.c = gg.cur_level.c;
+        gg.quadratic.correct_a = gg.cur_level.correct_a;
+        gg.quadratic.correct_b = gg.cur_level.correct_b;
+        gg.quadratic.correct_c = gg.cur_level.correct_c;
+        gg.quadratic.calculate_table();
+        gg.quadratic.draw_params();
         break;
       case LEVEL_MODULE:
         var m;
         var mp;
+        gg.module_board.clear();
         for(var i = 0; i < gg.cur_level.modparams.length; i++)
         {
           m = gg.module_board.gen_module();
@@ -57,6 +62,8 @@ var GamePlayScene = function(game, stage)
           m.v[0] = mp.v;
           m.v_btn.set(m.v[0]);
           m.correct_v[0] = mp.correct_v;
+          m.wx = mp.wx;
+          m.wy = mp.wy;
           if(i == 0) gg.module_board.table_module = m;
         }
         for(var i = 0; i < gg.cur_level.relparams.length; i++)
@@ -66,6 +73,8 @@ var GamePlayScene = function(game, stage)
           m.v = mp.v;
           m.v_btn.set(m.v);
           m.correct_v = mp.correct_v;
+          m.wx = mp.wx;
+          m.wy = mp.wy;
           m.src = gg.module_board.modules[mp.src_i];
           m.dst = gg.module_board.modules[mp.dst_i];
         }
@@ -74,6 +83,7 @@ var GamePlayScene = function(game, stage)
         break;
     }
 
+    gg.dialog_box.clear();
     for(var i = 0; i < gg.cur_level.text.length; i++)
       gg.dialog_box.nq(gg.cur_level.text[i]);
   }
@@ -116,7 +126,7 @@ var GamePlayScene = function(game, stage)
     b.w = graph_s;
     b.h = graph_s;
     b.x = 10;
-    b.y = gg.line.y+gg.line.h+10+btn_s+10;
+    b.y = 10;
     b.v_min = 0;
     b.v_max = 10;
     b.h_min = 0;
@@ -124,12 +134,10 @@ var GamePlayScene = function(game, stage)
     b.size();
 
     gg.dialog_box = new dialog_box();
-    gg.dialog_box.w = 400;
+    gg.dialog_box.w = gg.canv.width;
     gg.dialog_box.h = 100;
-    gg.dialog_box.x = 300;
-    gg.dialog_box.y = 100;
-    //gg.dialog_box.nq("Hey! This is a test. It's really important that you use the boxes on the left to try and match up the red dots. I know they're small, but you can maybe do it. Also, it might be too hard. Who knows.");
-    //gg.dialog_box.nq("Yep. You can advance text here. Is it tedious to read all of this text? Quite a bit of it can fit in here. But to be honest, this is going to be rather complex so a lot of text might be necessary.");
+    gg.dialog_box.x = 0;
+    gg.dialog_box.y = gg.canv.height-gg.dialog_box.h;
 
     gg.levels = [];
     var l;
@@ -145,8 +153,18 @@ var GamePlayScene = function(game, stage)
     l.correct_m = 2;
     l.correct_b = 1;
     l.text = [
-      "Hey! This is a level!",
+      "Our mining robots were recently upgraded with a stronger drill bits that speeds up mining.",
+      "We collected data about how many crystals they were able to harvest over the last 3 days.",
+      "Now we need you to build a model with this graph to predict how many crystals we will have by day 4."
     ];
+    /*
+    l.correct_text = [
+      "You did it! On to the next assignment...",
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.",
+    ];
+    */
     gg.levels.push(l);
     i++;
 
@@ -161,7 +179,11 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 0.2;
     l.correct_c = 3;
     l.text = [
-      "Hey! This is a level!",
+      "We’ve had a breakthrough.",
+      "It seems the deeper we dig, the more concentrated the crystals.",
+      "A straight line doesn’t fit the data we are collecting, so we are going to switch to a curved line.",
+      "Here is our measured data for the last 3 days.",
+      "We need you to build a model with this graph to predict how many crystals we'll have by day 4.",
     ];
     gg.levels.push(l);
     i++;
@@ -174,11 +196,13 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 1;
     m.correct_v = 1;
+    m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
     m.v = 1;
     m.correct_v = 2;
+    m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
     m.v = 1;
@@ -187,7 +211,9 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Hey! This is a level!",
+      "The material scientists have developed a new kind of super conductive metal wire that increases the output of the battery charger.",
+      "So let’s use our new system to predict how fast the robots will be charged.",
+      "We need you to update this model to use the new charger.",
     ];
     gg.levels.push(l);
     i++;
@@ -200,11 +226,13 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 1;
     m.correct_v = 2;
+    m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
     m.v = 2;
     m.correct_v = 2;
+    m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
     m.v = 1;
@@ -213,7 +241,8 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Hey! This is a level!",
+      "We are learning that after the first use, the batteries are charging quicker than we expected.",
+      "We figured out that they were coming back partially charged, something we didn’t account for.",
     ];
     gg.levels.push(l);
     i++;
@@ -226,11 +255,13 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 2;
     m.correct_v = 2;
+    m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
     m.v = 2;
     m.correct_v = 2;
+    m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
     m.v = 1;
@@ -239,7 +270,8 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Hey! This is a level!",
+      "After a few uses, it seems the charger is not outputting exactly what we expected.",
+      "We should be able to use the data we collected about the batteries charge to figure out the actual output.",
     ];
     gg.levels.push(l);
     i++;
@@ -252,11 +284,13 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 2;
     m.correct_v = 2;
+    m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
     m.v = 2;
     m.correct_v = 3;
+    m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
     m.v = 0.8;
@@ -265,7 +299,8 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Hey! This is a level!",
+      "After a year of use, the batteries are taking longer to charge because their charging efficiency has dropped.",
+      "Let’s use the relationship/conversion control that describes how much of the source component effects the destination component each time step.",
     ];
     gg.levels.push(l);
     i++;
@@ -278,11 +313,13 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
+    m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Motor";
     m.v = 1;
     m.correct_v = 1;
+    m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
     m.v = -0.5;
@@ -291,7 +328,8 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Hey! This is a level!",
+      "We have data for how charged the battery is for the first hour of work.",
+      "How long do you predict the robots will last, having 10% of their battery to return home.",
     ];
     gg.levels.push(l);
     i++;
@@ -304,31 +342,41 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
+    m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Motor";
     m.v = 1;
     m.correct_v = 1;
+    m.wx = -100;
+    m.wy = 50;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Drill";
     m.v = 1;
     m.correct_v = 1;
+    m.wx = -100;
+    m.wy = -50;
     l.modparams.push(m);
     m = new relparam();
     m.v = -0.4;
     m.correct_v = -0.4;
+    m.wy = 50;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
     m = new relparam();
     m.v = 0;
     m.correct_v = -0.2;
+    m.wy = -50;
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Hey! This is a level!",
+      "We are taking inventory about how each part of the robot is draining the battery.",
+      "In this model we break out the two parts using the most amount of energy, the drill motors and the radio.",
+      "We know that the model is correct, but the rate of discharge from the motors hasn’t been verified.",
+      "Step one, change the motor discharge rate to match the battery data. Step 2, tell us how long the battery is expected to last.",
     ];
     gg.levels.push(l);
     i++;
@@ -341,25 +389,32 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
+    m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Motor";
     m.v = 1;
     m.correct_v = 1;
+    m.wx = -100;
+    m.wy = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Drill";
     m.v = 1;
     m.correct_v = 1;
+    m.wx = -100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Solar Panel";
     m.v = 1;
     m.correct_v = 1;
+    m.wx = -100;
+    m.wy = -100;
     l.modparams.push(m);
     m = new relparam();
     m.v = -0.4;
     m.correct_v = -0.4;
+    m.wy = 100;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
@@ -372,11 +427,15 @@ var GamePlayScene = function(game, stage)
     m = new relparam();
     m.v = 0;
     m.correct_v = 0.3;
+    m.wy = -100;
     m.src_i = 3;
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Hey! This is a level!",
+      "We equipped the robots with little solar cells so they can be charging their batteries while out working, and hopefully work longer between charges.",
+      "We know that the model is correct, but the rate of charge from the solar panel hasn’t been determined.",
+      "Step one, change the solar panel discharge rate to match the battery data.",
+      "Step 2, tell us How long will the robots last until they have only 150 Amp Hours left, enough to return to base.",
     ];
     gg.levels.push(l);
     i++;
@@ -389,6 +448,7 @@ var GamePlayScene = function(game, stage)
     m.title = "Crystals";
     m.v = 0;
     m.correct_v = 0;
+    m.wx = -200;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Robots";
@@ -399,19 +459,27 @@ var GamePlayScene = function(game, stage)
     m.title = "Shipments";
     m.v = 1;
     m.correct_v = 4;
+    m.wx = 200;
     l.modparams.push(m);
     m = new relparam();
     m.v = 10;
     m.correct_v = 10;
+    m.wx = -100;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
     m = new relparam();
     m.v = 1;
     m.correct_v = 3;
+    m.wx = 100;
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.text = [
+      "We need to pick up the pace to hit our mining goal. Each robot can mine 100kg or crystals daily, but we are going to need more.",
+      "How many robots do we need to activate daily to make sure that we harvest 1M kg of crystals in 30 days.",
+    ];
+    gg.levels.push(l);
     i++;
 
     self.set_level(0);
@@ -430,7 +498,16 @@ var GamePlayScene = function(game, stage)
       case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger); gg.module_board.tick(); break;
     }
     clicker.filter(gg.dialog_box);
+    if(gg.cur_level.submitted && gg.dialog_box.requested_past_available)
+    {
+      var correct = gg.cur_level.correct;
+      gg.cur_level.submitted = 0;
+      gg.cur_level.correct = 0;
+      if(correct) self.set_level((gg.cur_level.i+1)%gg.levels.length);
+      else        self.set_level(gg.cur_level.i);
+    }
 
+    gg.cur_level.tick();
     gg.dialog_box.tick();
 
     keyer.flush();
@@ -449,6 +526,7 @@ var GamePlayScene = function(game, stage)
       case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
       case LEVEL_MODULE:    gg.module_board.draw(); break;
     }
+    gg.cur_level.draw();
     gg.dialog_box.draw();
   };
 

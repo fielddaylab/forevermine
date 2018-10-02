@@ -12,6 +12,8 @@ var modparam = function()
   this.title = "";
   this.v = 0;
   this.correct_v = 0;
+  this.wx = 0;
+  this.wy = 0;
 }
 var relparam = function()
 {
@@ -19,6 +21,8 @@ var relparam = function()
   this.correct_v = 0;
   this.src_i = 0;
   this.dst_i = 0;
+  this.wx = 0;
+  this.wy = 0;
 }
 
 var level = function()
@@ -39,5 +43,50 @@ var level = function()
   self.relparams = [];
 
   self.text = [];
+  self.correct_text = [ "You did it! On to the next assignment...", ];
+  self.incorrect_text = [ "I don't think that's right... try again.", ];
+
+  self.correct = 0;
+  self.submitted = 0;
+  self.submit = function(correct)
+  {
+    self.correct = correct;
+    self.submitted = 1;
+
+    if(self.correct)
+    {
+      gg.dialog_box.clear();
+      for(var i = 0; i < self.correct_text.length; i++)
+        gg.dialog_box.nq(self.correct_text[i]);
+      self.submitted_correct();
+    }
+    else
+    {
+      gg.dialog_box.clear();
+      for(var i = 0; i < self.incorrect_text.length; i++)
+        gg.dialog_box.nq(self.incorrect_text[i]);
+      self.submitted_incorrect();
+    }
+  }
+
+  self.submitted_correct = function()
+  {
+
+  }
+
+  self.submitted_incorrect = function()
+  {
+
+  }
+
+  self.tick = function()
+  {
+
+  }
+
+  self.draw = function()
+  {
+
+  }
 }
 

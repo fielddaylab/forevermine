@@ -27,8 +27,9 @@ var editable_line = function()
       self.table.t_data[i] = i;
       if(i < 3) self.table.known_data[i] = self.correct_m*i+self.correct_b;
       else      self.table.known_data[i] = "-";
-      self.table.predicted_data[i] = 0;
+      self.table.predicted_data[i] = self.m*i+self.b;
     }
+    self.table.verify();
   }
   self.calculate_table();
 
@@ -85,6 +86,7 @@ var editable_line = function()
 
     for(var i = 0; i < self.table.n; i++)
       self.table.predicted_data[i] = fdisp(self.v(self.table.t_data[i]),1);
+    self.table.verify();
   }
 
   self.filter = function(keyer,blurer,dragger)
@@ -102,6 +104,7 @@ var editable_line = function()
     if(dragger)
     {
       var check = 1;
+      if(check) check = !dragger.filter(self.table);
       if(check) check = !dragger.filter(self.m_btn);
       if(check) check = !dragger.filter(self.b_btn);
       return !check;
@@ -182,13 +185,18 @@ var editable_quadratic = function()
   self.c_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.c = v; self.draw_params(); });
   self.table = new table();
   self.table.n = 5;
-  for(var i = 0; i < self.table.n; i++)
+  self.calculate_table = function()
   {
-    self.table.t_data[i] = i;
-    if(i < 3) self.table.known_data[i] = self.correct_a*i*i + self.correct_b*i + self.correct_c;
-    else      self.table.known_data[i] = "-";
-    self.table.predicted_data[i] = 0;
+    for(var i = 0; i < self.table.n; i++)
+    {
+      self.table.t_data[i] = i;
+      if(i < 3) self.table.known_data[i] = self.correct_a*i*i + self.correct_b*i + self.correct_c;
+      else      self.table.known_data[i] = "-";
+      self.table.predicted_data[i] = self.a*i*i + self.b*i + self.c;;
+    }
+    self.table.verify();
   }
+  self.calculate_table();
 
   self.size = function()
   {
@@ -237,6 +245,7 @@ var editable_quadratic = function()
 
     for(var i = 0; i < self.table.n; i++)
       self.table.predicted_data[i] = fdisp(self.v(self.table.t_data[i]),1);
+    self.table.verify();
   }
 
   self.filter = function(keyer,blurer,dragger)
@@ -256,6 +265,7 @@ var editable_quadratic = function()
     if(dragger)
     {
       var check = 1;
+      if(check) check = !dragger.filter(self.table);
       if(check) check = !dragger.filter(self.a_btn);
       if(check) check = !dragger.filter(self.b_btn);
       if(check) check = !dragger.filter(self.c_btn);
@@ -334,6 +344,34 @@ var table = function()
   self.known_data = [];
   self.predicted_data = [];
 
+  self.correct = 0;
+
+  self.verify = function()
+  {
+    self.correct = 1;
+    for(var i = 0; i < self.predicted_data.length && i < self.known_data.length; i++)
+      if(self.predicted_data[i] != self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
+  }
+
+  self.dragStart = function(evt)
+  {
+    //copied from draw!
+    var x2 = self.x+self.w*2/3;
+    var x3 = self.x+self.w;
+    var y = self.y+((self.n-1)/self.n)*self.h;
+    var h = self.h/self.n;
+    if(ptWithin(x2,y,x3-x2,h,evt.doX,evt.doY))
+      gg.cur_level.submit(self.correct);
+  }
+  self.drag = function(evt)
+  {
+
+  }
+  self.dragFinish = function(evt)
+  {
+
+  }
+
   self.tick = function()
   {
 
@@ -356,10 +394,12 @@ var table = function()
     for(var i = 0; i < self.n; i++)
     {
       y = self.y+((i+1)/self.n)*self.h;
+      gg.ctx.fillStyle = black;
       gg.ctx.fillText(self.t_data[i],        x01,y-3);
       gg.ctx.fillStyle = red;
       gg.ctx.fillText(self.known_data[i],    x12,y-3);
-      gg.ctx.fillStyle = black;
+      if(self.known_data[i] == self.predicted_data[i] || self.correct) gg.ctx.fillStyle = green;
+      else gg.ctx.fillStyle = black;
       gg.ctx.fillText(self.predicted_data[i],x23,y-3);
       drawLine(x0,y,x3,y,gg.ctx);
     }
@@ -379,12 +419,21 @@ var dialog_box = function()
   self.font_h = 15;
   self.font = self.font_h+"px Helvetica";
 
+  self.requested_past_available = 0;
+
   self.text = [];
   self.lines = [];
+  self.clear = function(text)
+  {
+    self.text = [];
+    self.lines = []
+    self.requested_past_available = 0;
+  }
   self.nq = function(text)
   {
     self.text.push(text);
     self.lines.push(textToLines(self.font,self.w-self.pad-(self.h-self.pad*2)-self.pad-self.pad,text,gg.ctx));
+    self.requested_past_available = 0;
   }
 
   self.click = function()
@@ -394,6 +443,7 @@ var dialog_box = function()
       self.text.splice(0,1);
       self.lines.splice(0,1);
     }
+    else self.requested_past_available = 1;
   }
 
   self.tick = function()
@@ -703,7 +753,6 @@ var module_board = function()
   self.t = 0;
   self.t_target = 0;
   self.t_max = 10;
-  self.selected_module = 0;
   self.modules = [];
   self.modrels = [];
 
@@ -735,6 +784,7 @@ var module_board = function()
     else      self.table.known_data[i] = "-";
     self.table.predicted_data[i] = 0;
   }
+  self.table.verify();
   self.table_module = 0;
 
   self.new_module_btn = {x:0,y:0,w:0,h:0,dragStart:function(evt){
@@ -753,12 +803,12 @@ var module_board = function()
     self.graph.w = 100;
     self.graph.h = 100;
     self.graph.x = self.x+10;
-    self.graph.y = self.y+300;
+    self.graph.y = self.y+10;
 
     self.timeline.w = self.w;
     self.timeline.h = 30;
     self.timeline.x = 0;
-    self.timeline.y = self.h-self.timeline.h;
+    self.timeline.y = self.h-self.timeline.h-100;
 
     self.table.w = 100;
     self.table.h = 100;
@@ -774,6 +824,12 @@ var module_board = function()
     self.new_module_btn.h = 50;
     self.new_module_btn.x = self.x+self.w-10-self.new_module_btn.w;
     self.new_module_btn.y = self.timeline.y-10-self.new_module_btn.h;
+  }
+
+  self.clear = function()
+  {
+    self.modules = [];
+    self.modrels = [];
   }
 
   self.gen_module = function()
@@ -881,6 +937,7 @@ var module_board = function()
       for(var i = 0; i < self.table.n; i++)
         self.table.predicted_data[i] = 0;
     }
+    self.table.verify();
   }
 
   self.filter = function(keyer, blurer, dragger)
@@ -890,6 +947,7 @@ var module_board = function()
       keyer.filter(self.modules[i].v_btn);
     for(var i = 0; i < self.modules.length; i++)
       blurer.filter(self.modules[i].v_btn);
+    if(check) check = !dragger.filter(self.table);
     for(var i = 0; check && i < self.modules.length; i++)
       check = !dragger.filter(self.modules[i].v_btn);
     for(var i = 0; check && i < self.modules.length; i++)
@@ -902,7 +960,7 @@ var module_board = function()
       check = !dragger.filter(self.modrels[i].v_btn);
     for(var i = 0; check && i < self.modrels.length; i++)
       check = !dragger.filter(self.modrels[i]);
-    if(check) check = !dragger.filter(self.new_module_btn);
+    //if(check) check = !dragger.filter(self.new_module_btn);
     if(check) check = !dragger.filter(self.advance_btn);
     if(check) check = !dragger.filter(self.timeline);
     return !check
@@ -934,7 +992,7 @@ var module_board = function()
       self.modules[i].draw();
     for(var i = 0; i < self.modrels.length; i++)
       self.modrels[i].draw();
-    strokeBox(self.new_module_btn,gg.ctx);
+    //strokeBox(self.new_module_btn,gg.ctx);
 
     strokeBox(self.graph,gg.ctx);
     strokeBox(self.timeline,gg.ctx);
