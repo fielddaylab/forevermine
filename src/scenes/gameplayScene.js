@@ -62,8 +62,11 @@ var GamePlayScene = function(game, stage)
           m.v[0] = mp.v;
           m.v_btn.set(m.v[0]);
           m.correct_v[0] = mp.correct_v;
+          m.active = mp.active;
           m.wx = mp.wx;
           m.wy = mp.wy;
+          screenSpace(gg.module_board,gg.canv,m);
+          m.size();
           if(i == 0) gg.module_board.table_module = m;
         }
         for(var i = 0; i < gg.cur_level.relparams.length; i++)
@@ -73,10 +76,13 @@ var GamePlayScene = function(game, stage)
           m.v = mp.v;
           m.v_btn.set(m.v);
           m.correct_v = mp.correct_v;
+          m.active = mp.active;
           m.wx = mp.wx;
           m.wy = mp.wy;
           m.src = gg.module_board.modules[mp.src_i];
           m.dst = gg.module_board.modules[mp.dst_i];
+          screenSpace(gg.module_board,gg.canv,m);
+          m.size();
         }
         gg.module_board.calculate_table();
         gg.module_board.calculate();
@@ -113,7 +119,7 @@ var GamePlayScene = function(game, stage)
     b = gg.line;
     b.w = graph_s;
     b.h = graph_s;
-    b.x = 10;
+    b.x = 20;
     b.y = 10;
     b.v_min = 0;
     b.v_max = 10;
@@ -125,7 +131,7 @@ var GamePlayScene = function(game, stage)
     b = gg.quadratic;
     b.w = graph_s;
     b.h = graph_s;
-    b.x = 10;
+    b.x = 20;
     b.y = 10;
     b.v_min = 0;
     b.v_max = 10;
@@ -196,6 +202,7 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 1;
     m.correct_v = 1;
+    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
@@ -209,6 +216,7 @@ var GamePlayScene = function(game, stage)
     m.correct_v = 1;
     m.src_i = 1;
     m.dst_i = 0;
+    m.active = 0;
     l.relparams.push(m);
     l.text = [
       "The material scientists have developed a new kind of super conductive metal wire that increases the output of the battery charger.",
@@ -232,6 +240,7 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge Rate";
     m.v = 2;
     m.correct_v = 2;
+    m.active = 0;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
@@ -239,6 +248,7 @@ var GamePlayScene = function(game, stage)
     m.correct_v = 1;
     m.src_i = 1;
     m.dst_i = 0;
+    m.active = 0;
     l.relparams.push(m);
     l.text = [
       "We are learning that after the first use, the batteries are charging quicker than we expected.",
@@ -255,12 +265,14 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 2;
     m.correct_v = 2;
+    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
     m.v = 2;
     m.correct_v = 2;
+    m.active = 0;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
@@ -313,12 +325,14 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
+    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Motor";
     m.v = 1;
     m.correct_v = 1;
+    m.active = 0;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
@@ -342,12 +356,14 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
+    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Motor";
     m.v = 1;
     m.correct_v = 1;
+    m.active = 0;
     m.wx = -100;
     m.wy = 50;
     l.modparams.push(m);
@@ -355,6 +371,7 @@ var GamePlayScene = function(game, stage)
     m.title = "Drill";
     m.v = 1;
     m.correct_v = 1;
+    m.active = 0;
     m.wx = -100;
     m.wy = -50;
     l.modparams.push(m);
@@ -389,12 +406,14 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
+    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Motor";
     m.v = 1;
     m.correct_v = 1;
+    m.active = 0;
     m.wx = -100;
     m.wy = 100;
     l.modparams.push(m);
@@ -402,12 +421,14 @@ var GamePlayScene = function(game, stage)
     m.title = "Drill";
     m.v = 1;
     m.correct_v = 1;
+    m.active = 0;
     m.wx = -100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Solar Panel";
     m.v = 1;
     m.correct_v = 1;
+    m.active = 0;
     m.wx = -100;
     m.wy = -100;
     l.modparams.push(m);
@@ -448,30 +469,32 @@ var GamePlayScene = function(game, stage)
     m.title = "Crystals";
     m.v = 0;
     m.correct_v = 0;
-    m.wx = -200;
+    m.active = 0;
+    m.wx = 200;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Robots";
     m.v = 1;
     m.correct_v = 1;
+    m.active = 0;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Shipments";
     m.v = 1;
     m.correct_v = 4;
-    m.wx = 200;
+    m.wx = -200;
     l.modparams.push(m);
     m = new relparam();
     m.v = 10;
     m.correct_v = 10;
-    m.wx = -100;
+    m.wx = 100;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
     m = new relparam();
     m.v = 1;
     m.correct_v = 3;
-    m.wx = 100;
+    m.wx = -100;
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);

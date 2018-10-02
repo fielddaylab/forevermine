@@ -128,6 +128,8 @@ var editable_line = function()
 
     strokeBox(self,gg.ctx);
     drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
+    gg.ctx.fillText(fdisp(self.v_min),self.x-10,self.y+self.h);
+    gg.ctx.fillText(fdisp(self.v_max),self.x-10,self.y);
 
     gg.ctx.textAlign = "left";
     x = self.x;
@@ -294,6 +296,8 @@ var editable_quadratic = function()
     for(var i = 0; i < self.samples; i++)
       gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
     gg.ctx.stroke();
+    gg.ctx.fillText(fdisp(self.v_min),self.x-10,self.y+self.h);
+    gg.ctx.fillText(fdisp(self.v_max),self.x-10,self.y);
 
     gg.ctx.textAlign = "left";
     x = self.x;
@@ -490,6 +494,8 @@ var module = function()
   self.v_min = 0;
   self.v_max = 0;
 
+  self.active = 1;
+
   self.size = function()
   {
     self.v_btn.w = self.w/2;
@@ -504,7 +510,7 @@ var module = function()
   self.drag_y = 0;
   self.dragStart = function(evt)
   {
-    if(ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
+    if(self.active && ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
     {
       self.dragging_rel = 1;
       self.drag(evt);
@@ -569,7 +575,8 @@ var module = function()
   {
     var x;
     var y;
-    gg.ctx.strokeStyle = light_gray;
+    if(!self.active) { gg.ctx.fillStyle = very_light_gray; fillBox(self,gg.ctx); }
+    gg.ctx.strokeStyle = dark_gray;
     gg.ctx.beginPath();
     x = self.x;
     y = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.v[0]);
@@ -585,6 +592,7 @@ var module = function()
     drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
     gg.ctx.strokeStyle = black;
     strokeBox(self,gg.ctx);
+    gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h-1);
     gg.ctx.fillStyle = gray;
     if(floor(gg.module_board.t) != 0) gg.ctx.fillText(self.v[floor(gg.module_board.t)],self.x+self.w/2,self.y+self.h*2/3);
@@ -614,6 +622,8 @@ var modrel = function()
   self.src = 0;
   self.dst = 0;
 
+  self.active = 1;
+
   self.size = function()
   {
     self.v_btn.w = self.w/2;
@@ -629,13 +639,13 @@ var modrel = function()
   self.drag_y = 0;
   self.dragStart = function(evt)
   {
-    if(ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
+    if(self.active && ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
     {
       self.dragging_dst = 1;
       self.drag(evt);
       return 1;
     }
-    else if(ptWithin(self.x,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
+    else if(self.active && ptWithin(self.x,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
     {
       self.dragging_src = 1;
       self.drag(evt);
@@ -695,6 +705,8 @@ var modrel = function()
   self.draw = function()
   {
     strokeBox(self,gg.ctx);
+    if(!self.active) { gg.ctx.fillStyle = very_light_gray; fillBox(self,gg.ctx); }
+    gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.v,self.x+self.w/2,self.y+self.h*2/3);
     if(self.dragging_src)
       drawLine(self.x,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
@@ -802,7 +814,7 @@ var module_board = function()
   {
     self.graph.w = 100;
     self.graph.h = 100;
-    self.graph.x = self.x+10;
+    self.graph.x = self.x+20;
     self.graph.y = self.y+10;
 
     self.timeline.w = self.w;
@@ -857,6 +869,7 @@ var module_board = function()
     m.v = 1;
     m.v_btn.set(m.v);
     screenSpace(self,gg.canv,m);
+    m.size();
     self.modrels.push(m);
     return m;
   }
@@ -884,8 +897,10 @@ var module_board = function()
     }
     if(self.table_module)
     {
-      for(var i = 0; i < self.table.n; i++)
+      for(var i = 0; i < 3/*self.table.n*/; i++)
         self.table.known_data[i] = self.table_module.correct_v[i];
+      for(var i = 3; i < self.table.n; i++)
+        self.table.known_data[i] = "-";
     }
     else
     {
@@ -944,20 +959,20 @@ var module_board = function()
   {
     var check = 1;
     for(var i = 0; i < self.modules.length; i++)
-      keyer.filter(self.modules[i].v_btn);
+      if(self.modules[i].active) keyer.filter(self.modules[i].v_btn);
     for(var i = 0; i < self.modules.length; i++)
       blurer.filter(self.modules[i].v_btn);
     if(check) check = !dragger.filter(self.table);
     for(var i = 0; check && i < self.modules.length; i++)
-      check = !dragger.filter(self.modules[i].v_btn);
+      if(self.modules[i].active) check = !dragger.filter(self.modules[i].v_btn);
     for(var i = 0; check && i < self.modules.length; i++)
       check = !dragger.filter(self.modules[i]);
     for(var i = 0; i < self.modrels.length; i++)
-      keyer.filter(self.modrels[i].v_btn);
+      if(self.modrels[i].active) keyer.filter(self.modrels[i].v_btn);
     for(var i = 0; i < self.modrels.length; i++)
       blurer.filter(self.modrels[i].v_btn);
     for(var i = 0; check && i < self.modrels.length; i++)
-      check = !dragger.filter(self.modrels[i].v_btn);
+      if(self.modrels[i].active) check = !dragger.filter(self.modrels[i].v_btn);
     for(var i = 0; check && i < self.modrels.length; i++)
       check = !dragger.filter(self.modrels[i]);
     //if(check) check = !dragger.filter(self.new_module_btn);
@@ -987,6 +1002,7 @@ var module_board = function()
 
   self.draw = function()
   {
+    gg.ctx.font = "12px Helvetica";
     gg.ctx.textAlign = "center";
     for(var i = 0; i < self.modules.length; i++)
       self.modules[i].draw();
@@ -1030,6 +1046,9 @@ var module_board = function()
         gg.ctx.lineTo(x,y);
       }
       gg.ctx.stroke();
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(fdisp(m.v_min),g.x-10,g.y+g.h);
+      gg.ctx.fillText(fdisp(m.v_max),g.x-10,g.y);
 
       gg.ctx.strokeStyle = gray;
       var t_x = mapVal(0,self.t_max,self.graph.x,self.graph.x+self.graph.w,self.t);
