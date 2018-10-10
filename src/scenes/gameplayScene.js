@@ -102,49 +102,73 @@ var GamePlayScene = function(game, stage)
     var graph_s = 100;
     var btn_s = 20;
 
-    gg.module_board = new module_board();
-    b = gg.module_board;
-    b.w = gg.canv.width;
-    b.h = gg.canv.height;
-    b.x = 0;
-    b.y = 0;
-    //acts as module cam
-    b.ww = gg.canv.width;
-    b.wh = gg.canv.height;
-    b.wx = 0;
-    b.wy = 0;
-    b.size();
-
-    gg.line = new editable_line();
-    b = gg.line;
-    b.w = graph_s;
-    b.h = graph_s;
-    b.x = 20;
-    b.y = 10;
-    b.v_min = 0;
-    b.v_max = 10;
-    b.h_min = 0;
-    b.h_max = 10;
-    b.size();
-
-    gg.quadratic = new editable_quadratic();
-    b = gg.quadratic;
-    b.w = graph_s;
-    b.h = graph_s;
-    b.x = 20;
-    b.y = 10;
-    b.v_min = 0;
-    b.v_max = 10;
-    b.h_min = 0;
-    b.h_max = 10;
-    b.size();
-
     gg.dialog_box = new dialog_box();
     gg.dialog_box.w = 200;
     gg.dialog_box.h = gg.canv.height;
     gg.dialog_box.x = 0;
     gg.dialog_box.y = 0;
     gg.dialog_box.size();
+
+    gg.module_board = new module_board();
+    b = gg.module_board;
+    b.h = gg.canv.height;
+    b.x = gg.dialog_box.x+gg.dialog_box.w;
+    b.w = gg.canv.width-b.x;
+    b.y = 0;
+    b.graph.w = graph_s;
+    b.graph.h = graph_s;
+    b.graph.x = gg.canv.width-b.graph.w-10;
+    b.graph.y = 10;
+    //acts as module cam
+    b.ww = gg.canv.width;
+    b.wh = gg.canv.height;
+    b.wx = 0;
+    b.wy = 0;
+    b.table.h = 100;
+    b.table.x = gg.dialog_box.x+gg.dialog_box.w+10;
+    b.table.y = gg.canv.height-b.table.h;
+    b.table.w = gg.canv.width-b.table.x-10;
+    b.size();
+
+    gg.line = new editable_line();
+    b = gg.line;
+    b.h = gg.canv.height;
+    b.x = gg.dialog_box.x+gg.dialog_box.w;
+    b.y = 0;
+    b.w = gg.canv.width-b.x;
+    b.graph.w = graph_s;
+    b.graph.h = graph_s;
+    b.graph.x = gg.canv.width-b.graph.w-10;
+    b.graph.y = 10;
+    b.v_min = 0;
+    b.v_max = 10;
+    b.h_min = 0;
+    b.h_max = 10;
+    b.table.h = 100;
+    b.table.x = gg.dialog_box.x+gg.dialog_box.w+10;
+    b.table.y = gg.canv.height-b.table.h;
+    b.table.w = gg.canv.width-b.table.x-10;
+    b.size();
+
+    gg.quadratic = new editable_quadratic();
+    b = gg.quadratic;
+    b.h = gg.canv.height;
+    b.x = gg.dialog_box.x+gg.dialog_box.w;
+    b.y = 0;
+    b.w = gg.canv.width-b.x;
+    b.graph.w = graph_s;
+    b.graph.h = graph_s;
+    b.graph.x = gg.canv.width-b.graph.w-10;
+    b.graph.y = 10;
+    b.v_min = 0;
+    b.v_max = 10;
+    b.h_min = 0;
+    b.h_max = 10;
+    b.table.h = 100;
+    b.table.x = gg.dialog_box.x+gg.dialog_box.w+10;
+    b.table.y = gg.canv.height-b.table.h;
+    b.table.w = gg.canv.width-b.table.x-10;
+    b.size();
 
     gg.levels = [];
     var l;

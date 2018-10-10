@@ -6,6 +6,8 @@ var editable_line = function()
   self.x = 0;
   self.y = 0;
 
+  self.graph = {x:0,y:0,w:0,h:0};
+
   self.m = 0;
   self.b = 0;
   self.correct_m = 0;
@@ -17,6 +19,17 @@ var editable_line = function()
 
   self.m_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.m = v; self.draw_params(); });
   self.b_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.b = v; self.draw_params(); });
+
+  self.font_h = 50;
+  self.font = self.font_h+"px Helvetica";
+
+  self.btn_w = 0;
+  self.eqn_x = 0;
+  self.eqn_y = 0;
+  self.eqn_w = 0;
+  self.eqn_h = self.font_h;
+  self.yeq_x = 0;
+  self.xp_x = 0;
 
   self.table = new table();
   self.table.n = 5;
@@ -35,21 +48,25 @@ var editable_line = function()
 
   self.size = function()
   {
-    var btn_s = 20;
-    self.m_btn.w = btn_s+4;
-    self.m_btn.h = btn_s;
-    self.m_btn.x = self.x+18;
-    self.m_btn.y = self.y+self.h+5;
+    gg.ctx.font = self.font;
+    self.btn_w = gg.ctx.measureText("-0.0").width;
+    self.eqn_w = gg.ctx.measureText("y = ").width+self.btn_w+gg.ctx.measureText("x + ").width+self.btn_w;
+    self.eqn_h = self.font_h;
+    self.eqn_x = self.x+self.w/2-self.eqn_w/2;
+    self.eqn_y = self.y+self.h/2-self.eqn_h/2;
 
-    self.b_btn.w = btn_s+4;
-    self.b_btn.h = btn_s;
-    self.b_btn.x = self.x+58;
-    self.b_btn.y = self.y+self.h+5;
+    self.m_btn.w = self.btn_w;
+    self.m_btn.h = self.font_h;
+    self.m_btn.y = self.eqn_y;
 
-    self.table.w = 100;
-    self.table.h = self.h;
-    self.table.x = self.x+self.w+10;
-    self.table.y = self.y;
+    self.b_btn.w = self.btn_w;
+    self.b_btn.h = self.font_h;
+    self.b_btn.y = self.eqn_y;
+
+    self.yeq_x = self.eqn_x;
+    self.m_btn.x = self.yeq_x+gg.ctx.measureText("y = ").width;
+    self.xp_x = self.m_btn.x+self.m_btn.w;
+    self.b_btn.x = self.xp_x+gg.ctx.measureText("x + ").width;
 
     self.draw_params();
   }
@@ -79,10 +96,10 @@ var editable_line = function()
       if(self.ey > self.v_max) { self.ex = (self.v_max-self.b)/self.m; self.ey = self.v_max; }
     }
 
-    self.sy = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.sy);
-    self.ey = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.ey);
-    self.sx = mapVal(self.h_min, self.h_max, self.x, self.x+self.w, self.sx);
-    self.ex = mapVal(self.h_min, self.h_max, self.x, self.x+self.w, self.ex);
+    self.sy = mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, self.sy);
+    self.ey = mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, self.ey);
+    self.sx = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, self.sx);
+    self.ex = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, self.ex);
 
     for(var i = 0; i < self.table.n; i++)
       self.table.predicted_data[i] = fdisp(self.v(self.table.t_data[i]),1);
@@ -124,23 +141,21 @@ var editable_line = function()
 
     gg.ctx.strokeStyle = black;
     gg.ctx.fillStyle = black;
-    gg.ctx.font = "12px Helvetica";
 
-    strokeBox(self,gg.ctx);
+    strokeBox(self.graph,gg.ctx);
     drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
-    gg.ctx.fillText(fdisp(self.v_min),self.x-10,self.y+self.h);
-    gg.ctx.fillText(fdisp(self.v_max),self.x-10,self.y);
+    gg.ctx.font = "12px Helvetica";
+    gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
+    gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
+    gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
-    x = self.x;
-    y = self.y+self.h+20;
-    gg.ctx.fillText("y = ",x,y);
-    x += 20;
-    gg.ctx.fillText(self.m,x,y);
-    x += 24;
-    gg.ctx.fillText("x+",x,y);
-    x += 17;
-    gg.ctx.fillText(self.b,x,y);
+    gg.ctx.fillText("y = ",self.yeq_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("x + ",self.xp_x,self.eqn_y+self.eqn_h);
+    gg.ctx.textAlign = "right";
+    gg.ctx.fillText(self.m,self.m_btn.x+self.m_btn.w,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText(self.b,self.b_btn.x+self.b_btn.w,self.eqn_y+self.eqn_h);
+    gg.ctx.textAlign = "left";
 
     strokeBox(self.m_btn,gg.ctx);
     strokeBox(self.b_btn,gg.ctx);
@@ -152,10 +167,10 @@ var editable_line = function()
     {
       if(self.table.known_data[i] != "-")
       {
-        x = mapVal(self.h_min,self.h_max,self.x,self.x+self.w,self.table.t_data[i]);
-        y = mapVal(self.v_min,self.v_max,self.y+self.h,self.y,self.table.known_data[i]);
-        x = clamp(self.x,self.x+self.w,x);
-        y = clamp(self.y,self.y+self.h,y);
+        x = mapVal(self.h_min,self.h_max,self.graph.x,self.graph.x+self.graph.w,self.table.t_data[i]);
+        y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,self.table.known_data[i]);
+        x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
+        y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
         gg.ctx.fillRect(x-1,y-1,2,2);
       }
     }
@@ -169,6 +184,8 @@ var editable_quadratic = function()
   self.h = 0;
   self.x = 0;
   self.y = 0;
+
+  self.graph = {x:0,y:0,w:0,h:0};
 
   self.a = 0;
   self.b = 0;
@@ -185,6 +202,19 @@ var editable_quadratic = function()
   self.a_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.a = v; self.draw_params(); });
   self.b_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.b = v; self.draw_params(); });
   self.c_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.c = v; self.draw_params(); });
+
+  self.font_h = 50;
+  self.font = self.font_h+"px Helvetica";
+
+  self.btn_w = 0;
+  self.eqn_x = 0;
+  self.eqn_y = 0;
+  self.eqn_w = 0;
+  self.eqn_h = self.font_h;
+  self.yeq_x = 0;
+  self.x2p_x = 0;
+  self.xp_x = 0;
+
   self.table = new table();
   self.table.n = 5;
   self.calculate_table = function()
@@ -202,26 +232,31 @@ var editable_quadratic = function()
 
   self.size = function()
   {
-    var btn_s = 20;
-    self.a_btn.w = btn_s+4;
-    self.a_btn.h = btn_s;
-    self.a_btn.x = self.x+18;
-    self.a_btn.y = self.y+self.h+5;
+    gg.ctx.font = self.font;
+    self.btn_w = gg.ctx.measureText("-0.0").width;
+    self.eqn_w = gg.ctx.measureText("y = ").width+self.btn_w+gg.ctx.measureText("x² + ").width+self.btn_w+gg.ctx.measureText("x + ").width+self.btn_w;
+    self.eqn_h = self.font_h;
+    self.eqn_x = self.x+self.w/2-self.eqn_w/2;
+    self.eqn_y = self.y+self.h/2-self.eqn_h/2;
 
-    self.b_btn.w = btn_s+4;
-    self.b_btn.h = btn_s;
-    self.b_btn.x = self.x+63;
-    self.b_btn.y = self.y+self.h+5;
+    self.a_btn.w = self.btn_w;
+    self.a_btn.h = self.font_h;
+    self.a_btn.y = self.eqn_y;
 
-    self.c_btn.w = btn_s+4;
-    self.c_btn.h = btn_s;
-    self.c_btn.x = self.x+104;
-    self.c_btn.y = self.y+self.h+5;
+    self.b_btn.w = self.btn_w;
+    self.b_btn.h = self.font_h;
+    self.b_btn.y = self.eqn_y;
 
-    self.table.w = 100;
-    self.table.h = self.h;
-    self.table.x = self.x+self.w+10;
-    self.table.y = self.y;
+    self.c_btn.w = self.btn_w;
+    self.c_btn.h = self.font_h;
+    self.c_btn.y = self.eqn_y;
+
+    self.yeq_x = self.eqn_x;
+    self.a_btn.x = self.yeq_x+gg.ctx.measureText("y = ").width;
+    self.x2p_x = self.a_btn.x+self.a_btn.w;
+    self.b_btn.x = self.x2p_x+gg.ctx.measureText("x² + ").width;
+    self.xp_x = self.b_btn.x+self.b_btn.w;
+    self.c_btn.x = self.xp_x+gg.ctx.measureText("x +").width;
 
     self.draw_params();
   }
@@ -241,8 +276,8 @@ var editable_quadratic = function()
     {
       x = mapVal(0,self.samples-1,self.h_min,self.h_max,i);
       y = self.v(x);
-      self.xpts[i] = mapVal(self.h_min, self.h_max, self.x, self.x+self.w, x);
-      self.ypts[i] = clamp(self.y, self.y+self.h, mapVal(self.v_min, self.v_max, self.y+self.h, self.y, y)); //map then clamp separate because y flipped
+      self.xpts[i] = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, x);
+      self.ypts[i] = clamp(self.graph.y, self.graph.y+self.graph.h, mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, y)); //map then clamp separate because y flipped
     }
 
     for(var i = 0; i < self.table.n; i++)
@@ -288,31 +323,27 @@ var editable_quadratic = function()
 
     gg.ctx.strokeStyle = black;
     gg.ctx.fillStyle = black;
-    gg.ctx.font = "12px Helvetica";
 
-    strokeBox(self,gg.ctx);
+    strokeBox(self.graph,gg.ctx);
     gg.ctx.beginPath();
     gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
     for(var i = 0; i < self.samples; i++)
       gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
     gg.ctx.stroke();
+    gg.ctx.font = "12px Helvetica";
     gg.ctx.fillText(fdisp(self.v_min),self.x-10,self.y+self.h);
     gg.ctx.fillText(fdisp(self.v_max),self.x-10,self.y);
 
+    gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
-    x = self.x;
-    y = self.y+self.h+20;
-    gg.ctx.fillText("y = ",x,y);
-    x += 20;
-    gg.ctx.fillText(self.a,x,y);
-    x += 24;
-    gg.ctx.fillText("x²+",x,y);
-    x += 20;
-    gg.ctx.fillText(self.b,x,y);
-    x += 25;
-    gg.ctx.fillText("x+",x,y);
-    x += 17;
-    gg.ctx.fillText(self.c,x,y);
+    gg.ctx.fillText("y = ",self.yeq_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("x² + ",self.x2p_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("x + ",self.xp_x,self.eqn_y+self.eqn_h);
+    gg.ctx.textAlign = "right";
+    gg.ctx.fillText(self.a,self.a_btn.x+self.a_btn.w,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText(self.b,self.b_btn.x+self.b_btn.w,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText(self.c,self.c_btn.x+self.c_btn.w,self.eqn_y+self.eqn_h);
+    gg.ctx.textAlign = "left";
 
     strokeBox(self.a_btn,gg.ctx);
     strokeBox(self.b_btn,gg.ctx);
@@ -325,10 +356,10 @@ var editable_quadratic = function()
     {
       if(self.table.known_data[i] != "-")
       {
-        x = mapVal(self.h_min,self.h_max,self.x,self.x+self.w,self.table.t_data[i]);
-        y = mapVal(self.v_min,self.v_max,self.y+self.h,self.y,self.table.known_data[i]);
-        x = clamp(self.x,self.x+self.w,x);
-        y = clamp(self.y,self.y+self.h,y);
+        x = mapVal(self.h_min,self.h_max,self.graph.x,self.graph.x+self.graph.w,self.table.t_data[i]);
+        y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,self.table.known_data[i]);
+        x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
+        y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
         gg.ctx.fillRect(x-1,y-1,2,2);
       }
     }
@@ -342,6 +373,9 @@ var table = function()
   self.h = 0;
   self.x = 0;
   self.y = 0;
+
+  self.font_h = 20;
+  self.font = self.font_h+"px Helvetica";
 
   self.n = 0;
   self.t_data = [];
@@ -384,28 +418,30 @@ var table = function()
   self.draw = function()
   {
     strokeBox(self,gg.ctx);
-    var x0 = self.x;
-    var x1 = self.x+self.w/3;
-    var x2 = self.x+self.w*2/3;
-    var x3 = self.x+self.w;
-    var x01 = lerp(x0,x1,0.5);
-    var x12 = lerp(x1,x2,0.5);
-    var x23 = lerp(x2,x3,0.5);
-    drawLine(x1,self.y,x1,self.y+self.h,gg.ctx);
-    drawLine(x2,self.y,x2,self.y+self.h,gg.ctx);
-    var y = self.y;
+    var y0 = self.y;
+    var y1 = self.y+self.h/3;
+    var y2 = self.y+self.h*2/3;
+    var y3 = self.y+self.h;
+    var y01 = lerp(y0,y1,0.5);
+    var y12 = lerp(y1,y2,0.5);
+    var y23 = lerp(y2,y3,0.5);
+    drawLine(self.x,y1,self.x+self.w,y1,gg.ctx);
+    drawLine(self.x,y2,self.x+self.w,y2,gg.ctx);
+    var x = self.x;
     gg.ctx.textAlign = "center";
+    gg.ctx.font = self.font;
     for(var i = 0; i < self.n; i++)
     {
-      y = self.y+((i+1)/self.n)*self.h;
+      x = self.x+((i+1)/self.n)*self.w;
+      drawLine(x,y0,x,y3,gg.ctx);
+      x -= (self.w/self.n)/2;
       gg.ctx.fillStyle = black;
-      gg.ctx.fillText(self.t_data[i],        x01,y-3);
+      gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
       gg.ctx.fillStyle = red;
-      gg.ctx.fillText(self.known_data[i],    x12,y-3);
+      gg.ctx.fillText(self.known_data[i],x,y12+self.font_h/2);
       if(self.known_data[i] == self.predicted_data[i] || self.correct) gg.ctx.fillStyle = green;
       else gg.ctx.fillStyle = black;
-      gg.ctx.fillText(self.predicted_data[i],x23,y-3);
-      drawLine(x0,y,x3,y,gg.ctx);
+      gg.ctx.fillText(self.predicted_data[i],x,y23+self.font_h/2);
     }
   }
 
@@ -843,20 +879,10 @@ var module_board = function()
 
   self.size = function()
   {
-    self.graph.w = 100;
-    self.graph.h = 100;
-    self.graph.x = self.x+20;
-    self.graph.y = self.y+10;
-
     self.timeline.w = self.w;
     self.timeline.h = 30;
-    self.timeline.x = 0;
+    self.timeline.x = self.x;
     self.timeline.y = self.h-self.timeline.h-100;
-
-    self.table.w = 100;
-    self.table.h = 100;
-    self.table.x = self.graph.x+self.graph.w+10;
-    self.table.y = self.graph.y;
 
     self.advance_btn.w = 50;
     self.advance_btn.h = 50;
