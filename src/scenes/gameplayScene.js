@@ -140,10 +140,11 @@ var GamePlayScene = function(game, stage)
     b.size();
 
     gg.dialog_box = new dialog_box();
-    gg.dialog_box.w = gg.canv.width;
-    gg.dialog_box.h = 100;
+    gg.dialog_box.w = 200;
+    gg.dialog_box.h = gg.canv.height;
     gg.dialog_box.x = 0;
-    gg.dialog_box.y = gg.canv.height-gg.dialog_box.h;
+    gg.dialog_box.y = 0;
+    gg.dialog_box.size();
 
     gg.levels = [];
     var l;

@@ -419,57 +419,88 @@ var dialog_box = function()
   self.x = 0;
   self.y = 0;
 
+  self.bubble_w = 0;
+  self.text_w = 0;
+
   self.pad = 10;
   self.font_h = 15;
   self.font = self.font_h+"px Helvetica";
 
+  self.top_y = 0;
+  self.target_top_y = 0;
+
   self.requested_past_available = 0;
 
   self.text = [];
-  self.lines = [];
-  self.clear = function(text)
+  self.bubbles = [];
+
+  self.displayed_i = 0;
+
+  self.size = function()
+  {
+    self.bubble_w = self.w-self.pad*2;
+    self.text_w = self.bubble_w-self.pad*2;
+  }
+
+  self.clear = function()
   {
     self.text = [];
-    self.lines = []
+    self.bubbles = []
+    self.top_y = self.y+self.h;
+    self.target_top_y = self.top_y;
     self.requested_past_available = 0;
+    self.displayed_i = 0;
   }
+
   self.nq = function(text)
   {
     self.text.push(text);
-    self.lines.push(textToLines(self.font,self.w-self.pad-(self.h-self.pad*2)-self.pad-self.pad,text,gg.ctx));
+    self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.requested_past_available = 0;
   }
 
   self.click = function()
   {
-    if(self.text.length > 1)
+    if(self.displayed_i < self.text.length)
     {
-      self.text.splice(0,1);
-      self.lines.splice(0,1);
+      self.displayed_i++;
+      self.target_top_y = self.y+self.h;
+      for(var i = 0; i < self.displayed_i; i++)
+      {
+        self.target_top_y -= self.pad;
+        for(var j = 0; j < self.bubbles[i].length; j++)
+          self.target_top_y -= self.font_h+self.pad;
+        self.target_top_y -= self.pad*2;
+      }
     }
     else self.requested_past_available = 1;
   }
 
   self.tick = function()
   {
-
+    self.top_y = lerp(self.top_y,self.target_top_y,0.1);
   }
 
   self.draw = function()
   {
     strokeBox(self,gg.ctx);
-    gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,self.h-self.pad*2,self.h-self.pad*2);
+    gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,self.w-self.pad*2,self.w-self.pad*2);
 
     if(!self.text.length) return;
     gg.ctx.fillStyle = black;
     gg.ctx.textAlign = "left";
     gg.ctx.font = self.font;
-    var x = self.x+self.pad+(self.h-self.pad*2)+self.pad;
-    var y = self.y+self.font_h+self.pad;
-    for(var i = 0; i < self.lines[0].length; i++)
+    var y = self.top_y;
+    for(var i = 0; i < self.displayed_i; i++)
     {
-      gg.ctx.fillText(self.lines[0][i],x,y);
-      y += self.font_h;
+      gg.ctx.strokeRect(self.x+self.pad,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+      y += self.pad;
+      for(var j = 0; j < self.bubbles[i].length; j++)
+      {
+        gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,y+self.font_h);
+        y += self.font_h+self.pad;
+      }
+      y += self.pad;
     }
   }
 }
