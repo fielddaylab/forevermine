@@ -32,7 +32,7 @@ var editable_line = function()
   self.xp_x = 0;
 
   self.table = new table();
-  self.table.n = 5;
+  self.table.n = 10;
   self.calculate_table = function()
   {
     for(var i = 0; i < self.table.n; i++)
@@ -139,6 +139,7 @@ var editable_line = function()
     var x;
     var y;
 
+    gg.ctx.lineWidth = 1;
     gg.ctx.strokeStyle = black;
     gg.ctx.fillStyle = black;
 
@@ -216,7 +217,7 @@ var editable_quadratic = function()
   self.xp_x = 0;
 
   self.table = new table();
-  self.table.n = 5;
+  self.table.n = 10;
   self.calculate_table = function()
   {
     for(var i = 0; i < self.table.n; i++)
@@ -321,6 +322,7 @@ var editable_quadratic = function()
     var x;
     var y;
 
+    gg.ctx.lineWidth = 1;
     gg.ctx.strokeStyle = black;
     gg.ctx.fillStyle = black;
 
@@ -394,11 +396,11 @@ var table = function()
   self.dragStart = function(evt)
   {
     //copied from draw!
-    var x2 = self.x+self.w*2/3;
-    var x3 = self.x+self.w;
-    var y = self.y+((self.n-1)/self.n)*self.h;
-    var h = self.h/self.n;
-    if(ptWithin(x2,y,x3-x2,h,evt.doX,evt.doY))
+    var y2 = self.y+self.h*2/3;
+    var y3 = self.y+self.h;
+    var w = self.w/(self.n+1);
+    var x = self.x+(self.n)*w;
+    if(ptWithin(x,y2,w,y3-y2,evt.doX,evt.doY))
       gg.cur_level.submit(self.correct);
   }
   self.drag = function(evt)
@@ -417,7 +419,8 @@ var table = function()
 
   self.draw = function()
   {
-    strokeBox(self,gg.ctx);
+    gg.ctx.lineWidth = 0.5;
+
     var y0 = self.y;
     var y1 = self.y+self.h/3;
     var y2 = self.y+self.h*2/3;
@@ -428,13 +431,27 @@ var table = function()
     drawLine(self.x,y1,self.x+self.w,y1,gg.ctx);
     drawLine(self.x,y2,self.x+self.w,y2,gg.ctx);
     var x = self.x;
-    gg.ctx.textAlign = "center";
+    var w = self.w/(self.n+1);
+
+    gg.ctx.font = "12px Helvetica";
+    gg.ctx.textAlign = "left";
+    x = self.x+w;
+    drawLine(x,y1,x,y3,gg.ctx);
+    x -= w;
+    gg.ctx.fillStyle = black;
+    gg.ctx.fillText("DAY",x,y01+self.font_h/2);
+    gg.ctx.fillText("Collected",x,y12+self.font_h/2-13);
+    gg.ctx.fillText("Data",x,y12+self.font_h/2);
+    gg.ctx.fillText("Modeled",x,y23+self.font_h/2-13);
+    gg.ctx.fillText("Data",x,y23+self.font_h/2);
+
     gg.ctx.font = self.font;
+    gg.ctx.textAlign = "center";
     for(var i = 0; i < self.n; i++)
     {
-      x = self.x+((i+1)/self.n)*self.w;
-      drawLine(x,y0,x,y3,gg.ctx);
-      x -= (self.w/self.n)/2;
+      x = self.x+(i+2)*w;
+      drawLine(x,y1,x,y3,gg.ctx);
+      x -= w/2;
       gg.ctx.fillStyle = black;
       gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
       gg.ctx.fillStyle = red;
@@ -519,6 +536,7 @@ var dialog_box = function()
 
   self.draw = function()
   {
+    gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
     gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,self.w-self.pad*2,self.w-self.pad*2);
 
@@ -640,6 +658,7 @@ var module = function()
 
   self.draw = function()
   {
+    gg.ctx.lineWidth = 1;
     var x;
     var y;
     if(!self.active) { gg.ctx.fillStyle = very_light_gray; fillBox(self,gg.ctx); }
@@ -771,6 +790,7 @@ var modrel = function()
 
   self.draw = function()
   {
+    gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
     if(!self.active) { gg.ctx.fillStyle = very_light_gray; fillBox(self,gg.ctx); }
     gg.ctx.fillStyle = black;
@@ -855,7 +875,7 @@ var module_board = function()
   },drag:function(evt){},dragFinish:function(evt){}};
 
   self.table = new table();
-  self.table.n = 5;
+  self.table.n = 10;
   for(var i = 0; i < self.table.n; i++)
   {
     self.table.t_data[i] = i;
@@ -1059,6 +1079,8 @@ var module_board = function()
 
   self.draw = function()
   {
+    gg.ctx.lineWidth = 1;
+
     gg.ctx.font = "12px Helvetica";
     gg.ctx.textAlign = "center";
     for(var i = 0; i < self.modules.length; i++)
