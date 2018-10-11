@@ -57,7 +57,6 @@ var level = function()
 
     if(self.correct)
     {
-      gg.dialog_box.clear();
       for(var i = 0; i < self.correct_text.length; i++)
         gg.dialog_box.nq(self.correct_text[i]);
       self.submitted_correct();

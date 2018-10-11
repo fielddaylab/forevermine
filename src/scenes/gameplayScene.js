@@ -541,8 +541,8 @@ var GamePlayScene = function(game, stage)
 
     switch(gg.cur_level.type)
     {
-      case LEVEL_LINEAR:    gg.line.filter(keyer,blurer,dragger);         gg.line.tick();         break;
-      case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger);    gg.quadratic.tick();    break;
+      case LEVEL_LINEAR:    gg.line.filter(keyer,blurer,dragger,clicker);         gg.line.tick();         break;
+      case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
       case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger); gg.module_board.tick(); break;
     }
     clicker.filter(gg.dialog_box);

@@ -18,7 +18,11 @@ var editable_line = function()
   self.v_max = 0;
 
   self.m_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.m = v; self.draw_params(); });
+  self.minc_btn = new ButtonBox(0,0,0,0,function(){ self.m_btn.set(self.m_btn.number+0.1); });
+  self.mdec_btn = new ButtonBox(0,0,0,0,function(){ self.m_btn.set(self.m_btn.number-0.1); });
   self.b_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.b = v; self.draw_params(); });
+  self.binc_btn = new ButtonBox(0,0,0,0,function(){ self.b_btn.set(self.b_btn.number+0.1); });
+  self.bdec_btn = new ButtonBox(0,0,0,0,function(){ self.b_btn.set(self.b_btn.number-0.1); });
 
   self.font_h = 50;
   self.font = self.font_h+"px Helvetica";
@@ -68,6 +72,23 @@ var editable_line = function()
     self.xp_x = self.m_btn.x+self.m_btn.w;
     self.b_btn.x = self.xp_x+gg.ctx.measureText("x + ").width;
 
+    self.minc_btn.w = self.m_btn.w;
+    self.minc_btn.h = self.m_btn.h/2;
+    self.minc_btn.x = self.m_btn.x;
+    self.minc_btn.y = self.m_btn.y-self.m_btn.h;
+    self.mdec_btn.w = self.m_btn.w;
+    self.mdec_btn.h = self.m_btn.h/2;
+    self.mdec_btn.x = self.m_btn.x;
+    self.mdec_btn.y = self.m_btn.y+self.m_btn.h+self.m_btn.h/2;
+    self.binc_btn.w = self.b_btn.w;
+    self.binc_btn.h = self.b_btn.h/2;
+    self.binc_btn.x = self.b_btn.x;
+    self.binc_btn.y = self.b_btn.y-self.b_btn.h;
+    self.bdec_btn.w = self.b_btn.w;
+    self.bdec_btn.h = self.b_btn.h/2;
+    self.bdec_btn.x = self.b_btn.x;
+    self.bdec_btn.y = self.b_btn.y+self.b_btn.h+self.b_btn.h/2;
+
     self.draw_params();
   }
 
@@ -106,8 +127,9 @@ var editable_line = function()
     self.table.verify();
   }
 
-  self.filter = function(keyer,blurer,dragger)
+  self.filter = function(keyer,blurer,dragger,clicker)
   {
+    var check = 1;
     if(keyer)
     {
       keyer.filter(self.m_btn);
@@ -120,13 +142,18 @@ var editable_line = function()
     }
     if(dragger)
     {
-      var check = 1;
       if(check) check = !dragger.filter(self.table);
       if(check) check = !dragger.filter(self.m_btn);
       if(check) check = !dragger.filter(self.b_btn);
-      return !check;
     }
-    return 0;
+    if(clicker)
+    {
+      if(check) check = !clicker.filter(self.minc_btn);
+      if(check) check = !clicker.filter(self.mdec_btn);
+      if(check) check = !clicker.filter(self.binc_btn);
+      if(check) check = !clicker.filter(self.bdec_btn);
+    }
+    return !check;
   }
 
   self.tick = function()
@@ -159,7 +186,11 @@ var editable_line = function()
     gg.ctx.textAlign = "left";
 
     strokeBox(self.m_btn,gg.ctx);
+    strokeBox(self.minc_btn,gg.ctx);
+    strokeBox(self.mdec_btn,gg.ctx);
     strokeBox(self.b_btn,gg.ctx);
+    strokeBox(self.binc_btn,gg.ctx);
+    strokeBox(self.bdec_btn,gg.ctx);
 
     self.table.draw();
 
@@ -201,8 +232,14 @@ var editable_quadratic = function()
   self.samples = 100;
 
   self.a_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.a = v; self.draw_params(); });
+  self.ainc_btn = new ButtonBox(0,0,0,0,function(){ self.a_btn.set(self.a_btn.number+0.1); });
+  self.adec_btn = new ButtonBox(0,0,0,0,function(){ self.a_btn.set(self.a_btn.number-0.1); });
   self.b_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.b = v; self.draw_params(); });
+  self.binc_btn = new ButtonBox(0,0,0,0,function(){ self.b_btn.set(self.b_btn.number+0.1); });
+  self.bdec_btn = new ButtonBox(0,0,0,0,function(){ self.b_btn.set(self.b_btn.number-0.1); });
   self.c_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.c = v; self.draw_params(); });
+  self.cinc_btn = new ButtonBox(0,0,0,0,function(){ self.c_btn.set(self.c_btn.number+0.1); });
+  self.cdec_btn = new ButtonBox(0,0,0,0,function(){ self.c_btn.set(self.c_btn.number-0.1); });
 
   self.font_h = 50;
   self.font = self.font_h+"px Helvetica";
@@ -259,6 +296,33 @@ var editable_quadratic = function()
     self.xp_x = self.b_btn.x+self.b_btn.w;
     self.c_btn.x = self.xp_x+gg.ctx.measureText("x +").width;
 
+    self.ainc_btn.w = self.a_btn.w;
+    self.ainc_btn.h = self.a_btn.h/2;
+    self.ainc_btn.x = self.a_btn.x;
+    self.ainc_btn.y = self.a_btn.y-self.a_btn.h;
+    self.adec_btn.w = self.a_btn.w;
+    self.adec_btn.h = self.a_btn.h/2;
+    self.adec_btn.x = self.a_btn.x;
+    self.adec_btn.y = self.a_btn.y+self.a_btn.h+self.a_btn.h/2;
+
+    self.binc_btn.w = self.b_btn.w;
+    self.binc_btn.h = self.b_btn.h/2;
+    self.binc_btn.x = self.b_btn.x;
+    self.binc_btn.y = self.b_btn.y-self.b_btn.h;
+    self.bdec_btn.w = self.b_btn.w;
+    self.bdec_btn.h = self.b_btn.h/2;
+    self.bdec_btn.x = self.b_btn.x;
+    self.bdec_btn.y = self.b_btn.y+self.b_btn.h+self.b_btn.h/2;
+
+    self.cinc_btn.w = self.c_btn.w;
+    self.cinc_btn.h = self.c_btn.h/2;
+    self.cinc_btn.x = self.c_btn.x;
+    self.cinc_btn.y = self.c_btn.y-self.c_btn.h;
+    self.cdec_btn.w = self.c_btn.w;
+    self.cdec_btn.h = self.c_btn.h/2;
+    self.cdec_btn.x = self.c_btn.x;
+    self.cdec_btn.y = self.c_btn.y+self.c_btn.h+self.c_btn.h/2;
+
     self.draw_params();
   }
 
@@ -286,8 +350,9 @@ var editable_quadratic = function()
     self.table.verify();
   }
 
-  self.filter = function(keyer,blurer,dragger)
+  self.filter = function(keyer,blurer,dragger,clicker)
   {
+    var check = 1;
     if(keyer)
     {
       keyer.filter(self.a_btn);
@@ -302,14 +367,21 @@ var editable_quadratic = function()
     }
     if(dragger)
     {
-      var check = 1;
       if(check) check = !dragger.filter(self.table);
       if(check) check = !dragger.filter(self.a_btn);
       if(check) check = !dragger.filter(self.b_btn);
       if(check) check = !dragger.filter(self.c_btn);
-      return !check;
     }
-    return 0;
+    if(clicker)
+    {
+      if(check) check = !clicker.filter(self.ainc_btn);
+      if(check) check = !clicker.filter(self.adec_btn);
+      if(check) check = !clicker.filter(self.binc_btn);
+      if(check) check = !clicker.filter(self.bdec_btn);
+      if(check) check = !clicker.filter(self.cinc_btn);
+      if(check) check = !clicker.filter(self.cdec_btn);
+    }
+    return !check;
   }
 
   self.tick = function()
@@ -333,8 +405,8 @@ var editable_quadratic = function()
       gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
     gg.ctx.stroke();
     gg.ctx.font = "12px Helvetica";
-    gg.ctx.fillText(fdisp(self.v_min),self.x-10,self.y+self.h);
-    gg.ctx.fillText(fdisp(self.v_max),self.x-10,self.y);
+    gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
+    gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
@@ -348,8 +420,14 @@ var editable_quadratic = function()
     gg.ctx.textAlign = "left";
 
     strokeBox(self.a_btn,gg.ctx);
+    strokeBox(self.ainc_btn,gg.ctx);
+    strokeBox(self.adec_btn,gg.ctx);
     strokeBox(self.b_btn,gg.ctx);
+    strokeBox(self.binc_btn,gg.ctx);
+    strokeBox(self.bdec_btn,gg.ctx);
     strokeBox(self.c_btn,gg.ctx);
+    strokeBox(self.cinc_btn,gg.ctx);
+    strokeBox(self.cdec_btn,gg.ctx);
 
     self.table.draw();
 
