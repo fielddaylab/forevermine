@@ -530,7 +530,7 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    self.set_level(0);
+    self.set_level(3);
   };
 
   self.tick = function()
@@ -543,7 +543,7 @@ var GamePlayScene = function(game, stage)
     {
       case LEVEL_LINEAR:    gg.line.filter(keyer,blurer,dragger,clicker);         gg.line.tick();         break;
       case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
-      case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger); gg.module_board.tick(); break;
+      case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
     }
     clicker.filter(gg.dialog_box);
     if(gg.cur_level.submitted && gg.dialog_box.requested_past_available)

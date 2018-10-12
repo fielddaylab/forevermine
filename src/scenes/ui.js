@@ -650,7 +650,9 @@ var module = function()
   self.wx = 0;
   self.wy = 0;
 
+  self.vinc_btn = new ButtonBox(0,0,0,0,function(){ self.v_btn.set(self.v_btn.number+0.1); });
   self.v_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.v[0] = v; gg.module_board.calculate(); });
+  self.vdec_btn = new ButtonBox(0,0,0,0,function(){ self.v_btn.set(self.v_btn.number-0.1); });
 
   self.v = [];
   self.correct_v = [];
@@ -665,6 +667,15 @@ var module = function()
     self.v_btn.h = self.h/2;
     self.v_btn.x = self.x+self.w/2-self.v_btn.w/2;
     self.v_btn.y = self.y+self.h-self.v_btn.h;
+
+    self.vinc_btn.w = self.v_btn.w;
+    self.vinc_btn.h = self.v_btn.h/2;
+    self.vinc_btn.x = self.v_btn.x;
+    self.vinc_btn.y = self.v_btn.y-self.v_btn.h;
+    self.vdec_btn.w = self.v_btn.w;
+    self.vdec_btn.h = self.v_btn.h/2;
+    self.vdec_btn.x = self.v_btn.x;
+    self.vdec_btn.y = self.v_btn.y+self.v_btn.h+self.v_btn.h/2;
   }
 
   self.dragging_body = 0;
@@ -756,6 +767,12 @@ var module = function()
     drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
     gg.ctx.strokeStyle = black;
     strokeBox(self,gg.ctx);
+    if(self.active)
+    {
+      strokeBox(self.v_btn,gg.ctx);
+      strokeBox(self.vinc_btn,gg.ctx);
+      strokeBox(self.vdec_btn,gg.ctx);
+    }
     gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h-1);
     gg.ctx.fillStyle = gray;
@@ -779,7 +796,9 @@ var modrel = function()
   self.wx = 0;
   self.wy = 0;
 
+  self.vinc_btn = new ButtonBox(0,0,0,0,function(){ self.v_btn.set(self.v_btn.number+0.1); });
   self.v_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.v = v; gg.module_board.calculate(); });
+  self.vdec_btn = new ButtonBox(0,0,0,0,function(){ self.v_btn.set(self.v_btn.number-0.1); });
 
   self.v = 1;
   self.correct_v = 1;
@@ -794,6 +813,15 @@ var modrel = function()
     self.v_btn.h = self.h/2;
     self.v_btn.x = self.x+self.w/2-self.v_btn.w/2;
     self.v_btn.y = self.y+self.h/2-self.v_btn.h/2;
+
+    self.vinc_btn.w = self.v_btn.w;
+    self.vinc_btn.h = self.v_btn.h/2;
+    self.vinc_btn.x = self.v_btn.x;
+    self.vinc_btn.y = self.v_btn.y-self.v_btn.h;
+    self.vdec_btn.w = self.v_btn.w;
+    self.vdec_btn.h = self.v_btn.h/2;
+    self.vdec_btn.x = self.v_btn.x;
+    self.vdec_btn.y = self.v_btn.y+self.v_btn.h+self.v_btn.h/2;
   }
 
   self.dragging_body = 0;
@@ -870,6 +898,12 @@ var modrel = function()
   {
     gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
+    if(self.active)
+    {
+      strokeBox(self.v_btn,gg.ctx);
+      strokeBox(self.vinc_btn,gg.ctx);
+      strokeBox(self.vdec_btn,gg.ctx);
+    }
     if(!self.active) { gg.ctx.fillStyle = very_light_gray; fillBox(self,gg.ctx); }
     gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.v,self.x+self.w/2,self.y+self.h*2/3);
@@ -1110,7 +1144,7 @@ var module_board = function()
     self.table.verify();
   }
 
-  self.filter = function(keyer, blurer, dragger)
+  self.filter = function(keyer, blurer, dragger, clicker)
   {
     var check = 1;
     for(var i = 0; i < self.modules.length; i++)
@@ -1119,7 +1153,14 @@ var module_board = function()
       blurer.filter(self.modules[i].v_btn);
     if(check) check = !dragger.filter(self.table);
     for(var i = 0; check && i < self.modules.length; i++)
-      if(self.modules[i].active) check = !dragger.filter(self.modules[i].v_btn);
+    {
+      if(self.modules[i].active)
+      {
+        if(check) check = !dragger.filter(self.modules[i].v_btn);
+        if(check) check = !clicker.filter(self.modules[i].vinc_btn);
+        if(check) check = !clicker.filter(self.modules[i].vdec_btn);
+      }
+    }
     for(var i = 0; check && i < self.modules.length; i++)
       check = !dragger.filter(self.modules[i]);
     for(var i = 0; i < self.modrels.length; i++)
@@ -1127,7 +1168,14 @@ var module_board = function()
     for(var i = 0; i < self.modrels.length; i++)
       blurer.filter(self.modrels[i].v_btn);
     for(var i = 0; check && i < self.modrels.length; i++)
-      if(self.modrels[i].active) check = !dragger.filter(self.modrels[i].v_btn);
+    {
+      if(self.modrels[i].active)
+      {
+        if(check) check = !dragger.filter(self.modrels[i].v_btn);
+        if(check) check = !clicker.filter(self.modrels[i].vinc_btn);
+        if(check) check = !clicker.filter(self.modrels[i].vdec_btn);
+      }
+    }
     for(var i = 0; check && i < self.modrels.length; i++)
       check = !dragger.filter(self.modrels[i]);
     //if(check) check = !dragger.filter(self.new_module_btn);
