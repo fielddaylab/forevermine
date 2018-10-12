@@ -769,7 +769,7 @@ var module = function()
     strokeBox(self,gg.ctx);
     if(self.active)
     {
-      strokeBox(self.v_btn,gg.ctx);
+      //strokeBox(self.v_btn,gg.ctx);
       strokeBox(self.vinc_btn,gg.ctx);
       strokeBox(self.vdec_btn,gg.ctx);
     }
@@ -900,7 +900,7 @@ var modrel = function()
     strokeBox(self,gg.ctx);
     if(self.active)
     {
-      strokeBox(self.v_btn,gg.ctx);
+      //strokeBox(self.v_btn,gg.ctx);
       strokeBox(self.vinc_btn,gg.ctx);
       strokeBox(self.vdec_btn,gg.ctx);
     }
@@ -1011,9 +1011,9 @@ var module_board = function()
 
   self.size = function()
   {
-    self.timeline.w = self.w;
+    self.timeline.w = (self.w-20)*(10/11);
     self.timeline.h = 30;
-    self.timeline.x = self.x;
+    self.timeline.x = 10+self.x+(self.w-20)*(1/11);
     self.timeline.y = self.h-self.timeline.h-100;
 
     self.advance_btn.w = 50;
@@ -1252,6 +1252,7 @@ var module_board = function()
       }
       gg.ctx.stroke();
       gg.ctx.fillStyle = black;
+      gg.ctx.font = "12px Helvetica";
       gg.ctx.fillText(fdisp(m.v_min),g.x-10,g.y+g.h);
       gg.ctx.fillText(fdisp(m.v_max),g.x-10,g.y);
 

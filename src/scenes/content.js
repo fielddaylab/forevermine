@@ -63,7 +63,6 @@ var level = function()
     }
     else
     {
-      gg.dialog_box.clear();
       for(var i = 0; i < self.incorrect_text.length; i++)
         gg.dialog_box.nq(self.incorrect_text[i]);
       self.submitted_incorrect();
