@@ -562,7 +562,7 @@ var GamePlayScene = function(game, stage)
       case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
       case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
     }
-    clicker.filter(gg.dialog_box);
+    dragger.filter(gg.dialog_box);
     if(gg.cur_level.submitted && gg.dialog_box.requested_past_available)
     {
       var correct = gg.cur_level.correct;

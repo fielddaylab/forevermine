@@ -558,6 +558,7 @@ var dialog_box = function()
   self.font = self.font_h+"px Helvetica";
 
   self.top_y = 0;
+  self.max_top_y = 0;
   self.target_top_y = 0;
 
   self.requested_past_available = 0;
@@ -580,7 +581,8 @@ var dialog_box = function()
     self.triggers = [];
     self.bubbles = []
     self.top_y = self.y+self.h;
-    self.target_top_y = self.top_y;
+    self.max_top_y = self.top_y;
+    self.target_top_y = self.max_top_y;
     self.requested_past_available = 0;
     self.displayed_i = 0;
   }
@@ -603,26 +605,48 @@ var dialog_box = function()
   self.advance = function()
   {
     self.displayed_i++;
-    self.target_top_y = self.y+self.h;
+    self.max_top_y = self.y+self.h;
     for(var i = 0; i < self.displayed_i; i++)
     {
-      self.target_top_y -= self.pad;
+      self.max_top_y -= self.pad;
       for(var j = 0; j < self.bubbles[i].length; j++)
-        self.target_top_y -= self.font_h+self.pad;
-      self.target_top_y -= self.pad*2;
+        self.max_top_y -= self.font_h+self.pad;
+      self.max_top_y -= self.pad*2;
     }
+    self.target_top_y = self.max_top_y;
   }
 
-  self.click = function()
+  self.click = function(evt)
   {
     if(self.displayed_i < self.text.length && (self.triggers[self.displayed_i].type == TRIGGER_CLICK || self.triggers[self.displayed_i].type == TRIGGER_TIMER))
       self.advance();
     else self.requested_past_available = 1;
   }
 
+  self.dragging = 0;
+  self.dragging_t = 0;
+  self.drag_start_y = 0;
+  self.dragStart = function(evt)
+  {
+    self.dragging_t = 0;
+    self.drag_start_y = evt.doY;
+  }
+  self.drag = function(evt)
+  {
+    self.target_top_y += evt.doY-self.drag_start_y;
+    if(self.target_top_y > self.y+self.w) self.target_top_y = self.y+self.w;
+    if(self.target_top_y < self.max_top_y) self.target_top_y = self.max_top_y;
+    self.drag_start_y = evt.doY;
+  }
+  self.dragFinish = function(evt)
+  {
+    if(self.dragging_t < 10) self.click(evt);
+  }
+
   self.tick = function()
   {
     self.top_y = lerp(self.top_y,self.target_top_y,0.1);
+    self.dragging_t++;
 
     if(self.displayed_i < self.text.length && self.triggers[self.displayed_i].type == TRIGGER_TIMER)
     {
