@@ -473,6 +473,8 @@ var table = function()
 
   self.dragStart = function(evt)
   {
+    if(gg.cur_level.correct) return;
+
     //copied from draw!
     var y2 = self.y+self.h*2/3;
     var y3 = self.y+self.h;

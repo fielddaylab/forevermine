@@ -62,11 +62,9 @@ var level = function()
   self.incorrect_text = [ "I don't think that's right... try again.", trigger_timer];
 
   self.correct = 0;
-  self.submitted = 0;
   self.submit = function(correct)
   {
     self.correct = correct;
-    self.submitted = 1;
 
     if(self.correct)
     {

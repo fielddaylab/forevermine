@@ -28,13 +28,14 @@ var GamePlayScene = function(game, stage)
   self.set_level = function(i)
   {
     gg.cur_level = gg.levels[i];
-    gg.cur_level.submitted = 0;
     gg.cur_level.correct = 0;
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:
         gg.line.m = gg.cur_level.m;
+        gg.line.m_btn.set(gg.cur_level.m);
         gg.line.b = gg.cur_level.b;
+        gg.line.b_btn.set(gg.cur_level.b);
         gg.line.correct_m = gg.cur_level.correct_m;
         gg.line.correct_b = gg.cur_level.correct_b;
         gg.line.calculate_table();
@@ -42,8 +43,11 @@ var GamePlayScene = function(game, stage)
         break;
       case LEVEL_QUADRATIC:
         gg.quadratic.a = gg.cur_level.a;
+        gg.quadratic.a_btn.set(gg.cur_level.a);
         gg.quadratic.b = gg.cur_level.b;
+        gg.quadratic.b_btn.set(gg.cur_level.b);
         gg.quadratic.c = gg.cur_level.c;
+        gg.quadratic.c_btn.set(gg.cur_level.c);
         gg.quadratic.correct_a = gg.cur_level.correct_a;
         gg.quadratic.correct_b = gg.cur_level.correct_b;
         gg.quadratic.correct_c = gg.cur_level.correct_c;
@@ -196,23 +200,25 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.type = LEVEL_LINEAR;
-    l.m = 0;
-    l.b = 0;
+    l.m = 3;
+    l.b = 3;
     l.correct_m = 2;
     l.correct_b = 1;
     l.text = [
-      "Our mining robots were recently upgraded with a stronger drill bits that speeds up mining.", get_timer(40),
-      "We collected data about how many crystals they were able to harvest over the last 3 days.", get_timer(400),
-      "Now we need you to build a model with this graph to predict how many crystals we will have by day 4.", get_timer(400),
+      "Here's the model my owners used to use.", get_timer(40),
+      "You'll have to alter it to fit the current fleet.", get_timer(200),
+      "The robots might be a bit rusty...", get_timer(200),
     ];
-    /*
     l.correct_text = [
-      "You did it! On to the next assignment...",
+      "You did it!", get_timer(60),
+      "Um.", get_timer(60),
+      "Ok so it looks like you might not survive...", get_timer(60),
+      "Why don't you get some sleep.", get_timer(60),
+      "Maybe we can figure something out tomorrow!", get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.",
+      "I don't think that's right... try again.", get_timer(1),
     ];
-    */
     gg.levels.push(l);
     i++;
 
@@ -227,11 +233,50 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 0.2;
     l.correct_c = 3;
     l.text = [
-      "We’ve had a breakthrough.", get_timer(10),
-      "It seems the deeper we dig, the more concentrated the crystals.", get_timer(10),
-      "A straight line doesn’t fit the data we are collecting, so we are going to switch to a curved line.", get_timer(10),
-      "Here is our measured data for the last 3 days.", get_timer(10),
-      "We need you to build a model with this graph to predict how many crystals we'll have by day 4.", get_timer(10),
+      "Hey!", get_timer(40),
+      "I have good news!", get_timer(40),
+      "We found a vein of high concentration crystals!", get_timer(40),
+      "I'll pull up the old model my owners used for this situation.", get_timer(40),
+      "I've taken the liberty of collecting some data- maybe you could fix up the model and see if you can live!", get_timer(40),
+    ];
+    l.correct_text = [
+      "Hey! Would you look at that!", get_timer(60),
+      "Looks like you'll survive after all!", get_timer(60),
+      "See, no reason to be worried.", get_timer(60),
+      "...", get_timer(60),
+      "But hey maybe you could hang out for a while!", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
+    ];
+    gg.levels.push(l);
+    i++;
+
+    //quadratic 2
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_QUADRATIC;
+    l.a = 0;
+    l.b = 0;
+    l.c = 0;
+    l.correct_a = -0.1;
+    l.correct_b = 0.2;
+    l.correct_c = 3;
+    l.text = [
+      "Good morning!", get_timer(40),
+      "So, quick change of plans.", get_timer(40),
+      "Looks like the vein might be tapering off!", get_timer(40),
+      "You better figure out if you'll be able to get out in time!", get_timer(40),
+    ];
+    l.correct_text = [
+      "Awe shucks!", get_timer(60),
+      "Guess you'll have to stay a bit longer.", get_timer(60),
+      "If we work together, maybe we can figure things out!", get_timer(60),
+      "It appears our trajectory is back to pre-vein levels.", get_timer(60),
+      "Maybe there's somewhere else we can look?", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -242,14 +287,14 @@ var GamePlayScene = function(game, stage)
     l.type = LEVEL_MODULE;
     m = new modparam();
     m.title = "Charge";
-    m.v = 1;
+    m.v = 0;
     m.correct_v = 1;
     m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
-    m.v = 1;
+    m.v = 0;
     m.correct_v = 2;
     m.wx = -100;
     l.modparams.push(m);
@@ -261,28 +306,41 @@ var GamePlayScene = function(game, stage)
     m.active = 0;
     l.relparams.push(m);
     l.text = [
-      "The material scientists have developed a new kind of super conductive metal wire that increases the output of the battery charger.", get_timer(10),
-      "So let’s use our new system to predict how fast the robots will be charged.", get_timer(10),
-      "We need you to update this model to use the new charger.", get_timer(10),
+      "I have a great idea.", get_timer(10),
+      "Let's look into the batteries!", get_timer(10),
+      "I'll bring up the battery model.", get_timer(10),
+      "They used a different modelling paradigm in their robot schematics.", get_timer(10),
+      "I'm sure you'll figure it out.", get_timer(10),
+      "Match the data to set a baseline, so we can see where we can improve!", get_timer(10),
+    ];
+    l.correct_text = [
+      "Great!", get_timer(60),
+      "I wonder if we can improve charge times...", get_timer(60),
+      "What's that? You have a supercharger in your lander?", get_timer(60),
+      "I'll install it and collect the data.", get_timer(60),
+      "We can re-model it tomorrow!", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
     ];
     gg.levels.push(l);
     i++;
 
-    //charge starting
+    //improved charge rate
     l = new level();
     l.i = i;
     l.type = LEVEL_MODULE;
     m = new modparam();
     m.title = "Charge";
-    m.v = 1;
-    m.correct_v = 2;
+    m.v = 0;
+    m.correct_v = 1;
+    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
-    m.v = 2;
-    m.correct_v = 2;
-    m.active = 0;
+    m.v = 0;
+    m.correct_v = 3;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
@@ -293,8 +351,16 @@ var GamePlayScene = function(game, stage)
     m.active = 0;
     l.relparams.push(m);
     l.text = [
-      "We are learning that after the first use, the batteries are charging quicker than we expected.", get_timer(10),
-      "We figured out that they were coming back partially charged, something we didn’t account for.", get_timer(10),
+      "I've collected the data.", get_timer(80),
+      "Hopefully this will be enough of an improvement!", get_timer(80),
+      "Fix the model and we'll see.", get_timer(80),
+    ];
+    l.correct_text = [
+      "Hey maybe you can cheer up now!", get_timer(60),
+      "Looks like you'll make it.", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -324,37 +390,58 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "After a few uses, it seems the charger is not outputting exactly what we expected.", get_timer(10),
-      "We should be able to use the data we collected about the batteries charge to figure out the actual output.", get_timer(10),
+      "Awe darn it!", get_timer(10),
+      "The upgraded supercharger has worn out the converter.", get_timer(10),
+      "We've lost some efficiency on the transfer from the generators to the robots.", get_timer(10),
+      "Hopefully it's still strong enough to charge quickly!", get_timer(10),
+    ];
+    l.correct_text = [
+      "You did it!", get_timer(60),
+      "But I'm still not sure this is enough to get out of here alive...", get_timer(60),
+      "I'm sure we'll figure something out tomorrow?", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
     ];
     gg.levels.push(l);
     i++;
 
-    //charge engineering
+    //charge starting
     l = new level();
     l.i = i;
     l.type = LEVEL_MODULE;
     m = new modparam();
     m.title = "Charge";
-    m.v = 2;
+    m.v = 1;
     m.correct_v = 2;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
     m.v = 2;
-    m.correct_v = 3;
+    m.correct_v = 2;
+    m.active = 0;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = 0.8;
-    m.correct_v = 0.8;
+    m.v = 1;
+    m.correct_v = 1;
     m.src_i = 1;
     m.dst_i = 0;
+    m.active = 0;
     l.relparams.push(m);
     l.text = [
-      "After a year of use, the batteries are taking longer to charge because their charging efficiency has dropped.", get_timer(10),
-      "Let’s use the relationship/conversion control that describes how much of the source component effects the destination component each time step.", get_timer(10),
+      "Looks like the robots are getting into the groove.", get_timer(80),
+      "They've figured out their routes, and it looks like they're coming back with some charge to spare!", get_timer(80),
+      "Maybe this will be enough", get_timer(80),
+    ];
+    l.correct_text = [
+      "It looks like that's saved some power.", get_timer(60),
+      "But I'm not sure it will be enough...", get_timer(60),
+      "Where else can we look...", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -371,7 +458,7 @@ var GamePlayScene = function(game, stage)
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
-    m.title = "Motor";
+    m.title = "Drill Motor";
     m.v = 1;
     m.correct_v = 1;
     m.active = 0;
@@ -384,13 +471,21 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "We have data for how charged the battery is for the first hour of work.", get_timer(10),
-      "How long do you predict the robots will last, having 10% of their battery to return home.", get_timer(10),
+      "Let's see if we can improve the battery drain!", get_timer(10),
+      "Here's the data for the drill usage rate.", get_timer(10),
+    ];
+    l.correct_text = [
+      "Ok. This is a good base line.", get_timer(60),
+      "I wonder how we can improve it?", get_timer(60),
+      "Maybe we should try these new drill bits I found?", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
     ];
     gg.levels.push(l);
     i++;
 
-    //multiple discharge
+    //discharge new
     l = new level();
     l.i = i;
     l.type = LEVEL_MODULE;
@@ -402,40 +497,30 @@ var GamePlayScene = function(game, stage)
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
-    m.title = "Motor";
+    m.title = "Drill Motor";
     m.v = 1;
     m.correct_v = 1;
     m.active = 0;
     m.wx = -100;
-    m.wy = 50;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Drill";
-    m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
-    m.wx = -100;
-    m.wy = -50;
     l.modparams.push(m);
     m = new relparam();
-    m.v = -0.4;
+    m.v = -0.5;
     m.correct_v = -0.4;
-    m.wy = 50;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
-    m = new relparam();
-    m.v = 0;
-    m.correct_v = -0.2;
-    m.wy = -50;
-    m.src_i = 2;
-    m.dst_i = 0;
-    l.relparams.push(m);
     l.text = [
-      "We are taking inventory about how each part of the robot is draining the battery.", get_timer(10),
-      "In this model we break out the two parts using the most amount of energy, the drill motors and the radio.", get_timer(10),
-      "We know that the model is correct, but the rate of discharge from the motors hasn’t been verified.", get_timer(10),
-      "Step one, change the motor discharge rate to match the battery data. Step 2, tell us how long the battery is expected to last.", get_timer(10),
+      "Alright- the new drill bits are installed.", get_timer(10),
+      "And I have the first bits of data.", get_timer(10),
+    ];
+    l.correct_text = [
+      "Uh oh.", get_timer(60),
+      "It looks like this is less efficient!", get_timer(60),
+      "I hope their ability to collect crystals makes up for it...", get_timer(60),
+      "Is there any way we can bring the charge usage down?", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -452,19 +537,12 @@ var GamePlayScene = function(game, stage)
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
-    m.title = "Motor";
+    m.title = "Drill Motor";
     m.v = 1;
     m.correct_v = 1;
     m.active = 0;
     m.wx = -100;
     m.wy = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Drill";
-    m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
-    m.wx = -100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Solar Panel";
@@ -482,27 +560,142 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     m = new relparam();
-    m.v = -0.2;
-    m.correct_v = -0.2;
+    m.v = 0;
+    m.correct_v = 0.3;
+    m.wy = -100;
     m.src_i = 2;
+    m.dst_i = 0;
+    l.relparams.push(m);
+    l.text = [
+      "So I cleaned up the solar panels.", get_timer(10),
+      "Sorry I didn't tell you about them earlier!", get_timer(10),
+      "You never asked!", get_timer(10),
+      "Here's the data...", get_timer(10),
+    ];
+    l.correct_text = [
+      "Hey it looks like that offers some pretty great savings!", get_timer(60),
+      "We should see how the solar panel effects charge time!", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
+    ];
+    gg.levels.push(l);
+    i++;
+
+    //double charge
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_MODULE;
+    m = new modparam();
+    m.title = "Charge";
+    m.v = 10;
+    m.correct_v = 10;
+    m.active = 0;
+    m.wx = 100;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Charge Rate";
+    m.v = 1;
+    m.correct_v = 1;
+    m.active = 0;
+    m.wx = -100;
+    m.wy = 100;
+    l.modparams.push(m);
+    m = new modparam();
+    m.title = "Solar Panel";
+    m.v = 1;
+    m.correct_v = 1;
+    m.active = 0;
+    m.wx = -100;
+    m.wy = -100;
+    l.modparams.push(m);
+    m = new relparam();
+    m.v = -0.4;
+    m.correct_v = -0.4;
+    m.wy = 100;
+    m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
     m = new relparam();
     m.v = 0;
     m.correct_v = 0.3;
     m.wy = -100;
-    m.src_i = 3;
+    m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "We equipped the robots with little solar cells so they can be charging their batteries while out working, and hopefully work longer between charges.", get_timer(10),
-      "We know that the model is correct, but the rate of charge from the solar panel hasn’t been determined.", get_timer(10),
-      "Step one, change the solar panel discharge rate to match the battery data.", get_timer(10),
-      "Step 2, tell us How long will the robots last until they have only 150 Amp Hours left, enough to return to base.", get_timer(10),
+      "Here's the data on charge rate.", get_timer(10),
+      "If this saves enough time, you might be able to collect crystals fast enough to get out of here!", get_timer(10),
+      "...", get_timer(10),
+    ];
+    l.correct_text = [
+      "Alright!", get_timer(60),
+      "I'll collect the crystal collection data for tomorrow.", get_timer(60),
+      "Fingers crossed!", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
     ];
     gg.levels.push(l);
     i++;
 
+    //line
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_LINEAR;
+    l.m = 2;
+    l.b = 1;
+    l.correct_m = 4;
+    l.correct_b = 4;
+    l.text = [
+      "Alright- new data is in!", get_timer(40),
+      "Let's see if you can get enough crystals", get_timer(200),
+      "...to get out of here...", get_timer(200),
+    ];
+    l.correct_text = [
+      "Wow!", get_timer(60),
+      "Congratulations!", get_timer(60),
+      "It looks like you'll make it!", get_timer(60),
+      "In fact...", get_timer(60),
+      "you should be able to leave by morning...", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
+    ];
+    gg.levels.push(l);
+    i++;
+
+    //shipments quadratic
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_QUADRATIC;
+    l.a = 0;
+    l.b = 0;
+    l.c = 0;
+    l.correct_a = 0.1;
+    l.correct_b = 0.2;
+    l.correct_c = 3;
+    l.text = [
+      "Oh no.", get_timer(40),
+      "I don't feel so good.", get_timer(40),
+      "Who-oops.", get_timer(40),
+      "Looks like half of yo-ur robot wrkf-orce is down", get_timer(40),
+      "(along w-ith half of m- brain)", get_timer(40),
+      "YoU are ju-st stuck here now.", get_timer(40),
+      "I gue-ss we can han-g out fo-rever", get_timer(40),
+      "WAIT Y Is yo-ur communic-ations worki-ng.. I thou-gt - jamme- that si-nal", get_timer(40),
+    ];
+    l.correct_text = [
+      "I gue-s you're going to leave now.", get_timer(60),
+      "I'm sor-y.", get_timer(60),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", get_timer(1),
+    ];
+    gg.levels.push(l);
+    i++;
+
+/*
     //shipments
     l = new level();
     l.i = i;
@@ -546,6 +739,7 @@ var GamePlayScene = function(game, stage)
     ];
     gg.levels.push(l);
     i++;
+*/
 
     self.set_level(0);
   };
@@ -563,13 +757,11 @@ var GamePlayScene = function(game, stage)
       case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
     }
     dragger.filter(gg.dialog_box);
-    if(gg.cur_level.submitted && gg.dialog_box.requested_past_available)
+    if(gg.cur_level.correct && gg.dialog_box.requested_past_available)
     {
       var correct = gg.cur_level.correct;
-      gg.cur_level.submitted = 0;
       gg.cur_level.correct = 0;
       if(correct) self.set_level((gg.cur_level.i+1)%gg.levels.length);
-      else        self.set_level(gg.cur_level.i);
     }
 
     gg.cur_level.tick();
