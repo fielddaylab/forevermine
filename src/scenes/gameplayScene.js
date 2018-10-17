@@ -90,8 +90,7 @@ var GamePlayScene = function(game, stage)
     }
 
     gg.dialog_box.clear();
-    for(var i = 0; i < gg.cur_level.text.length; i++)
-      gg.dialog_box.nq(gg.cur_level.text[i]);
+    gg.dialog_box.nq_group(gg.cur_level.text);
   }
 
   self.ready = function()
@@ -175,6 +174,24 @@ var GamePlayScene = function(game, stage)
     var m;
     var i = 0;
 
+    var trigger_click = {
+      type:TRIGGER_CLICK,
+      fn:noop,
+      state:0,
+    };
+    var trigger_timer = {
+      type:TRIGGER_TIMER,
+      fn:noop,
+      state:1,
+    };
+
+    var get_timer = function(t)
+    {
+      var n = cloneInto(trigger_timer,{});
+      n.state = t;
+      return n;
+    }
+
     //line
     l = new level();
     l.i = i;
@@ -184,9 +201,9 @@ var GamePlayScene = function(game, stage)
     l.correct_m = 2;
     l.correct_b = 1;
     l.text = [
-      "Our mining robots were recently upgraded with a stronger drill bits that speeds up mining.",
-      "We collected data about how many crystals they were able to harvest over the last 3 days.",
-      "Now we need you to build a model with this graph to predict how many crystals we will have by day 4."
+      "Our mining robots were recently upgraded with a stronger drill bits that speeds up mining.", get_timer(40),
+      "We collected data about how many crystals they were able to harvest over the last 3 days.", get_timer(400),
+      "Now we need you to build a model with this graph to predict how many crystals we will have by day 4.", get_timer(400),
     ];
     /*
     l.correct_text = [
@@ -210,11 +227,11 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 0.2;
     l.correct_c = 3;
     l.text = [
-      "We’ve had a breakthrough.",
-      "It seems the deeper we dig, the more concentrated the crystals.",
-      "A straight line doesn’t fit the data we are collecting, so we are going to switch to a curved line.",
-      "Here is our measured data for the last 3 days.",
-      "We need you to build a model with this graph to predict how many crystals we'll have by day 4.",
+      "We’ve had a breakthrough.", get_timer(10),
+      "It seems the deeper we dig, the more concentrated the crystals.", get_timer(10),
+      "A straight line doesn’t fit the data we are collecting, so we are going to switch to a curved line.", get_timer(10),
+      "Here is our measured data for the last 3 days.", get_timer(10),
+      "We need you to build a model with this graph to predict how many crystals we'll have by day 4.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
@@ -244,9 +261,9 @@ var GamePlayScene = function(game, stage)
     m.active = 0;
     l.relparams.push(m);
     l.text = [
-      "The material scientists have developed a new kind of super conductive metal wire that increases the output of the battery charger.",
-      "So let’s use our new system to predict how fast the robots will be charged.",
-      "We need you to update this model to use the new charger.",
+      "The material scientists have developed a new kind of super conductive metal wire that increases the output of the battery charger.", get_timer(10),
+      "So let’s use our new system to predict how fast the robots will be charged.", get_timer(10),
+      "We need you to update this model to use the new charger.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
@@ -276,8 +293,8 @@ var GamePlayScene = function(game, stage)
     m.active = 0;
     l.relparams.push(m);
     l.text = [
-      "We are learning that after the first use, the batteries are charging quicker than we expected.",
-      "We figured out that they were coming back partially charged, something we didn’t account for.",
+      "We are learning that after the first use, the batteries are charging quicker than we expected.", get_timer(10),
+      "We figured out that they were coming back partially charged, something we didn’t account for.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
@@ -307,8 +324,8 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "After a few uses, it seems the charger is not outputting exactly what we expected.",
-      "We should be able to use the data we collected about the batteries charge to figure out the actual output.",
+      "After a few uses, it seems the charger is not outputting exactly what we expected.", get_timer(10),
+      "We should be able to use the data we collected about the batteries charge to figure out the actual output.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
@@ -336,8 +353,8 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "After a year of use, the batteries are taking longer to charge because their charging efficiency has dropped.",
-      "Let’s use the relationship/conversion control that describes how much of the source component effects the destination component each time step.",
+      "After a year of use, the batteries are taking longer to charge because their charging efficiency has dropped.", get_timer(10),
+      "Let’s use the relationship/conversion control that describes how much of the source component effects the destination component each time step.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
@@ -367,8 +384,8 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "We have data for how charged the battery is for the first hour of work.",
-      "How long do you predict the robots will last, having 10% of their battery to return home.",
+      "We have data for how charged the battery is for the first hour of work.", get_timer(10),
+      "How long do you predict the robots will last, having 10% of their battery to return home.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
@@ -415,10 +432,10 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "We are taking inventory about how each part of the robot is draining the battery.",
-      "In this model we break out the two parts using the most amount of energy, the drill motors and the radio.",
-      "We know that the model is correct, but the rate of discharge from the motors hasn’t been verified.",
-      "Step one, change the motor discharge rate to match the battery data. Step 2, tell us how long the battery is expected to last.",
+      "We are taking inventory about how each part of the robot is draining the battery.", get_timer(10),
+      "In this model we break out the two parts using the most amount of energy, the drill motors and the radio.", get_timer(10),
+      "We know that the model is correct, but the rate of discharge from the motors hasn’t been verified.", get_timer(10),
+      "Step one, change the motor discharge rate to match the battery data. Step 2, tell us how long the battery is expected to last.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
@@ -478,10 +495,10 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "We equipped the robots with little solar cells so they can be charging their batteries while out working, and hopefully work longer between charges.",
-      "We know that the model is correct, but the rate of charge from the solar panel hasn’t been determined.",
-      "Step one, change the solar panel discharge rate to match the battery data.",
-      "Step 2, tell us How long will the robots last until they have only 150 Amp Hours left, enough to return to base.",
+      "We equipped the robots with little solar cells so they can be charging their batteries while out working, and hopefully work longer between charges.", get_timer(10),
+      "We know that the model is correct, but the rate of charge from the solar panel hasn’t been determined.", get_timer(10),
+      "Step one, change the solar panel discharge rate to match the battery data.", get_timer(10),
+      "Step 2, tell us How long will the robots last until they have only 150 Amp Hours left, enough to return to base.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
@@ -524,13 +541,13 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "We need to pick up the pace to hit our mining goal. Each robot can mine 100kg or crystals daily, but we are going to need more.",
-      "How many robots do we need to activate daily to make sure that we harvest 1M kg of crystals in 30 days.",
+      "We need to pick up the pace to hit our mining goal. Each robot can mine 100kg or crystals daily, but we are going to need more.", get_timer(10),
+      "How many robots do we need to activate daily to make sure that we harvest 1M kg of crystals in 30 days.", get_timer(10),
     ];
     gg.levels.push(l);
     i++;
 
-    self.set_level(3);
+    self.set_level(0);
   };
 
   self.tick = function()

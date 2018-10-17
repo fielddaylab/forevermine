@@ -14,6 +14,34 @@ function jsonFromURL()
   return result;
 }
 
+function clone(o)
+{
+  if(typeof o === 'object') return cloneInto(o,{});
+  return o;
+}
+
+function cloneInto(src,dst)
+{
+  var attribs = Object.keys(src);
+  for(var i = 0; i < attribs.length; i++)
+  {
+    var k = attribs[i];
+    dst[k] = src[k];
+  }
+  return dst;
+}
+
+function deepCloneInto(src,dst) //NOT IMPLEMENTED! REALLY JUST EXISTS AS CONTRAST TO CLONEINTO TO DESCRIBE LIMITATIONS
+{
+  var attribs = Object.keys(src);
+  for(var i = 0; i < attribs.length; i++)
+  {
+    var k = attribs[i];
+    dst[k] = src[k];
+  }
+  return dst;
+}
+
 //colors
 var black   = "#000000";
 var white   = "#FFFFFF";

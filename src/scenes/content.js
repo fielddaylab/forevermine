@@ -7,6 +7,12 @@ var LEVEL_QUADRATIC = ENUM; ENUM++;
 var LEVEL_MODULE    = ENUM; ENUM++;
 var LEVEL_COUNT     = ENUM; ENUM++;
 
+ENUM = 0;
+var TRIGGER_NULL = ENUM; ENUM++;
+var TRIGGER_CLICK = ENUM; ENUM++;
+var TRIGGER_TIMER = ENUM; ENUM++;
+var TRIGGER_COUNT = ENUM; ENUM++;
+
 var modparam = function()
 {
   this.title = "";
@@ -44,9 +50,16 @@ var level = function()
   self.modparams = [];
   self.relparams = [];
 
+  var trigger_timer = {
+    type:TRIGGER_TIMER,
+    fn:noop,
+    state:0,
+    tstate:0,
+  };
+
   self.text = [];
-  self.correct_text = [ "You did it! On to the next assignment...", ];
-  self.incorrect_text = [ "I don't think that's right... try again.", ];
+  self.correct_text = [ "You did it! On to the next assignment...", trigger_timer];
+  self.incorrect_text = [ "I don't think that's right... try again.", trigger_timer];
 
   self.correct = 0;
   self.submitted = 0;
@@ -57,14 +70,12 @@ var level = function()
 
     if(self.correct)
     {
-      for(var i = 0; i < self.correct_text.length; i++)
-        gg.dialog_box.nq(self.correct_text[i]);
+      gg.dialog_box.nq_group(self.correct_text);
       self.submitted_correct();
     }
     else
     {
-      for(var i = 0; i < self.incorrect_text.length; i++)
-        gg.dialog_box.nq(self.incorrect_text[i]);
+      gg.dialog_box.nq_group(self.incorrect_text);
       self.submitted_incorrect();
     }
   }

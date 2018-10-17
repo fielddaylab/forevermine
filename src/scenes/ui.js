@@ -563,6 +563,7 @@ var dialog_box = function()
   self.requested_past_available = 0;
 
   self.text = [];
+  self.triggers = [];
   self.bubbles = [];
 
   self.displayed_i = 0;
@@ -576,6 +577,7 @@ var dialog_box = function()
   self.clear = function()
   {
     self.text = [];
+    self.triggers = [];
     self.bubbles = []
     self.top_y = self.y+self.h;
     self.target_top_y = self.top_y;
@@ -583,33 +585,51 @@ var dialog_box = function()
     self.displayed_i = 0;
   }
 
-  self.nq = function(text)
+  self.nq = function(text, trigger)
   {
     self.text.push(text);
+    trigger.tstate = clone(trigger.state);
+    self.triggers.push(trigger);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.requested_past_available = 0;
   }
 
+  self.nq_group = function(text)
+  {
+    for(var i = 0; i < text.length; i+=2)
+      self.nq(text[i],text[i+1]);
+  }
+
+  self.advance = function()
+  {
+    self.displayed_i++;
+    self.target_top_y = self.y+self.h;
+    for(var i = 0; i < self.displayed_i; i++)
+    {
+      self.target_top_y -= self.pad;
+      for(var j = 0; j < self.bubbles[i].length; j++)
+        self.target_top_y -= self.font_h+self.pad;
+      self.target_top_y -= self.pad*2;
+    }
+  }
+
   self.click = function()
   {
-    if(self.displayed_i < self.text.length)
-    {
-      self.displayed_i++;
-      self.target_top_y = self.y+self.h;
-      for(var i = 0; i < self.displayed_i; i++)
-      {
-        self.target_top_y -= self.pad;
-        for(var j = 0; j < self.bubbles[i].length; j++)
-          self.target_top_y -= self.font_h+self.pad;
-        self.target_top_y -= self.pad*2;
-      }
-    }
+    if(self.displayed_i < self.text.length && (self.triggers[self.displayed_i].type == TRIGGER_CLICK || self.triggers[self.displayed_i].type == TRIGGER_TIMER))
+      self.advance();
     else self.requested_past_available = 1;
   }
 
   self.tick = function()
   {
     self.top_y = lerp(self.top_y,self.target_top_y,0.1);
+
+    if(self.displayed_i < self.text.length && self.triggers[self.displayed_i].type == TRIGGER_TIMER)
+    {
+      self.triggers[self.displayed_i].tstate--;
+      if(self.triggers[self.displayed_i].tstate <= 0)
+        self.advance();
+    }
   }
 
   self.draw = function()
@@ -634,6 +654,11 @@ var dialog_box = function()
       }
       y += self.pad;
     }
+
+    if(self.displayed_i == self.text.length || self.triggers[self.displayed_i].type == TRIGGER_CLICK)
+      gg.ctx.strokeRect(self.x+self.w-20, self.y+self.pad, 20, 20);
+    else if(self.displayed_i < self.text.length && self.triggers[self.displayed_i].type == TRIGGER_TIMER)
+      gg.ctx.strokeRect(self.x+self.w-20, self.y+self.h-self.pad, 20, 20);
   }
 }
 
