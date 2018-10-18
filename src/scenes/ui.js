@@ -294,7 +294,7 @@ var editable_quadratic = function()
     self.x2p_x = self.a_btn.x+self.a_btn.w;
     self.b_btn.x = self.x2p_x+gg.ctx.measureText("x² + ").width;
     self.xp_x = self.b_btn.x+self.b_btn.w;
-    self.c_btn.x = self.xp_x+gg.ctx.measureText("x +").width;
+    self.c_btn.x = self.xp_x+gg.ctx.measureText("x + ").width;
 
     self.ainc_btn.w = self.a_btn.w;
     self.ainc_btn.h = self.a_btn.h/2;
@@ -544,7 +544,7 @@ var table = function()
 
 }
 
-var dialog_box = function()
+var message_box = function()
 {
   var self = this;
   self.w = 0;
@@ -613,8 +613,9 @@ var dialog_box = function()
       self.max_top_y -= self.pad;
       for(var j = 0; j < self.bubbles[i].length; j++)
         self.max_top_y -= self.font_h+self.pad;
-      self.max_top_y -= self.pad*2;
+      self.max_top_y -= self.pad;
     }
+    self.max_top_y -= self.pad;
     self.target_top_y = self.max_top_y;
   }
 

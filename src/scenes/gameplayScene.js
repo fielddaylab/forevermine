@@ -11,6 +11,8 @@ var GamePlayScene = function(game, stage)
     gg.ctx = gg.canv.context;
 
     if(gg.module_board) { gg.module_board.ww = gg.canv.width; gg.module_board.wh = gg.canv.height; }
+    if(gg.home_cam_out) { gg.home_cam_out.ww = gg.canv.width; gg.home_cam_out.wh = gg.canv.height; }
+    if(gg.home_cam_in)  { gg.home_cam_in.ww = 530; gg.home_cam_in.wh = 440; gg.home_cam_in.wx = gg.home_cam.ww/2; gg.home_cam_in.wy = 0; }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
     if(hoverer) hoverer.detach(); hoverer = new PersistentHoverer({source:gg.canvas});
@@ -24,6 +26,14 @@ var GamePlayScene = function(game, stage)
   var clicker;
   var dragger;
   var blurer;
+
+  var ENUM = 0;
+  var MODE_NULL         = ENUM; ENUM++;
+  var MODE_HOME         = ENUM; ENUM++;
+  var MODE_HOME_TO_WORK = ENUM; ENUM++;
+  var MODE_WORK         = ENUM; ENUM++;
+  var MODE_WORK_TO_HOME = ENUM; ENUM++;
+  var MODE_COUNT        = ENUM; ENUM++;
 
   self.set_level = function(i)
   {
@@ -93,29 +103,34 @@ var GamePlayScene = function(game, stage)
         break;
     }
 
-    gg.dialog_box.clear();
-    gg.dialog_box.nq_group(gg.cur_level.text);
+    gg.message_box.clear();
+    gg.message_box.nq_group(gg.cur_level.text);
   }
 
   self.ready = function()
   {
-    self.resize(stage);
-
     var b;
     var graph_s = 100;
     var btn_s = 20;
 
-    gg.dialog_box = new dialog_box();
-    gg.dialog_box.w = 200;
-    gg.dialog_box.h = gg.canv.height;
-    gg.dialog_box.x = 0;
-    gg.dialog_box.y = 0;
-    gg.dialog_box.size();
+    gg.mode = MODE_HOME;
+    gg.mode_t = 0;
+
+    gg.home_cam_out = {wx:0,wy:0,ww:0,wh:0}; //dimensions set in resize
+    gg.home_cam_in  = {wx:0,wy:0,ww:0,wh:0}; //dimensions set in resize
+    gg.home_cam     = {wx:0,wy:0,ww:0,wh:0};
+
+    gg.message_box = new message_box();
+    gg.message_box.w = 200;
+    gg.message_box.h = gg.canv.height;
+    gg.message_box.x = 0;
+    gg.message_box.y = 0;
+    gg.message_box.size();
 
     gg.module_board = new module_board();
     b = gg.module_board;
     b.h = gg.canv.height;
-    b.x = gg.dialog_box.x+gg.dialog_box.w;
+    b.x = gg.message_box.x+gg.message_box.w;
     b.w = gg.canv.width-b.x;
     b.y = 0;
     b.graph.w = graph_s;
@@ -128,7 +143,7 @@ var GamePlayScene = function(game, stage)
     b.wx = 0;
     b.wy = 0;
     b.table.h = 100;
-    b.table.x = gg.dialog_box.x+gg.dialog_box.w+10;
+    b.table.x = gg.message_box.x+gg.message_box.w+10;
     b.table.y = gg.canv.height-b.table.h;
     b.table.w = gg.canv.width-b.table.x-10;
     b.size();
@@ -136,7 +151,7 @@ var GamePlayScene = function(game, stage)
     gg.line = new editable_line();
     b = gg.line;
     b.h = gg.canv.height;
-    b.x = gg.dialog_box.x+gg.dialog_box.w;
+    b.x = gg.message_box.x+gg.message_box.w;
     b.y = 0;
     b.w = gg.canv.width-b.x;
     b.graph.w = graph_s;
@@ -148,7 +163,7 @@ var GamePlayScene = function(game, stage)
     b.h_min = 0;
     b.h_max = 10;
     b.table.h = 100;
-    b.table.x = gg.dialog_box.x+gg.dialog_box.w+10;
+    b.table.x = gg.message_box.x+gg.message_box.w+10;
     b.table.y = gg.canv.height-b.table.h;
     b.table.w = gg.canv.width-b.table.x-10;
     b.size();
@@ -156,7 +171,7 @@ var GamePlayScene = function(game, stage)
     gg.quadratic = new editable_quadratic();
     b = gg.quadratic;
     b.h = gg.canv.height;
-    b.x = gg.dialog_box.x+gg.dialog_box.w;
+    b.x = gg.message_box.x+gg.message_box.w;
     b.y = 0;
     b.w = gg.canv.width-b.x;
     b.graph.w = graph_s;
@@ -168,7 +183,7 @@ var GamePlayScene = function(game, stage)
     b.h_min = 0;
     b.h_max = 10;
     b.table.h = 100;
-    b.table.x = gg.dialog_box.x+gg.dialog_box.w+10;
+    b.table.x = gg.message_box.x+gg.message_box.w+10;
     b.table.y = gg.canv.height-b.table.h;
     b.table.w = gg.canv.width-b.table.x-10;
     b.size();
@@ -742,30 +757,60 @@ var GamePlayScene = function(game, stage)
 */
 
     self.set_level(0);
+
+    self.resize(stage);
   };
 
   self.tick = function()
   {
-    var check = 1;
-
-    var b;
-
-    switch(gg.cur_level.type)
+    gg.mode_t++;
+    switch(mode)
     {
-      case LEVEL_LINEAR:    gg.line.filter(keyer,blurer,dragger,clicker);         gg.line.tick();         break;
-      case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
-      case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
-    }
-    dragger.filter(gg.dialog_box);
-    if(gg.cur_level.correct && gg.dialog_box.requested_past_available)
-    {
-      var correct = gg.cur_level.correct;
-      gg.cur_level.correct = 0;
-      if(correct) self.set_level((gg.cur_level.i+1)%gg.levels.length);
-    }
+      case MODE_HOME:
+      {
+        gg.home_cam.wx = gg.home_cam_out.wx;
+        gg.home_cam.wy = gg.home_cam_out.wy;
+        gg.home_cam.ww = gg.home_cam_out.ww;
+        gg.home_cam.wh = gg.home_cam_out.wh;
+      }
+        break;
+      case MODE_HOME_TO_WORK:
+      {
+        gg.home_cam.wx = lerp(gg.home_cam_out.wx,gg.home_cam_in.wx,gg.mode_t/100);
+        gg.home_cam.wy = lerp(gg.home_cam_out.wy,gg.home_cam_in.wy,gg.mode_t/100);
+        gg.home_cam.ww = lerp(gg.home_cam_out.ww,gg.home_cam_in.ww,gg.mode_t/100);
+        gg.home_cam.wh = lerp(gg.home_cam_out.wh,gg.home_cam_in.wh,gg.mode_t/100);
+      }
+        break;
+      case MODE_WORK:
+      {
+        switch(gg.cur_level.type)
+        {
+          case LEVEL_LINEAR:    gg.line.filter(keyer,blurer,dragger,clicker);         gg.line.tick();         break;
+          case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
+          case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
+        }
+        dragger.filter(gg.message_box);
+        if(gg.cur_level.correct && gg.message_box.requested_past_available)
+        {
+          var correct = gg.cur_level.correct;
+          gg.cur_level.correct = 0;
+          if(correct) self.set_level((gg.cur_level.i+1)%gg.levels.length);
+        }
 
-    gg.cur_level.tick();
-    gg.dialog_box.tick();
+        gg.cur_level.tick();
+        gg.message_box.tick();
+      }
+        break;
+      case MODE_WORK_TO_HOME:
+      {
+        gg.home_cam.wx = lerp(gg.home_cam_in.wx,gg.home_cam_out.wx,gg.mode_t/100);
+        gg.home_cam.wy = lerp(gg.home_cam_in.wy,gg.home_cam_out.wy,gg.mode_t/100);
+        gg.home_cam.ww = lerp(gg.home_cam_in.ww,gg.home_cam_out.ww,gg.mode_t/100);
+        gg.home_cam.wh = lerp(gg.home_cam_in.wh,gg.home_cam_out.wh,gg.mode_t/100);
+      }
+        break;
+    }
 
     keyer.flush();
     hoverer.flush();
@@ -784,7 +829,7 @@ var GamePlayScene = function(game, stage)
       case LEVEL_MODULE:    gg.module_board.draw(); break;
     }
     gg.cur_level.draw();
-    gg.dialog_box.draw();
+    gg.message_box.draw();
   };
 
   self.cleanup = function()
