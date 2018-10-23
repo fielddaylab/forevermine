@@ -86,16 +86,8 @@ var GamePlayScene = function(game, stage)
         {
           m = gg.module_board.gen_modrel();
           mp = gg.cur_level.relparams[i];
-          m.v = mp.v;
-          m.v_btn.set(m.v);
-          m.correct_v = mp.correct_v;
-          m.active = mp.active;
-          m.wx = mp.wx;
-          m.wy = mp.wy;
           m.src = gg.module_board.modules[mp.src_i];
           m.dst = gg.module_board.modules[mp.dst_i];
-          screenSpace(gg.module_board,gg.canv,m);
-          m.size();
         }
         gg.module_board.calculate_table();
         gg.module_board.calculate();
@@ -347,7 +339,7 @@ var GamePlayScene = function(game, stage)
     l.type = LEVEL_MODULE;
     m = new modparam();
     m.title = "Charge";
-    m.v = 0;
+    m.v = 1;
     m.correct_v = 1;
     m.active = 0;
     m.wx = 100;
@@ -359,11 +351,8 @@ var GamePlayScene = function(game, stage)
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = 1;
-    m.correct_v = 1;
     m.src_i = 1;
     m.dst_i = 0;
-    m.active = 0;
     l.relparams.push(m);
     l.text = [
       "I have a great idea.", get_timer(10),
@@ -394,7 +383,7 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 0;
     m.correct_v = 1;
-    m.active = 0;
+    m.active = 1;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
@@ -404,11 +393,8 @@ var GamePlayScene = function(game, stage)
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = 1;
-    m.correct_v = 1;
     m.src_i = 1;
     m.dst_i = 0;
-    m.active = 0;
     l.relparams.push(m);
     l.text = [
       "I've collected the data.", get_timer(80),
@@ -444,8 +430,6 @@ var GamePlayScene = function(game, stage)
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = 1;
-    m.correct_v = 0.8;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
@@ -484,11 +468,8 @@ var GamePlayScene = function(game, stage)
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = 1;
-    m.correct_v = 1;
     m.src_i = 1;
     m.dst_i = 0;
-    m.active = 0;
     l.relparams.push(m);
     l.text = [
       "Looks like the robots are getting into the groove.", get_timer(80),
@@ -525,8 +506,6 @@ var GamePlayScene = function(game, stage)
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = -0.5;
-    m.correct_v = -0.4;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
@@ -564,8 +543,6 @@ var GamePlayScene = function(game, stage)
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = -0.5;
-    m.correct_v = -0.4;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
@@ -613,16 +590,10 @@ var GamePlayScene = function(game, stage)
     m.wy = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = -0.4;
-    m.correct_v = -0.4;
-    m.wy = 100;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
     m = new relparam();
-    m.v = 0;
-    m.correct_v = 0.3;
-    m.wy = -100;
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
@@ -670,16 +641,10 @@ var GamePlayScene = function(game, stage)
     m.wy = -100;
     l.modparams.push(m);
     m = new relparam();
-    m.v = -0.4;
-    m.correct_v = -0.4;
-    m.wy = 100;
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
     m = new relparam();
-    m.v = 0;
-    m.correct_v = 0.3;
-    m.wy = -100;
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
@@ -756,7 +721,7 @@ var GamePlayScene = function(game, stage)
     i++;
 
     self.resize(stage);
-    gg.next_level = gg.levels[0];
+    gg.next_level = gg.levels[3];
     gg.exposition_box.clear();
     gg.exposition_box.nq_group(gg.next_level.pre_text);
     self.set_mode(MODE_HOME);

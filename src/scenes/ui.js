@@ -301,7 +301,7 @@ var editable_line = function()
     }
     if(dragger)
     {
-      if(check) check = !dragger.filter(self.table);
+      if(check) check = !clicker.filter(self.table);
       if(check) check = !dragger.filter(self.m_btn);
       if(check) check = !dragger.filter(self.b_btn);
     }
@@ -527,7 +527,7 @@ var editable_quadratic = function()
     }
     if(dragger)
     {
-      if(check) check = !dragger.filter(self.table);
+      if(check) check = !clicker.filter(self.table);
       if(check) check = !dragger.filter(self.a_btn);
       if(check) check = !dragger.filter(self.b_btn);
       if(check) check = !dragger.filter(self.c_btn);
@@ -631,7 +631,7 @@ var table = function()
       if(self.predicted_data[i] != self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
   }
 
-  self.dragStart = function(evt)
+  self.click = function(evt)
   {
     if(gg.cur_level.correct) return;
 
@@ -642,14 +642,6 @@ var table = function()
     var x = self.x+(self.n)*w;
     if(ptWithin(x,y2,w,y3-y2,evt.doX,evt.doY))
       gg.cur_level.submit(self.correct);
-  }
-  self.drag = function(evt)
-  {
-
-  }
-  self.dragFinish = function(evt)
-  {
-
   }
 
   self.tick = function()
@@ -792,6 +784,7 @@ var message_box = function()
   self.drag_start_y = 0;
   self.dragStart = function(evt)
   {
+    self.click(evt)
     self.dragging_t = 0;
     self.drag_start_y = evt.doY;
   }
@@ -804,7 +797,7 @@ var message_box = function()
   }
   self.dragFinish = function(evt)
   {
-    if(self.dragging_t < 10) self.click(evt);
+    //if(self.dragging_t < 10) self.click(evt);
   }
 
   self.tick = function()
@@ -895,68 +888,6 @@ var module = function()
     self.vdec_btn.y = self.v_btn.y+self.v_btn.h+self.v_btn.h/2;
   }
 
-  self.dragging_body = 0;
-  self.dragging_rel = 0;
-  self.drag_x = 0;
-  self.drag_y = 0;
-  self.dragStart = function(evt)
-  {
-    if(self.active && ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
-    {
-      self.dragging_rel = 1;
-      self.drag(evt);
-      return 1;
-    }
-    else
-    {
-      self.dragging_body = 1;
-      self.drag_x = evt.doX-self.x;
-      self.drag_y = evt.doY-self.y;
-      self.drag(evt);
-      return 1;
-    }
-    return 0;
-  }
-  self.drag = function(evt)
-  {
-    if(self.dragging_body)
-    {
-      self.x = evt.doX-self.drag_x;
-      self.y = evt.doY-self.drag_y;
-      worldSpaceCoords(gg.module_board,gg.canv,self);
-      self.size();
-    }
-    else if(self.dragging_rel)
-    {
-      self.drag_x = evt.doX;
-      self.drag_y = evt.doY;
-    }
-  }
-  self.dragFinish = function(evt)
-  {
-    if(self.dragging_rel)
-    {
-      var m;
-      for(var i = 0; i < gg.module_board.modules.length; i++)
-      {
-        m = gg.module_board.modules[i];
-        if(ptWithinBox(m,self.drag_x,self.drag_y))
-        {
-          var r = gg.module_board.gen_modrel();
-          r.wx = lerp(self.wx,m.wx,0.5);
-          r.wy = lerp(self.wy,m.wy,0.5);
-          screenSpace(gg.module_board,gg.canv,r);
-          r.src = self;
-          r.dst = m;
-          gg.module_board.calculate();
-          break;
-        }
-      }
-    }
-    self.dragging_body = 0;
-    self.dragging_rel = 0;
-  }
-
   self.tick = function()
   {
 
@@ -995,170 +926,36 @@ var module = function()
     gg.ctx.fillStyle = gray;
     if(floor(gg.module_board.t) != 0) gg.ctx.fillText(self.v[floor(gg.module_board.t)],self.x+self.w/2,self.y+self.h*2/3);
     gg.ctx.fillStyle = black;
-    if(self.dragging_rel)
-      drawLine(self.x+self.w,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
   }
 }
 
 var modrel = function()
 {
   var self = this;
-  self.w = 0;
-  self.h = 0;
-  self.x = 0;
-  self.y = 0;
-
-  self.ww = 0;
-  self.wh = 0;
-  self.wx = 0;
-  self.wy = 0;
-
-  self.vinc_btn = new ButtonBox(0,0,0,0,function(){ self.v_btn.set(self.v_btn.number+0.1); });
-  self.v_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); self.v = v; gg.module_board.calculate(); });
-  self.vdec_btn = new ButtonBox(0,0,0,0,function(){ self.v_btn.set(self.v_btn.number-0.1); });
-
-  self.v = 1;
-  self.correct_v = 1;
   self.src = 0;
   self.dst = 0;
 
-  self.active = 1;
-
-  self.size = function()
-  {
-    self.v_btn.w = self.w/2;
-    self.v_btn.h = self.h/2;
-    self.v_btn.x = self.x+self.w/2-self.v_btn.w/2;
-    self.v_btn.y = self.y+self.h/2-self.v_btn.h/2;
-
-    self.vinc_btn.w = self.v_btn.w;
-    self.vinc_btn.h = self.v_btn.h/2;
-    self.vinc_btn.x = self.v_btn.x;
-    self.vinc_btn.y = self.v_btn.y-self.v_btn.h;
-    self.vdec_btn.w = self.v_btn.w;
-    self.vdec_btn.h = self.v_btn.h/2;
-    self.vdec_btn.x = self.v_btn.x;
-    self.vdec_btn.y = self.v_btn.y+self.v_btn.h+self.v_btn.h/2;
-  }
-
-  self.dragging_body = 0;
-  self.dragging_src = 0;
-  self.dragging_dst = 0;
-  self.drag_x = 0;
-  self.drag_y = 0;
-  self.dragStart = function(evt)
-  {
-    if(self.active && ptWithin(self.x+self.w*0.9,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
-    {
-      self.dragging_dst = 1;
-      self.drag(evt);
-      return 1;
-    }
-    else if(self.active && ptWithin(self.x,self.y+self.h*0.45,self.w*0.1,self.h*0.1,evt.doX,evt.doY))
-    {
-      self.dragging_src = 1;
-      self.drag(evt);
-      return 1;
-    }
-    else
-    {
-      self.dragging_body = 1;
-      self.drag_x = evt.doX-self.x;
-      self.drag_y = evt.doY-self.y;
-      self.drag(evt);
-      return 1;
-    }
-    return 0;
-  }
-  self.drag = function(evt)
-  {
-    if(self.dragging_body)
-    {
-      self.x = evt.doX-self.drag_x;
-      self.y = evt.doY-self.drag_y;
-      worldSpaceCoords(gg.module_board,gg.canv,self);
-      self.size();
-    }
-    else if(self.dragging_src || self.dragging_dst)
-    {
-      self.drag_x = evt.doX;
-      self.drag_y = evt.doY;
-    }
-  }
-  self.dragFinish = function(evt)
-  {
-    if(self.dragging_src || self.dragging_dst)
-    {
-      var m;
-      for(var i = 0; i < gg.module_board.modules.length; i++)
-      {
-        m = gg.module_board.modules[i];
-        if(ptWithinBox(m,self.drag_x,self.drag_y))
-        {
-               if(self.dragging_src) self.src = m;
-          else if(self.dragging_dst) self.dst = m;
-          gg.module_board.calculate();
-          break;
-        }
-      }
-    }
-    self.dragging_body = 0;
-    self.dragging_src = 0;
-    self.dragging_dst = 0;
-  }
-
-  self.tick = function()
-  {
-  }
-
   self.draw = function()
   {
+    if(!self.src || !self.dst) return;
     gg.ctx.lineWidth = 1;
-    strokeBox(self,gg.ctx);
-    if(self.active)
-    {
-      //strokeBox(self.v_btn,gg.ctx);
-      strokeBox(self.vinc_btn,gg.ctx);
-      strokeBox(self.vdec_btn,gg.ctx);
-    }
-    if(!self.active) { gg.ctx.fillStyle = very_light_gray; fillBox(self,gg.ctx); }
-    gg.ctx.fillStyle = black;
-    gg.ctx.fillText(self.v,self.x+self.w/2,self.y+self.h*2/3);
-    if(self.dragging_src)
-      drawLine(self.x,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
-    else if(self.dragging_dst)
-      drawLine(self.x+self.w,self.y+self.h/2,self.drag_x,self.drag_y,gg.ctx);
-    if(self.src && !self.dragging_src)
-      drawLine(self.x,self.y+self.h/2,self.src.x+self.src.w,self.src.y+self.src.h/2,gg.ctx);
-    if(self.dst && !self.dragging_dst)
-      drawLine(self.x+self.w,self.y+self.h/2,self.dst.x,self.dst.y+self.dst.h/2,gg.ctx);
+    drawLine(self.src.x+self.src.w,self.src.y+self.src.h/2,self.dst.x,self.dst.y+self.dst.h/2,gg.ctx);
     var t = gg.module_board.t;
     var td = t%1;
     if(td != 0)
     {
       t = round(t-td);
-      td *= 2;
       var x;
       var y;
       var s = 20;
-      if(self.src && td < 1)
+      if(td > 0 && td < 1)
       {
-        x = lerp(self.src.x+self.src.w,self.x,td);
-        y = lerp(self.src.y+self.src.h/2,self.y+self.h/2,td);
+        x = lerp(self.src.x+self.src.w,self.dst.x,td);
+        y = lerp(self.src.y+self.src.h/2,self.dst.y+self.dst.h/2,td);
         gg.ctx.fillStyle = white;
         gg.ctx.fillRect(x-s/2,y-s/2,s,s);
         gg.ctx.fillStyle = black;
         gg.ctx.fillText(self.src.v[t],x,y+s/2);
-      }
-      if(self.dst && td > 1)
-      {
-        td -= 1;
-        x = lerp(self.x+self.w,self.dst.x,td);
-        y = lerp(self.y+self.h/2,self.dst.y+self.dst.h/2,td);
-        gg.ctx.fillStyle = white;
-        gg.ctx.fillRect(x-s/2,y-s/2,s,s);
-        gg.ctx.fillStyle = black;
-        gg.ctx.fillText(self.src.v[t]*self.v,x,y+s/2);
       }
     }
   }
@@ -1198,10 +995,10 @@ var module_board = function()
     self.t = t;
   },dragFinish:function(evt){}};
 
-  self.advance_btn = {x:0,y:0,w:0,h:0,dragStart:function(evt){
+  self.advance_btn = {x:0,y:0,w:0,h:0,click:function(evt){
     self.t_target++;
     if(self.t_target > self.t_max) self.t_target = self.t_max;
-  },drag:function(evt){},dragFinish:function(evt){}};
+  }};
 
   self.table = new table();
   self.table.n = 10;
@@ -1215,17 +1012,6 @@ var module_board = function()
   self.table.verify();
   self.table_module = 0;
 
-  self.new_module_btn = {x:0,y:0,w:0,h:0,dragStart:function(evt){
-    var m = self.gen_module();
-    m.x = evt.doX-m.w/2;
-    m.y = evt.doY-m.h/2;
-    worldSpace(self,gg.canv,m);
-    if(m.dragStart(evt)) m.dragging = 1;
-    self.new_module_btn.dragging = 0;
-    gg.module_board.calculate();
-    return 0;
-  },drag:function(evt){},dragFinish:function(evt){}};
-
   self.size = function()
   {
     self.timeline.w = (self.w-20)*(10/11);
@@ -1237,11 +1023,6 @@ var module_board = function()
     self.advance_btn.h = 50;
     self.advance_btn.x = self.x+10;
     self.advance_btn.y = self.timeline.y-10-self.advance_btn.h;
-
-    self.new_module_btn.w = 50;
-    self.new_module_btn.h = 50;
-    self.new_module_btn.x = self.x+self.w-10-self.new_module_btn.w;
-    self.new_module_btn.y = self.timeline.y-10-self.new_module_btn.h;
   }
 
   self.clear = function()
@@ -1268,14 +1049,6 @@ var module_board = function()
   self.gen_modrel = function()
   {
     var m = new modrel();
-    m.wx = 0;
-    m.wy = 0;
-    m.ww = 20;
-    m.wh = 20;
-    m.v = 1;
-    m.v_btn.set(m.v);
-    screenSpace(self,gg.canv,m);
-    m.size();
     self.modrels.push(m);
     return m;
   }
@@ -1293,7 +1066,7 @@ var module_board = function()
       for(var j = 0; j < self.modrels.length; j++)
       {
         m = self.modrels[j];
-        if(m.src && m.dst) m.dst.correct_v[i] += m.src.correct_v[i-1]*m.correct_v;
+        if(m.src && m.dst) m.dst.correct_v[i] += m.src.correct_v[i-1];
       }
       for(var j = 0; j < self.modules.length; j++)
       {
@@ -1328,7 +1101,7 @@ var module_board = function()
       for(var j = 0; j < self.modrels.length; j++)
       {
         m = self.modrels[j];
-        if(m.src && m.dst) m.dst.v[i] += m.src.v[i-1]*m.v;
+        if(m.src && m.dst) m.dst.v[i] += m.src.v[i-1];
       }
       for(var j = 0; j < self.modules.length; j++)
       {
@@ -1368,7 +1141,7 @@ var module_board = function()
       if(self.modules[i].active) keyer.filter(self.modules[i].v_btn);
     for(var i = 0; i < self.modules.length; i++)
       blurer.filter(self.modules[i].v_btn);
-    if(check) check = !dragger.filter(self.table);
+    if(check) check = !clicker.filter(self.table);
     for(var i = 0; check && i < self.modules.length; i++)
     {
       if(self.modules[i].active)
@@ -1378,25 +1151,7 @@ var module_board = function()
         if(check) check = !clicker.filter(self.modules[i].vdec_btn);
       }
     }
-    for(var i = 0; check && i < self.modules.length; i++)
-      check = !dragger.filter(self.modules[i]);
-    for(var i = 0; i < self.modrels.length; i++)
-      if(self.modrels[i].active) keyer.filter(self.modrels[i].v_btn);
-    for(var i = 0; i < self.modrels.length; i++)
-      blurer.filter(self.modrels[i].v_btn);
-    for(var i = 0; check && i < self.modrels.length; i++)
-    {
-      if(self.modrels[i].active)
-      {
-        if(check) check = !dragger.filter(self.modrels[i].v_btn);
-        if(check) check = !clicker.filter(self.modrels[i].vinc_btn);
-        if(check) check = !clicker.filter(self.modrels[i].vdec_btn);
-      }
-    }
-    for(var i = 0; check && i < self.modrels.length; i++)
-      check = !dragger.filter(self.modrels[i]);
-    //if(check) check = !dragger.filter(self.new_module_btn);
-    if(check) check = !dragger.filter(self.advance_btn);
+    if(check) check = !clicker.filter(self.advance_btn);
     if(check) check = !dragger.filter(self.timeline);
     return !check
   }
@@ -1407,12 +1162,6 @@ var module_board = function()
     for(var i = 0; i < self.modules.length; i++)
     {
       m = self.modules[i];
-      screenSpaceCoords(self,gg.canv,m);
-      m.tick();
-    }
-    for(var i = 0; i < self.modrels.length; i++)
-    {
-      m = self.modrels[i];
       screenSpaceCoords(self,gg.canv,m);
       m.tick();
     }
@@ -1430,7 +1179,6 @@ var module_board = function()
       self.modules[i].draw();
     for(var i = 0; i < self.modrels.length; i++)
       self.modrels[i].draw();
-    //strokeBox(self.new_module_btn,gg.ctx);
 
     strokeBox(self.graph,gg.ctx);
     strokeBox(self.timeline,gg.ctx);

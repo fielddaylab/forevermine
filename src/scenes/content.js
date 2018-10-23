@@ -24,13 +24,8 @@ var modparam = function()
 }
 var relparam = function()
 {
-  this.v = 0;
-  this.correct_v = 0;
   this.src_i = 0;
   this.dst_i = 0;
-  this.active = 1;
-  this.wx = 0;
-  this.wy = 0;
 }
 
 var level = function()
