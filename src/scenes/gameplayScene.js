@@ -127,7 +127,7 @@ var GamePlayScene = function(game, stage)
       case MODE_WORK:
         gg.home_cam.wx = gg.monitor.wx;
         gg.home_cam.wy = gg.monitor.wy;
-        gg.home_cam.ww = gg.monitor.ww;
+        gg.home_cam.ww = gg.monitor.wh/gg.lab.wh*gg.lab.ww;
         gg.home_cam.wh = gg.monitor.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
@@ -151,7 +151,7 @@ var GamePlayScene = function(game, stage)
     gg.monitor  = new monitor();
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
-    gg.zoom_t = 100;
+    gg.zoom_t = 50;
 
     gg.exposition_box = new exposition_box();
     gg.exposition_box.w = gg.canv.width-20;
@@ -784,7 +784,7 @@ var GamePlayScene = function(game, stage)
           var t = gg.mode_t/gg.zoom_t;
           gg.home_cam.wx = lerp(gg.lab.wx,gg.monitor.wx,t);
           gg.home_cam.wy = lerp(gg.lab.wy,gg.monitor.wy,t);
-          gg.home_cam.ww = lerp(gg.lab.ww,gg.monitor.ww,t);
+          gg.home_cam.ww = lerp(gg.lab.ww,gg.monitor.wh/gg.lab.wh*gg.lab.ww,t);
           gg.home_cam.wh = lerp(gg.lab.wh,gg.monitor.wh,t);
           screenSpace(gg.home_cam,gg.canv,gg.lab);
           screenSpace(gg.home_cam,gg.canv,gg.monitor);
@@ -819,7 +819,7 @@ var GamePlayScene = function(game, stage)
           var t = (gg.mode_t-gg.fade_t)/gg.zoom_t;
           gg.home_cam.wx = lerp(gg.monitor.wx,gg.lab.wx,t);
           gg.home_cam.wy = lerp(gg.monitor.wy,gg.lab.wy,t);
-          gg.home_cam.ww = lerp(gg.monitor.ww,gg.lab.ww,t);
+          gg.home_cam.ww = lerp(gg.monitor.wh/gg.lab.wh*gg.lab.ww,gg.lab.ww,t);
           gg.home_cam.wh = lerp(gg.monitor.wh,gg.lab.wh,t);
           screenSpace(gg.home_cam,gg.canv,gg.lab);
           screenSpace(gg.home_cam,gg.canv,gg.monitor);
