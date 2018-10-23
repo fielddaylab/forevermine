@@ -254,7 +254,7 @@ var GamePlayScene = function(game, stage)
     l.pre_text = [
       "Hi there!",
       "I'm blah blah. Blah blah blah blah. Blah BLAH blah-blah; blah aba blah blahblahblah. BLAH! BLAH blah BLAHAHA. Blah.",
-      "The robots might be a bit rusty...",
+      "Yep this is a test WOWOWOWOWO",
     ];
     l.text = [
       "Here's the model my owners used to use.", get_timer(40),

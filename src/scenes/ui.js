@@ -115,6 +115,7 @@ var exposition_box = function()
   {
     self.text.push(text);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
+    if(self.text.length == 1) gg.monitor.talk_t = 50;
   }
 
   self.nq_group = function(text)
@@ -126,7 +127,7 @@ var exposition_box = function()
   self.advance = function()
   {
     self.displayed_i++;
-    gg.monitor.talk_t = 50;
+    if(self.displayed_i < self.text.length) gg.monitor.talk_t = 50;
   }
 
   self.click = function(evt)
