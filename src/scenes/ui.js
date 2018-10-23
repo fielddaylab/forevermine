@@ -1,3 +1,84 @@
+var monitor = function()
+{
+  var self = this;
+  self.ww = 0;
+  self.wh = 0;
+  self.wx = 0;
+  self.wy = 0;
+  self.w = 0;
+  self.h = 0;
+  self.x = 0;
+  self.y = 0;
+
+  self.look_t = 0;
+  self.blink_t = 0;
+  self.talk_t = 0;
+
+  self.face_x = 0;
+  self.face_y = 0;
+  self.eyes_h = 0;
+  self.mouth_h = 0;
+
+  self.clicked = 0;
+
+  self.init_screen = function()
+  {
+    self.screen = GenIcon(self.ww,self.wh);
+    self.draw();
+  }
+
+  self.click = function(evt)
+  {
+    self.clicked = 1;
+  }
+
+  self.tick = function()
+  {
+    self.clicked = 0;
+
+    self.look_t++;  if(self.look_t  > 1000) self.look_t = 0;
+    self.blink_t++; if(self.blink_t >  100) self.blink_t = 0;
+    if(self.talk_t > 0) self.talk_t--;
+
+    self.face_x = lerp(self.face_x,sin(self.look_t/50)/5, 0.1);
+    self.face_y = lerp(self.face_y,sin(self.look_t/190)/5,0.1);
+
+    if(self.blink_t > 95) self.eyes_h = lerp(self.eyes_h,0,0.9);
+    else                  self.eyes_h = lerp(self.eyes_h,1,0.9);
+
+    if(self.talk_t > 0) self.mouth_h = lerp(self.mouth_h,psin(self.talk_t),0.8);
+    else                self.mouth_h = lerp(self.mouth_h,                1,0.8);
+  }
+
+  self.draw = function()
+  {
+    var s = self.screen;
+    var c = s.context;
+
+    c.fillStyle = white;
+    c.fillRect(0,0,s.width,s.height);
+
+    c.fillStyle = blue;
+    var w;
+    var h;
+    var x;
+    var y;
+    w = s.width/10;
+    h = s.height/10*self.eyes_h;
+    x = s.width/4+self.face_x*s.width/4;
+    y = s.height/4+self.face_y*s.height/4;
+    c.fillRect(x,y,w,h); //left eye
+    x = s.width-w-s.width/4+self.face_x*s.width/4;
+    c.fillRect(x,y,w,h); //right eye
+
+    w = s.width/2;
+    h = s.height/10*self.mouth_h;
+    x = s.width/4+self.face_x*s.width/4;
+    y = s.height-h-s.height/4+self.face_y*s.height/4;
+    c.fillRect(x,y,w,h); //mouth
+  }
+}
+
 var exposition_box = function()
 {
   var self = this;
@@ -44,6 +125,7 @@ var exposition_box = function()
   self.advance = function()
   {
     self.displayed_i++;
+    gg.monitor.talk_t = 50;
   }
 
   self.click = function(evt)
@@ -695,6 +777,7 @@ var message_box = function()
     }
     self.max_top_y -= self.pad;
     self.target_top_y = self.max_top_y;
+    gg.monitor.talk_t = 50;
   }
 
   self.click = function(evt)
@@ -741,9 +824,7 @@ var message_box = function()
   {
     gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
-    gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,self.w-self.pad*2,self.w-self.pad*2);
 
-    if(!self.text.length) return;
     gg.ctx.fillStyle = black;
     gg.ctx.textAlign = "left";
     gg.ctx.font = self.font;
@@ -760,10 +841,16 @@ var message_box = function()
       y += self.pad;
     }
 
-    if(self.displayed_i == self.text.length || self.triggers[self.displayed_i].type == TRIGGER_CLICK)
+    if(self.displayed_i < self.text.length && self.triggers[self.displayed_i].type == TRIGGER_CLICK)
       gg.ctx.strokeRect(self.x+self.w-20, self.y+self.pad, 20, 20);
     else if(self.displayed_i < self.text.length && self.triggers[self.displayed_i].type == TRIGGER_TIMER)
       gg.ctx.strokeRect(self.x+self.w-20, self.y+self.h-self.pad, 20, 20);
+
+    var s = self.w-self.pad*2;
+    gg.ctx.fillStyle = white;
+    gg.ctx.fillRect(self.x,self.y,self.w,self.w);
+    gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,s,s);
+    gg.ctx.drawImage(gg.monitor.screen,(gg.monitor.screen.width-gg.monitor.screen.height)/2,0,gg.monitor.screen.height,gg.monitor.screen.height,self.x+self.pad,self.y+self.pad,s,s);
   }
 }
 

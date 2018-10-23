@@ -12,20 +12,13 @@ var GamePlayScene = function(game, stage)
 
     if(gg.module_board) { gg.module_board.ww = gg.canv.width; gg.module_board.wh = gg.canv.height; }
     if(gg.lab)          { gg.lab.ww = gg.canv.width; gg.lab.wh = gg.canv.height; }
-    if(gg.monitor)      { gg.monitor.ww = 530; gg.monitor.wh = 440; gg.monitor.wx = gg.monitor.ww/3; gg.monitor.wy = 0; gg.monitor.screen = GenIcon(gg.monitor.ww,gg.monitor.wh); self.draw_screen(); }
+    if(gg.monitor)      { gg.monitor.ww = 530; gg.monitor.wh = 440; gg.monitor.wx = gg.monitor.ww/3; gg.monitor.wy = 0; gg.monitor.init_screen(); }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
     if(hoverer) hoverer.detach(); hoverer = new PersistentHoverer({source:gg.canvas});
     if(clicker) clicker.detach(); clicker = new Clicker({source:gg.canvas});
     if(dragger) dragger.detach(); dragger = new Dragger({source:gg.canvas});
     if(blurer)  blurer.detach();  blurer  = new Blurer({source:gg.canvas});
-  }
-
-  self.draw_screen = function()
-  {
-    var s = gg.monitor.screen;
-    s.context.fillStyle = blue;
-    s.context.fillRect(s.width/10,s.height/10,s.width*0.8,s.height*0.8);
   }
 
   var keyer;
@@ -155,7 +148,7 @@ var GamePlayScene = function(game, stage)
     var btn_s = 20;
 
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
-    gg.monitor  = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0,click:function(evt){if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length) self.set_mode(MODE_HOME_TO_WORK); }};
+    gg.monitor  = new monitor();
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 100;
@@ -772,12 +765,15 @@ var GamePlayScene = function(game, stage)
   self.tick = function()
   {
     gg.mode_t++;
+    gg.monitor.tick();
     switch(gg.mode)
     {
       case MODE_HOME:
       {
         clicker.filter(gg.exposition_box);
         clicker.filter(gg.monitor);
+        if(gg.monitor.clicked && gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
+          self.set_mode(MODE_HOME_TO_WORK);
         gg.exposition_box.tick();
       }
         break;
@@ -842,6 +838,7 @@ var GamePlayScene = function(game, stage)
 
   self.draw = function()
   {
+    gg.monitor.draw(); //draws to self- not to screen
     switch(gg.mode)
     {
       case MODE_HOME:
