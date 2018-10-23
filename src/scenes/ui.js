@@ -1,3 +1,80 @@
+var exposition_box = function()
+{
+  var self = this;
+  self.w = 0;
+  self.h = 0;
+  self.x = 0;
+  self.y = 0;
+
+  self.text_w = 0;
+
+  self.pad = 10;
+  self.font_h = 15;
+  self.font = self.font_h+"px Helvetica";
+
+  self.text = [];
+  self.bubbles = [];
+
+  self.displayed_i = 0;
+
+  self.size = function()
+  {
+    self.text_w = self.w-self.pad*2;
+  }
+
+  self.clear = function()
+  {
+    self.text = [];
+    self.bubbles = []
+    self.displayed_i = 0;
+  }
+
+  self.nq = function(text)
+  {
+    self.text.push(text);
+    self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
+  }
+
+  self.nq_group = function(text)
+  {
+    for(var i = 0; i < text.length; i++)
+      self.nq(text[i]);
+  }
+
+  self.advance = function()
+  {
+    self.displayed_i++;
+  }
+
+  self.click = function(evt)
+  {
+    if(self.displayed_i < self.text.length) self.advance();
+  }
+
+  self.tick = function()
+  {
+  }
+
+  self.draw = function()
+  {
+    if(self.displayed_i >= self.text.length) return;
+
+    gg.ctx.lineWidth = 1;
+    strokeBox(self,gg.ctx);
+
+    gg.ctx.fillStyle = black;
+    gg.ctx.textAlign = "left";
+    gg.ctx.font = self.font;
+    var y = self.y+self.pad;
+    for(var i = 0; i < self.bubbles[self.displayed_i].length; i++)
+    {
+      gg.ctx.fillText(self.bubbles[self.displayed_i][i],self.x+self.pad,y+self.font_h);
+      y += self.font_h+self.pad;
+    }
+  }
+}
+
+
 var editable_line = function()
 {
   var self = this;
@@ -209,6 +286,7 @@ var editable_line = function()
   }
 
 }
+
 var editable_quadratic = function()
 {
   var self = this;

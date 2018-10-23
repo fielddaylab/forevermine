@@ -57,6 +57,7 @@ var level = function()
     tstate:0,
   };
 
+  self.pre_text = [];
   self.text = [];
   self.correct_text = [ "You did it! On to the next assignment...", trigger_timer];
   self.incorrect_text = [ "I don't think that's right... try again.", trigger_timer];
@@ -68,12 +69,12 @@ var level = function()
 
     if(self.correct)
     {
-      gg.dialog_box.nq_group(self.correct_text);
+      gg.message_box.nq_group(self.correct_text);
       self.submitted_correct();
     }
     else
     {
-      gg.dialog_box.nq_group(self.incorrect_text);
+      gg.message_box.nq_group(self.incorrect_text);
       self.submitted_incorrect();
     }
   }

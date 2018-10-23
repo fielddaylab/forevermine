@@ -11,14 +11,21 @@ var GamePlayScene = function(game, stage)
     gg.ctx = gg.canv.context;
 
     if(gg.module_board) { gg.module_board.ww = gg.canv.width; gg.module_board.wh = gg.canv.height; }
-    if(gg.home_cam_out) { gg.home_cam_out.ww = gg.canv.width; gg.home_cam_out.wh = gg.canv.height; }
-    if(gg.home_cam_in)  { gg.home_cam_in.ww = 530; gg.home_cam_in.wh = 440; gg.home_cam_in.wx = gg.home_cam.ww/2; gg.home_cam_in.wy = 0; }
+    if(gg.lab)          { gg.lab.ww = gg.canv.width; gg.lab.wh = gg.canv.height; }
+    if(gg.monitor)      { gg.monitor.ww = 530; gg.monitor.wh = 440; gg.monitor.wx = gg.monitor.ww/3; gg.monitor.wy = 0; gg.monitor.screen = GenIcon(gg.monitor.ww,gg.monitor.wh); self.draw_screen(); }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
     if(hoverer) hoverer.detach(); hoverer = new PersistentHoverer({source:gg.canvas});
     if(clicker) clicker.detach(); clicker = new Clicker({source:gg.canvas});
     if(dragger) dragger.detach(); dragger = new Dragger({source:gg.canvas});
     if(blurer)  blurer.detach();  blurer  = new Blurer({source:gg.canvas});
+  }
+
+  self.draw_screen = function()
+  {
+    var s = gg.monitor.screen;
+    s.context.fillStyle = blue;
+    s.context.fillRect(s.width/10,s.height/10,s.width*0.8,s.height*0.8);
   }
 
   var keyer;
@@ -35,9 +42,8 @@ var GamePlayScene = function(game, stage)
   var MODE_WORK_TO_HOME = ENUM; ENUM++;
   var MODE_COUNT        = ENUM; ENUM++;
 
-  self.set_level = function(i)
+  self.reset_level = function()
   {
-    gg.cur_level = gg.levels[i];
     gg.cur_level.correct = 0;
     switch(gg.cur_level.type)
     {
@@ -102,9 +108,44 @@ var GamePlayScene = function(game, stage)
         gg.module_board.calculate();
         break;
     }
+  }
 
-    gg.message_box.clear();
-    gg.message_box.nq_group(gg.cur_level.text);
+  self.set_mode = function(mode)
+  {
+    gg.mode = mode;
+    gg.mode_t = 0;
+
+    switch(mode)
+    {
+      case MODE_HOME:
+        gg.home_cam.wx = gg.lab.wx;
+        gg.home_cam.wy = gg.lab.wy;
+        gg.home_cam.ww = gg.lab.ww;
+        gg.home_cam.wh = gg.lab.wh;
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        break;
+      case MODE_HOME_TO_WORK:
+        gg.cur_level = gg.next_level;
+        self.reset_level();
+        gg.message_box.clear();
+        gg.message_box.nq_group(gg.cur_level.text);
+        break;
+      case MODE_WORK:
+        gg.home_cam.wx = gg.monitor.wx;
+        gg.home_cam.wy = gg.monitor.wy;
+        gg.home_cam.ww = gg.monitor.ww;
+        gg.home_cam.wh = gg.monitor.wh;
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        break;
+      case MODE_WORK_TO_HOME:
+        gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
+        gg.exposition_box.clear();
+        gg.exposition_box.nq_group(gg.next_level.pre_text);
+        break;
+    }
+
   }
 
   self.ready = function()
@@ -113,12 +154,18 @@ var GamePlayScene = function(game, stage)
     var graph_s = 100;
     var btn_s = 20;
 
-    gg.mode = MODE_HOME;
-    gg.mode_t = 0;
+    gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
+    gg.monitor  = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0,click:function(evt){if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length) self.set_mode(MODE_HOME_TO_WORK); }};
+    gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
+    gg.fade_t = 20;
+    gg.zoom_t = 100;
 
-    gg.home_cam_out = {wx:0,wy:0,ww:0,wh:0}; //dimensions set in resize
-    gg.home_cam_in  = {wx:0,wy:0,ww:0,wh:0}; //dimensions set in resize
-    gg.home_cam     = {wx:0,wy:0,ww:0,wh:0};
+    gg.exposition_box = new exposition_box();
+    gg.exposition_box.w = gg.canv.width-20;
+    gg.exposition_box.h = 100;
+    gg.exposition_box.x = 10;
+    gg.exposition_box.y = gg.canv.height-10-gg.exposition_box.h;
+    gg.exposition_box.size();
 
     gg.message_box = new message_box();
     gg.message_box.w = 200;
@@ -219,6 +266,11 @@ var GamePlayScene = function(game, stage)
     l.b = 3;
     l.correct_m = 2;
     l.correct_b = 1;
+    l.pre_text = [
+      "Hi there!",
+      "I'm blah blah. Blah blah blah blah. Blah BLAH blah-blah; blah aba blah blahblahblah. BLAH! BLAH blah BLAHAHA. Blah.",
+      "The robots might be a bit rusty...",
+    ];
     l.text = [
       "Here's the model my owners used to use.", get_timer(40),
       "You'll have to alter it to fit the current fleet.", get_timer(200),
@@ -710,76 +762,38 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-/*
-    //shipments
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Crystals";
-    m.v = 0;
-    m.correct_v = 0;
-    m.active = 0;
-    m.wx = 200;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Robots";
-    m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Shipments";
-    m.v = 1;
-    m.correct_v = 4;
-    m.wx = -200;
-    l.modparams.push(m);
-    m = new relparam();
-    m.v = 10;
-    m.correct_v = 10;
-    m.wx = 100;
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    m = new relparam();
-    m.v = 1;
-    m.correct_v = 3;
-    m.wx = -100;
-    m.src_i = 2;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.text = [
-      "We need to pick up the pace to hit our mining goal. Each robot can mine 100kg or crystals daily, but we are going to need more.", get_timer(10),
-      "How many robots do we need to activate daily to make sure that we harvest 1M kg of crystals in 30 days.", get_timer(10),
-    ];
-    gg.levels.push(l);
-    i++;
-*/
-
-    self.set_level(0);
-
     self.resize(stage);
+    gg.next_level = gg.levels[0];
+    gg.exposition_box.clear();
+    gg.exposition_box.nq_group(gg.next_level.pre_text);
+    self.set_mode(MODE_HOME);
   };
 
   self.tick = function()
   {
     gg.mode_t++;
-    switch(mode)
+    switch(gg.mode)
     {
       case MODE_HOME:
       {
-        gg.home_cam.wx = gg.home_cam_out.wx;
-        gg.home_cam.wy = gg.home_cam_out.wy;
-        gg.home_cam.ww = gg.home_cam_out.ww;
-        gg.home_cam.wh = gg.home_cam_out.wh;
+        clicker.filter(gg.exposition_box);
+        clicker.filter(gg.monitor);
+        gg.exposition_box.tick();
       }
         break;
       case MODE_HOME_TO_WORK:
       {
-        gg.home_cam.wx = lerp(gg.home_cam_out.wx,gg.home_cam_in.wx,gg.mode_t/100);
-        gg.home_cam.wy = lerp(gg.home_cam_out.wy,gg.home_cam_in.wy,gg.mode_t/100);
-        gg.home_cam.ww = lerp(gg.home_cam_out.ww,gg.home_cam_in.ww,gg.mode_t/100);
-        gg.home_cam.wh = lerp(gg.home_cam_out.wh,gg.home_cam_in.wh,gg.mode_t/100);
+        if(gg.mode_t <= gg.zoom_t)
+        {
+          var t = gg.mode_t/gg.zoom_t;
+          gg.home_cam.wx = lerp(gg.lab.wx,gg.monitor.wx,t);
+          gg.home_cam.wy = lerp(gg.lab.wy,gg.monitor.wy,t);
+          gg.home_cam.ww = lerp(gg.lab.ww,gg.monitor.ww,t);
+          gg.home_cam.wh = lerp(gg.lab.wh,gg.monitor.wh,t);
+          screenSpace(gg.home_cam,gg.canv,gg.lab);
+          screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        }
+        if(gg.mode_t >= gg.zoom_t+gg.fade_t) self.set_mode(MODE_WORK);
       }
         break;
       case MODE_WORK:
@@ -795,7 +809,7 @@ var GamePlayScene = function(game, stage)
         {
           var correct = gg.cur_level.correct;
           gg.cur_level.correct = 0;
-          if(correct) self.set_level((gg.cur_level.i+1)%gg.levels.length);
+          if(correct) self.set_mode(MODE_WORK_TO_HOME);
         }
 
         gg.cur_level.tick();
@@ -804,10 +818,17 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_WORK_TO_HOME:
       {
-        gg.home_cam.wx = lerp(gg.home_cam_in.wx,gg.home_cam_out.wx,gg.mode_t/100);
-        gg.home_cam.wy = lerp(gg.home_cam_in.wy,gg.home_cam_out.wy,gg.mode_t/100);
-        gg.home_cam.ww = lerp(gg.home_cam_in.ww,gg.home_cam_out.ww,gg.mode_t/100);
-        gg.home_cam.wh = lerp(gg.home_cam_in.wh,gg.home_cam_out.wh,gg.mode_t/100);
+        if(gg.mode_t > gg.fade_t && gg.mode_t <= gg.zoom_t)
+        {
+          var t = (gg.mode_t-gg.fade_t)/gg.zoom_t;
+          gg.home_cam.wx = lerp(gg.monitor.wx,gg.lab.wx,t);
+          gg.home_cam.wy = lerp(gg.monitor.wy,gg.lab.wy,t);
+          gg.home_cam.ww = lerp(gg.monitor.ww,gg.lab.ww,t);
+          gg.home_cam.wh = lerp(gg.monitor.wh,gg.lab.wh,t);
+          screenSpace(gg.home_cam,gg.canv,gg.lab);
+          screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        }
+        else if(gg.mode_t >= gg.zoom_t+gg.fade_t) self.set_mode(MODE_HOME);
       }
         break;
     }
@@ -821,15 +842,82 @@ var GamePlayScene = function(game, stage)
 
   self.draw = function()
   {
-    gg.ctx.strokeStyle = black;
-    switch(gg.cur_level.type)
+    switch(gg.mode)
     {
-      case LEVEL_LINEAR:    gg.line.draw();         break;
-      case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
-      case LEVEL_MODULE:    gg.module_board.draw(); break;
+      case MODE_HOME:
+      {
+        strokeBox(gg.lab,gg.ctx);
+        strokeBox(gg.monitor,gg.ctx,gg.ctx);
+        drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+        gg.exposition_box.draw();
+      }
+        break;
+      case MODE_HOME_TO_WORK:
+      {
+        if(gg.mode_t < gg.zoom_t)
+        {
+          strokeBox(gg.lab,gg.ctx);
+          strokeBox(gg.monitor,gg.ctx);
+          drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+        }
+        else if(gg.mode_t <= gg.zoom_t+gg.fade_t)
+        {
+          gg.ctx.strokeStyle = black;
+          switch(gg.cur_level.type)
+          {
+            case LEVEL_LINEAR:    gg.line.draw();         break;
+            case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
+            case LEVEL_MODULE:    gg.module_board.draw(); break;
+          }
+          gg.cur_level.draw();
+          gg.message_box.draw();
+
+          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.zoom_t)/gg.fade_t);
+          drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+          gg.ctx.globalAlpha = 1;
+        }
+      }
+        break;
+      case MODE_WORK:
+      {
+        gg.ctx.strokeStyle = black;
+        switch(gg.cur_level.type)
+        {
+          case LEVEL_LINEAR:    gg.line.draw();         break;
+          case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
+          case LEVEL_MODULE:    gg.module_board.draw(); break;
+        }
+        gg.cur_level.draw();
+        gg.message_box.draw();
+      }
+        break;
+      case MODE_WORK_TO_HOME:
+      {
+        if(gg.mode_t < gg.fade_t)
+        {
+          gg.ctx.strokeStyle = black;
+          switch(gg.cur_level.type)
+          {
+            case LEVEL_LINEAR:    gg.line.draw();         break;
+            case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
+            case LEVEL_MODULE:    gg.module_board.draw(); break;
+          }
+          gg.cur_level.draw();
+          gg.message_box.draw();
+
+          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+          gg.ctx.globalAlpha = 1;
+        }
+        else if(gg.mode_t <= gg.fade_t+gg.zoom_t)
+        {
+          strokeBox(gg.lab,gg.ctx);
+          strokeBox(gg.monitor,gg.ctx);
+          drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+        }
+      }
+        break;
     }
-    gg.cur_level.draw();
-    gg.message_box.draw();
   };
 
   self.cleanup = function()
