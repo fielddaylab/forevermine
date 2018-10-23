@@ -810,7 +810,9 @@ var GamePlayScene = function(game, stage)
       {
         strokeBox(gg.lab,gg.ctx);
         strokeBox(gg.monitor,gg.ctx,gg.ctx);
+        gg.ctx.imageSmoothingEnabled = 0;
         drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+        gg.ctx.imageSmoothingEnabled = 1;
         gg.exposition_box.draw();
       }
         break;
@@ -820,7 +822,9 @@ var GamePlayScene = function(game, stage)
         {
           strokeBox(gg.lab,gg.ctx);
           strokeBox(gg.monitor,gg.ctx);
+          gg.ctx.imageSmoothingEnabled = 0;
           drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+          gg.ctx.imageSmoothingEnabled = 1;
         }
         else if(gg.mode_t <= gg.zoom_t+gg.fade_t)
         {
@@ -835,7 +839,9 @@ var GamePlayScene = function(game, stage)
           gg.message_box.draw();
 
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.zoom_t)/gg.fade_t);
+          gg.ctx.imageSmoothingEnabled = 0;
           drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+          gg.ctx.imageSmoothingEnabled = 1;
           gg.ctx.globalAlpha = 1;
         }
       }
@@ -868,14 +874,18 @@ var GamePlayScene = function(game, stage)
           gg.message_box.draw();
 
           gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          gg.ctx.imageSmoothingEnabled = 0;
           drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+          gg.ctx.imageSmoothingEnabled = 1;
           gg.ctx.globalAlpha = 1;
         }
         else if(gg.mode_t <= gg.fade_t+gg.zoom_t)
         {
           strokeBox(gg.lab,gg.ctx);
           strokeBox(gg.monitor,gg.ctx);
+          gg.ctx.imageSmoothingEnabled = 0;
           drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+          gg.ctx.imageSmoothingEnabled = 1;
         }
       }
         break;

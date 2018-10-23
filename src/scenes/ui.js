@@ -23,7 +23,8 @@ var monitor = function()
 
   self.init_screen = function()
   {
-    self.screen = GenIcon(self.ww,self.wh);
+    var d = 50;
+    self.screen = GenIcon(self.ww/d,self.wh/d);
     self.draw();
   }
 
@@ -843,7 +844,10 @@ var message_box = function()
     gg.ctx.fillStyle = white;
     gg.ctx.fillRect(self.x,self.y,self.w,self.w);
     gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,s,s);
+
+    gg.ctx.imageSmoothingEnabled = 0;
     gg.ctx.drawImage(gg.monitor.screen,(gg.monitor.screen.width-gg.monitor.screen.height)/2,0,gg.monitor.screen.height,gg.monitor.screen.height,self.x+self.pad,self.y+self.pad,s,s);
+    gg.ctx.imageSmoothingEnabled = 1;
   }
 }
 
