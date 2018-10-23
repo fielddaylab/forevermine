@@ -721,7 +721,7 @@ var GamePlayScene = function(game, stage)
     i++;
 
     self.resize(stage);
-    gg.next_level = gg.levels[3];
+    gg.next_level = gg.levels[0];
     gg.exposition_box.clear();
     gg.exposition_box.nq_group(gg.next_level.pre_text);
     self.set_mode(MODE_HOME);
