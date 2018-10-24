@@ -187,8 +187,8 @@ var timeline = function()
   {
     self.advance_btn.w = 50;
     self.advance_btn.h = 50;
-    self.advance_btn.x = self.x+10;
-    self.advance_btn.y = self.y-10-self.advance_btn.h;
+    self.advance_btn.x = self.x-10-self.advance_btn.w;
+    self.advance_btn.y = self.y+self.h-self.advance_btn.h;
   }
 
   self.dragStart = function(evt)
@@ -238,6 +238,15 @@ var timeline = function()
     gg.ctx.strokeStyle = black;
     t_x = mapVal(0,self.t_max,self.x,self.x+self.w,self.t);
     drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
+
+    if(self.t < self.t_target)
+    {
+      gg.ctx.font = "12px Helvetica";
+      gg.ctx.fillStyle = light_gray;
+      gg.ctx.fillText("simulating...",self.x,self.y-10);
+    }
+
+    gg.ctx.fillStyle = black;
 
   }
 }
@@ -300,8 +309,8 @@ var editable_line = function()
     self.btn_w = gg.ctx.measureText("-0.0").width;
     self.eqn_w = gg.ctx.measureText("y = ").width+self.btn_w+gg.ctx.measureText("x + ").width+self.btn_w;
     self.eqn_h = self.font_h;
-    self.eqn_x = self.x+self.w/2-self.eqn_w/2;
-    self.eqn_y = self.y+self.h/2-self.eqn_h/2;
+    self.eqn_x = self.x+self.w/3-self.eqn_w/2;
+    self.eqn_y = self.y+self.h/3-self.eqn_h/2;
 
     self.m_btn.w = self.btn_w;
     self.m_btn.h = self.font_h;
@@ -429,6 +438,10 @@ var editable_line = function()
     gg.ctx.fillText(self.b,self.b_btn.x+self.b_btn.w,self.eqn_y+self.eqn_h);
     gg.ctx.textAlign = "left";
 
+    gg.ctx.fillStyle = light_gray;
+    gg.ctx.fillText("x = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
+    gg.ctx.fillText("y = "+fdisp(self.m*fdisp(gg.timeline.t,1)+self.b,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
+
     strokeBox(self.m_btn,gg.ctx);
     strokeBox(self.minc_btn,gg.ctx);
     strokeBox(self.mdec_btn,gg.ctx);
@@ -519,8 +532,8 @@ var editable_quadratic = function()
     self.btn_w = gg.ctx.measureText("-0.0").width;
     self.eqn_w = gg.ctx.measureText("y = ").width+self.btn_w+gg.ctx.measureText("x² + ").width+self.btn_w+gg.ctx.measureText("x + ").width+self.btn_w;
     self.eqn_h = self.font_h;
-    self.eqn_x = self.x+self.w/2-self.eqn_w/2;
-    self.eqn_y = self.y+self.h/2-self.eqn_h/2;
+    self.eqn_x = self.x+self.w/3-self.eqn_w/2;
+    self.eqn_y = self.y+self.h/3-self.eqn_h/2;
 
     self.a_btn.w = self.btn_w;
     self.a_btn.h = self.font_h;
@@ -663,6 +676,10 @@ var editable_quadratic = function()
     gg.ctx.fillText(self.b,self.b_btn.x+self.b_btn.w,self.eqn_y+self.eqn_h);
     gg.ctx.fillText(self.c,self.c_btn.x+self.c_btn.w,self.eqn_y+self.eqn_h);
     gg.ctx.textAlign = "left";
+
+    gg.ctx.fillStyle = light_gray;
+    gg.ctx.fillText("x = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
+    gg.ctx.fillText("y = "+fdisp(self.a*fdisp(pow(gg.timeline.t,2),1)+self.b*fdisp(gg.timeline.t,1)+self.c,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
 
     strokeBox(self.a_btn,gg.ctx);
     strokeBox(self.ainc_btn,gg.ctx);

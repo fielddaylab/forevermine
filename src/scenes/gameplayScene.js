@@ -846,6 +846,7 @@ var GamePlayScene = function(game, stage)
           }
           gg.cur_level.draw();
           gg.message_box.draw();
+          gg.timeline.draw();
 
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.zoom_t)/gg.fade_t);
           gg.ctx.imageSmoothingEnabled = 0;
@@ -882,6 +883,7 @@ var GamePlayScene = function(game, stage)
           }
           gg.cur_level.draw();
           gg.message_box.draw();
+          gg.timeline.draw();
 
           gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
           gg.ctx.imageSmoothingEnabled = 0;
