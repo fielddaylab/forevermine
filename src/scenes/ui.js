@@ -1012,6 +1012,8 @@ var message_box = function()
     {
       if(floor(self.advance_t/20)%2)
         drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
+      gg.ctx.fillStyle = red;
+      gg.ctx.fillRect(self.input_x+self.input_w-self.pad/2,self.input_y-self.pad/2,self.pad,self.pad);
     }
     gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
 

@@ -788,7 +788,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_WORK_TO_HOME:
       {
-        if(gg.mode_t > gg.fade_t && gg.mode_t <= gg.zoom_t)
+        if(gg.mode_t >= gg.fade_t && gg.mode_t < gg.fade_t+gg.zoom_t)
         {
           var t = (gg.mode_t-gg.fade_t)/gg.zoom_t;
           gg.home_cam.wx = lerp(gg.monitor.wx,gg.lab.wx,t);
