@@ -166,6 +166,81 @@ var exposition_box = function()
   }
 }
 
+var timeline = function()
+{
+  var self = this;
+  self.x = 0;
+  self.y = 0;
+  self.w = 0;
+  self.h = 0;
+
+  self.t = 0;
+  self.t_target = 0;
+  self.t_max = 10;
+
+  self.advance_btn = {x:0,y:0,w:0,h:0,click:function(evt){
+    self.t_target++;
+    if(self.t_target > self.t_max) self.t_target = self.t_max;
+  }};
+
+  self.size = function()
+  {
+    self.advance_btn.w = 50;
+    self.advance_btn.h = 50;
+    self.advance_btn.x = self.x+10;
+    self.advance_btn.y = self.y-10-self.advance_btn.h;
+  }
+
+  self.dragStart = function(evt)
+  {
+    self.drag(evt);
+  }
+  self.drag = function(evt)
+  {
+    var t = clampMapVal(self.x,self.x+self.w,0,self.t_max,evt.doX);
+    self.t_target = ceil(t);
+    self.t = t;
+  }
+  self.dragFinish = function(evt)
+  {
+  }
+
+  self.filter = function(dragger, clicker)
+  {
+    var check = true;
+    if(check) check = !clicker.filter(self.advance_btn);
+    if(check) check = !dragger.filter(self);
+    return check;
+  }
+
+  self.tick = function()
+  {
+    if(self.t < self.t_target && !self.dragging) self.t += 0.01;
+    if(self.t > self.t_target) self.t = self.t_target;
+  }
+
+  self.draw = function()
+  {
+    strokeBox(self,gg.ctx);
+    strokeBox(self.advance_btn,gg.ctx);
+
+    var t_x;
+    gg.ctx.strokeStyle = gray;
+    gg.ctx.beginPath();
+    for(var i = 1; i < self.t_max; i++)
+    {
+      t_x = mapVal(0,self.t_max,self.x,self.x+self.w,i);
+      gg.ctx.moveTo(t_x,self.y);
+      gg.ctx.lineTo(t_x,self.y+self.h);
+    }
+    gg.ctx.stroke();
+
+    gg.ctx.strokeStyle = black;
+    t_x = mapVal(0,self.t_max,self.x,self.x+self.w,self.t);
+    drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
+
+  }
+}
 
 var editable_line = function()
 {
@@ -1024,14 +1099,14 @@ var module = function()
     x = self.x;
     y = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.v[0]);
     gg.ctx.moveTo(x,y);
-    for(var i = 1; i < gg.module_board.t_max; i++)
+    for(var i = 1; i < gg.timeline.t_max; i++)
     {
-      x = self.x+(i/(gg.module_board.t_max-1))*self.w;
+      x = self.x+(i/(gg.timeline.t_max-1))*self.w;
       y = mapVal(self.v_min, self.v_max, self.y+self.h, self.y, self.v[i]);
       gg.ctx.lineTo(x,y);
     }
     gg.ctx.stroke();
-    var t_x = mapVal(0,gg.module_board.t_max,self.x,self.x+self.w,gg.module_board.t);
+    var t_x = mapVal(0,gg.timeline.t_max,self.x,self.x+self.w,gg.timeline.t);
     drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
     gg.ctx.strokeStyle = black;
     strokeBox(self,gg.ctx);
@@ -1044,7 +1119,7 @@ var module = function()
     gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h-1);
     gg.ctx.fillStyle = gray;
-    if(floor(gg.module_board.t) != 0) gg.ctx.fillText(self.v[floor(gg.module_board.t)],self.x+self.w/2,self.y+self.h*2/3);
+    if(floor(gg.timeline.t) != 0) gg.ctx.fillText(self.v[floor(gg.timeline.t)],self.x+self.w/2,self.y+self.h*2/3);
     gg.ctx.fillStyle = black;
   }
 }
@@ -1060,7 +1135,7 @@ var modrel = function()
     if(!self.src || !self.dst) return;
     gg.ctx.lineWidth = 1;
     drawLine(self.src.x+self.src.w,self.src.y+self.src.h/2,self.dst.x,self.dst.y+self.dst.h/2,gg.ctx);
-    var t = gg.module_board.t;
+    var t = gg.timeline.t;
     var td = t%1;
     if(td != 0)
     {
@@ -1095,30 +1170,10 @@ var module_board = function()
   self.wx = 0;
   self.wy = 0;
 
-  self.t = 0;
-  self.t_target = 0;
-  self.t_max = 10;
   self.modules = [];
   self.modrels = [];
 
   self.graph = {x:0,y:0,w:0,h:0};
-
-  self.timeline = {x:0,y:0,w:0,h:0,
-  dragStart:function(evt)
-  {
-    self.timeline.drag(evt);
-  },
-  drag:function(evt)
-  {
-    var t = clampMapVal(self.timeline.x,self.timeline.x+self.timeline.w,0,self.t_max,evt.doX);
-    self.t_target = ceil(t);
-    self.t = t;
-  },dragFinish:function(evt){}};
-
-  self.advance_btn = {x:0,y:0,w:0,h:0,click:function(evt){
-    self.t_target++;
-    if(self.t_target > self.t_max) self.t_target = self.t_max;
-  }};
 
   self.table = new table();
   self.table.n = 10;
@@ -1131,19 +1186,6 @@ var module_board = function()
   }
   self.table.verify();
   self.table_module = 0;
-
-  self.size = function()
-  {
-    self.timeline.w = (self.w-20)*(10/11);
-    self.timeline.h = 30;
-    self.timeline.x = 10+self.x+(self.w-20)*(1/11);
-    self.timeline.y = self.h-self.timeline.h-100;
-
-    self.advance_btn.w = 50;
-    self.advance_btn.h = 50;
-    self.advance_btn.x = self.x+10;
-    self.advance_btn.y = self.timeline.y-10-self.advance_btn.h;
-  }
 
   self.clear = function()
   {
@@ -1158,7 +1200,7 @@ var module_board = function()
     m.wy = 0;
     m.ww = 50;
     m.wh = 50;
-    for(var i = 0; i < self.t_max; i++)
+    for(var i = 0; i < gg.timeline.t_max; i++)
       m.v[i] = 0;
     m.v_btn.set(m.v[0]);
     screenSpace(self,gg.canv,m);
@@ -1175,7 +1217,7 @@ var module_board = function()
 
   self.calculate_table = function()
   {
-    for(var i = 1; i <= self.t_max; i++)
+    for(var i = 1; i <= gg.timeline.t_max; i++)
     {
       var m;
       for(var j = 0; j < self.modules.length; j++)
@@ -1210,7 +1252,7 @@ var module_board = function()
 
   self.calculate = function()
   {
-    for(var i = 1; i <= self.t_max; i++)
+    for(var i = 1; i <= gg.timeline.t_max; i++)
     {
       var m;
       for(var j = 0; j < self.modules.length; j++)
@@ -1234,7 +1276,7 @@ var module_board = function()
       m = self.modules[i];
       m.v_min = 9999;
       m.v_max = -9999;
-      for(var j = 0; j <= self.t_max; j++)
+      for(var j = 0; j <= gg.timeline.t_max; j++)
       {
         if(m.v[j] < m.v_min) m.v_min = m.v[j];
         if(m.v[j] > m.v_max) m.v_max = m.v[j];
@@ -1271,8 +1313,6 @@ var module_board = function()
         if(check) check = !clicker.filter(self.modules[i].vdec_btn);
       }
     }
-    if(check) check = !clicker.filter(self.advance_btn);
-    if(check) check = !dragger.filter(self.timeline);
     return !check
   }
 
@@ -1285,8 +1325,6 @@ var module_board = function()
       screenSpaceCoords(self,gg.canv,m);
       m.tick();
     }
-    if(self.t < self.t_target && !self.timeline.dragging) self.t += 0.01;
-    if(self.t > self.t_target) self.t = self.t_target;
   }
 
   self.draw = function()
@@ -1301,23 +1339,6 @@ var module_board = function()
       self.modrels[i].draw();
 
     strokeBox(self.graph,gg.ctx);
-    strokeBox(self.timeline,gg.ctx);
-    var t_x;
-    gg.ctx.strokeStyle = gray;
-    gg.ctx.beginPath();
-    for(var i = 1; i < self.t_max; i++)
-    {
-      t_x = mapVal(0,self.t_max,self.timeline.x,self.timeline.x+self.timeline.w,i);
-      gg.ctx.moveTo(t_x,self.timeline.y);
-      gg.ctx.lineTo(t_x,self.timeline.y+self.timeline.h);
-    }
-    gg.ctx.stroke();
-
-    gg.ctx.strokeStyle = black;
-    t_x = mapVal(0,self.t_max,self.timeline.x,self.timeline.x+self.timeline.w,self.t);
-    drawLine(t_x,self.timeline.y,t_x,self.timeline.y+self.timeline.h,gg.ctx);
-
-    strokeBox(self.advance_btn,gg.ctx);
     self.table.draw();
 
     if(self.table_module)
@@ -1326,12 +1347,12 @@ var module_board = function()
       var g = self.graph;
       gg.ctx.strokeStyle = black;
       gg.ctx.beginPath();
-      x = mapVal(0,self.t_max-1,g.x,g.x+g.w,0);
+      x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,0);
       y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,m.v[0]);
       gg.ctx.moveTo(x,y);
-      for(var i = 1; i < self.t_max; i++)
+      for(var i = 1; i < gg.timeline.t_max; i++)
       {
-        x = mapVal(0,self.t_max-1,g.x,g.x+g.w,i);
+        x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,i);
         y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,m.v[i]);
         gg.ctx.lineTo(x,y);
       }
@@ -1342,7 +1363,7 @@ var module_board = function()
       gg.ctx.fillText(fdisp(m.v_max),g.x-10,g.y);
 
       gg.ctx.strokeStyle = gray;
-      var t_x = mapVal(0,self.t_max,self.graph.x,self.graph.x+self.graph.w,self.t);
+      var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
       drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
       gg.ctx.fillStyle = red;
@@ -1350,7 +1371,7 @@ var module_board = function()
       {
         if(self.table.known_data[i] != "-")
         {
-          x = mapVal(0,self.t_max-1,g.x,g.x+g.w,i);
+          x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,i);
           y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,self.table.known_data[i]);
           y = clamp(g.y,g.y+g.h,y);
           gg.ctx.fillRect(x-1,y-1,2,2);

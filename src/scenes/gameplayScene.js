@@ -38,6 +38,8 @@ var GamePlayScene = function(game, stage)
   self.reset_level = function()
   {
     gg.cur_level.correct = 0;
+    gg.timeline.t = 0;
+    gg.timeline.target_t = 0;
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:
@@ -178,7 +180,13 @@ var GamePlayScene = function(game, stage)
     b.table.x = gg.message_box.x+gg.message_box.w+10;
     b.table.y = gg.canv.height-b.table.h;
     b.table.w = gg.canv.width-b.table.x-10;
-    b.size();
+
+    gg.timeline = new timeline();
+    gg.timeline.w = (gg.module_board.w-20)*(10/11);
+    gg.timeline.h = 30;
+    gg.timeline.x = 10+gg.module_board.x+(gg.module_board.w-20)*(1/11);
+    gg.timeline.y = gg.module_board.h-gg.timeline.h-100;
+    gg.timeline.size();
 
     gg.line = new editable_line();
     b = gg.line;
@@ -766,10 +774,13 @@ var GamePlayScene = function(game, stage)
           case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
           case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
         }
+        gg.timeline.filter(dragger,clicker);
         dragger.filter(gg.message_box);
+
         if(gg.cur_level.correct && gg.message_box.requested_end)
           self.set_mode(MODE_WORK_TO_HOME);
 
+        gg.timeline.tick();
         gg.cur_level.tick();
         gg.message_box.tick();
         if(!gg.cur_level.correct) gg.message_box.prompt_end = 0;
@@ -855,6 +866,7 @@ var GamePlayScene = function(game, stage)
         }
         gg.cur_level.draw();
         gg.message_box.draw();
+        gg.timeline.draw();
       }
         break;
       case MODE_WORK_TO_HOME:
