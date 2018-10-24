@@ -714,6 +714,16 @@ var message_box = function()
   self.x = 0;
   self.y = 0;
 
+  self.monitor_x = 0;
+  self.monitor_y = 0;
+  self.monitor_w = 0;
+  self.monitor_h = 0;
+
+  self.input_x = 0;
+  self.input_y = 0;
+  self.input_w = 0;
+  self.input_h = 0;
+
   self.bubble_w = 0;
   self.text_w = 0;
 
@@ -726,14 +736,14 @@ var message_box = function()
   self.target_top_y = 0;
   self.bottom_y = 0;
 
-  self.advance_t = 0;
+  self.advance_t = self.thinking_buff-1;
   self.thinking_buff = 50;
 
   self.prompt_player_input = 0;
   self.prompt_ai_typing = 0;
   self.prompt_end = 0;
 
-  self.requested_past_available = 0;
+  self.requested_end = 0;
 
   self.text = [];
   self.bubbles = [];
@@ -747,6 +757,16 @@ var message_box = function()
     self.bubble_w = self.w-self.pad*3;
     self.text_w = self.bubble_w-self.pad*2;
     self.bottom_y = self.y+self.h-(self.font_h+self.pad*3);
+
+    self.monitor_x = self.x+self.pad;
+    self.monitor_y = self.y+self.pad;
+    self.monitor_w = self.w-self.pad*2;
+    self.monitor_h = self.monitor_w;
+
+    self.input_x = self.x+self.pad;
+    self.input_y = self.bottom_y;
+    self.input_w = self.w-self.pad*2;
+    self.input_h = self.font_h+self.pad*2;
   }
 
   self.clear = function()
@@ -758,9 +778,9 @@ var message_box = function()
     self.top_y = self.bottom_y;
     self.max_top_y = self.top_y;
     self.target_top_y = self.max_top_y;
-    self.advance_t = 0;
-    self.requested_past_available = 0;
+    self.requested_end = 0;
     self.displayed_i = 0;
+    self.advance_t = self.thinking_buff;
   }
 
   self.nq = function(text, speaker, trigger)
@@ -770,7 +790,7 @@ var message_box = function()
     self.speakers.push(speaker);
     trigger.tstate = clone(trigger.state);
     self.triggers.push(trigger);
-    self.requested_past_available = 0;
+    self.requested_end = 0;
   }
 
   self.nq_group = function(text)
@@ -804,9 +824,15 @@ var message_box = function()
 
   self.click = function(evt)
   {
-    if(self.displayed_i < self.text.length && (self.triggers[self.displayed_i].type == TRIGGER_CLICK || self.triggers[self.displayed_i].type == TRIGGER_TIMER))
-      self.advance();
-    else self.requested_past_available = 1;
+    if(self.prompt_end && self.displayed_i == self.text.length && ptWithin(self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h,evt.doX,evt.doY))
+      self.requested_end = 1;
+    if(self.displayed_i < self.text.length)
+    {
+      if(self.speakers[self.displayed_i] == SPEAKER_AI)
+        self.advance();
+      else if(ptWithin(self.input_x,self.input_y,self.input_w,self.input_h,evt.doX,evt.doY))
+        self.advance();
+    }
   }
 
   self.dragging = 0;
@@ -839,6 +865,7 @@ var message_box = function()
         self.advance();
     }
 
+    var old_prompt_ai_typing = self.prompt_ai_typing
     self.prompt_player_input = 0;
     self.prompt_ai_typing = 0;
     self.prompt_end = 0;
@@ -858,11 +885,11 @@ var message_box = function()
         else if(self.triggers[self.displayed_i].type == TRIGGER_TIMER)
           self.prompt_ai_typing = 1;
       }
-
-      if(self.advance_t == self.thinking_buff && self.prompt_ai_typing) //newly typing
-        self.calculate_top();
     }
     else if(self.displayed_i == self.text.length) self.prompt_end = 1;
+
+    if(old_prompt_ai_typing != self.prompt_ai_typing)
+      self.calculate_top();
   }
 
   self.draw = function()
@@ -904,14 +931,14 @@ var message_box = function()
     if(!self.prompt_player_input)
     {
       gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillRect(self.x+self.pad,self.bottom_y,self.w-self.pad*2,self.font_h+self.pad*2);
+      gg.ctx.fillRect(self.input_x,self.input_y,self.input_w,self.input_h);
     }
     else
     {
       if(floor(self.advance_t/20)%2)
-        drawLine(self.x+self.pad*2,self.bottom_y+self.pad,self.x+self.pad*2,self.bottom_y+self.pad+self.font_h,gg.ctx)
+        drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
     }
-    gg.ctx.strokeRect(self.x+self.pad,self.bottom_y,self.w-self.pad*2,self.font_h+self.pad*2);
+    gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
 
     //"ai typing"
     if(self.prompt_ai_typing)
@@ -928,10 +955,15 @@ var message_box = function()
     var s = self.w-self.pad*2;
     gg.ctx.fillStyle = white;
     gg.ctx.fillRect(self.x,self.y,self.w,self.w);
-    gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,s,s);
+    gg.ctx.strokeRect(self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h);
     gg.ctx.imageSmoothingEnabled = 0;
-    gg.ctx.drawImage(gg.monitor.screen,(gg.monitor.screen.width-gg.monitor.screen.height)/2,0,gg.monitor.screen.height,gg.monitor.screen.height,self.x+self.pad,self.y+self.pad,s,s);
+    gg.ctx.drawImage(gg.monitor.screen,(gg.monitor.screen.width-gg.monitor.screen.height)/2,0,gg.monitor.screen.height,gg.monitor.screen.height,self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h);
     gg.ctx.imageSmoothingEnabled = 1;
+    if(self.prompt_end)
+    {
+      gg.ctx.fillStyle = red;
+      gg.ctx.fillRect(self.monitor_x+self.monitor_w-self.pad/2,self.monitor_y-self.pad/2,self.pad,self.pad);
+    }
   }
 }
 

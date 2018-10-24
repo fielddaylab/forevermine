@@ -257,7 +257,7 @@ var GamePlayScene = function(game, stage)
       "Yep this is a test WOWOWOWOWO",
     ];
     l.text = [
-      "Here's the model my owners used to use.", SPEAKER_AI, get_timer(40),
+      "Here's the model my owners used to use.", SPEAKER_AI, get_timer(200),
       "What should I do?", SPEAKER_PLAYER, trigger_click,
       "You'll have to alter it to fit the current fleet.", SPEAKER_AI, get_timer(200),
       "The robots might be a bit rusty...", SPEAKER_AI, get_timer(200),
@@ -270,7 +270,7 @@ var GamePlayScene = function(game, stage)
       "Maybe we can figure something out tomorrow!", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(60),
     ];
     gg.levels.push(l);
     i++;
@@ -300,7 +300,7 @@ var GamePlayScene = function(game, stage)
       "But hey maybe you could hang out for a while!", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(60),
     ];
     gg.levels.push(l);
     i++;
@@ -329,7 +329,7 @@ var GamePlayScene = function(game, stage)
       "Maybe there's somewhere else we can look?", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(60),
     ];
     gg.levels.push(l);
     i++;
@@ -767,15 +767,12 @@ var GamePlayScene = function(game, stage)
           case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
         }
         dragger.filter(gg.message_box);
-        if(gg.cur_level.correct && gg.message_box.requested_past_available)
-        {
-          var correct = gg.cur_level.correct;
-          gg.cur_level.correct = 0;
-          if(correct) self.set_mode(MODE_WORK_TO_HOME);
-        }
+        if(gg.cur_level.correct && gg.message_box.requested_end)
+          self.set_mode(MODE_WORK_TO_HOME);
 
         gg.cur_level.tick();
         gg.message_box.tick();
+        if(!gg.cur_level.correct) gg.message_box.prompt_end = 0;
       }
         break;
       case MODE_WORK_TO_HOME:
