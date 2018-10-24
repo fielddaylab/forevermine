@@ -10,12 +10,15 @@ var monitor = function()
   self.x = 0;
   self.y = 0;
 
-  self.look_t = 0;
+  self.look_t = randIntBelow(1000);
+  self.look_t_thresh = self.look_t+randIntBelow(500);
   self.blink_t = 0;
   self.talk_t = 0;
 
-  self.face_x = 0;
-  self.face_y = 0;
+  self.eyes_x = 0;
+  self.eyes_y = 0;
+  self.mouth_x = 0;
+  self.mouth_y = 0;
   self.eyes_h = 0;
   self.mouth_h = 0;
 
@@ -23,7 +26,7 @@ var monitor = function()
 
   self.init_screen = function()
   {
-    var d = 50;
+    var d = 10;
     self.screen = GenIcon(self.ww/d,self.wh/d);
     self.draw();
   }
@@ -37,12 +40,17 @@ var monitor = function()
   {
     self.clicked = 0;
 
-    self.look_t++;  if(self.look_t  > 1000) self.look_t = 0;
+    self.look_t++;  if(self.look_t  > self.look_t_thresh) { self.look_t = randIntBelow(1000); self.look_t_thresh = self.look_t+randIntBelow(500); }
     self.blink_t++; if(self.blink_t >  100) self.blink_t = 0;
     if(self.talk_t > 0) self.talk_t--;
 
-    self.face_x = lerp(self.face_x,sin(self.look_t/50)/5, 0.1);
-    self.face_y = lerp(self.face_y,sin(self.look_t/190)/5,0.1);
+    var face_x = sin(self.look_t/50)/5;
+    var face_y = sin(self.look_t/190)/5;
+
+    self.eyes_x = lerp(self.eyes_x,face_x, 0.1);
+    self.eyes_y = lerp(self.eyes_y,face_y,0.1);
+    self.mouth_x = lerp(self.mouth_x,face_x, 0.05);
+    self.mouth_y = lerp(self.mouth_y,face_y,0.05);
 
     if(self.blink_t > 95) self.eyes_h = lerp(self.eyes_h,0,0.9);
     else                  self.eyes_h = lerp(self.eyes_h,1,0.9);
@@ -66,16 +74,16 @@ var monitor = function()
     var y;
     w = s.width/10;
     h = s.height/10*self.eyes_h;
-    x = s.width/4+self.face_x*s.width/4;
-    y = s.height/4+self.face_y*s.height/4;
+    x = s.width/4+self.eyes_x*s.width/4;
+    y = s.height/4+self.eyes_y*s.height/4;
     c.fillRect(x,y,w,h); //left eye
-    x = s.width-w-s.width/4+self.face_x*s.width/4;
+    x = s.width-w-s.width/4+self.eyes_x*s.width/4;
     c.fillRect(x,y,w,h); //right eye
 
     w = s.width/2;
     h = s.height/10*self.mouth_h;
-    x = s.width/4+self.face_x*s.width/4;
-    y = s.height-h-s.height/4+self.face_y*s.height/4;
+    x = s.width/4+self.mouth_x*s.width/4;
+    y = s.height-h-s.height/4+self.mouth_y*s.height/4;
     c.fillRect(x,y,w,h); //mouth
   }
 }
@@ -716,52 +724,64 @@ var message_box = function()
   self.top_y = 0;
   self.max_top_y = 0;
   self.target_top_y = 0;
+  self.bottom_y = 0;
+
+  self.advance_t = 0;
+  self.thinking_buff = 50;
+
+  self.prompt_player_input = 0;
+  self.prompt_ai_typing = 0;
+  self.prompt_end = 0;
 
   self.requested_past_available = 0;
 
   self.text = [];
-  self.triggers = [];
   self.bubbles = [];
+  self.speakers = [];
+  self.triggers = [];
 
   self.displayed_i = 0;
 
   self.size = function()
   {
-    self.bubble_w = self.w-self.pad*2;
+    self.bubble_w = self.w-self.pad*3;
     self.text_w = self.bubble_w-self.pad*2;
+    self.bottom_y = self.y+self.h-(self.font_h+self.pad*3);
   }
 
   self.clear = function()
   {
     self.text = [];
-    self.triggers = [];
     self.bubbles = []
-    self.top_y = self.y+self.h;
+    self.speakers = []
+    self.triggers = [];
+    self.top_y = self.bottom_y;
     self.max_top_y = self.top_y;
     self.target_top_y = self.max_top_y;
+    self.advance_t = 0;
     self.requested_past_available = 0;
     self.displayed_i = 0;
   }
 
-  self.nq = function(text, trigger)
+  self.nq = function(text, speaker, trigger)
   {
     self.text.push(text);
+    self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
+    self.speakers.push(speaker);
     trigger.tstate = clone(trigger.state);
     self.triggers.push(trigger);
-    self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.requested_past_available = 0;
   }
 
   self.nq_group = function(text)
   {
-    for(var i = 0; i < text.length; i+=2)
-      self.nq(text[i],text[i+1]);
+    for(var i = 0; i < text.length; i+=3)
+      self.nq(text[i],text[i+1],text[i+2]);
   }
 
-  self.advance = function()
+  self.calculate_top = function()
   {
-    self.displayed_i++;
-    self.max_top_y = self.y+self.h;
+    self.max_top_y = self.bottom_y;
     for(var i = 0; i < self.displayed_i; i++)
     {
       self.max_top_y -= self.pad;
@@ -769,8 +789,16 @@ var message_box = function()
         self.max_top_y -= self.font_h+self.pad;
       self.max_top_y -= self.pad;
     }
-    self.max_top_y -= self.pad;
+    if(self.prompt_ai_typing) self.max_top_y -= self.pad*3;
     self.target_top_y = self.max_top_y;
+  }
+
+  self.advance = function()
+  {
+    self.prompt_ai_typing = 0;
+    self.advance_t = 0;
+    self.displayed_i++;
+    self.calculate_top();
     gg.monitor.talk_t = 50;
   }
 
@@ -782,12 +810,10 @@ var message_box = function()
   }
 
   self.dragging = 0;
-  self.dragging_t = 0;
   self.drag_start_y = 0;
   self.dragStart = function(evt)
   {
     self.click(evt)
-    self.dragging_t = 0;
     self.drag_start_y = evt.doY;
   }
   self.drag = function(evt)
@@ -799,13 +825,12 @@ var message_box = function()
   }
   self.dragFinish = function(evt)
   {
-    //if(self.dragging_t < 10) self.click(evt);
   }
 
   self.tick = function()
   {
     self.top_y = lerp(self.top_y,self.target_top_y,0.1);
-    self.dragging_t++;
+    self.advance_t++;
 
     if(self.displayed_i < self.text.length && self.triggers[self.displayed_i].type == TRIGGER_TIMER)
     {
@@ -813,39 +838,97 @@ var message_box = function()
       if(self.triggers[self.displayed_i].tstate <= 0)
         self.advance();
     }
+
+    self.prompt_player_input = 0;
+    self.prompt_ai_typing = 0;
+    self.prompt_end = 0;
+    if(self.advance_t >= self.thinking_buff && self.displayed_i < self.text.length) //possible need for prompt
+    {
+      if(self.speakers[self.displayed_i] == SPEAKER_PLAYER)
+      {
+        if(self.triggers[self.displayed_i].type == TRIGGER_CLICK)
+          self.prompt_player_input = 1;
+        else if(self.triggers[self.displayed_i].type == TRIGGER_TIMER)
+          ; //odd
+      }
+      else if(self.speakers[self.displayed_i] == SPEAKER_AI)
+      {
+        if(self.triggers[self.displayed_i].type == TRIGGER_CLICK)
+          ; //odd
+        else if(self.triggers[self.displayed_i].type == TRIGGER_TIMER)
+          self.prompt_ai_typing = 1;
+      }
+
+      if(self.advance_t == self.thinking_buff && self.prompt_ai_typing) //newly typing
+        self.calculate_top();
+    }
+    else if(self.displayed_i == self.text.length) self.prompt_end = 1;
   }
 
   self.draw = function()
   {
     gg.ctx.lineWidth = 1;
-    strokeBox(self,gg.ctx);
-
     gg.ctx.fillStyle = black;
     gg.ctx.textAlign = "left";
     gg.ctx.font = self.font;
     var y = self.top_y;
     for(var i = 0; i < self.displayed_i; i++)
     {
-      gg.ctx.strokeRect(self.x+self.pad,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+      if(self.speakers[i] == SPEAKER_PLAYER)
+      {
+        gg.ctx.fillStyle = light_green;
+        gg.ctx.fillRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.strokeRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+      }
+      else
+      {
+        gg.ctx.fillStyle = light_blue;
+        gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+      }
+      gg.ctx.fillStyle = black;
       y += self.pad;
       for(var j = 0; j < self.bubbles[i].length; j++)
       {
-        gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,y+self.font_h);
+        if(self.speakers[i] == SPEAKER_PLAYER) { gg.ctx.textAlign = "right"; gg.ctx.fillText(self.bubbles[i][j],self.x+self.w-self.pad*2,y+self.font_h); }
+        else                                   { gg.ctx.textAlign = "left";  gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,       y+self.font_h); }
         y += self.font_h+self.pad;
       }
       y += self.pad;
     }
+    gg.ctx.textAlign = "left";
 
-    if(self.displayed_i < self.text.length && self.triggers[self.displayed_i].type == TRIGGER_CLICK)
-      gg.ctx.strokeRect(self.x+self.w-20, self.y+self.pad, 20, 20);
-    else if(self.displayed_i < self.text.length && self.triggers[self.displayed_i].type == TRIGGER_TIMER)
-      gg.ctx.strokeRect(self.x+self.w-20, self.y+self.h-self.pad, 20, 20);
+    strokeBox(self,gg.ctx);
 
+    //"input" box
+    if(!self.prompt_player_input)
+    {
+      gg.ctx.fillStyle = light_gray;
+      gg.ctx.fillRect(self.x+self.pad,self.bottom_y,self.w-self.pad*2,self.font_h+self.pad*2);
+    }
+    else
+    {
+      if(floor(self.advance_t/20)%2)
+        drawLine(self.x+self.pad*2,self.bottom_y+self.pad,self.x+self.pad*2,self.bottom_y+self.pad+self.font_h,gg.ctx)
+    }
+    gg.ctx.strokeRect(self.x+self.pad,self.bottom_y,self.w-self.pad*2,self.font_h+self.pad*2);
+
+    //"ai typing"
+    if(self.prompt_ai_typing)
+    {
+      switch(floor(self.advance_t/20)%3)
+      {
+        case 0: gg.ctx.fillText("typing.",self.x+self.pad*2,y+self.font_h); break;
+        case 1: gg.ctx.fillText("typing..",self.x+self.pad*2,y+self.font_h); break;
+        case 2: gg.ctx.fillText("typing...",self.x+self.pad*2,y+self.font_h); break;
+      }
+    }
+
+    //ai
     var s = self.w-self.pad*2;
     gg.ctx.fillStyle = white;
     gg.ctx.fillRect(self.x,self.y,self.w,self.w);
     gg.ctx.strokeRect(self.x+self.pad,self.y+self.pad,s,s);
-
     gg.ctx.imageSmoothingEnabled = 0;
     gg.ctx.drawImage(gg.monitor.screen,(gg.monitor.screen.width-gg.monitor.screen.height)/2,0,gg.monitor.screen.height,gg.monitor.screen.height,self.x+self.pad,self.y+self.pad,s,s);
     gg.ctx.imageSmoothingEnabled = 1;

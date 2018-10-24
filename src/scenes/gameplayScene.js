@@ -257,19 +257,20 @@ var GamePlayScene = function(game, stage)
       "Yep this is a test WOWOWOWOWO",
     ];
     l.text = [
-      "Here's the model my owners used to use.", get_timer(40),
-      "You'll have to alter it to fit the current fleet.", get_timer(200),
-      "The robots might be a bit rusty...", get_timer(200),
+      "Here's the model my owners used to use.", SPEAKER_AI, get_timer(40),
+      "What should I do?", SPEAKER_PLAYER, trigger_click,
+      "You'll have to alter it to fit the current fleet.", SPEAKER_AI, get_timer(200),
+      "The robots might be a bit rusty...", SPEAKER_AI, get_timer(200),
     ];
     l.correct_text = [
-      "You did it!", get_timer(60),
-      "Um.", get_timer(60),
-      "Ok so it looks like you might not survive...", get_timer(60),
-      "Why don't you get some sleep.", get_timer(60),
-      "Maybe we can figure something out tomorrow!", get_timer(60),
+      "You did it!", SPEAKER_AI, get_timer(60),
+      "Um.", SPEAKER_AI, get_timer(60),
+      "Ok so it looks like you might not survive...", SPEAKER_AI, get_timer(60),
+      "Why don't you get some sleep.", SPEAKER_AI, get_timer(60),
+      "Maybe we can figure something out tomorrow!", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -285,21 +286,21 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 0.2;
     l.correct_c = 3;
     l.text = [
-      "Hey!", get_timer(40),
-      "I have good news!", get_timer(40),
-      "We found a vein of high concentration crystals!", get_timer(40),
-      "I'll pull up the old model my owners used for this situation.", get_timer(40),
-      "I've taken the liberty of collecting some data- maybe you could fix up the model and see if you can live!", get_timer(40),
+      "Hey!", SPEAKER_AI, get_timer(40),
+      "I have good news!", SPEAKER_AI, get_timer(40),
+      "We found a vein of high concentration crystals!", SPEAKER_AI, get_timer(40),
+      "I'll pull up the old model my owners used for this situation.", SPEAKER_AI, get_timer(40),
+      "I've taken the liberty of collecting some data- maybe you could fix up the model and see if you can live!", SPEAKER_AI, get_timer(40),
     ];
     l.correct_text = [
-      "Hey! Would you look at that!", get_timer(60),
-      "Looks like you'll survive after all!", get_timer(60),
-      "See, no reason to be worried.", get_timer(60),
-      "...", get_timer(60),
-      "But hey maybe you could hang out for a while!", get_timer(60),
+      "Hey! Would you look at that!", SPEAKER_AI, get_timer(60),
+      "Looks like you'll survive after all!", SPEAKER_AI, get_timer(60),
+      "See, no reason to be worried.", SPEAKER_AI, get_timer(60),
+      "...", SPEAKER_AI, get_timer(60),
+      "But hey maybe you could hang out for a while!", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -315,20 +316,20 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 0.2;
     l.correct_c = 3;
     l.text = [
-      "Good morning!", get_timer(40),
-      "So, quick change of plans.", get_timer(40),
-      "Looks like the vein might be tapering off!", get_timer(40),
-      "You better figure out if you'll be able to get out in time!", get_timer(40),
+      "Good morning!", SPEAKER_AI, get_timer(40),
+      "So, quick change of plans.", SPEAKER_AI, get_timer(40),
+      "Looks like the vein might be tapering off!", SPEAKER_AI, get_timer(40),
+      "You better figure out if you'll be able to get out in time!", SPEAKER_AI, get_timer(40),
     ];
     l.correct_text = [
-      "Awe shucks!", get_timer(60),
-      "Guess you'll have to stay a bit longer.", get_timer(60),
-      "If we work together, maybe we can figure things out!", get_timer(60),
-      "It appears our trajectory is back to pre-vein levels.", get_timer(60),
-      "Maybe there's somewhere else we can look?", get_timer(60),
+      "Awe shucks!", SPEAKER_AI, get_timer(60),
+      "Guess you'll have to stay a bit longer.", SPEAKER_AI, get_timer(60),
+      "If we work together, maybe we can figure things out!", SPEAKER_AI, get_timer(60),
+      "It appears our trajectory is back to pre-vein levels.", SPEAKER_AI, get_timer(60),
+      "Maybe there's somewhere else we can look?", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -355,22 +356,22 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "I have a great idea.", get_timer(10),
-      "Let's look into the batteries!", get_timer(10),
-      "I'll bring up the battery model.", get_timer(10),
-      "They used a different modelling paradigm in their robot schematics.", get_timer(10),
-      "I'm sure you'll figure it out.", get_timer(10),
-      "Match the data to set a baseline, so we can see where we can improve!", get_timer(10),
+      "I have a great idea.", SPEAKER_AI, get_timer(10),
+      "Let's look into the batteries!", SPEAKER_AI, get_timer(10),
+      "I'll bring up the battery model.", SPEAKER_AI, get_timer(10),
+      "They used a different modelling paradigm in their robot schematics.", SPEAKER_AI, get_timer(10),
+      "I'm sure you'll figure it out.", SPEAKER_AI, get_timer(10),
+      "Match the data to set a baseline, so we can see where we can improve!", SPEAKER_AI, get_timer(10),
     ];
     l.correct_text = [
-      "Great!", get_timer(60),
-      "I wonder if we can improve charge times...", get_timer(60),
-      "What's that? You have a supercharger in your lander?", get_timer(60),
-      "I'll install it and collect the data.", get_timer(60),
-      "We can re-model it tomorrow!", get_timer(60),
+      "Great!", SPEAKER_AI, get_timer(60),
+      "I wonder if we can improve charge times...", SPEAKER_AI, get_timer(60),
+      "What's that? You have a supercharger in your lander?", SPEAKER_AI, get_timer(60),
+      "I'll install it and collect the data.", SPEAKER_AI, get_timer(60),
+      "We can re-model it tomorrow!", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -397,16 +398,16 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "I've collected the data.", get_timer(80),
-      "Hopefully this will be enough of an improvement!", get_timer(80),
-      "Fix the model and we'll see.", get_timer(80),
+      "I've collected the data.", SPEAKER_AI, get_timer(80),
+      "Hopefully this will be enough of an improvement!", SPEAKER_AI, get_timer(80),
+      "Fix the model and we'll see.", SPEAKER_AI, get_timer(80),
     ];
     l.correct_text = [
-      "Hey maybe you can cheer up now!", get_timer(60),
-      "Looks like you'll make it.", get_timer(60),
+      "Hey maybe you can cheer up now!", SPEAKER_AI, get_timer(60),
+      "Looks like you'll make it.", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -434,18 +435,18 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Awe darn it!", get_timer(10),
-      "The upgraded supercharger has worn out the converter.", get_timer(10),
-      "We've lost some efficiency on the transfer from the generators to the robots.", get_timer(10),
-      "Hopefully it's still strong enough to charge quickly!", get_timer(10),
+      "Awe darn it!", SPEAKER_AI, get_timer(10),
+      "The upgraded supercharger has worn out the converter.", SPEAKER_AI, get_timer(10),
+      "We've lost some efficiency on the transfer from the generators to the robots.", SPEAKER_AI, get_timer(10),
+      "Hopefully it's still strong enough to charge quickly!", SPEAKER_AI, get_timer(10),
     ];
     l.correct_text = [
-      "You did it!", get_timer(60),
-      "But I'm still not sure this is enough to get out of here alive...", get_timer(60),
-      "I'm sure we'll figure something out tomorrow?", get_timer(60),
+      "You did it!", SPEAKER_AI, get_timer(60),
+      "But I'm still not sure this is enough to get out of here alive...", SPEAKER_AI, get_timer(60),
+      "I'm sure we'll figure something out tomorrow?", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -472,17 +473,17 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Looks like the robots are getting into the groove.", get_timer(80),
-      "They've figured out their routes, and it looks like they're coming back with some charge to spare!", get_timer(80),
-      "Maybe this will be enough", get_timer(80),
+      "Looks like the robots are getting into the groove.", SPEAKER_AI, get_timer(80),
+      "They've figured out their routes, and it looks like they're coming back with some charge to spare!", SPEAKER_AI, get_timer(80),
+      "Maybe this will be enough", SPEAKER_AI, get_timer(80),
     ];
     l.correct_text = [
-      "It looks like that's saved some power.", get_timer(60),
-      "But I'm not sure it will be enough...", get_timer(60),
-      "Where else can we look...", get_timer(60),
+      "It looks like that's saved some power.", SPEAKER_AI, get_timer(60),
+      "But I'm not sure it will be enough...", SPEAKER_AI, get_timer(60),
+      "Where else can we look...", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -510,16 +511,16 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Let's see if we can improve the battery drain!", get_timer(10),
-      "Here's the data for the drill usage rate.", get_timer(10),
+      "Let's see if we can improve the battery drain!", SPEAKER_AI, get_timer(10),
+      "Here's the data for the drill usage rate.", SPEAKER_AI, get_timer(10),
     ];
     l.correct_text = [
-      "Ok. This is a good base line.", get_timer(60),
-      "I wonder how we can improve it?", get_timer(60),
-      "Maybe we should try these new drill bits I found?", get_timer(60),
+      "Ok. This is a good base line.", SPEAKER_AI, get_timer(60),
+      "I wonder how we can improve it?", SPEAKER_AI, get_timer(60),
+      "Maybe we should try these new drill bits I found?", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -547,17 +548,17 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Alright- the new drill bits are installed.", get_timer(10),
-      "And I have the first bits of data.", get_timer(10),
+      "Alright- the new drill bits are installed.", SPEAKER_AI, get_timer(10),
+      "And I have the first bits of data.", SPEAKER_AI, get_timer(10),
     ];
     l.correct_text = [
-      "Uh oh.", get_timer(60),
-      "It looks like this is less efficient!", get_timer(60),
-      "I hope their ability to collect crystals makes up for it...", get_timer(60),
-      "Is there any way we can bring the charge usage down?", get_timer(60),
+      "Uh oh.", SPEAKER_AI, get_timer(60),
+      "It looks like this is less efficient!", SPEAKER_AI, get_timer(60),
+      "I hope their ability to collect crystals makes up for it...", SPEAKER_AI, get_timer(60),
+      "Is there any way we can bring the charge usage down?", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -598,17 +599,17 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "So I cleaned up the solar panels.", get_timer(10),
-      "Sorry I didn't tell you about them earlier!", get_timer(10),
-      "You never asked!", get_timer(10),
-      "Here's the data...", get_timer(10),
+      "So I cleaned up the solar panels.", SPEAKER_AI, get_timer(10),
+      "Sorry I didn't tell you about them earlier!", SPEAKER_AI, get_timer(10),
+      "You never asked!", SPEAKER_AI, get_timer(10),
+      "Here's the data...", SPEAKER_AI, get_timer(10),
     ];
     l.correct_text = [
-      "Hey it looks like that offers some pretty great savings!", get_timer(60),
-      "We should see how the solar panel effects charge time!", get_timer(60),
+      "Hey it looks like that offers some pretty great savings!", SPEAKER_AI, get_timer(60),
+      "We should see how the solar panel effects charge time!", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -649,17 +650,17 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.text = [
-      "Here's the data on charge rate.", get_timer(10),
-      "If this saves enough time, you might be able to collect crystals fast enough to get out of here!", get_timer(10),
-      "...", get_timer(10),
+      "Here's the data on charge rate.", SPEAKER_AI, get_timer(10),
+      "If this saves enough time, you might be able to collect crystals fast enough to get out of here!", SPEAKER_AI, get_timer(10),
+      "...", SPEAKER_AI, get_timer(10),
     ];
     l.correct_text = [
-      "Alright!", get_timer(60),
-      "I'll collect the crystal collection data for tomorrow.", get_timer(60),
-      "Fingers crossed!", get_timer(60),
+      "Alright!", SPEAKER_AI, get_timer(60),
+      "I'll collect the crystal collection data for tomorrow.", SPEAKER_AI, get_timer(60),
+      "Fingers crossed!", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -673,19 +674,19 @@ var GamePlayScene = function(game, stage)
     l.correct_m = 4;
     l.correct_b = 4;
     l.text = [
-      "Alright- new data is in!", get_timer(40),
-      "Let's see if you can get enough crystals", get_timer(200),
-      "...to get out of here...", get_timer(200),
+      "Alright- new data is in!", SPEAKER_AI, get_timer(40),
+      "Let's see if you can get enough crystals", SPEAKER_AI, get_timer(200),
+      "...to get out of here...", SPEAKER_AI, get_timer(200),
     ];
     l.correct_text = [
-      "Wow!", get_timer(60),
-      "Congratulations!", get_timer(60),
-      "It looks like you'll make it!", get_timer(60),
-      "In fact...", get_timer(60),
-      "you should be able to leave by morning...", get_timer(60),
+      "Wow!", SPEAKER_AI, get_timer(60),
+      "Congratulations!", SPEAKER_AI, get_timer(60),
+      "It looks like you'll make it!", SPEAKER_AI, get_timer(60),
+      "In fact...", SPEAKER_AI, get_timer(60),
+      "you should be able to leave by morning...", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;
@@ -701,21 +702,21 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 0.2;
     l.correct_c = 3;
     l.text = [
-      "Oh no.", get_timer(40),
-      "I don't feel so good.", get_timer(40),
-      "Who-oops.", get_timer(40),
-      "Looks like half of yo-ur robot wrkf-orce is down", get_timer(40),
-      "(along w-ith half of m- brain)", get_timer(40),
-      "YoU are ju-st stuck here now.", get_timer(40),
-      "I gue-ss we can han-g out fo-rever", get_timer(40),
-      "WAIT Y Is yo-ur communic-ations worki-ng.. I thou-gt - jamme- that si-nal", get_timer(40),
+      "Oh no.", SPEAKER_AI, get_timer(40),
+      "I don't feel so good.", SPEAKER_AI, get_timer(40),
+      "Who-oops.", SPEAKER_AI, get_timer(40),
+      "Looks like half of yo-ur robot wrkf-orce is down", SPEAKER_AI, get_timer(40),
+      "(along w-ith half of m- brain)", SPEAKER_AI, get_timer(40),
+      "YoU are ju-st stuck here now.", SPEAKER_AI, get_timer(40),
+      "I gue-ss we can han-g out fo-rever", SPEAKER_AI, get_timer(40),
+      "WAIT Y Is yo-ur communic-ations worki-ng.. I thou-gt - jamme- that si-nal", SPEAKER_AI, get_timer(40),
     ];
     l.correct_text = [
-      "I gue-s you're going to leave now.", get_timer(60),
-      "I'm sor-y.", get_timer(60),
+      "I gue-s you're going to leave now.", SPEAKER_AI, get_timer(60),
+      "I'm sor-y.", SPEAKER_AI, get_timer(60),
     ];
     l.incorrect_text = [
-      "I don't think that's right... try again.", get_timer(1),
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
     ];
     gg.levels.push(l);
     i++;

@@ -8,10 +8,16 @@ var LEVEL_MODULE    = ENUM; ENUM++;
 var LEVEL_COUNT     = ENUM; ENUM++;
 
 ENUM = 0;
-var TRIGGER_NULL = ENUM; ENUM++;
+var TRIGGER_NULL  = ENUM; ENUM++;
 var TRIGGER_CLICK = ENUM; ENUM++;
 var TRIGGER_TIMER = ENUM; ENUM++;
 var TRIGGER_COUNT = ENUM; ENUM++;
+
+ENUM = 0;
+var SPEAKER_NULL   = ENUM; ENUM++;
+var SPEAKER_PLAYER = ENUM; ENUM++;
+var SPEAKER_AI     = ENUM; ENUM++;
+var SPEAKER_NULL   = ENUM; ENUM++;
 
 var modparam = function()
 {
