@@ -62,6 +62,7 @@ var level = function()
   self.text = [];
   self.correct_text = [ "You did it! On to the next assignment...", trigger_timer];
   self.incorrect_text = [ "I don't think that's right... try again.", trigger_timer];
+  self.post_text = [];
 
   self.correct = 0;
   self.submit = function(correct)

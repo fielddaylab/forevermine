@@ -28,18 +28,22 @@ var GamePlayScene = function(game, stage)
   var blurer;
 
   var ENUM = 0;
-  var MODE_NULL         = ENUM; ENUM++;
-  var MODE_HOME         = ENUM; ENUM++;
-  var MODE_HOME_TO_WORK = ENUM; ENUM++;
-  var MODE_WORK         = ENUM; ENUM++;
-  var MODE_WORK_TO_HOME = ENUM; ENUM++;
-  var MODE_COUNT        = ENUM; ENUM++;
+  var MODE_NULL          = ENUM; ENUM++;
+  var MODE_PRE           = ENUM; ENUM++;
+  var MODE_PRE_TO_WORK   = ENUM; ENUM++;
+  var MODE_WORK          = ENUM; ENUM++;
+  var MODE_WORK_TO_POST  = ENUM; ENUM++;
+  var MODE_POST          = ENUM; ENUM++;
+  var MODE_POST_TO_NIGHT = ENUM; ENUM++;
+  var MODE_NIGHT         = ENUM; ENUM++;
+  var MODE_NIGHT_TO_PRE  = ENUM; ENUM++;
+  var MODE_COUNT         = ENUM; ENUM++;
 
   self.reset_level = function()
   {
     gg.cur_level.correct = 0;
     gg.timeline.t = 0;
-    gg.timeline.target_t = 0;
+    gg.timeline.t_target = 0;
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:
@@ -104,7 +108,8 @@ var GamePlayScene = function(game, stage)
 
     switch(mode)
     {
-      case MODE_HOME:
+      case MODE_PRE:
+      case MODE_POST:
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
         gg.home_cam.ww = gg.lab.ww;
@@ -112,7 +117,7 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
-      case MODE_HOME_TO_WORK:
+      case MODE_PRE_TO_WORK: //takes on next as current
         gg.cur_level = gg.next_level;
         self.reset_level();
         gg.message_box.clear();
@@ -126,7 +131,15 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
-      case MODE_WORK_TO_HOME:
+      case MODE_WORK_TO_POST:
+        gg.exposition_box.clear();
+        gg.exposition_box.nq_group(gg.cur_level.post_text);
+        break;
+      case MODE_POST_TO_NIGHT:
+        break;
+      case MODE_NIGHT:
+        break;
+      case MODE_NIGHT_TO_PRE: //sets next level
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
         gg.exposition_box.nq_group(gg.next_level.pre_text);
@@ -260,15 +273,18 @@ var GamePlayScene = function(game, stage)
     l.correct_m = 2;
     l.correct_b = 1;
     l.pre_text = [
-      "Hi there!",
-      "I'm blah blah. Blah blah blah blah. Blah BLAH blah-blah; blah aba blah blahblahblah. BLAH! BLAH blah BLAHAHA. Blah.",
-      "Yep this is a test WOWOWOWOWO",
+      "Hi there!", SPEAKER_AI,
+      "I'm blah blah. Blah blah blah blah. Blah BLAH blah-blah; blah aba blah blahblahblah. BLAH! BLAH blah BLAHAHA. Blah.", SPEAKER_AI,
+      "Yep this is a test WOWOWOWOWO", SPEAKER_AI,
     ];
     l.text = [
       "Here's the model my owners used to use.", SPEAKER_AI, get_timer(200),
       "What should I do?", SPEAKER_PLAYER, trigger_click,
       "You'll have to alter it to fit the current fleet.", SPEAKER_AI, get_timer(200),
       "The robots might be a bit rusty...", SPEAKER_AI, get_timer(200),
+    ];
+    l.incorrect_text = [
+      "I don't think that's right... try again.", SPEAKER_AI, get_timer(60),
     ];
     l.correct_text = [
       "You did it!", SPEAKER_AI, get_timer(60),
@@ -277,8 +293,10 @@ var GamePlayScene = function(game, stage)
       "Why don't you get some sleep.", SPEAKER_AI, get_timer(60),
       "Maybe we can figure something out tomorrow!", SPEAKER_AI, get_timer(60),
     ];
-    l.incorrect_text = [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(60),
+    l.post_text = [
+      "That was great.", SPEAKER_AI,
+      "You should go to sleep.", SPEAKER_AI,
+      "Goodnight!", SPEAKER_AI,
     ];
     gg.levels.push(l);
     i++;
@@ -420,45 +438,6 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    //charge conversion
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Charge";
-    m.v = 2;
-    m.correct_v = 2;
-    m.active = 0;
-    m.wx = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Charge Rate";
-    m.v = 2;
-    m.correct_v = 2;
-    m.active = 0;
-    m.wx = -100;
-    l.modparams.push(m);
-    m = new relparam();
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.text = [
-      "Awe darn it!", SPEAKER_AI, get_timer(10),
-      "The upgraded supercharger has worn out the converter.", SPEAKER_AI, get_timer(10),
-      "We've lost some efficiency on the transfer from the generators to the robots.", SPEAKER_AI, get_timer(10),
-      "Hopefully it's still strong enough to charge quickly!", SPEAKER_AI, get_timer(10),
-    ];
-    l.correct_text = [
-      "You did it!", SPEAKER_AI, get_timer(60),
-      "But I'm still not sure this is enough to get out of here alive...", SPEAKER_AI, get_timer(60),
-      "I'm sure we'll figure something out tomorrow?", SPEAKER_AI, get_timer(60),
-    ];
-    l.incorrect_text = [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
-    ];
-    gg.levels.push(l);
-    i++;
-
     //charge starting
     l = new level();
     l.i = i;
@@ -533,7 +512,7 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    //discharge new
+    //discharge new drills
     l = new level();
     l.i = i;
     l.type = LEVEL_MODULE;
@@ -733,7 +712,7 @@ var GamePlayScene = function(game, stage)
     gg.next_level = gg.levels[0];
     gg.exposition_box.clear();
     gg.exposition_box.nq_group(gg.next_level.pre_text);
-    self.set_mode(MODE_HOME);
+    self.set_mode(MODE_PRE);
   };
 
   self.tick = function()
@@ -742,16 +721,16 @@ var GamePlayScene = function(game, stage)
     gg.monitor.tick();
     switch(gg.mode)
     {
-      case MODE_HOME:
+      case MODE_PRE:
       {
         clicker.filter(gg.exposition_box);
         clicker.filter(gg.monitor);
         if(gg.monitor.clicked && gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
-          self.set_mode(MODE_HOME_TO_WORK);
+          self.set_mode(MODE_PRE_TO_WORK);
         gg.exposition_box.tick();
       }
         break;
-      case MODE_HOME_TO_WORK:
+      case MODE_PRE_TO_WORK:
       {
         if(gg.mode_t <= gg.zoom_t)
         {
@@ -778,7 +757,7 @@ var GamePlayScene = function(game, stage)
         dragger.filter(gg.message_box);
 
         if(gg.cur_level.correct && gg.message_box.requested_end)
-          self.set_mode(MODE_WORK_TO_HOME);
+          self.set_mode(MODE_WORK_TO_POST);
 
         gg.timeline.tick();
         gg.cur_level.tick();
@@ -786,7 +765,7 @@ var GamePlayScene = function(game, stage)
         if(!gg.cur_level.correct) gg.message_box.prompt_end = 0;
       }
         break;
-      case MODE_WORK_TO_HOME:
+      case MODE_WORK_TO_POST:
       {
         if(gg.mode_t >= gg.fade_t && gg.mode_t < gg.fade_t+gg.zoom_t)
         {
@@ -798,8 +777,26 @@ var GamePlayScene = function(game, stage)
           screenSpace(gg.home_cam,gg.canv,gg.lab);
           screenSpace(gg.home_cam,gg.canv,gg.monitor);
         }
-        else if(gg.mode_t >= gg.zoom_t+gg.fade_t) self.set_mode(MODE_HOME);
+        else if(gg.mode_t >= gg.zoom_t+gg.fade_t) self.set_mode(MODE_POST);
       }
+        break;
+      case MODE_POST:
+      {
+        clicker.filter(gg.exposition_box);
+        clicker.filter(gg.monitor);
+        if(gg.monitor.clicked && gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
+          self.set_mode(MODE_POST_TO_NIGHT);
+        gg.exposition_box.tick();
+      }
+        break;
+      case MODE_POST_TO_NIGHT:
+        if(gg.mode_t >= gg.fade_t*2) self.set_mode(MODE_NIGHT);
+        break;
+      case MODE_NIGHT:
+        if(gg.mode_t >= gg.fade_t) self.set_mode(MODE_NIGHT_TO_PRE);
+        break;
+      case MODE_NIGHT_TO_PRE:
+        if(gg.mode_t >= gg.fade_t*2) self.set_mode(MODE_PRE);
         break;
     }
 
@@ -810,96 +807,113 @@ var GamePlayScene = function(game, stage)
     blurer.flush();
   };
 
+  self.draw_home = function()
+  {
+    strokeBox(gg.lab,gg.ctx);
+    strokeBox(gg.monitor,gg.ctx);
+    gg.ctx.imageSmoothingEnabled = 0;
+    drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+    gg.ctx.imageSmoothingEnabled = 1;
+    gg.exposition_box.draw();
+  }
+
+  self.draw_work = function()
+  {
+    gg.ctx.strokeStyle = black;
+    switch(gg.cur_level.type)
+    {
+      case LEVEL_LINEAR:    gg.line.draw();         break;
+      case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
+      case LEVEL_MODULE:    gg.module_board.draw(); break;
+    }
+    gg.cur_level.draw();
+    gg.message_box.draw();
+    gg.timeline.draw();
+  }
+
+  self.draw_night = function()
+  {
+
+  }
+
   self.draw = function()
   {
     gg.monitor.draw(); //draws to self- not to screen
     switch(gg.mode)
     {
-      case MODE_HOME:
+      case MODE_PRE:
       {
-        strokeBox(gg.lab,gg.ctx);
-        strokeBox(gg.monitor,gg.ctx,gg.ctx);
-        gg.ctx.imageSmoothingEnabled = 0;
-        drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
-        gg.ctx.imageSmoothingEnabled = 1;
-        gg.exposition_box.draw();
+        self.draw_home();
       }
         break;
-      case MODE_HOME_TO_WORK:
+      case MODE_PRE_TO_WORK:
       {
         if(gg.mode_t < gg.zoom_t)
-        {
-          strokeBox(gg.lab,gg.ctx);
-          strokeBox(gg.monitor,gg.ctx);
-          gg.ctx.imageSmoothingEnabled = 0;
-          drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
-          gg.ctx.imageSmoothingEnabled = 1;
-        }
+          self.draw_home();
         else if(gg.mode_t <= gg.zoom_t+gg.fade_t)
         {
-          gg.ctx.strokeStyle = black;
-          switch(gg.cur_level.type)
-          {
-            case LEVEL_LINEAR:    gg.line.draw();         break;
-            case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
-            case LEVEL_MODULE:    gg.module_board.draw(); break;
-          }
-          gg.cur_level.draw();
-          gg.message_box.draw();
-          gg.timeline.draw();
-
+          self.draw_work();
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.zoom_t)/gg.fade_t);
-          gg.ctx.imageSmoothingEnabled = 0;
-          drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
-          gg.ctx.imageSmoothingEnabled = 1;
+          self.draw_home();
           gg.ctx.globalAlpha = 1;
         }
       }
         break;
       case MODE_WORK:
       {
-        gg.ctx.strokeStyle = black;
-        switch(gg.cur_level.type)
-        {
-          case LEVEL_LINEAR:    gg.line.draw();         break;
-          case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
-          case LEVEL_MODULE:    gg.module_board.draw(); break;
-        }
-        gg.cur_level.draw();
-        gg.message_box.draw();
-        gg.timeline.draw();
+        self.draw_work();
       }
         break;
-      case MODE_WORK_TO_HOME:
+      case MODE_WORK_TO_POST:
       {
         if(gg.mode_t < gg.fade_t)
         {
-          gg.ctx.strokeStyle = black;
-          switch(gg.cur_level.type)
-          {
-            case LEVEL_LINEAR:    gg.line.draw();         break;
-            case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
-            case LEVEL_MODULE:    gg.module_board.draw(); break;
-          }
-          gg.cur_level.draw();
-          gg.message_box.draw();
-          gg.timeline.draw();
-
+          self.draw_work();
           gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
-          gg.ctx.imageSmoothingEnabled = 0;
-          drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
-          gg.ctx.imageSmoothingEnabled = 1;
+          self.draw_home();
           gg.ctx.globalAlpha = 1;
         }
         else if(gg.mode_t <= gg.fade_t+gg.zoom_t)
-        {
-          strokeBox(gg.lab,gg.ctx);
-          strokeBox(gg.monitor,gg.ctx);
-          gg.ctx.imageSmoothingEnabled = 0;
-          drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
-          gg.ctx.imageSmoothingEnabled = 1;
-        }
+          self.draw_home();
       }
+        break;
+      case MODE_POST:
+        self.draw_home();
+        break;
+      case MODE_POST_TO_NIGHT:
+        if(gg.mode_t < gg.fade_t)
+        {
+          self.draw_home();
+          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        else
+        {
+          self.draw_night();
+          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.globalAlpha = 1;
+        }
+        break;
+      case MODE_NIGHT:
+        self.draw_night();
+        break;
+      case MODE_NIGHT_TO_PRE:
+        if(gg.mode_t < gg.fade_t)
+        {
+          self.draw_night();
+          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        else
+        {
+          self.draw_home();
+          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.globalAlpha = 1;
+        }
         break;
     }
   };

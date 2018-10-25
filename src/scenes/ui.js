@@ -104,6 +104,7 @@ var exposition_box = function()
 
   self.text = [];
   self.bubbles = [];
+  self.speakers = [];
 
   self.displayed_i = 0;
 
@@ -116,20 +117,22 @@ var exposition_box = function()
   {
     self.text = [];
     self.bubbles = []
+    self.speakers = []
     self.displayed_i = 0;
   }
 
-  self.nq = function(text)
+  self.nq = function(text, speaker)
   {
     self.text.push(text);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
+    self.speakers.push(speaker);
     if(self.text.length == 1) gg.monitor.talk_t = 50;
   }
 
   self.nq_group = function(text)
   {
-    for(var i = 0; i < text.length; i++)
-      self.nq(text[i]);
+    for(var i = 0; i < text.length; i+=2)
+      self.nq(text[i],text[i+1]);
   }
 
   self.advance = function()
