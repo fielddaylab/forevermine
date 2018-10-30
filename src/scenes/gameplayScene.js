@@ -29,6 +29,8 @@ var GamePlayScene = function(game, stage)
 
   var ENUM = 0;
   var MODE_NULL          = ENUM; ENUM++;
+  var MODE_MENU          = ENUM; ENUM++;
+  var MODE_CINEMATIC     = ENUM; ENUM++;
   var MODE_PRE           = ENUM; ENUM++;
   var MODE_PRE_TO_WORK   = ENUM; ENUM++;
   var MODE_WORK          = ENUM; ENUM++;
@@ -108,6 +110,16 @@ var GamePlayScene = function(game, stage)
 
     switch(mode)
     {
+      case MODE_MENU:
+        gg.home_cam.wx = gg.lab.wx;
+        gg.home_cam.wy = gg.lab.wy;
+        gg.home_cam.ww = gg.lab.ww;
+        gg.home_cam.wh = gg.lab.wh;
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        break;
+      case MODE_CINEMATIC:
+        break;
       case MODE_PRE:
       case MODE_POST:
         gg.home_cam.wx = gg.lab.wx;
@@ -709,10 +721,7 @@ var GamePlayScene = function(game, stage)
     i++;
 
     self.resize(stage);
-    gg.next_level = gg.levels[0];
-    gg.exposition_box.clear();
-    gg.exposition_box.nq_group(gg.next_level.pre_text);
-    self.set_mode(MODE_PRE);
+    self.set_mode(MODE_MENU);
   };
 
   self.tick = function()
@@ -721,6 +730,22 @@ var GamePlayScene = function(game, stage)
     gg.monitor.tick();
     switch(gg.mode)
     {
+      case MODE_MENU:
+        clicker.filter(gg.monitor);
+        if(gg.monitor.clicked)
+          self.set_mode(MODE_CINEMATIC);
+        break;
+      case MODE_CINEMATIC:
+      {
+        if(1) //when done...
+        {
+          gg.next_level = gg.levels[0];
+          gg.exposition_box.clear();
+          gg.exposition_box.nq_group(gg.next_level.pre_text);
+          self.set_mode(MODE_PRE);
+        }
+      }
+        break;
       case MODE_PRE:
       {
         clicker.filter(gg.exposition_box);
@@ -841,6 +866,13 @@ var GamePlayScene = function(game, stage)
     gg.monitor.draw(); //draws to self- not to screen
     switch(gg.mode)
     {
+      case MODE_MENU:
+      {
+        self.draw_home();
+      }
+        break;
+      case MODE_CINEMATIC:
+        break;
       case MODE_PRE:
       {
         self.draw_home();

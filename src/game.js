@@ -16,7 +16,6 @@ var Game = function(init)
   self.scenes = [
     new NullScene(self, stage),
     new LoadingScene(self, stage),
-    new MenuScene(self, stage),
     new GamePlayScene(self, stage),
   ];
   self.cur_scene     =  0;
