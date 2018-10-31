@@ -186,6 +186,8 @@ var GamePlayScene = function(game, stage)
     gg.message_box.y = 0;
     gg.message_box.size();
 
+    gg.timeline = new timeline(); //init now, size later
+
     gg.module_board = new module_board();
     b = gg.module_board;
     b.h = gg.canv.height;
@@ -206,11 +208,10 @@ var GamePlayScene = function(game, stage)
     b.table.y = gg.canv.height-b.table.h;
     b.table.w = gg.canv.width-b.table.x-10;
 
-    gg.timeline = new timeline();
-    gg.timeline.w = (gg.module_board.w-20)*(10/11);
+    gg.timeline.w = (gg.module_board.w-20)*(10/12);
     gg.timeline.h = 30;
-    gg.timeline.x = 10+gg.module_board.x+(gg.module_board.w-20)*(1/11);
-    gg.timeline.y = gg.module_board.h-gg.timeline.h-100;
+    gg.timeline.x = 10+gg.module_board.x+(gg.module_board.w-20)*(1.5/12);
+    gg.timeline.y = gg.module_board.h-gg.timeline.h-65;
     gg.timeline.size();
 
     gg.line = new editable_line();

@@ -292,7 +292,7 @@ var editable_line = function()
   self.xp_x = 0;
 
   self.table = new table();
-  self.table.n = 10;
+  self.table.n = gg.timeline.t_max+1;
   self.calculate_table = function()
   {
     for(var i = 0; i < self.table.n; i++)
@@ -432,6 +432,10 @@ var editable_line = function()
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
     gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
+    gg.ctx.strokeStyle = gray;
+    var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
+    drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
+
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
     gg.ctx.fillText("y = ",self.yeq_x,self.eqn_y+self.eqn_h);
@@ -515,7 +519,7 @@ var editable_quadratic = function()
   self.xp_x = 0;
 
   self.table = new table();
-  self.table.n = 10;
+  self.table.n = gg.timeline.t_max+1;
   self.calculate_table = function()
   {
     for(var i = 0; i < self.table.n; i++)
@@ -668,6 +672,10 @@ var editable_quadratic = function()
     gg.ctx.font = "12px Helvetica";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
     gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
+
+    gg.ctx.strokeStyle = gray;
+    var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
+    drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
@@ -1198,7 +1206,7 @@ var module_board = function()
   self.graph = {x:0,y:0,w:0,h:0};
 
   self.table = new table();
-  self.table.n = 10;
+  self.table.n = gg.timeline.t_max+1;
   for(var i = 0; i < self.table.n; i++)
   {
     self.table.t_data[i] = i;
