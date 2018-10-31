@@ -28,18 +28,20 @@ var GamePlayScene = function(game, stage)
   var blurer;
 
   var ENUM = 0;
-  var MODE_NULL          = ENUM; ENUM++;
-  var MODE_MENU          = ENUM; ENUM++;
-  var MODE_CINEMATIC     = ENUM; ENUM++;
-  var MODE_PRE           = ENUM; ENUM++;
-  var MODE_PRE_TO_WORK   = ENUM; ENUM++;
-  var MODE_WORK          = ENUM; ENUM++;
-  var MODE_WORK_TO_POST  = ENUM; ENUM++;
-  var MODE_POST          = ENUM; ENUM++;
-  var MODE_POST_TO_NIGHT = ENUM; ENUM++;
-  var MODE_NIGHT         = ENUM; ENUM++;
-  var MODE_NIGHT_TO_PRE  = ENUM; ENUM++;
-  var MODE_COUNT         = ENUM; ENUM++;
+  var MODE_NULL           = ENUM; ENUM++;
+  var MODE_MENU           = ENUM; ENUM++;
+  var MODE_CINEMATIC      = ENUM; ENUM++;
+  var MODE_PREH           = ENUM; ENUM++;
+  var MODE_PREH_TO_WORK   = ENUM; ENUM++;
+  var MODE_WORK           = ENUM; ENUM++;
+  var MODE_WORK_TO_FEED   = ENUM; ENUM++;
+  var MODE_FEED           = ENUM; ENUM++;
+  var MODE_FEED_TO_POSTH  = ENUM; ENUM++;
+  var MODE_POSTH          = ENUM; ENUM++;
+  var MODE_POSTH_TO_NIGHT = ENUM; ENUM++;
+  var MODE_NIGHT          = ENUM; ENUM++;
+  var MODE_NIGHT_TO_PREH  = ENUM; ENUM++;
+  var MODE_COUNT          = ENUM; ENUM++;
 
   self.reset_level = function()
   {
@@ -120,8 +122,8 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CINEMATIC:
         break;
-      case MODE_PRE:
-      case MODE_POST:
+      case MODE_PREH:
+      case MODE_FEED:
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
         gg.home_cam.ww = gg.lab.ww;
@@ -129,7 +131,7 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
-      case MODE_PRE_TO_WORK: //takes on next as current
+      case MODE_PREH_TO_WORK: //takes on next as current
         gg.cur_level = gg.next_level;
         self.reset_level();
         gg.message_box.clear();
@@ -143,15 +145,21 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
-      case MODE_WORK_TO_POST:
+      case MODE_WORK_TO_FEED:
         gg.exposition_box.clear();
+        break;
+      case MODE_FEED:
+        break;
+      case MODE_FEED_TO_POSTH:
         gg.exposition_box.nq_group(gg.cur_level.post_text);
         break;
-      case MODE_POST_TO_NIGHT:
+      case MODE_POSTH:
+        break;
+      case MODE_POSTH_TO_NIGHT:
         break;
       case MODE_NIGHT:
         break;
-      case MODE_NIGHT_TO_PRE: //sets next level
+      case MODE_NIGHT_TO_PREH: //sets next level
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
         gg.exposition_box.nq_group(gg.next_level.pre_text);
@@ -550,22 +558,22 @@ var GamePlayScene = function(game, stage)
           gg.next_level = gg.levels[0];
           gg.exposition_box.clear();
           gg.exposition_box.nq_group(gg.next_level.pre_text);
-          self.set_mode(MODE_PRE);
+          self.set_mode(MODE_PREH);
         }
       }
         break;
-      case MODE_PRE:
+      case MODE_PREH:
       {
         clicker.filter(gg.exposition_box);
         clicker.filter(gg.monitor);
         if(gg.monitor.clicked && gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
-          self.set_mode(MODE_PRE_TO_WORK);
+          self.set_mode(MODE_PREH_TO_WORK);
         gg.exposition_box.tick();
       }
         break;
-      case MODE_PRE_TO_WORK:
+      case MODE_PREH_TO_WORK:
       {
-        if(gg.mode_t <= gg.zoom_t)
+        if(gg.mode_t <= gg.zoom_t) //zoom to work
         {
           var t = gg.mode_t/gg.zoom_t;
           gg.home_cam.wx = lerp(gg.lab.wx,gg.monitor.wx,t);
@@ -575,7 +583,11 @@ var GamePlayScene = function(game, stage)
           screenSpace(gg.home_cam,gg.canv,gg.lab);
           screenSpace(gg.home_cam,gg.canv,gg.monitor);
         }
-        if(gg.mode_t >= gg.zoom_t+gg.fade_t) self.set_mode(MODE_WORK);
+        else if(gg.mode_t < gg.zoom_t+gg.fade_t) //fade to work
+        {
+          var t = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
+        }
+        else self.set_mode(MODE_WORK);
       }
         break;
       case MODE_WORK:
@@ -590,7 +602,7 @@ var GamePlayScene = function(game, stage)
         dragger.filter(gg.message_box);
 
         if(gg.cur_level.correct && gg.message_box.requested_end)
-          self.set_mode(MODE_WORK_TO_POST);
+          self.set_mode(MODE_WORK_TO_FEED);
 
         gg.timeline.tick();
         gg.cur_level.tick();
@@ -598,9 +610,13 @@ var GamePlayScene = function(game, stage)
         if(!gg.cur_level.correct) gg.message_box.prompt_end = 0;
       }
         break;
-      case MODE_WORK_TO_POST:
+      case MODE_WORK_TO_FEED:
       {
-        if(gg.mode_t >= gg.fade_t && gg.mode_t < gg.fade_t+gg.zoom_t)
+        if(gg.mode_t < gg.fade_t) //fade to face
+        {
+          var t = gg.mode_t/gg.fade_t;
+        }
+        else if(gg.mode_t < gg.fade_t+gg.zoom_t) //zoom to home
         {
           var t = (gg.mode_t-gg.fade_t)/gg.zoom_t;
           gg.home_cam.wx = lerp(gg.monitor.wx,gg.lab.wx,t);
@@ -610,26 +626,70 @@ var GamePlayScene = function(game, stage)
           screenSpace(gg.home_cam,gg.canv,gg.lab);
           screenSpace(gg.home_cam,gg.canv,gg.monitor);
         }
-        else if(gg.mode_t >= gg.zoom_t+gg.fade_t) self.set_mode(MODE_POST);
+        else if(gg.mode_t < gg.fade_t+gg.zoom_t+gg.fade_t) //fade to feed
+        {
+          var t = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
+        }
+        else self.set_mode(MODE_FEED);
       }
         break;
-      case MODE_POST:
+      case MODE_FEED:
+        if(gg.mode_t < gg.fade_t) //display night
+        {
+          var t = gg.mode_t/gg.fade_t;
+        }
+        else self.set_mode(MODE_FEED_TO_POSTH);
+        break;
+      case MODE_FEED_TO_POSTH:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to face
+        {
+          var t = gg.mode_t/gg.fade_t;
+        }
+        else self.set_mode(MODE_POSTH);
+      }
+        break;
+      case MODE_POSTH:
       {
         clicker.filter(gg.exposition_box);
         clicker.filter(gg.monitor);
         if(gg.monitor.clicked && gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
-          self.set_mode(MODE_POST_TO_NIGHT);
+          self.set_mode(MODE_POSTH_TO_NIGHT);
         gg.exposition_box.tick();
       }
         break;
-      case MODE_POST_TO_NIGHT:
-        if(gg.mode_t >= gg.fade_t*2) self.set_mode(MODE_NIGHT);
+      case MODE_POSTH_TO_NIGHT:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to black
+        {
+          var t = gg.mode_t/gg.fade_t;
+        }
+        else if(gg.mode_t < gg.fade_t+gg.fade_t) //fade to night
+        {
+          var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
+        }
+        else self.set_mode(MODE_NIGHT);
+      }
         break;
       case MODE_NIGHT:
-        if(gg.mode_t >= gg.fade_t) self.set_mode(MODE_NIGHT_TO_PRE);
+        if(gg.mode_t < gg.fade_t) //display night
+        {
+          var t = gg.mode_t/gg.fade_t;
+        }
+        else self.set_mode(MODE_NIGHT_TO_PREH);
         break;
-      case MODE_NIGHT_TO_PRE:
-        if(gg.mode_t >= gg.fade_t*2) self.set_mode(MODE_PRE);
+      case MODE_NIGHT_TO_PREH:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to black
+        {
+          var t = gg.mode_t/gg.fade_t;
+        }
+        else if(gg.mode_t < gg.fade_t+gg.fade_t) //fade to home
+        {
+          var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
+        }
+        else self.set_mode(MODE_PREH);
+      }
         break;
     }
 
@@ -680,17 +740,22 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_CINEMATIC:
-        break;
-      case MODE_PRE:
       {
         self.draw_home();
       }
         break;
-      case MODE_PRE_TO_WORK:
+      case MODE_PREH:
       {
-        if(gg.mode_t < gg.zoom_t)
+        self.draw_home();
+      }
+        break;
+      case MODE_PREH_TO_WORK:
+      {
+        if(gg.mode_t <= gg.zoom_t) //zoom to work
+        {
           self.draw_home();
-        else if(gg.mode_t <= gg.zoom_t+gg.fade_t)
+        }
+        else if(gg.mode_t < gg.zoom_t+gg.fade_t) //fade to work
         {
           self.draw_work();
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.zoom_t)/gg.fade_t);
@@ -704,23 +769,42 @@ var GamePlayScene = function(game, stage)
         self.draw_work();
       }
         break;
-      case MODE_WORK_TO_POST:
+      case MODE_WORK_TO_FEED:
       {
-        if(gg.mode_t < gg.fade_t)
+        if(gg.mode_t < gg.fade_t) //fade to face
         {
           self.draw_work();
           gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
           self.draw_home();
           gg.ctx.globalAlpha = 1;
         }
-        else if(gg.mode_t <= gg.fade_t+gg.zoom_t)
+        else if(gg.mode_t < gg.fade_t+gg.zoom_t) //zoom to home
+        {
           self.draw_home();
+        }
+        else if(gg.mode_t < gg.fade_t+gg.zoom_t+gg.fade_t) //fade to feed
+        {
+          self.draw_home();
+        }
       }
         break;
-      case MODE_POST:
+      case MODE_FEED:
+      {
+        self.draw_home();
+      }
+        break;
+      case MODE_FEED_TO_POSTH:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to face
+        {
+          var t = gg.mode_t/gg.fade_t;
+        }
+      }
+        break;
+      case MODE_POSTH:
         self.draw_home();
         break;
-      case MODE_POST_TO_NIGHT:
+      case MODE_POSTH_TO_NIGHT:
         if(gg.mode_t < gg.fade_t)
         {
           self.draw_home();
@@ -739,7 +823,7 @@ var GamePlayScene = function(game, stage)
       case MODE_NIGHT:
         self.draw_night();
         break;
-      case MODE_NIGHT_TO_PRE:
+      case MODE_NIGHT_TO_PREH:
         if(gg.mode_t < gg.fade_t)
         {
           self.draw_night();
