@@ -713,6 +713,7 @@ var GamePlayScene = function(game, stage)
   self.draw_work = function()
   {
     gg.ctx.strokeStyle = black;
+    gg.timeline.draw();
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:    gg.line.draw();         break;
@@ -721,7 +722,6 @@ var GamePlayScene = function(game, stage)
     }
     gg.cur_level.draw();
     gg.message_box.draw();
-    gg.timeline.draw();
   }
 
   self.draw_night = function()

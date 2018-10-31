@@ -15,12 +15,23 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 0;
 
-  self.eyes_x = 0;
-  self.eyes_y = 0;
-  self.mouth_x = 0;
-  self.mouth_y = 0;
-  self.eyes_h = 0;
-  self.mouth_h = 0;
+  self.eyes_nx = 0;
+  self.eyes_ny = 0;
+  self.eyes_nw = 0;
+  self.eyes_nh = 0;
+  self.eyes_nsw = 0;
+  self.eyes_nsvw = 0;
+  self.mouth_nx = 0;
+  self.mouth_ny = 0;
+  self.mouth_nw = 0;
+  self.mouth_nh = 0;
+  self.mouth_nsw = 0;
+  self.mouth_nsvw = 0;
+
+  self.eyes_pw = 0.1;
+  self.eyes_ph = 0.1;
+  self.mouth_pw = 0.4;
+  self.mouth_ph = 0.1;
 
   self.clicked = 0;
 
@@ -41,22 +52,31 @@ var monitor = function()
     self.clicked = 0;
 
     self.look_t++;  if(self.look_t  > self.look_t_thresh) { self.look_t = randIntBelow(1000); self.look_t_thresh = self.look_t+randIntBelow(500); }
-    self.blink_t++; if(self.blink_t >  100) self.blink_t = 0;
-    if(self.talk_t > 0) self.talk_t--;
+    self.blink_t++; if(self.blink_t > 300) self.blink_t = randIntBelow(250);
+    self.talk_t++;
 
-    var face_x = sin(self.look_t/50)/5;
-    var face_y = sin(self.look_t/190)/5;
+    var face_nx = (sin(self.look_t/50 )/5+1)/2;
+    var face_ny = (sin(self.look_t/190)/5+1)/2;
 
-    self.eyes_x = lerp(self.eyes_x,face_x, 0.1);
-    self.eyes_y = lerp(self.eyes_y,face_y,0.1);
-    self.mouth_x = lerp(self.mouth_x,face_x, 0.05);
-    self.mouth_y = lerp(self.mouth_y,face_y,0.05);
+    self.eyes_nx = lerp(self.eyes_nx,face_nx, 0.1);
+    self.eyes_ny = lerp(self.eyes_ny,face_ny,0.1);
+    self.eyes_nw = 1;
+    if(self.blink_t == 300-5) self.eyes_nsvw = -.02;
+    if(self.blink_t > 300-5) self.eyes_nh = lerp(self.eyes_nh,0,0.9);
+    else                     self.eyes_nh = lerp(self.eyes_nh,1,0.9);
+    self.eyes_nsw += self.eyes_nsvw;
+    self.eyes_nsvw -= self.eyes_nsw/20;
+    self.eyes_nsvw *= 0.9;
 
-    if(self.blink_t > 95) self.eyes_h = lerp(self.eyes_h,0,0.9);
-    else                  self.eyes_h = lerp(self.eyes_h,1,0.9);
-
-    if(self.talk_t > 0) self.mouth_h = lerp(self.mouth_h,psin(self.talk_t),0.8);
-    else                self.mouth_h = lerp(self.mouth_h,                1,0.8);
+    self.mouth_nx = lerp(self.mouth_nx,face_nx, 0.05);
+    self.mouth_ny = lerp(self.mouth_ny,face_ny,0.05);
+    self.mouth_nw = 1;
+    if(self.talk_t == 1) self.mouth_nsvw = -.05;
+    if(self.talk_t < 50) self.mouth_nh = lerp(self.mouth_nh,psin(self.talk_t),0.8);
+    else                self.mouth_nh = lerp(self.mouth_nh,                1,0.8);
+    self.mouth_nsw += self.mouth_nsvw;
+    self.mouth_nsvw -= self.mouth_nsw/20;
+    self.mouth_nsvw *= 0.9;
   }
 
   self.draw = function()
@@ -72,18 +92,18 @@ var monitor = function()
     var h;
     var x;
     var y;
-    w = s.width/10;
-    h = s.height/10*self.eyes_h;
-    x = s.width/4+self.eyes_x*s.width/4;
-    y = s.height/4+self.eyes_y*s.height/4;
+    w = s.width*(self.eyes_pw+self.eyes_nsw/2)*self.eyes_nw;
+    h = s.height*self.eyes_ph*self.eyes_nh;
+    x = self.eyes_nx*s.width/2-w/2;
+    y = s.height/2-h/2+self.eyes_ny*s.height/4;
     c.fillRect(x,y,w,h); //left eye
-    x = s.width-w-s.width/4+self.eyes_x*s.width/4;
+    x = s.width/2+self.eyes_nx*s.width/2-w/2;
     c.fillRect(x,y,w,h); //right eye
 
-    w = s.width/2;
-    h = s.height/10*self.mouth_h;
-    x = s.width/4+self.mouth_x*s.width/4;
-    y = s.height-h-s.height/4+self.mouth_y*s.height/4;
+    w = s.width*(self.mouth_pw+self.mouth_nsw/2)*self.mouth_nw;
+    h = s.height*self.mouth_ph*self.mouth_nh;
+    x = s.width/4+self.mouth_nx*s.width/2-w/2;
+    y = s.height/4*3-h/2+self.mouth_ny*s.height/4;
     c.fillRect(x,y,w,h); //mouth
   }
 }
@@ -126,7 +146,7 @@ var exposition_box = function()
     self.text.push(text);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.speakers.push(speaker);
-    if(self.text.length == 1) gg.monitor.talk_t = 50;
+    if(self.text.length == 1) gg.monitor.talk_t = 0;
   }
 
   self.nq_group = function(text)
@@ -138,7 +158,7 @@ var exposition_box = function()
   self.advance = function()
   {
     self.displayed_i++;
-    if(self.displayed_i < self.text.length) gg.monitor.talk_t = 50;
+    if(self.displayed_i < self.text.length) gg.monitor.talk_t = 0;
   }
 
   self.click = function(evt)
@@ -922,7 +942,7 @@ var message_box = function()
     self.advance_t = 0;
     self.displayed_i++;
     self.calculate_top();
-    gg.monitor.talk_t = 50;
+    gg.monitor.talk_t = 0;
   }
 
   self.click = function(evt)
