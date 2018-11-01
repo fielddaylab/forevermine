@@ -43,7 +43,7 @@ var english_text =
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", trigger_timer,
+      "I don't think that's right... try again.", trigger_timer, get_timer(60),
     ],
     post_text:
     [
