@@ -333,6 +333,7 @@ var timeline = function()
     if(self.t >= self.t_max)
     {
       self.fast_sim = 0;
+      self.t_target = self.t_max;
       self.t = self.t_max;
     }
   }
@@ -383,8 +384,6 @@ var editable_line = function()
   self.b = 0;
   self.correct_m = 0;
   self.correct_b = 0;
-  self.h_min = 0;
-  self.h_max = 0;
   self.v_min = 0;
   self.v_max = 0;
 
@@ -480,10 +479,10 @@ var editable_line = function()
   self.ey = 0;
   self.draw_params = function()
   {
-    self.sy = self.v(self.h_min);
-    self.ey = self.v(self.h_max);
-    self.sx = self.h_min;
-    self.ex = self.h_max;
+    self.sy = self.v(0);
+    self.ey = self.v(gg.timeline.t_max);
+    self.sx = 0;
+    self.ex = gg.timeline.t_max;
          if(self.sy < self.v_min && self.ey < self.v_min) { self.sy = self.v_min; self.ey = self.v_min; }
     else if(self.sy > self.v_max && self.ey > self.v_max) { self.sy = self.v_max; self.ey = self.v_max; }
     else
@@ -496,8 +495,8 @@ var editable_line = function()
 
     self.sy = mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, self.sy);
     self.ey = mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, self.ey);
-    self.sx = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, self.sx);
-    self.ex = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, self.ex);
+    self.sx = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, self.sx);
+    self.ex = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, self.ex);
 
     for(var i = 0; i < gg.table.n; i++)
       gg.table.predicted_data[i] = fdisp(self.v(gg.table.t_data[i]),1);
@@ -546,7 +545,18 @@ var editable_line = function()
     gg.ctx.fillStyle = black;
 
     strokeBox(self.graph,gg.ctx);
-    drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
+    if(gg.timeline.t < gg.timeline.t_max)
+    {
+      var t = gg.timeline.t/gg.timeline.t_max;
+      var tx = lerp(self.graph.x,self.graph.x+self.graph.w,t);
+      if(tx > self.sx)
+      {
+        t = min(invlerp(self.sx,self.ex,tx),1);
+        drawLine(self.sx,self.sy,lerp(self.sx,self.ex,t),lerp(self.sy,self.ey,t), gg.ctx);
+      }
+    }
+    else
+      drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
     gg.ctx.font = "12px Helvetica";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
     gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
@@ -580,13 +590,14 @@ var editable_line = function()
     {
       if(gg.table.known_data[i] != "-")
       {
-        x = mapVal(self.h_min,self.h_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
+        x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
         y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
         x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
         y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
         gg.ctx.fillRect(x-1,y-1,2,2);
       }
     }
+
   }
 
 }
@@ -607,8 +618,6 @@ var editable_quadratic = function()
   self.correct_a = 0;
   self.correct_b = 0;
   self.correct_c = 0;
-  self.h_min = 0;
-  self.h_max = 0;
   self.v_min = 0;
   self.v_max = 0;
   self.samples = 100;
@@ -727,9 +736,9 @@ var editable_quadratic = function()
     var y;
     for(var i = 0; i < self.samples; i++)
     {
-      x = mapVal(0,self.samples-1,self.h_min,self.h_max,i);
+      x = mapVal(0,self.samples-1,0,gg.timeline.t_max,i);
       y = self.v(x);
-      self.xpts[i] = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, x);
+      self.xpts[i] = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, x);
       self.ypts[i] = clamp(self.graph.y, self.graph.y+self.graph.h, mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, y)); //map then clamp separate because y flipped
     }
 
@@ -785,10 +794,16 @@ var editable_quadratic = function()
     gg.ctx.fillStyle = black;
 
     strokeBox(self.graph,gg.ctx);
+    var t = gg.timeline.t/gg.timeline.t_max;
+    var tn = self.samples*t;
+    var tr = tn%1;
+    tn = round(tn-tr);
     gg.ctx.beginPath();
     gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
-    for(var i = 0; i < self.samples; i++)
+    for(var i = 0; i < tn; i++)
       gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
+    if(tn < self.samples)
+      gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
     gg.ctx.stroke();
     gg.ctx.font = "12px Helvetica";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
@@ -828,7 +843,7 @@ var editable_quadratic = function()
     {
       if(gg.table.known_data[i] != "-")
       {
-        x = mapVal(self.h_min,self.h_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
+        x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
         y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
         x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
         y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
@@ -1364,6 +1379,9 @@ var module_board = function()
 
   self.graph = {x:0,y:0,w:0,h:0};
 
+  self.v_min = 0;
+  self.v_max = 0;
+
   self.table_module = 0;
 
   self.clear = function()
@@ -1374,8 +1392,7 @@ var module_board = function()
     for(var i = 0; i < gg.table.n; i++)
     {
       gg.table.t_data[i] = i;
-      if(i < 3) gg.table.known_data[i] = 2*i+5;
-      else      gg.table.known_data[i] = "-";
+      gg.table.known_data[i] = "-";
       gg.table.predicted_data[i] = 0;
     }
     gg.table.verify();
@@ -1406,6 +1423,8 @@ var module_board = function()
   self.calculate_table = function()
   {
     gg.table.clear();
+    for(var i = 0; i < gg.table.n; i++)
+      gg.table.t_data[i] = i;
     for(var i = 1; i <= gg.timeline.t_max; i++)
     {
       var m;
@@ -1460,18 +1479,6 @@ var module_board = function()
         m.v[i] = fdisp(m.v[i],1);
       }
     }
-    for(var i = 0; i < self.modules.length; i++)
-    {
-      m = self.modules[i];
-      m.v_min = 9999;
-      m.v_max = -9999;
-      for(var j = 0; j <= gg.timeline.t_max; j++)
-      {
-        if(m.v[j] < m.v_min) m.v_min = m.v[j];
-        if(m.v[j] > m.v_max) m.v_max = m.v[j];
-      }
-      if(m.v_min == m.v_max) { m.v_min--; m.v_max++; }
-    }
     if(self.table_module)
     {
       for(var i = 0; i < gg.table.n; i++)
@@ -1482,7 +1489,24 @@ var module_board = function()
       for(var i = 0; i < gg.table.n; i++)
         gg.table.predicted_data[i] = 0;
     }
+
     gg.table.verify();
+    self.draw_params();
+  }
+
+  self.xpts = [];
+  self.ypts = [];
+  self.draw_params = function()
+  {
+    var x;
+    var y;
+    for(var i = 0; i <= gg.timeline.t_max; i++)
+    {
+      x = i;
+      y = self.table_module.v[i];
+      self.xpts[i] = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, x);
+      self.ypts[i] = clamp(self.graph.y, self.graph.y+self.graph.h, mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, y)); //map then clamp separate because y flipped
+    }
   }
 
   self.filter = function(keyer, blurer, dragger, clicker)
@@ -1532,22 +1556,21 @@ var module_board = function()
     {
       var m = self.table_module;
       var g = self.graph;
-      gg.ctx.strokeStyle = black;
+
+      strokeBox(self.graph,gg.ctx);
+      var t = gg.timeline.t;
+      var tr = gg.timeline.t%1;
+      var tn = round(gg.timeline.t-tr);
       gg.ctx.beginPath();
-      x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,0);
-      y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,m.v[0]);
-      gg.ctx.moveTo(x,y);
-      for(var i = 1; i < gg.timeline.t_max; i++)
-      {
-        x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,i);
-        y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,m.v[i]);
-        gg.ctx.lineTo(x,y);
-      }
+      gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
+      for(var i = 1; i <= tn; i++)
+        gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
+      if(tn < gg.timeline.t_max)
+        gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
       gg.ctx.stroke();
-      gg.ctx.fillStyle = black;
       gg.ctx.font = "12px Helvetica";
-      gg.ctx.fillText(fdisp(m.v_min),g.x-10,g.y+g.h);
-      gg.ctx.fillText(fdisp(m.v_max),g.x-10,g.y);
+      gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
+      gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
       gg.ctx.strokeStyle = gray;
       var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
@@ -1558,8 +1581,8 @@ var module_board = function()
       {
         if(gg.table.known_data[i] != "-")
         {
-          x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,i);
-          y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
+          x = mapVal(0,gg.timeline.t_max,g.x,g.x+g.w,i);
+          y = mapVal(self.v_min,self.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
           y = clamp(g.y,g.y+g.h,y);
           gg.ctx.fillRect(x-1,y-1,2,2);
         }

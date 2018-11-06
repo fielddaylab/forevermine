@@ -13,7 +13,7 @@ var GamePlayScene = function(game, stage)
     if(self.was_ready)
     {
       var b;
-      var graph_s = 100;
+      var graph_s = 200;
 
       gg.monitor.ww = 530;
       gg.monitor.wh = 440;
@@ -53,6 +53,8 @@ var GamePlayScene = function(game, stage)
       b.graph.h = graph_s;
       b.graph.x = gg.canv.width-b.graph.w-10;
       b.graph.y = 10;
+      b.v_min = 0;
+      b.v_max = 10;
       //acts as module cam
       b.ww = gg.canv.width;
       b.wh = gg.canv.height;
@@ -81,8 +83,6 @@ var GamePlayScene = function(game, stage)
       b.graph.y = 10;
       b.v_min = 0;
       b.v_max = 10;
-      b.h_min = 0;
-      b.h_max = 10;
       b.size();
 
       b = gg.quadratic;
@@ -96,8 +96,6 @@ var GamePlayScene = function(game, stage)
       b.graph.y = 10;
       b.v_min = 0;
       b.v_max = 10;
-      b.h_min = 0;
-      b.h_max = 10;
       b.size();
 
 
@@ -569,7 +567,7 @@ var GamePlayScene = function(game, stage)
       {
         if(1) //when done...
         {
-          gg.next_level = gg.levels[0];
+          gg.next_level = gg.levels[3];
           gg.exposition_box.clear();
           gg.exposition_box.nq_group(gg.next_level.pre_text);
           self.set_mode(MODE_PREH);
