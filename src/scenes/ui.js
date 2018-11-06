@@ -18,10 +18,12 @@ var monitor = function()
   self.eye_img = GenIcon(100,100);
   self.eye_img.context.fillStyle = red;
   self.eye_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
+  self.eye_img = GenImg("assets/eye.png");
 
   self.mouth_img = GenIcon(100,100);
   self.mouth_img.context.fillStyle = red;
   self.mouth_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
+  self.mouth_img = GenImg("assets/mouth.png");
 
   self.eyes_nx = 0;
   self.eyes_ny = 0;
@@ -47,6 +49,7 @@ var monitor = function()
   {
     var d = 10;
     self.screen = GenIcon(self.ww/d,self.wh/d);
+    self.screen.context.imageSmoothingEnabled = 1;
     self.draw();
   }
 
@@ -103,7 +106,7 @@ var monitor = function()
     w = s.width*(self.eyes_pw+self.eyes_nsw/2)*self.eyes_nw;
     h = s.height*self.eyes_ph*self.eyes_nh;
     x = self.eyes_nx*s.width/2-w/2;
-    y = s.height/2-h/2+self.eyes_ny*s.height/4;
+    y = s.height*1/2-h/2+self.eyes_ny*s.height/4;
     //c.fillRect(x,y,w,h); //left eye
     c.drawImage(self.eye_img,x,y,w,h);
     x = s.width/2+self.eyes_nx*s.width/2-w/2;
@@ -113,7 +116,7 @@ var monitor = function()
     w = s.width*(self.mouth_pw+self.mouth_nsw/2)*self.mouth_nw;
     h = s.height*self.mouth_ph*self.mouth_nh;
     x = s.width/4+self.mouth_nx*s.width/2-w/2;
-    y = s.height/4*3-h/2+self.mouth_ny*s.height/4;
+    y = s.height*2/3-h/2+self.mouth_ny*s.height/4;
     //c.fillRect(x,y,w,h); //mouth
     c.drawImage(self.mouth_img,x,y,w,h);
   }
@@ -289,8 +292,12 @@ var exposition_box = function()
 
     gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
-
     gg.ctx.fillStyle = black;
+    gg.ctx.globalAlpha = 0.5;
+    fillBox(self,gg.ctx);
+    gg.ctx.globalAlpha = 1;
+
+    gg.ctx.fillStyle = white;
     gg.ctx.textAlign = "left";
     gg.ctx.font = self.font;
     var y = self.y+self.pad;

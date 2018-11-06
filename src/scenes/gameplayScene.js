@@ -15,10 +15,10 @@ var GamePlayScene = function(game, stage)
       var b;
       var graph_s = 200;
 
-      gg.monitor.ww = 530;
-      gg.monitor.wh = 440;
-      gg.monitor.wx = gg.monitor.ww/3;
-      gg.monitor.wy = 0;
+      gg.monitor.ww = 530*0.8;
+      gg.monitor.wh = 440*0.8;
+      gg.monitor.wx = 234;
+      gg.monitor.wy = -30;
       gg.monitor.init_screen();
 
       gg.lab.ww = gg.canv.width;
@@ -263,6 +263,9 @@ var GamePlayScene = function(game, stage)
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
+
+    gg.console_img = GenImg("assets/console.png");
+    gg.background_img = GenImg("assets/background.jpg");
 
     gg.data_dragger = new data_dragger();
     gg.exposition_box = new exposition_box();
@@ -720,10 +723,12 @@ var GamePlayScene = function(game, stage)
   self.draw_home = function()
   {
     strokeBox(gg.lab,gg.ctx);
-    strokeBox(gg.monitor,gg.ctx);
+    drawImageBox(gg.background_img,gg.lab,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 0;
     drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 1;
+    drawImageBox(gg.console_img,gg.lab,gg.ctx);
+    //strokeBox(gg.monitor,gg.ctx);
     gg.exposition_box.draw();
   }
 
