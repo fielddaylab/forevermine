@@ -840,8 +840,8 @@ var GamePlayScene = function(game, stage)
         else
         {
           self.draw_night();
-          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
         break;
@@ -859,8 +859,8 @@ var GamePlayScene = function(game, stage)
         else
         {
           self.draw_home();
-          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
         break;

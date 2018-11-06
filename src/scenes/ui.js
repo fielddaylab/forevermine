@@ -15,6 +15,8 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 0;
 
+  self.bg_color = "#D8EEF1";
+
   self.eye_img = GenIcon(100,100);
   self.eye_img.context.fillStyle = red;
   self.eye_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
@@ -95,7 +97,7 @@ var monitor = function()
     var s = self.screen;
     var c = s.context;
 
-    c.fillStyle = white;
+    c.fillStyle = self.bg_color;
     c.fillRect(0,0,s.width,s.height);
 
     c.fillStyle = blue;
