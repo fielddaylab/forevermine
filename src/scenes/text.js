@@ -48,7 +48,7 @@ var english_text =
     ],
     incorrect_text:
     [
-      "Those numbers don't match, silly! Try again.", trigger_timer,
+      "Those numbers don't match, silly! Try again.", trigger_timer, get_timer(60),
     ],
     post_text:
     [

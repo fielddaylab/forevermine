@@ -10,9 +10,98 @@ var GamePlayScene = function(game, stage)
     gg.canvas = gg.canv.canvas;
     gg.ctx = gg.canv.context;
 
-    if(gg.module_board) { gg.module_board.ww = gg.canv.width; gg.module_board.wh = gg.canv.height; }
-    if(gg.lab)          { gg.lab.ww = gg.canv.width; gg.lab.wh = gg.canv.height; }
-    if(gg.monitor)      { gg.monitor.ww = 530; gg.monitor.wh = 440; gg.monitor.wx = gg.monitor.ww/3; gg.monitor.wy = 0; gg.monitor.init_screen(); }
+    if(self.was_ready)
+    {
+      var b;
+      var graph_s = 100;
+
+      gg.monitor.ww = 530;
+      gg.monitor.wh = 440;
+      gg.monitor.wx = gg.monitor.ww/3;
+      gg.monitor.wy = 0;
+      gg.monitor.init_screen();
+
+      gg.lab.ww = gg.canv.width;
+      gg.lab.wh = gg.canv.height;
+
+      gg.module_board.ww = gg.canv.width;
+      gg.module_board.wh = gg.canv.height;
+
+      gg.data_dragger.w = gg.canv.width;
+      gg.data_dragger.h = gg.canv.height;
+      gg.data_dragger.x = 0;
+      gg.data_dragger.y = 0;
+
+      gg.exposition_box.w = gg.canv.width-20;
+      gg.exposition_box.h = 100;
+      gg.exposition_box.x = 10;
+      gg.exposition_box.y = gg.canv.height-10-gg.exposition_box.h;
+      gg.exposition_box.size();
+
+      gg.message_box.w = 200;
+      gg.message_box.h = gg.canv.height;
+      gg.message_box.x = 0;
+      gg.message_box.y = 0;
+      gg.message_box.size();
+
+      b = gg.module_board;
+      b.h = gg.canv.height;
+      b.x = gg.message_box.x+gg.message_box.w;
+      b.w = gg.canv.width-b.x;
+      b.y = 0;
+      b.graph.w = graph_s;
+      b.graph.h = graph_s;
+      b.graph.x = gg.canv.width-b.graph.w-10;
+      b.graph.y = 10;
+      //acts as module cam
+      b.ww = gg.canv.width;
+      b.wh = gg.canv.height;
+      b.wx = 0;
+      b.wy = 0;
+
+      gg.timeline.w = (gg.module_board.w-20)*(10/12);
+      gg.timeline.h = 30;
+      gg.timeline.x = 10+gg.module_board.x+(gg.module_board.w-20)*(1.5/12);
+      gg.timeline.y = gg.module_board.h-gg.timeline.h-65;
+      gg.timeline.size();
+
+      gg.table.h = 100;
+      gg.table.x = gg.message_box.x+gg.message_box.w+10;
+      gg.table.y = gg.canv.height-gg.table.h;
+      gg.table.w = gg.canv.width-gg.table.x-10;
+
+      b = gg.line;
+      b.h = gg.canv.height;
+      b.x = gg.message_box.x+gg.message_box.w;
+      b.y = 0;
+      b.w = gg.canv.width-b.x;
+      b.graph.w = graph_s;
+      b.graph.h = graph_s;
+      b.graph.x = gg.canv.width-b.graph.w-10;
+      b.graph.y = 10;
+      b.v_min = 0;
+      b.v_max = 10;
+      b.h_min = 0;
+      b.h_max = 10;
+      b.size();
+
+      b = gg.quadratic;
+      b.h = gg.canv.height;
+      b.x = gg.message_box.x+gg.message_box.w;
+      b.y = 0;
+      b.w = gg.canv.width-b.x;
+      b.graph.w = graph_s;
+      b.graph.h = graph_s;
+      b.graph.x = gg.canv.width-b.graph.w-10;
+      b.graph.y = 10;
+      b.v_min = 0;
+      b.v_max = 10;
+      b.h_min = 0;
+      b.h_max = 10;
+      b.size();
+
+
+    }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
     if(hoverer) hoverer.detach(); hoverer = new PersistentHoverer({source:gg.canvas});
@@ -136,6 +225,7 @@ var GamePlayScene = function(game, stage)
         self.reset_level();
         gg.message_box.clear();
         gg.message_box.nq_group(gg.cur_level.text);
+        gg.message_box.nq("DATA:", SPEAKER_DATA, {})
         break;
       case MODE_WORK:
         gg.home_cam.wx = gg.monitor.wx;
@@ -170,97 +260,20 @@ var GamePlayScene = function(game, stage)
 
   self.ready = function()
   {
-    var b;
-    var graph_s = 100;
-    var btn_s = 20;
-
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
 
+    gg.data_dragger = new data_dragger();
     gg.exposition_box = new exposition_box();
-    gg.exposition_box.w = gg.canv.width-20;
-    gg.exposition_box.h = 100;
-    gg.exposition_box.x = 10;
-    gg.exposition_box.y = gg.canv.height-10-gg.exposition_box.h;
-    gg.exposition_box.size();
-
     gg.message_box = new message_box();
-    gg.message_box.w = 200;
-    gg.message_box.h = gg.canv.height;
-    gg.message_box.x = 0;
-    gg.message_box.y = 0;
-    gg.message_box.size();
-
-    gg.timeline = new timeline(); //init now, size later
-
+    gg.timeline = new timeline();
+    gg.table = new table();
     gg.module_board = new module_board();
-    b = gg.module_board;
-    b.h = gg.canv.height;
-    b.x = gg.message_box.x+gg.message_box.w;
-    b.w = gg.canv.width-b.x;
-    b.y = 0;
-    b.graph.w = graph_s;
-    b.graph.h = graph_s;
-    b.graph.x = gg.canv.width-b.graph.w-10;
-    b.graph.y = 10;
-    //acts as module cam
-    b.ww = gg.canv.width;
-    b.wh = gg.canv.height;
-    b.wx = 0;
-    b.wy = 0;
-    b.table.h = 100;
-    b.table.x = gg.message_box.x+gg.message_box.w+10;
-    b.table.y = gg.canv.height-b.table.h;
-    b.table.w = gg.canv.width-b.table.x-10;
-
-    gg.timeline.w = (gg.module_board.w-20)*(10/12);
-    gg.timeline.h = 30;
-    gg.timeline.x = 10+gg.module_board.x+(gg.module_board.w-20)*(1.5/12);
-    gg.timeline.y = gg.module_board.h-gg.timeline.h-65;
-    gg.timeline.size();
-
     gg.line = new editable_line();
-    b = gg.line;
-    b.h = gg.canv.height;
-    b.x = gg.message_box.x+gg.message_box.w;
-    b.y = 0;
-    b.w = gg.canv.width-b.x;
-    b.graph.w = graph_s;
-    b.graph.h = graph_s;
-    b.graph.x = gg.canv.width-b.graph.w-10;
-    b.graph.y = 10;
-    b.v_min = 0;
-    b.v_max = 10;
-    b.h_min = 0;
-    b.h_max = 10;
-    b.table.h = 100;
-    b.table.x = gg.message_box.x+gg.message_box.w+10;
-    b.table.y = gg.canv.height-b.table.h;
-    b.table.w = gg.canv.width-b.table.x-10;
-    b.size();
-
     gg.quadratic = new editable_quadratic();
-    b = gg.quadratic;
-    b.h = gg.canv.height;
-    b.x = gg.message_box.x+gg.message_box.w;
-    b.y = 0;
-    b.w = gg.canv.width-b.x;
-    b.graph.w = graph_s;
-    b.graph.h = graph_s;
-    b.graph.x = gg.canv.width-b.graph.w-10;
-    b.graph.y = 10;
-    b.v_min = 0;
-    b.v_max = 10;
-    b.h_min = 0;
-    b.h_max = 10;
-    b.table.h = 100;
-    b.table.x = gg.message_box.x+gg.message_box.w+10;
-    b.table.y = gg.canv.height-b.table.h;
-    b.table.w = gg.canv.width-b.table.x-10;
-    b.size();
 
     gg.levels = [];
     var l;
@@ -536,6 +549,7 @@ var GamePlayScene = function(game, stage)
       l.post_text      = used_text[i].post_text;
     }
 
+    self.was_ready = 1;
     self.resize(stage);
     self.set_mode(MODE_MENU);
   };
@@ -592,14 +606,19 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_WORK:
       {
-        switch(gg.cur_level.type)
+        gg.table.tick();
+        dragger.filter(gg.data_dragger);
+        if(!gg.data_dragger.dragging)
         {
-          case LEVEL_LINEAR:    gg.line.filter(keyer,blurer,dragger,clicker);         gg.line.tick();         break;
-          case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
-          case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
+          switch(gg.cur_level.type)
+          {
+            case LEVEL_LINEAR:    gg.line.filter(keyer,blurer,dragger,clicker);         gg.line.tick();         break;
+            case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
+            case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
+          }
+          gg.timeline.filter(dragger,clicker);
+          dragger.filter(gg.message_box);
         }
-        gg.timeline.filter(dragger,clicker);
-        dragger.filter(gg.message_box);
 
         if(gg.cur_level.correct && gg.message_box.requested_end)
           self.set_mode(MODE_WORK_TO_FEED);
@@ -714,6 +733,7 @@ var GamePlayScene = function(game, stage)
   {
     gg.ctx.strokeStyle = black;
     gg.timeline.draw();
+    gg.table.draw();
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:    gg.line.draw();         break;
@@ -798,6 +818,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_t < gg.fade_t) //fade to face
         {
           var t = gg.mode_t/gg.fade_t;
+          self.draw_home();
         }
       }
         break;

@@ -17,6 +17,8 @@ ENUM = 0;
 var SPEAKER_NULL   = ENUM; ENUM++;
 var SPEAKER_PLAYER = ENUM; ENUM++;
 var SPEAKER_AI     = ENUM; ENUM++;
+var SPEAKER_DATA   = ENUM; ENUM++;
+var SPEAKER_SIM    = ENUM; ENUM++;
 var SPEAKER_NULL   = ENUM; ENUM++;
 
 var modparam = function()
