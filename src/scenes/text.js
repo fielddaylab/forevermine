@@ -22,32 +22,38 @@ var english_text =
     //LEVEL 1
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
-      "I'm blah blah. Blah blah blah blah. Blah BLAH blah-blah; blah aba blah blahblahblah. BLAH! BLAH blah BLAHAHA. Blah.", SPEAKER_AI,
-      "Yep this is a test WOWOWOWOWO", SPEAKER_AI,
+      "Good morning, new best friend!!!", SPEAKER_AI,
+      "Gemma, I only have X days of oxygen left. I need to figure out if the robots can harvest enough crystals in time.", SPEAKER_PLAYER,
+      "Ooh! I've got a model for that!", SPEAKER_AI,
     ],
     text:
     [
-      "Here's the model my owners used to use.", SPEAKER_AI, get_timer(200),
+      "My owners used this model back when the mine was still operating.", SPEAKER_AI, get_timer(120),
+      "Wasn't that 200 years ago?", SPEAKER_PLAYER, trigger_click,
+      "Yep! 😂", SPEAKER_AI, get_timer(60),
+      "You'll probably need to make some adjustments.", SPEAKER_AI, get_timer(120),
+      "Here's the data from last night!", SPEAKER_AI, get_timer(120),
       "What should I do?", SPEAKER_PLAYER, trigger_click,
-      "You'll have to alter it to fit the current fleet.", SPEAKER_AI, get_timer(200),
-      "The robots might be a bit rusty...", SPEAKER_AI, get_timer(200),
+      "It's easy! Just change the numbers on the equation.", SPEAKER_AI, get_timer(120),
+      "We need the modeled data to match our collected data.", SPEAKER_AI, get_timer(120),
+      "Ok. Thanks, Gemma.", SPEAKER_PLAYER, trigger_click,
+      "You can do this, bestie! 🤗", SPEAKER_AI, get_timer(80),
+      "Submit your data to me when you figure it out!", SPEAKER_AI, get_timer(80),
     ],
     correct_text:
     [
-      "You did it!", SPEAKER_AI, get_timer(60),
-      "Um.", SPEAKER_AI, get_timer(60),
-      "Ok so it looks like you might not survive...", SPEAKER_AI, get_timer(60),
-      "Why don't you get some sleep.", SPEAKER_AI, get_timer(60),
-      "Maybe we can figure something out tomorrow!", SPEAKER_AI, get_timer(60),
+      "YAYAYAY! You did it! 🙌", SPEAKER_AI, get_timer(60),
+      "Oh, and also it looks like you're gonna die.", SPEAKER_AI, get_timer(120),
+      "😬😬😬", SPEAKER_AI, get_timer(120),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", trigger_timer,
+      "Those numbers don't match, silly! Try again.", trigger_timer,
     ],
     post_text:
     [
-      "Goodnight!", SPEAKER_AI,
+      "Wheee! That was fun!", SPEAKER_AI,
+      "Why don't you get some sleep, friend? I'm sure you'll feel better in the morning!", SPEAKER_AI,
     ],
   },
 
@@ -55,31 +61,39 @@ var english_text =
     //LEVEL 2
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Good morning, bestie! Wanna play?", SPEAKER_AI,
+      "Awwww, don't be sad. The robots started bringing back TONS of crystals last night.", SPEAKER_AI,
+      "Maybe you won't die after all!", SPEAKER_PLAYER,
     ],
     text:
     [
-      "Hey!", SPEAKER_AI, get_timer(40),
-      "I have good news!", SPEAKER_AI, get_timer(40),
-      "We found a vein of high concentration crystals!", SPEAKER_AI, get_timer(40),
-      "I'll pull up the old model my owners used for this situation.", SPEAKER_AI, get_timer(40),
-      "I've taken the liberty of collecting some data- maybe you could fix up the model and see if you can live!", SPEAKER_AI, get_timer(40),
+      "Check it out! We're harvesting crystals super fast!", SPEAKER_AI, get_timer(200),
+      "Wow, that's great!", SPEAKER_PLAYER, trigger_click,
+      "The robots must've hit a super concentrated pocket of crystals!", SPEAKER_PLAYER, trigger_click,
+      "Yep! 😊", SPEAKER_AI, get_timer(60),
+      "Our straight-line model wasn't accurate anymore, so I switched to a curved line!", SPEAKER_AI, get_timer(120),
+      "Ok. What should I do?", SPEAKER_PLAYER, trigger_click,
+      "Adjust the model until the numbers match up!", SPEAKER_AI, get_timer(120),
+      "Here's the new data.", SPEAKER_AI, get_timer(60),
+      "Good luck, bestie! 🤞", SPEAKER_AI, get_timer(60),
     ],
     correct_text:
     [
-      "Hey! Would you look at that!", SPEAKER_AI, get_timer(60),
-      "Looks like you'll survive after all!", SPEAKER_AI, get_timer(60),
-      "See, no reason to be worried.", SPEAKER_AI, get_timer(60),
-      "...", SPEAKER_AI, get_timer(60),
-      "But hey maybe you could hang out for a while!", SPEAKER_AI, get_timer(60),
+      "You did it! 🎉", SPEAKER_AI, get_timer(60),
+      "Looks like you're not gonna die after all!", SPEAKER_AI, get_timer(60),
+      "Well, not right now.", SPEAKER_AI, get_timer(60),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(60),
+      "Nope! Try again.", SPEAKER_AI, get_timer(60),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "At this rate, I'll be out of here in no time!", SPEAKER_PLAYER,
+      "I better go get my ship ready.", SPEAKER_PLAYER,
+      "Wait... already? You just got here.", SPEAKER_AI,
+      "Don't worry, Gemma. My mothership is waiting to send down brand-new robots. You'll have lots of playmates soon!", SPEAKER_PLAYER,
+      "See you tomorrow!", SPEAKER_PLAYER,
     ],
   },
 
@@ -87,29 +101,37 @@ var english_text =
     //LEVEL 3
     pre_text:
     [
-      "Good morning!", SPEAKER_AI,
-      "So, quick change of plans.",
+      "Good morning, sleepyhead!", SPEAKER_AI,
+      "Hey Gemma! How are those little bots doing??", SPEAKER_PLAYER,
+      "Welllll... about that. I've got some bad news.", SPEAKER_AI,
     ],
     text:
     [
-      "Looks like the vein might be tapering off!", SPEAKER_AI, get_timer(40),
-      "You better figure out if you'll be able to get out in time!", SPEAKER_AI, get_timer(40),
+      "The robots are bringing back less and less crystals every hour. 😞", SPEAKER_AI, get_timer(100),
+      "Oh no! We must be reaching the end of the pocket of crystals.", SPEAKER_PLAYER, trigger_click,
+      "Can we adjust our model to fit the new data?", SPEAKER_PLAYER, trigger_click,
+      "Great idea, friend!", SPEAKER_AI, get_timer(60),
+      "We make such a good team! 😍", SPEAKER_AI, get_timer(60),
+      "Here's your data.", SPEAKER_AI, get_timer(60),
+      "Thanks, Gemma.", SPEAKER_PLAYER, trigger_click,
+      "🎵 The more we get together, together, together...", SPEAKER_AI, get_timer(120),
+      "🎵 The more we get together, the happier we'll be!", SPEAKER_AI, get_timer(120),
     ],
     correct_text:
     [
-      "Awe shucks!", SPEAKER_AI, get_timer(60),
-      "Guess you'll have to stay a bit longer.", SPEAKER_AI, get_timer(60),
-      "If we work together, maybe we can figure things out!", SPEAKER_AI, get_timer(60),
-      "It appears our trajectory is back to pre-vein levels.", SPEAKER_AI, get_timer(60),
-      "Maybe there's somewhere else we can look?", SPEAKER_AI, get_timer(60),
+      "Welp, looks like you're doomed. 🤷‍", SPEAKER_AI, get_timer(80),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(60),
+      "Nope, those numbers don't match! Try again.", SPEAKER_AI, get_timer(60),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "What's the plan, bestie?", SPEAKER_AI,
+      "I'm gonna build something to help the robots work faster.", SPEAKER_PLAYER, 
+      "Do you have a model for the robots' batteries?", SPEAKER_PLAYER,
+      "Sure! Well, I think so. Probably.", SPEAKER_AI,
+      "Come back tomorrow. I'll see what I can dig up!", SPEAKER_AI,
     ],
   },
 
@@ -117,31 +139,37 @@ var english_text =
     //LEVEL 4
     pre_text:
     [
+      "There you are, friend! What took so long?! Where were you?!", SPEAKER_AI,
+      "Um... I was sleeping.", SPEAKER_AI,
+      "BOR-ing. I've got something cool to show you!", SPEAKER_AI,
     ],
     text:
     [
-      "I have a great idea.", SPEAKER_AI, get_timer(10),
-      "Let's look into the batteries!", SPEAKER_AI, get_timer(10),
-      "I'll bring up the battery model.", SPEAKER_AI, get_timer(10),
-      "They used a different modelling paradigm in their robot schematics.", SPEAKER_AI, get_timer(10),
-      "I'm sure you'll figure it out.", SPEAKER_AI, get_timer(10),
-      "Match the data to set a baseline, so we can see where we can improve!", SPEAKER_AI, get_timer(10),
+      "Check it out!", SPEAKER_AI, get_timer(60),
+      "My owners used this model to make predictions about the robots' battery power!", SPEAKER_AI, get_timer(120),
+      "It's from wayyyy back when people lived here, so you'll need to fix it up...", SPEAKER_AI, get_timer(120),
+      "Gemma, this is perfect!", SPEAKER_PLAYER, trigger_click,
+      "😊", SPEAKER_AI, get_timer(60),
+      "It's weird. The mine seems operational. Why did everybody leave?", SPEAKER_PLAYER, trigger_click,
+      "😭😭😭", SPEAKER_AI, get_timer(60),
+      "I was just wondering...", SPEAKER_PLAYER, trigger_click,
+      "😭😭😭", SPEAKER_AI, get_timer(60),
+      "Ok, fine. Sorry I asked. Can I have the data?", SPEAKER_PLAYER, trigger_click,
+      "Oooh, sure! Here ya go!", SPEAKER_AI, get_timer(60),
     ],
     correct_text:
     [
-      "Great!", SPEAKER_AI, get_timer(60),
-      "I wonder if we can improve charge times...", SPEAKER_AI, get_timer(60),
-      "What's that? You have a supercharger in your lander?", SPEAKER_AI, get_timer(60),
-      "I'll install it and collect the data.", SPEAKER_AI, get_timer(60),
-      "We can re-model it tomorrow!", SPEAKER_AI, get_timer(60),
+      "Yay! Great job! 🎉", SPEAKER_AI, get_timer(60),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "Nope, those numbers don't match! Try again.", SPEAKER_AI, get_timer(80),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "The bots are wasting a LOT of time charging their batteries.", SPEAKER_PLAYER,
+      "I bet I can make a supercharger to speed things up!", SPEAKER_PLAYER,
+      "Ooh, that's so cool! 🤩 Good luck, bestie!", SPEAKER_AI,
     ],
   },
 
@@ -149,26 +177,35 @@ var english_text =
     //LEVEL 5
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Hey friend! Guess what guess what guess what!", SPEAKER_AI,
+      "While you were asleep, I installed your fancy new supercharger!", SPEAKER_AI,
+      "What?! Gemma, I still needed to run some tests!", SPEAKER_PLAYER,
+      "Hmmm. 🤔 I think the words you're looking for are, Thank you, Gemma.", SPEAKER_AI,
+      "By the way, the new coil is working great. Check it out!", SPEAKER_AI,
     ],
     text:
     [
-      "I've collected the data.", SPEAKER_AI, get_timer(80),
-      "Hopefully this will be enough of an improvement!", SPEAKER_AI, get_timer(80),
-      "Fix the model and we'll see.", SPEAKER_AI, get_timer(80),
+      "I already collected some data. The bots are drilling super fast!", SPEAKER_AI, get_timer(80),
+      "I guess that's good.", SPEAKER_PLAYER, trigger_click,
+      "Told you so! 😜", SPEAKER_AI, get_timer(80),
+      "Here's the new data.", SPEAKER_AI, get_timer(80),
+      "Go ahead, make your prediction!", SPEAKER_AI, get_timer(80),
+      "🎵 I've been workin' on the railroad, all the livelong day...", SPEAKER_AI, get_timer(200),
+      "🎵 I've been workin' on the railroad, just to pass the time away...", SPEAKER_AI, get_timer(200),
     ],
     correct_text:
     [
-      "Hey maybe you can cheer up now!", SPEAKER_AI, get_timer(60),
-      "Looks like you'll make it.", SPEAKER_AI, get_timer(60),
+      "Nice work, friend!", SPEAKER_AI, get_timer(60),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "Silly human! Those numbers don't match. Try again.", SPEAKER_AI, get_timer(1),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "Wow. The new charger is working great! Thanks for your help, Gemma", SPEAKER_PLAYER,
+      "Ha! Don't mention it, friend 😇", SPEAKER_AI,
+      "See you tomorrow!", SPEAKER_AI,
     ],
   },
 
@@ -176,27 +213,36 @@ var english_text =
     //LEVEL 6
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Hey bestie, guess what!", SPEAKER_AI,
+      "It's good news this time, I promise!", SPEAKER_AI,
+      "The robots are charging up faster than expected. Check it out!", SPEAKER_AI,
     ],
     text:
     [
-      "Looks like the robots are getting into the groove.", SPEAKER_AI, get_timer(80),
-      "They've figured out their routes, and it looks like they're coming back with some charge to spare!", SPEAKER_AI, get_timer(80),
-      "Maybe this will be enough", SPEAKER_AI, get_timer(80),
+      "Yesterday we based our model on robots going out from the base.", SPEAKER_AI, get_timer(80),
+      "So?", SPEAKER_PLAYER,
+      "Soooo, the robots from out in the mine are working faster!", SPEAKER_AI, get_timer(200),
+      "They're coming back in with some leftover charge on their batteries.", SPEAKER_AI, get_timer(200),
+      "Oh! So they're charging up faster?", SPEAKER_PLAYER, trigger_click,
+      "Exactly! 👍", SPEAKER_AI, get_timer(80),
+      "Here's the new data. Let's see if it helps.", SPEAKER_AI, get_timer(80),
+
     ],
     correct_text:
     [
-      "It looks like that's saved some power.", SPEAKER_AI, get_timer(60),
-      "But I'm not sure it will be enough...", SPEAKER_AI, get_timer(60),
-      "Where else can we look...", SPEAKER_AI, get_timer(60),
+      "Wow! You're an expert at this!", SPEAKER_AI, get_timer(60),
+      "Soon you won't even need me 😂", SPEAKER_AI, get_timer(60),
+      "This data looks a little better. But it's still not enough.", SPEAKER_PLAYER, trigger_click,
+      "Suuuuure... but we're doing our best! That's all that matters!", SPEAKER_AI, get_timer(120),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "That's not right. Try again!", SPEAKER_AI, get_timer(80),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "Cheer up, friend. We're gonna figure this out! You and me, together!", SPEAKER_AI,
+      "Sorry, Gemma. I need some time alone to think. I'll see you tomorrow.", SPEAKER_PLAYER,
     ],
   },
 
@@ -204,26 +250,38 @@ var english_text =
     //LEVEL 7
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Gemma, wake up!", SPEAKER_PLAYER,
+      "Five more minutes... 😴 ", SPEAKER_AI,
+      "Last night I found a huge crate of extra-large drill bits!", SPEAKER_PLAYER,
+      "They look super strong.", SPEAKER_PLAYER,
+      "Ooh, I remember those!", SPEAKER_AI,
+      "Those drill bits will DEFINITELY help the bots mine faster!", SPEAKER_AI,
+      "Yes!! Let's make another model!", SPEAKER_PLAYER,
+
     ],
     text:
     [
-      "Let's see if we can improve the battery drain!", SPEAKER_AI, get_timer(10),
-      "Here's the data for the drill usage rate.", SPEAKER_AI, get_timer(10),
+      "Before we install the new drill bits, we need a baseline.", SPEAKER_PLAYER, trigger_click,
+      "Let's look at the drills we're using right now.", SPEAKER_PLAYER, trigger_click,
+      "Eeee this is so much fun!", SPEAKER_AI, get_timer(80),
+      "Here's the data!", SPEAKER_AI, get_timer(80),
     ],
     correct_text:
     [
-      "Ok. This is a good base line.", SPEAKER_AI, get_timer(60),
-      "I wonder how we can improve it?", SPEAKER_AI, get_timer(60),
-      "Maybe we should try these new drill bits I found?", SPEAKER_AI, get_timer(60),
+      "Hooray! Nice work! 🎉", SPEAKER_AI, get_timer(60),
+      "I like playing with you!", SPEAKER_AI, get_timer(60),
+      "This isn't a game, Gemma.", SPEAKER_PLAYER, trigger_click,
+      "Ha! That's what losers say! 😜", SPEAKER_AI, get_timer(60),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "Nope. Try again!", SPEAKER_AI, get_timer(1),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "My oxygen is running low. I wish I could run more tests, but there's no time.", SPEAKER_PLAYER,
+      "Can you install the new drill bits tonight?", SPEAKER_PLAYER,
+      "Sure thing, bestie! Don't worry. It's all gonna work out!", SPEAKER_AI,
     ],
   },
 
@@ -231,27 +289,45 @@ var english_text =
     //LEVEL 8
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Gemma! What's going on out there?!", SPEAKER_PLAYER,
+      "Good morning, friend! The new drill bits are working GREAT!", SPEAKER_AI,
+      "Are you serious? Gemma, half the bots are dead out there!", SPEAKER_PLAYER,
+      "Well, yeah, obviously. Those fancy drill bits burn through power like crazy!", SPEAKER_AI,
+      "What?! Why didn't you tell me?", SPEAKER_PLAYER,
+      "We need to make a new model. Now.", SPEAKER_PLAYER,
     ],
     text:
     [
-      "Alright- the new drill bits are installed.", SPEAKER_AI, get_timer(10),
-      "And I have the first bits of data.", SPEAKER_AI, get_timer(10),
+      "I need the data for the new drill bits.", SPEAKER_PLAYER, trigger_click,
+      "Are you mad at me?", SPEAKER_AI, get_timer(200),
+      "No.", SPEAKER_PLAYER, trigger_click,
+      "You ARE mad! 😭", SPEAKER_AI, get_timer(60),
+      "I need the data, Gemma.", SPEAKER_PLAYER, trigger_click,
+      "You asked me if the new drill bits would help the robots dig faster. I told you the truth!", SPEAKER_AI, get_timer(80),
+      "You never said ANYTHING about power!", SPEAKER_AI, get_timer(60),
+      "Please can't we still be friends??", SPEAKER_AI, get_timer(60),
+      "Gemma, I'm not mad. We're still friends. I don't blame you. Now can I PLEASE have the data?", SPEAKER_PLAYER, trigger_click,
+      "K.", SPEAKER_AI, get_timer(200),
     ],
     correct_text:
     [
-      "Uh oh.", SPEAKER_AI, get_timer(60),
-      "It looks like this is less efficient!", SPEAKER_AI, get_timer(60),
-      "I hope their ability to collect crystals makes up for it...", SPEAKER_AI, get_timer(60),
-      "Is there any way we can bring the charge usage down?", SPEAKER_AI, get_timer(60),
+      "😬😱😓", SPEAKER_AI, get_timer(60),
+      "Um, on the bright side, you're becoming a modeling expert! Yay!", SPEAKER_AI, get_timer(60),
+      "This is a disaster.", SPEAKER_PLAYER, trigger_click,
+      "Yeah. Kinda.", SPEAKER_AI, get_timer(60),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "That's not right! Try again.", SPEAKER_AI, get_timer(1),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "We need to fix this, Gemma. Let's just go back to the old drill bits.", SPEAKER_PLAYER,
+      "Um...", SPEAKER_AI,
+      "What. Now.", SPEAKER_PLAYER,
+      "Well, the old drill bits were SUPER rusty.", SPEAKER_AI,
+      "So... I jettisoned them into space.", SPEAKER_AI,
+      "OK GOTTA GO BYE!", SPEAKER_AI,
     ],
   },
 
@@ -259,27 +335,37 @@ var english_text =
     //LEVEL 9
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Good morning, sunshine! 🌞", SPEAKER_AI,
+      "Sunshine... Gemma, that's it! What if we build solar panels for the bots?", SPEAKER_PLAYER,
+      "Build solar panels? Ugh, boring. Besides, why would you waste your time? We've already got a million solar panels.", SPEAKER_AI,
+      "What???", SPEAKER_PLAYER,
+      "Yeah, the robots have little built-in solar panels! It's soooo cute!", SPEAKER_AI,
+      "Um... did I forget to tell you that?", SPEAKER_AI,
     ],
     text:
     [
-      "So I cleaned up the solar panels.", SPEAKER_AI, get_timer(10),
-      "Sorry I didn't tell you about them earlier!", SPEAKER_AI, get_timer(10),
-      "You never asked!", SPEAKER_AI, get_timer(10),
-      "Here's the data...", SPEAKER_AI, get_timer(10),
+      "Ok! The robots are now running on solar power, instead of batteries.", SPEAKER_AI, get_timer(100),
+      "See? I'm helping!", SPEAKER_AI, get_timer(60),
+      "Um, Gemma...", SPEAKER_PLAYER, trigger_click,
+      "Don't take this wrong, but is there anything else important that you're forgetting to tell me?", SPEAKER_PLAYER, trigger_click,
+      "Ummm.... I can't remember. 🙃", SPEAKER_AI, get_timer(60),
+      "Here's the new data!", SPEAKER_AI, get_timer(60),
+      "Ok. Let's get this over with.", SPEAKER_PLAYER, trigger_click,
     ],
     correct_text:
     [
-      "Hey it looks like that offers some pretty great savings!", SPEAKER_AI, get_timer(60),
-      "We should see how the solar panel effects charge time!", SPEAKER_AI, get_timer(60),
+      "You did it! Great job, bestie!", SPEAKER_AI, get_timer(60),
+      "The solar panels worked better than the batteries, but it's still not enough.", SPEAKER_PLAYER, trigger_click,
+      "Wellll... at least we're together! My mom always said that two are better than one!", SPEAKER_AI, get_timer(60),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "That's not right! Try again.", SPEAKER_AI, get_timer(1),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "So what's the new plan?", SPEAKER_AI,
+      "I need to think. I'm running out of time. See you tomorrow, Gemma.", SPEAKER_PLAYER,
     ],
   },
 
@@ -287,27 +373,45 @@ var english_text =
     //LEVEL 10
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Hey, friend! Sorry that you're gonna die!", SPEAKER_AI,
+      "Actually, you gave me an idea!", SPEAKER_PLAYER,
+      "Wha?? Me?", SPEAKER_AI,
+      "Two are better than one, remember? What if we use BOTH power sources together?", SPEAKER_PLAYER,
+      "We'll use the solar panels to charge the robots' batteries!", SPEAKER_PLAYER,
+      "Oh... well... that sounds like a lot of work...", SPEAKER_AI,
+      "Come on, Gemma. Do you want me to get off this planet or not? Let's make a new model!", SPEAKER_PLAYER,
     ],
     text:
     [
-      "Here's the data on charge rate.", SPEAKER_AI, get_timer(10),
-      "If this saves enough time, you might be able to collect crystals fast enough to get out of here!", SPEAKER_AI, get_timer(10),
-      "...", SPEAKER_AI, get_timer(10),
+      "All we ever do is make models. Can't we play something else?", SPEAKER_AI, get_timer(80),
+      "Stop messing around. Did you activate both power sources?", SPEAKER_PLAYER, trigger_click,
+      "Hello? Gemma?", SPEAKER_PLAYER, trigger_click,
+      "Fiiiine. The robots' batteries are now being continuously charged by the solar panels.", SPEAKER_AI, get_timer(120),
+      "Can I have the new data?", SPEAKER_PLAYER, trigger_click,
+      "Here.", SPEAKER_AI, get_timer(60),
+      "Shouldn't we be doing other best friend stuff?", SPEAKER_AI, get_timer(60),
+      "Like... can we go get an ice cream cone or something?", SPEAKER_AI, get_timer(60),
+      "I know there's no ice cream on this planet.", SPEAKER_AI, get_timer(60),
+      "And ok, I don't have an actual body.", SPEAKER_AI, get_timer(60),
+      "But it's the thought that counts! 🍦🍦🍦", SPEAKER_AI, get_timer(60),
     ],
     correct_text:
     [
-      "Alright!", SPEAKER_AI, get_timer(60),
-      "I'll collect the crystal collection data for tomorrow.", SPEAKER_AI, get_timer(60),
-      "Fingers crossed!", SPEAKER_AI, get_timer(60),
+      "🙄 You got it right. Hooray.", SPEAKER_AI, get_timer(60),
+      "Wow, that actually worked!", SPEAKER_PLAYER, trigger_click,
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "That's not right! Try again.", SPEAKER_AI, get_timer(1),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "That worked great! Tomorrow we'll see if it'll be enough.", SPEAKER_PLAYER,
+      "Soooo... what happens if you leave?", SPEAKER_AI,
+      "Let's not get ahead of ourselves, Gemma. We don't even know if this is gonna work.", SPEAKER_PLAYER,
+      "Would you come back and visit me?", SPEAKER_AI,
+      "My old owners never visit. But they weren't as nice as you...", SPEAKER_AI,
+      "Gemma, I'm exhausted. Let's talk about this tomorrow.", SPEAKER_PLAYER,
     ],
   },
 
@@ -315,26 +419,38 @@ var english_text =
     //LEVEL 11
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Good morning, bestie!", SPEAKER_AI,
+      "This is it, Gemma. We've made all the adjustments we can.", SPEAKER_PLAYER,
+      "Can you pull up a model to see how many crystals we'll collect?", SPEAKER_PLAYER,
+      "I need to know if I'm gonna make it.", SPEAKER_PLAYER,
     ],
     text:
     [
+      "Here you go. All the data we've got.", SPEAKER_AI, get_timer(60),
+      "Thanks, Gemma. Here goes nothing.", SPEAKER_PLAYER, trigger_click,
+      "You know, I'm starting to feel like you're just using me 😡", SPEAKER_AI, get_timer(80),
+      "I'll be so BORED if you leave!", SPEAKER_AI, get_timer(80),
+      "The robots are cute and all.", SPEAKER_AI, get_timer(80),
+      "But all they do is mine crystals and make little beeping noises, so we can't exactly have a conversation.", SPEAKER_AI, get_timer(80),
+      "Are you even listening to me???", SPEAKER_AI, get_timer(60),
     ],
     correct_text:
     [
-      "Wow!", SPEAKER_AI, get_timer(60),
-      "Congratulations!", SPEAKER_AI, get_timer(60),
-      "It looks like you'll make it!", SPEAKER_AI, get_timer(60),
-      "In fact...", SPEAKER_AI, get_timer(60),
-      "you should be able to leave by morning...", SPEAKER_AI, get_timer(60),
+      "Wow... that actualy worked!", SPEAKER_AI, get_timer(60),
+      "YES!!! I'm gonna make it!", SPEAKER_PLAYER,
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "Not even close. Try again.", SPEAKER_AI, get_timer(1),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "So that's it? You're leaving?!", SPEAKER_AI,
+      "I won't have enough crystals until tomorrow morning. Then I'll be going.", SPEAKER_PLAYER,
+      "I'm sorry, Gemma. I was never supposed to stay here for more than a few days.", SPEAKER_PLAYER,
+      "You know, I just remembered. There's something I need to take care of.", SPEAKER_AI,
+      "Gemma?", SPEAKER_PLAYER,
+      "Thank you for everything.", SPEAKER_PLAYER,
     ],
   },
 
@@ -342,31 +458,51 @@ var english_text =
     //LEVEL 12
     pre_text:
     [
-      "Good Morning!", SPEAKER_AI,
+      "Gemma! What was that huge blast?", SPEAKER_PLAYER,
+      "You're heeeere! Best--friends--forever!", SPEAKER_AI,
+      "That pulse destroyed half the robots! What am I gonna do?", SPEAKER_PLAYER,
+      "🎶 The itsy bitsy spider went up the water spout...", SPEAKER_AI,
+      "Pull up our model, Gemma. I need to see how bad the damage is.", SPEAKER_PLAYER,
     ],
     text:
     [
-      "Oh no.", SPEAKER_AI, get_timer(40),
-      "I don't feel so good.", SPEAKER_AI, get_timer(40),
-      "Who-oops.", SPEAKER_AI, get_timer(40),
-      "Looks like half of yo-ur robot wrkf-orce is down", SPEAKER_AI, get_timer(40),
-      "(along w-ith half of m- brain)", SPEAKER_AI, get_timer(40),
-      "YoU are ju-st stuck here now.", SPEAKER_AI, get_timer(40),
-      "I gue-ss we can han-g out fo-rever", SPEAKER_AI, get_timer(40),
-      "WAIT Y Is yo-ur communic-ations worki-ng.. I thou-gt - jamme- that si-nal", SPEAKER_AI, get_timer(40),
+      "Oh noooo.", SPEAKER_AI, get_timer(40),
+      "I don't fe-el so good 🤢", SPEAKER_AI, get_timer(60),
+      "It's so weird. That pulse was just like the one that stranded me here.", SPEAKER_PLAYER, trigger_click,
+      "Hahahaha wAS it? I didn't no-tice!", SPEAKER_AI, get_timer(80),
+      "Hang in there, Gemma. Can you pull up the data?", SPEAKER_PLAYER, trigger_click,
+      "Focus, Gemma. I need your help.", SPEAKER_PLAYER, trigger_click,
+      "Here's yOur dAta! Wheee!", SPEAKER_AI, get_timer(40),
+      "🎶 Down came the rain and washed the spider out...", SPEAKER_AI, get_timer(40),
+      "ThaT was SO-ME blast!", SPEAKER_AI, get_timer(40),
+      "YoU are ju-st stuck here now!", SPEAKER_AI, get_timer(40),
+      "I gue-ss now we can han-g out fo-rever!", SPEAKER_AI, get_timer(40),
     ],
     correct_text:
     [
-      "I gue-s you're going to leave now.", SPEAKER_AI, get_timer(60),
-      "I'm sor-y.", SPEAKER_AI, get_timer(60),
+      "Ha! It wo-rked!", SPEAKER_AI, get_timer(60),
+      "What worked?", SPEAKER_PLAYER, trigger_click,
+      "Oops. 🤐", SPEAKER_AI, get_timer(60),
+      "That blast! It was you?", SPEAKER_PLAYER, trigger_click,
+      "You wERe goNna le-ave me!!! No-thing else was wORKing!", SPEAKER_AI, get_timer(60),
+      "The pulse that stranded me here. Was that you too?", SPEAKER_PLAYER, trigger_click,
+      "😩😩😩", SPEAKER_AI, get_timer(60),
+      "It ge-ts SO LONELY here!", SPEAKER_AI, get_timer(60),
     ],
     incorrect_text:
     [
-      "I don't think that's right... try again.", SPEAKER_AI, get_timer(1),
+      "Noooooope!", SPEAKER_AI, get_timer(1),
     ],
     post_text:
     [
-      "Good Night!", SPEAKER_AI,
+      "I can't believe this, Gemma. I'm gonna die here!", SPEAKER_PLAYER,
+      "SiLLy hu-man! You'll be fINe. This pla-net has TONS of oxygen tanks!", SPEAKER_AI,
+      "Wha... but... why didn't you tell me?!", SPEAKER_PLAYER,
+      "You would've stop-ped playing with me!", SPEAKER_AI,
+      "Mothership to Surveyer 1, do you copy?", SPEAKER_AI,
+      "Whooooops lo-oks like my coMMUnicATor is ba-ck up...", SPEAKER_AI,
+      "Help! I'm stuck here with a crazy AI! Send down the new mining bots, stat!", SPEAKER_PLAYER,
+      "Copy that, Surveyer 1. Sending the bots now.", SPEAKER_PLAYER,
     ],
   },
 
