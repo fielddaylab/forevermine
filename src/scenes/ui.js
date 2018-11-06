@@ -15,6 +15,14 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 0;
 
+  self.eye_img = GenIcon(100,100);
+  self.eye_img.context.fillStyle = red;
+  self.eye_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
+
+  self.mouth_img = GenIcon(100,100);
+  self.mouth_img.context.fillStyle = red;
+  self.mouth_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
+
   self.eyes_nx = 0;
   self.eyes_ny = 0;
   self.eyes_nw = 0;
@@ -96,15 +104,18 @@ var monitor = function()
     h = s.height*self.eyes_ph*self.eyes_nh;
     x = self.eyes_nx*s.width/2-w/2;
     y = s.height/2-h/2+self.eyes_ny*s.height/4;
-    c.fillRect(x,y,w,h); //left eye
+    //c.fillRect(x,y,w,h); //left eye
+    c.drawImage(self.eye_img,x,y,w,h);
     x = s.width/2+self.eyes_nx*s.width/2-w/2;
-    c.fillRect(x,y,w,h); //right eye
+    //c.fillRect(x,y,w,h); //right eye
+    c.drawImage(self.eye_img,x,y,w,h);
 
     w = s.width*(self.mouth_pw+self.mouth_nsw/2)*self.mouth_nw;
     h = s.height*self.mouth_ph*self.mouth_nh;
     x = s.width/4+self.mouth_nx*s.width/2-w/2;
     y = s.height/4*3-h/2+self.mouth_ny*s.height/4;
-    c.fillRect(x,y,w,h); //mouth
+    //c.fillRect(x,y,w,h); //mouth
+    c.drawImage(self.mouth_img,x,y,w,h);
   }
 }
 
@@ -168,6 +179,8 @@ var data_dragger = function()
     self.dragging_data = 0;
     self.dragging_sim = 0;
 
+    self.drag(evt);
+
     if(self.ptWithinData(evt)) { self.dragging_data = 1; return 1; }
     if(self.ptWithinSim(evt))  { self.dragging_sim = 1;  return 1; }
     self.dragging = 0;
@@ -191,6 +204,20 @@ var data_dragger = function()
     }
     self.dragging_data = 0;
     self.dragging_sim = 0;
+  }
+
+  self.draw = function()
+  {
+    if(self.dragging_data)
+    {
+      gg.ctx.fillStyle = red;
+      gg.ctx.fillRect(self.last_evt.doX,self.last_evt.doY,100,100);
+    }
+    if(self.dragging_sim)
+    {
+      gg.ctx.fillStyle = green;
+      gg.ctx.fillRect(self.last_evt.doX,self.last_evt.doY,100,100);
+    }
   }
 }
 

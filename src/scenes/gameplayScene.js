@@ -740,6 +740,7 @@ var GamePlayScene = function(game, stage)
     }
     gg.cur_level.draw();
     gg.message_box.draw();
+    gg.data_dragger.draw();
   }
 
   self.draw_night = function()
