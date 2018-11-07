@@ -649,6 +649,12 @@ var GamePlayScene = function(game, stage)
         else if(gg.mode_t < gg.fade_t+gg.zoom_t+gg.fade_t) //fade to feed
         {
           var t = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
+          gg.home_cam.wx = gg.lab.wx;
+          gg.home_cam.wy = gg.lab.wy;
+          gg.home_cam.ww = gg.lab.ww;
+          gg.home_cam.wh = gg.lab.wh;
+          screenSpace(gg.home_cam,gg.canv,gg.lab);
+          screenSpace(gg.home_cam,gg.canv,gg.monitor);
         }
         else self.set_mode(MODE_FEED);
       }
