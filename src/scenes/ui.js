@@ -13,7 +13,7 @@ var monitor = function()
   self.look_t = randIntBelow(1000);
   self.look_t_thresh = self.look_t+randIntBelow(500);
   self.blink_t = 0;
-  self.talk_t = 0;
+  self.talk_t = 99999;
 
   self.bg_color = "#D8EEF1";
 
@@ -264,7 +264,7 @@ var exposition_box = function()
     self.text.push(text);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.speakers.push(speaker);
-    if(self.text.length == 1) gg.monitor.talk_t = 0;
+    if(self.text.length == 1 && self.speakers[0] == SPEAKER_AI) gg.monitor.talk_t = 0;
   }
 
   self.nq_group = function(text)
@@ -276,7 +276,7 @@ var exposition_box = function()
   self.advance = function()
   {
     self.displayed_i++;
-    if(self.displayed_i < self.text.length) gg.monitor.talk_t = 0;
+    if(self.displayed_i < self.text.length && self.speakers[self.displayed_i] == SPEAKER_AI) gg.monitor.talk_t = 0;
   }
 
   self.click = function(evt)
@@ -1116,7 +1116,8 @@ var message_box = function()
     self.advance_t = 0;
     self.displayed_i++;
     self.calculate_top();
-    gg.monitor.talk_t = 0;
+    if(self.speakers[self.displayed_i-1] == SPEAKER_AI)
+      gg.monitor.talk_t = 0;
   }
 
   self.click = function(evt)
