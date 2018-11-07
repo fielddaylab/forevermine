@@ -43,7 +43,7 @@ var monitor = function()
   self.eyes_pw = 0.15;
   self.eyes_ph = 0.08;
   self.mouth_pw = 0.4;
-  self.mouth_ph = 0.15;
+  self.mouth_ph = 0.18;
 
   self.clicked = 0;
 
