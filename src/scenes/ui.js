@@ -45,6 +45,11 @@ var monitor = function()
   self.mouth_pw = 0.4;
   self.mouth_ph = 0.1;
 
+  self.eyes_hy = 0.5; //"home" y
+  self.eyes_vy = 0.25; //"variance" y
+  self.mouth_hy = 0.66; //"home" y
+  self.mouth_vy = 0.25; //"variance" y
+
   self.clicked = 0;
 
   self.init_screen = function()
@@ -108,7 +113,7 @@ var monitor = function()
     w = s.width*(self.eyes_pw+self.eyes_nsw/2)*self.eyes_nw;
     h = s.height*self.eyes_ph*self.eyes_nh;
     x = self.eyes_nx*s.width/2-w/2;
-    y = s.height*1/2-h/2+self.eyes_ny*s.height/4;
+    y = s.height*self.eyes_hy-h/2+self.eyes_ny*s.height*self.eyes_vy;
     //c.fillRect(x,y,w,h); //left eye
     c.drawImage(self.eye_img,x,y,w,h);
     x = s.width/2+self.eyes_nx*s.width/2-w/2;
@@ -118,7 +123,7 @@ var monitor = function()
     w = s.width*(self.mouth_pw+self.mouth_nsw/2)*self.mouth_nw;
     h = s.height*self.mouth_ph*self.mouth_nh;
     x = s.width/4+self.mouth_nx*s.width/2-w/2;
-    y = s.height*2/3-h/2+self.mouth_ny*s.height/4;
+    y = s.height*self.mouth_hy-h/2+self.mouth_ny*s.height*self.mouth_vy;
     //c.fillRect(x,y,w,h); //mouth
     c.drawImage(self.mouth_img,x,y,w,h);
   }
