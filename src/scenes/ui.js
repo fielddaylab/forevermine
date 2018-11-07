@@ -40,10 +40,10 @@ var monitor = function()
   self.mouth_nsw = 0;
   self.mouth_nsvw = 0;
 
-  self.eyes_pw = 0.1;
-  self.eyes_ph = 0.1;
+  self.eyes_pw = 0.15;
+  self.eyes_ph = 0.08;
   self.mouth_pw = 0.4;
-  self.mouth_ph = 0.1;
+  self.mouth_ph = 0.18;
 
   self.eyes_hy = 0.5; //"home" y
   self.eyes_vy = 0.25; //"variance" y
@@ -54,7 +54,7 @@ var monitor = function()
 
   self.init_screen = function()
   {
-    var d = 10;
+    var d = 5;
     self.screen = GenIcon(self.ww/d,self.wh/d);
     self.screen.context.imageSmoothingEnabled = 1;
     self.draw();
@@ -1644,6 +1644,3 @@ var module_board = function()
   }
 
 }
-
-
-
