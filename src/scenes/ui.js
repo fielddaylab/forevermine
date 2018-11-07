@@ -45,9 +45,9 @@ var monitor = function()
   self.mouth_pw = 0.4;
   self.mouth_ph = 0.18;
 
-  self.eyes_hy = 0.5; //"home" y
+  self.eyes_hy = 0.42; //"home" y
   self.eyes_vy = 0.25; //"variance" y
-  self.mouth_hy = 0.66; //"home" y
+  self.mouth_hy = 0.64; //"home" y
   self.mouth_vy = 0.25; //"variance" y
 
   self.clicked = 0;
