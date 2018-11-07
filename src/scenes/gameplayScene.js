@@ -15,10 +15,10 @@ var GamePlayScene = function(game, stage)
       var b;
       var graph_s = 200;
 
-      gg.monitor.ww = 530*0.8;
-      gg.monitor.wh = 440*0.8;
+      gg.monitor.ww = 422;
+      gg.monitor.wh = 320;
       gg.monitor.wx = 234;
-      gg.monitor.wy = -30;
+      gg.monitor.wy = -26;
       gg.monitor.init_screen();
 
       gg.lab.ww = gg.canv.width;
