@@ -237,7 +237,7 @@ var data_dragger = function()
           gg.ctx.fillRect(0,0,gg.message_box.w,gg.canv.height);
           gg.ctx.fillRect(gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height-gg.table.h);
           gg.ctx.fillStyle = white;
-          gg.ctx.fillText("<- DROP",gg.table.x+100,gg.table.y-100);
+          gg.ctx.fillText("\\/ DROP",gg.table.x+100,gg.table.y-20);
         }
       }
       if(gg.table.correct && !gg.cur_level.correct && !gg.timeline.fast_sim)
@@ -348,6 +348,11 @@ var exposition_box = function()
     gg.ctx.fillStyle = white;
     gg.ctx.textAlign = "left";
     gg.ctx.font = self.font;
+    switch(self.speakers[self.displayed_i])
+    {
+      case SPEAKER_AI: gg.ctx.fillText("GEMMA",self.x+self.pad,self.y+self.font_h/2); break;
+      case SPEAKER_PLAYER: gg.ctx.fillText("YOU",self.x+self.pad,self.y+self.font_h/2); break;
+    }
     var y = self.y+self.pad;
     for(var i = 0; i < self.bubbles[self.displayed_i].length; i++)
     {
