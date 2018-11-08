@@ -210,7 +210,6 @@ var GamePlayScene = function(game, stage)
       case MODE_CINEMATIC:
         break;
       case MODE_PREH:
-      case MODE_FEED:
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
         gg.home_cam.ww = gg.lab.ww;
@@ -237,6 +236,12 @@ var GamePlayScene = function(game, stage)
         gg.exposition_box.clear();
         break;
       case MODE_FEED:
+        gg.home_cam.wx = gg.lab.wx;
+        gg.home_cam.wy = gg.lab.wy;
+        gg.home_cam.ww = gg.lab.ww;
+        gg.home_cam.wh = gg.lab.wh;
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
       case MODE_FEED_TO_POSTH:
         gg.exposition_box.nq_group(gg.cur_level.post_text);
@@ -289,6 +294,8 @@ var GamePlayScene = function(game, stage)
     l.b = 3;
     l.correct_m = 2;
     l.correct_b = 1;
+    for(var j = 0; j < 10; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     gg.levels.push(l);
     i++;
 
@@ -660,9 +667,9 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_FEED:
-        if(gg.mode_t < gg.fade_t) //display night
+        if(gg.mode_t < gg.fade_t*gg.cur_level.feedback_imgs.length) //display feedback
         {
-          var t = gg.mode_t/gg.fade_t;
+          var t = gg.mode_t/gg.fade_t*gg.cur_level.feedback_imgs.length;
         }
         else self.set_mode(MODE_FEED_TO_POSTH);
         break;
@@ -731,7 +738,12 @@ var GamePlayScene = function(game, stage)
     strokeBox(gg.lab,gg.ctx);
     drawImageBox(gg.background_img,gg.lab,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 0;
-    drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+    if(gg.mode == MODE_FEED)
+    {
+      drawImageBox(gg.cur_level.feedback_imgs[floor((gg.mode_t*2/gg.fade_t)%gg.cur_level.feedback_imgs.length)],gg.monitor,gg.ctx);
+    }
+    else
+      drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 1;
     drawImageBox(gg.console_img,gg.lab,gg.ctx);
     //strokeBox(gg.monitor,gg.ctx);
