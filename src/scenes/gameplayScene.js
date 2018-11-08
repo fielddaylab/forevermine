@@ -231,6 +231,7 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.monitor.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        gg.timeline.fast_sim = 1;
         break;
       case MODE_WORK_TO_FEED:
         gg.exposition_box.clear();

@@ -191,8 +191,8 @@ var data_dragger = function()
 
     self.drag(evt);
 
-    if(self.ptWithinData(evt)) { self.dragging_data = 1; return 1; }
-    if(self.ptWithinSim(evt))  { self.dragging_sim = 1;  return 1; }
+    if(!gg.table.data_visible && self.ptWithinData(evt)) { self.dragging_data = 1; return 1; }
+    if(gg.table.data_visible && self.ptWithinSim(evt))   { self.dragging_sim = 1;  return 1; }
     self.dragging = 0;
     return 0;
   }
@@ -218,6 +218,47 @@ var data_dragger = function()
 
   self.draw = function()
   {
+    if(gg.cur_level.i == 0)
+    {
+      if(!gg.table.data_visible && gg.message_box.displayed_i > 0 && gg.message_box.speakers[gg.message_box.displayed_i-1] == SPEAKER_DATA)
+      {
+        if(!self.dragging_data)
+        {
+          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.message_box.data_y-10);
+          gg.ctx.fillRect(gg.message_box.w,gg.message_box.data_y-10,gg.canv.width-gg.message_box.w,50);
+          gg.ctx.fillRect(0,gg.message_box.data_y+40,gg.canv.width,gg.canv.height-gg.message_box.data_y-40);
+          gg.ctx.fillStyle = white;
+          gg.ctx.fillText("<- DRAG",gg.message_box.x+gg.message_box.w,gg.message_box.data_y+20);
+        }
+        else
+        {
+          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
+          gg.ctx.fillRect(0,0,gg.message_box.w,gg.canv.height);
+          gg.ctx.fillRect(gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height-gg.table.h);
+          gg.ctx.fillStyle = white;
+          gg.ctx.fillText("<- DROP",gg.table.x+100,gg.table.y-100);
+        }
+      }
+      if(gg.table.correct && !gg.cur_level.correct && !gg.timeline.fast_sim)
+      {
+        if(!self.dragging_sim)
+        {
+          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.table.y);
+          gg.ctx.fillRect(0,gg.table.y,gg.canv.width-100,gg.table.h);
+          gg.ctx.fillStyle = white;
+          gg.ctx.fillText("DRAG ->",gg.canv.width-200,gg.table.y);
+        }
+        else
+        {
+          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
+          gg.ctx.fillRect(gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height);
+          gg.ctx.fillStyle = white;
+          gg.ctx.fillText("<- DROP",gg.message_box.w+10,gg.canv.height/2);
+        }
+      }
+    }
     if(self.dragging_data)
     {
       gg.ctx.fillStyle = red;
@@ -1030,6 +1071,7 @@ var message_box = function()
   self.max_top_y = 0;
   self.target_top_y = 0;
   self.bottom_y = 0;
+  self.data_y = 0;
 
   self.advance_t = self.thinking_buff-1;
   self.thinking_buff = 50;
@@ -1223,6 +1265,7 @@ var message_box = function()
         gg.ctx.fillStyle = light_red;
         gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
+        self.data_y = y;
       }
       gg.ctx.fillStyle = black;
       y += self.pad;
