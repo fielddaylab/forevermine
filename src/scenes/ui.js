@@ -698,7 +698,7 @@ var editable_quadratic = function()
 
   self.v = function(x)
   {
-    return self.a*x*self.b*x+self.b*x+self.c;
+    return (self.a*x+self.b)*x+self.c;
   }
 
   self.calculate_table = function()
@@ -707,7 +707,7 @@ var editable_quadratic = function()
     for(var i = 0; i < gg.table.n; i++)
     {
       gg.table.t_data[i] = i;
-      if(i < 3) gg.table.known_data[i] = fdisp(self.correct_a*i*self.correct_b*i + self.correct_b*i + self.correct_c,1);
+      if(i < 3) gg.table.known_data[i] = fdisp((self.correct_a*i+self.correct_b)*i + self.correct_c,1);
       else      gg.table.known_data[i] = "-";
       gg.table.predicted_data[i] = fdisp(self.v(i),1);
     }
