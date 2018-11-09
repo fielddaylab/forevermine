@@ -115,10 +115,11 @@ var LoadingScene = function(game, stage)
     loadingImageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put asset paths in img_srcs
-    img_srcs.push("assets/accessory_heart.png");
-    img_srcs.push("assets/accessory_nervous.png");
+    img_srcs.push("assets/alert.png");
     img_srcs.push("assets/background.jpg");
     img_srcs.push("assets/console.png");
+    img_srcs.push("assets/accessory_heart.png");
+    img_srcs.push("assets/accessory_nervous.png");
     img_srcs.push("assets/eye.png");
     img_srcs.push("assets/mouth.png");
     for(var i = 0; i < 10; i++)

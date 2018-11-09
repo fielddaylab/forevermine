@@ -1287,7 +1287,7 @@ var message_box = function()
         if(!gg.data_dragger.dragging_data && !gg.table.data_visible)
         {
           var s = 20;
-          gg.ctx.drawImage(gg.notice_img,self.x+self.pad-s/2,y-s/2,s,s);
+          gg.ctx.drawImage(gg.notice_img,self.x+self.pad+self.bubble_w-s/2,y-s/2,s,s);
         }
         self.data_y = y;
       }
@@ -1318,15 +1318,16 @@ var message_box = function()
     {
       gg.ctx.fillStyle = light_gray;
       gg.ctx.fillRect(self.input_x,self.input_y,self.input_w,self.input_h);
+      gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
     }
     else //needs input
     {
       if(floor(self.advance_t/20)%2)
         drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
+      gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
       var s = 20;
       gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s/2,self.input_y-s/2,s,s);
     }
-    gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
 
     //"ai typing"
     if(self.prompt_ai_typing)

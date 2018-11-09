@@ -276,9 +276,7 @@ var GamePlayScene = function(game, stage)
     gg.console_img = GenImg("assets/console.png");
     gg.dark_console_img = GenImg("assets/console.png");
     gg.background_img = GenImg("assets/background.jpg");
-    gg.notice_img = GenIcon(100,100);
-    gg.notice_img.context.fillStyle = red;
-    gg.notice_img.context.fillRect(0,0,100,100);
+    gg.notice_img = GenImg("assets/alert.png");
 
     gg.data_dragger = new data_dragger();
     gg.exposition_box = new exposition_box();
