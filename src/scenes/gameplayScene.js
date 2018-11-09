@@ -296,8 +296,8 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.type = LEVEL_LINEAR;
-    l.m = 3;
-    l.b = 3;
+    l.m = 0;
+    l.b = 0;
     l.correct_m = 2;
     l.correct_b = 1;
     for(var j = 0; j < 10; j++)
@@ -310,24 +310,22 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.type = LEVEL_QUADRATIC;
     l.a = 0;
-    l.b = 0;
-    l.c = 0;
-    l.correct_a = 0.1;
-    l.correct_b = 0.2;
-    l.correct_c = 3;
+    l.b = 3;
+    l.c = 4;
+    l.correct_a = 0.2;
+    l.correct_b = 3;
+    l.correct_c = 4;
     gg.levels.push(l);
     i++;
 
     //quadratic 2
     l = new level();
     l.i = i;
-    l.type = LEVEL_QUADRATIC;
-    l.a = 0;
-    l.b = 0;
-    l.c = 0;
-    l.correct_a = -0.1;
-    l.correct_b = 0.2;
-    l.correct_c = 3;
+    l.type = LEVEL_LINEAR;
+    l.m = 4;
+    l.b = 5;
+    l.correct_m = 3;
+    l.correct_b = 5;
     gg.levels.push(l);
     i++;
 
@@ -576,7 +574,7 @@ var GamePlayScene = function(game, stage)
     {
       case MODE_MENU:
         clicker.filter(gg.monitor);
-        if(gg.monitor.clicked)
+        //if(gg.monitor.clicked)
           self.set_mode(MODE_CINEMATIC);
         break;
       case MODE_CINEMATIC:
@@ -803,15 +801,17 @@ var GamePlayScene = function(game, stage)
       {
         self.draw_home();
         drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+        var s = 40;
+        gg.ctx.drawImage(gg.notice_img,gg.monitor.x+gg.monitor.w-s/2,gg.monitor.y-s/2,s,s);
       }
         break;
       case MODE_BOOT:
       {
         self.draw_home();
         var t = gg.mode_t/gg.fade_t;
-        gg.globalAlpha = 1-t;
+        gg.ctx.globalAlpha = 1-t;
         drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
-        gg.globalAlpha = 1;
+        gg.ctx.globalAlpha = 1;
       }
         break;
       case MODE_PREH:

@@ -15,7 +15,7 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 99999;
 
-  self.bg_color = "#D8EEF1";
+  self.bg_color = "#F0F9EC";
 
   self.eye_img = GenIcon(100,100);
   self.eye_img.context.fillStyle = red;
