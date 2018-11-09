@@ -770,8 +770,8 @@ var GamePlayScene = function(game, stage)
     gg.ctx.fillStyle = "#7A92AB";
     gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
     gg.ctx.strokeStyle = black;
-    gg.timeline.draw();
     gg.table.draw();
+    gg.timeline.draw();
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:    gg.line.draw();         break;

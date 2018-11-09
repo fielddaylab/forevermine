@@ -431,10 +431,11 @@ var timeline = function()
 
   self.draw = function()
   {
-    strokeBox(self,gg.ctx);
     strokeBox(self.advance_btn,gg.ctx);
 
     var t_x;
+
+/*
     gg.ctx.strokeStyle = gray;
     gg.ctx.beginPath();
     for(var i = 1; i < self.t_max; i++)
@@ -444,10 +445,14 @@ var timeline = function()
       gg.ctx.lineTo(t_x,self.y+self.h);
     }
     gg.ctx.stroke();
+*/
 
     gg.ctx.strokeStyle = black;
     t_x = mapVal(0,self.t_max,self.x,self.x+self.w,self.t);
-    drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
+    gg.ctx.fillStyle = white;
+    var s = self.h;
+    gg.ctx.fillRect(t_x-s/2,self.y,s,s);
+    //drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
 
     if(self.t < self.t_target)
     {
@@ -969,6 +974,11 @@ var table = function()
   self.font_h = 20;
   self.font = self.font_h+"px Helvetica";
 
+  self.bg_color = "#F0F9EC";
+  self.predicted_color = "#94DEE8";
+  self.known_color = "#5CC8D9";
+  self.text_color = "#4D514B";
+
   self.n = gg.timeline.t_max+1;
   self.t_data = [];
   self.known_data = [];
@@ -1003,6 +1013,8 @@ var table = function()
   self.draw = function()
   {
     gg.ctx.lineWidth = 0.5;
+    gg.ctx.fillStyle = self.bg_color;
+    fillBox(self,gg.ctx);
 
     var y0 = self.y;
     var y1 = self.y+self.h/3;
@@ -1016,6 +1028,12 @@ var table = function()
     var x = self.x;
     var w = self.w/(self.n+1);
 
+    gg.ctx.fillStyle = self.known_color;
+    gg.ctx.fillRect(x,y1,self.w,y2-y1);
+    gg.ctx.fillStyle = self.predicted_color;
+    gg.ctx.fillRect(x,y2,self.w,y3-y2);
+
+    gg.ctx.fillStyle = self.text_color;
     gg.ctx.font = "12px Helvetica";
     gg.ctx.textAlign = "left";
     x = self.x+w;
