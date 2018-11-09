@@ -635,6 +635,7 @@ var editable_line = function()
     gg.ctx.strokeStyle = black;
     gg.ctx.fillStyle = black;
 
+    //graph
     strokeBox(self.graph,gg.ctx);
     if(gg.timeline.t < gg.timeline.t_max)
     {
@@ -656,11 +657,21 @@ var editable_line = function()
     var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
     drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
+    //eqn
+    gg.ctx.fillStyle = white;
+    fillBox(self.m_btn,gg.ctx);
+    fillBox(self.minc_btn,gg.ctx);
+    fillBox(self.mdec_btn,gg.ctx);
+    fillBox(self.b_btn,gg.ctx);
+    fillBox(self.binc_btn,gg.ctx);
+    fillBox(self.bdec_btn,gg.ctx);
+
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
     gg.ctx.fillText("y = ",self.yeq_x,self.eqn_y+self.eqn_h);
     gg.ctx.fillText("x + ",self.xp_x,self.eqn_y+self.eqn_h);
     gg.ctx.textAlign = "right";
+    gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.m,self.m_btn.x+self.m_btn.w,self.eqn_y+self.eqn_h);
     gg.ctx.fillText(self.b,self.b_btn.x+self.b_btn.w,self.eqn_y+self.eqn_h);
     gg.ctx.textAlign = "left";
@@ -668,13 +679,6 @@ var editable_line = function()
     gg.ctx.fillStyle = light_gray;
     gg.ctx.fillText("x = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
     gg.ctx.fillText("y = "+fdisp(self.m*fdisp(gg.timeline.t,1)+self.b,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
-
-    strokeBox(self.m_btn,gg.ctx);
-    strokeBox(self.minc_btn,gg.ctx);
-    strokeBox(self.mdec_btn,gg.ctx);
-    strokeBox(self.b_btn,gg.ctx);
-    strokeBox(self.binc_btn,gg.ctx);
-    strokeBox(self.bdec_btn,gg.ctx);
 
     if(gg.table.data_visible)
     {
@@ -887,6 +891,7 @@ var editable_quadratic = function()
     gg.ctx.strokeStyle = black;
     gg.ctx.fillStyle = black;
 
+    //graph
     strokeBox(self.graph,gg.ctx);
     var t = gg.timeline.t/gg.timeline.t_max;
     var tn = self.samples*t;
@@ -907,12 +912,25 @@ var editable_quadratic = function()
     var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
     drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
+    //eqn
+    gg.ctx.fillStyle = white;
+    fillBox(self.a_btn,gg.ctx);
+    fillBox(self.ainc_btn,gg.ctx);
+    fillBox(self.adec_btn,gg.ctx);
+    fillBox(self.b_btn,gg.ctx);
+    fillBox(self.binc_btn,gg.ctx);
+    fillBox(self.bdec_btn,gg.ctx);
+    fillBox(self.c_btn,gg.ctx);
+    fillBox(self.cinc_btn,gg.ctx);
+    fillBox(self.cdec_btn,gg.ctx);
+
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
     gg.ctx.fillText("y = (",self.yeq_x,self.eqn_y+self.eqn_h);
     gg.ctx.fillText("x + ",self.xt_x,self.eqn_y+self.eqn_h);
     gg.ctx.fillText(")x + ",self.xp_x,self.eqn_y+self.eqn_h);
     gg.ctx.textAlign = "right";
+    gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.a,self.a_btn.x+self.a_btn.w,self.eqn_y+self.eqn_h);
     gg.ctx.fillText(self.b,self.b_btn.x+self.b_btn.w,self.eqn_y+self.eqn_h);
     gg.ctx.fillText(self.c,self.c_btn.x+self.c_btn.w,self.eqn_y+self.eqn_h);
@@ -921,16 +939,6 @@ var editable_quadratic = function()
     gg.ctx.fillStyle = light_gray;
     gg.ctx.fillText("x = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
     gg.ctx.fillText("y = "+fdisp(self.v(gg.timeline.t),2),self.yeq_x,self.eqn_y+self.eqn_h*4);
-
-    strokeBox(self.a_btn,gg.ctx);
-    strokeBox(self.ainc_btn,gg.ctx);
-    strokeBox(self.adec_btn,gg.ctx);
-    strokeBox(self.b_btn,gg.ctx);
-    strokeBox(self.binc_btn,gg.ctx);
-    strokeBox(self.bdec_btn,gg.ctx);
-    strokeBox(self.c_btn,gg.ctx);
-    strokeBox(self.cinc_btn,gg.ctx);
-    strokeBox(self.cdec_btn,gg.ctx);
 
     if(gg.table.data_visible)
     {
@@ -1082,6 +1090,11 @@ var message_box = function()
   self.font_h = 15;
   self.font = self.font_h+"px Helvetica";
 
+  self.bg_color = "#F0F9EC";
+  self.ai_text_color = "#4D514C";
+  self.you_text_color = "#FEFFFF";
+  self.data_text_color = "#FF6666";
+
   self.top_y = 0;
   self.max_top_y = 0;
   self.target_top_y = 0;
@@ -1112,9 +1125,9 @@ var message_box = function()
     self.text_w = self.bubble_w-self.pad*2;
     self.bottom_y = self.y+self.h-(self.font_h+self.pad*3);
 
-    self.monitor_x = self.x+self.pad;
-    self.monitor_y = self.y+self.pad;
-    self.monitor_w = self.w-self.pad*2;
+    self.monitor_x = self.x;
+    self.monitor_y = self.y;
+    self.monitor_w = self.w;
     self.monitor_h = self.monitor_w;
 
     self.input_x = self.x+self.pad;
@@ -1260,6 +1273,8 @@ var message_box = function()
 
   self.draw = function()
   {
+    gg.ctx.fillStyle = self.bg_color;
+    gg.ctx.fillRect(self.x,self.y,self.w,self.h);
     gg.ctx.lineWidth = 1;
     gg.ctx.fillStyle = black;
     gg.ctx.textAlign = "left";
@@ -1269,19 +1284,19 @@ var message_box = function()
     {
       if(self.speakers[i] == SPEAKER_PLAYER)
       {
-        gg.ctx.fillStyle = light_green;
+        gg.ctx.fillStyle = self.you_text_color;
         gg.ctx.fillRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
         gg.ctx.strokeRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
       }
       else if(self.speakers[i] == SPEAKER_AI)
       {
-        gg.ctx.fillStyle = light_blue;
+        gg.ctx.fillStyle = self.ai_text_color;
         gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
       }
       else if(self.speakers[i] == SPEAKER_DATA)
       {
-        gg.ctx.fillStyle = light_red;
+        gg.ctx.fillStyle = self.data_text_color;
         gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
         if(!gg.data_dragger.dragging_data && !gg.table.data_visible)
@@ -1297,21 +1312,19 @@ var message_box = function()
       {
         for(var j = 0; j < self.bubbles[i].length; j++)
         {
-          if(self.speakers[i] == SPEAKER_PLAYER) { gg.ctx.textAlign = "right"; gg.ctx.fillText(self.bubbles[i][j],self.x+self.w-self.pad*2,y+self.font_h); }
-          else                                   { gg.ctx.textAlign = "left";  gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,       y+self.font_h); }
+          if(self.speakers[i] == SPEAKER_PLAYER) { gg.ctx.textAlign = "right"; gg.ctx.fillStyle = self.ai_text_color; gg.ctx.fillText(self.bubbles[i][j],self.x+self.w-self.pad*2,y+self.font_h); }
+          else                                   { gg.ctx.textAlign = "left";  gg.ctx.fillStyle = self.you_text_color; gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,       y+self.font_h); }
           y += self.font_h+self.pad;
         }
       }
       else
       {
-        gg.ctx.textAlign = "left"; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+        gg.ctx.textAlign = "left"; gg.ctx.fillStyle = self.ai_text_color; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
         y += self.font_h+self.pad;
       }
       y += self.pad;
     }
     gg.ctx.textAlign = "left";
-
-    strokeBox(self,gg.ctx);
 
     //"input" box
     if(!self.prompt_player_input)
@@ -1342,9 +1355,6 @@ var message_box = function()
 
     //ai
     var s = self.w-self.pad*2;
-    gg.ctx.fillStyle = white;
-    gg.ctx.fillRect(self.x,self.y,self.w,self.w);
-    gg.ctx.strokeRect(self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h);
     gg.ctx.imageSmoothingEnabled = 0;
     gg.ctx.drawImage(gg.monitor.screen,(gg.monitor.screen.width-gg.monitor.screen.height)/2,0,gg.monitor.screen.height,gg.monitor.screen.height,self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h);
     gg.ctx.imageSmoothingEnabled = 1;
