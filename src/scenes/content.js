@@ -66,6 +66,8 @@ var level = function()
   self.incorrect_text = [ "I don't think that's right... try again.", trigger_timer];
   self.post_text = [];
 
+  self.feedback_imgs = [];
+
   self.correct = 0;
   self.submit = function(correct)
   {

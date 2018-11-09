@@ -13,12 +13,12 @@ var GamePlayScene = function(game, stage)
     if(self.was_ready)
     {
       var b;
-      var graph_s = 100;
+      var graph_s = 200;
 
-      gg.monitor.ww = 530;
-      gg.monitor.wh = 440;
-      gg.monitor.wx = gg.monitor.ww/3;
-      gg.monitor.wy = 0;
+      gg.monitor.ww = 422;
+      gg.monitor.wh = 320;
+      gg.monitor.wx = 234;
+      gg.monitor.wy = -26;
       gg.monitor.init_screen();
 
       gg.lab.ww = gg.canv.width;
@@ -53,6 +53,8 @@ var GamePlayScene = function(game, stage)
       b.graph.h = graph_s;
       b.graph.x = gg.canv.width-b.graph.w-10;
       b.graph.y = 10;
+      b.v_min = 0;
+      b.v_max = 10;
       //acts as module cam
       b.ww = gg.canv.width;
       b.wh = gg.canv.height;
@@ -81,8 +83,6 @@ var GamePlayScene = function(game, stage)
       b.graph.y = 10;
       b.v_min = 0;
       b.v_max = 10;
-      b.h_min = 0;
-      b.h_max = 10;
       b.size();
 
       b = gg.quadratic;
@@ -96,8 +96,6 @@ var GamePlayScene = function(game, stage)
       b.graph.y = 10;
       b.v_min = 0;
       b.v_max = 10;
-      b.h_min = 0;
-      b.h_max = 10;
       b.size();
 
 
@@ -212,7 +210,6 @@ var GamePlayScene = function(game, stage)
       case MODE_CINEMATIC:
         break;
       case MODE_PREH:
-      case MODE_FEED:
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
         gg.home_cam.ww = gg.lab.ww;
@@ -234,11 +231,18 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.monitor.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        gg.timeline.fast_sim = 1;
         break;
       case MODE_WORK_TO_FEED:
         gg.exposition_box.clear();
         break;
       case MODE_FEED:
+        gg.home_cam.wx = gg.lab.wx;
+        gg.home_cam.wy = gg.lab.wy;
+        gg.home_cam.ww = gg.lab.ww;
+        gg.home_cam.wh = gg.lab.wh;
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
       case MODE_FEED_TO_POSTH:
         gg.exposition_box.nq_group(gg.cur_level.post_text);
@@ -266,6 +270,9 @@ var GamePlayScene = function(game, stage)
     gg.fade_t = 20;
     gg.zoom_t = 50;
 
+    gg.console_img = GenImg("assets/console.png");
+    gg.background_img = GenImg("assets/background.jpg");
+
     gg.data_dragger = new data_dragger();
     gg.exposition_box = new exposition_box();
     gg.message_box = new message_box();
@@ -288,6 +295,8 @@ var GamePlayScene = function(game, stage)
     l.b = 3;
     l.correct_m = 2;
     l.correct_b = 1;
+    for(var j = 0; j < 10; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     gg.levels.push(l);
     i++;
 
@@ -648,14 +657,20 @@ var GamePlayScene = function(game, stage)
         else if(gg.mode_t < gg.fade_t+gg.zoom_t+gg.fade_t) //fade to feed
         {
           var t = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
+          gg.home_cam.wx = gg.lab.wx;
+          gg.home_cam.wy = gg.lab.wy;
+          gg.home_cam.ww = gg.lab.ww;
+          gg.home_cam.wh = gg.lab.wh;
+          screenSpace(gg.home_cam,gg.canv,gg.lab);
+          screenSpace(gg.home_cam,gg.canv,gg.monitor);
         }
         else self.set_mode(MODE_FEED);
       }
         break;
       case MODE_FEED:
-        if(gg.mode_t < gg.fade_t) //display night
+        if(gg.mode_t < gg.fade_t*gg.cur_level.feedback_imgs.length) //display feedback
         {
-          var t = gg.mode_t/gg.fade_t;
+          var t = gg.mode_t/gg.fade_t*gg.cur_level.feedback_imgs.length;
         }
         else self.set_mode(MODE_FEED_TO_POSTH);
         break;
@@ -722,10 +737,17 @@ var GamePlayScene = function(game, stage)
   self.draw_home = function()
   {
     strokeBox(gg.lab,gg.ctx);
-    strokeBox(gg.monitor,gg.ctx);
+    drawImageBox(gg.background_img,gg.lab,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 0;
-    drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+    if(gg.mode == MODE_FEED)
+    {
+      drawImageBox(gg.cur_level.feedback_imgs[floor((gg.mode_t*2/gg.fade_t)%gg.cur_level.feedback_imgs.length)],gg.monitor,gg.ctx);
+    }
+    else
+      drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 1;
+    drawImageBox(gg.console_img,gg.lab,gg.ctx);
+    //strokeBox(gg.monitor,gg.ctx);
     gg.exposition_box.draw();
   }
 
@@ -742,6 +764,7 @@ var GamePlayScene = function(game, stage)
     }
     gg.cur_level.draw();
     gg.message_box.draw();
+    gg.data_dragger.draw();
   }
 
   self.draw_night = function()
@@ -836,8 +859,8 @@ var GamePlayScene = function(game, stage)
         else
         {
           self.draw_night();
-          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
         break;
@@ -855,8 +878,8 @@ var GamePlayScene = function(game, stage)
         else
         {
           self.draw_home();
-          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
         break;

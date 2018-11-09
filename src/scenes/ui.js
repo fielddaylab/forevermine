@@ -13,7 +13,19 @@ var monitor = function()
   self.look_t = randIntBelow(1000);
   self.look_t_thresh = self.look_t+randIntBelow(500);
   self.blink_t = 0;
-  self.talk_t = 0;
+  self.talk_t = 99999;
+
+  self.bg_color = "#D8EEF1";
+
+  self.eye_img = GenIcon(100,100);
+  self.eye_img.context.fillStyle = red;
+  self.eye_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
+  self.eye_img = GenImg("assets/eye.png");
+
+  self.mouth_img = GenIcon(100,100);
+  self.mouth_img.context.fillStyle = red;
+  self.mouth_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
+  self.mouth_img = GenImg("assets/mouth.png");
 
   self.eyes_nx = 0;
   self.eyes_ny = 0;
@@ -28,17 +40,23 @@ var monitor = function()
   self.mouth_nsw = 0;
   self.mouth_nsvw = 0;
 
-  self.eyes_pw = 0.1;
-  self.eyes_ph = 0.1;
+  self.eyes_pw = 0.15;
+  self.eyes_ph = 0.08;
   self.mouth_pw = 0.4;
-  self.mouth_ph = 0.1;
+  self.mouth_ph = 0.18;
+
+  self.eyes_hy = 0.42; //"home" y
+  self.eyes_vy = 0.25; //"variance" y
+  self.mouth_hy = 0.64; //"home" y
+  self.mouth_vy = 0.25; //"variance" y
 
   self.clicked = 0;
 
   self.init_screen = function()
   {
-    var d = 10;
+    var d = 5;
     self.screen = GenIcon(self.ww/d,self.wh/d);
+    self.screen.context.imageSmoothingEnabled = 1;
     self.draw();
   }
 
@@ -84,7 +102,7 @@ var monitor = function()
     var s = self.screen;
     var c = s.context;
 
-    c.fillStyle = white;
+    c.fillStyle = self.bg_color;
     c.fillRect(0,0,s.width,s.height);
 
     c.fillStyle = blue;
@@ -95,16 +113,19 @@ var monitor = function()
     w = s.width*(self.eyes_pw+self.eyes_nsw/2)*self.eyes_nw;
     h = s.height*self.eyes_ph*self.eyes_nh;
     x = self.eyes_nx*s.width/2-w/2;
-    y = s.height/2-h/2+self.eyes_ny*s.height/4;
-    c.fillRect(x,y,w,h); //left eye
+    y = s.height*self.eyes_hy-h/2+self.eyes_ny*s.height*self.eyes_vy;
+    //c.fillRect(x,y,w,h); //left eye
+    c.drawImage(self.eye_img,x,y,w,h);
     x = s.width/2+self.eyes_nx*s.width/2-w/2;
-    c.fillRect(x,y,w,h); //right eye
+    //c.fillRect(x,y,w,h); //right eye
+    c.drawImage(self.eye_img,x,y,w,h);
 
     w = s.width*(self.mouth_pw+self.mouth_nsw/2)*self.mouth_nw;
     h = s.height*self.mouth_ph*self.mouth_nh;
     x = s.width/4+self.mouth_nx*s.width/2-w/2;
-    y = s.height/4*3-h/2+self.mouth_ny*s.height/4;
-    c.fillRect(x,y,w,h); //mouth
+    y = s.height*self.mouth_hy-h/2+self.mouth_ny*s.height*self.mouth_vy;
+    //c.fillRect(x,y,w,h); //mouth
+    c.drawImage(self.mouth_img,x,y,w,h);
   }
 }
 
@@ -168,8 +189,10 @@ var data_dragger = function()
     self.dragging_data = 0;
     self.dragging_sim = 0;
 
-    if(self.ptWithinData(evt)) { self.dragging_data = 1; return 1; }
-    if(self.ptWithinSim(evt))  { self.dragging_sim = 1;  return 1; }
+    self.drag(evt);
+
+    if(!gg.table.data_visible && self.ptWithinData(evt)) { self.dragging_data = 1; return 1; }
+    if(gg.table.data_visible && self.ptWithinSim(evt))   { self.dragging_sim = 1;  return 1; }
     self.dragging = 0;
     return 0;
   }
@@ -183,6 +206,7 @@ var data_dragger = function()
     if(self.dragging_data && self.ptWithinTable(evt))
     {
       gg.table.data_visible = 1;
+      gg.table.verify();
     }
     if(self.dragging_sim && self.ptWithinChat(evt))
     {
@@ -190,6 +214,61 @@ var data_dragger = function()
     }
     self.dragging_data = 0;
     self.dragging_sim = 0;
+  }
+
+  self.draw = function()
+  {
+    if(gg.cur_level.i == 0)
+    {
+      if(!gg.table.data_visible && gg.message_box.displayed_i > 0 && gg.message_box.speakers[gg.message_box.displayed_i-1] == SPEAKER_DATA)
+      {
+        if(!self.dragging_data)
+        {
+          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.message_box.data_y-10);
+          gg.ctx.fillRect(gg.message_box.w,gg.message_box.data_y-10,gg.canv.width-gg.message_box.w,50);
+          gg.ctx.fillRect(0,gg.message_box.data_y+40,gg.canv.width,gg.canv.height-gg.message_box.data_y-40);
+          gg.ctx.fillStyle = white;
+          gg.ctx.fillText("<- DRAG",gg.message_box.x+gg.message_box.w,gg.message_box.data_y+20);
+        }
+        else
+        {
+          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
+          gg.ctx.fillRect(0,0,gg.message_box.w,gg.canv.height);
+          gg.ctx.fillRect(gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height-gg.table.h);
+          gg.ctx.fillStyle = white;
+          gg.ctx.fillText("\\/ DROP",gg.table.x+100,gg.table.y-20);
+        }
+      }
+      if(gg.table.correct && !gg.cur_level.correct && !gg.timeline.fast_sim)
+      {
+        if(!self.dragging_sim)
+        {
+          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.table.y);
+          gg.ctx.fillRect(0,gg.table.y,gg.canv.width-100,gg.table.h);
+          gg.ctx.fillStyle = white;
+          gg.ctx.fillText("DRAG ->",gg.canv.width-200,gg.table.y);
+        }
+        else
+        {
+          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
+          gg.ctx.fillRect(gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height);
+          gg.ctx.fillStyle = white;
+          gg.ctx.fillText("<- DROP",gg.message_box.w+10,gg.canv.height/2);
+        }
+      }
+    }
+    if(self.dragging_data)
+    {
+      gg.ctx.fillStyle = red;
+      gg.ctx.fillRect(self.last_evt.doX,self.last_evt.doY,100,100);
+    }
+    if(self.dragging_sim)
+    {
+      gg.ctx.fillStyle = green;
+      gg.ctx.fillRect(self.last_evt.doX,self.last_evt.doY,100,100);
+    }
   }
 }
 
@@ -231,7 +310,7 @@ var exposition_box = function()
     self.text.push(text);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.speakers.push(speaker);
-    if(self.text.length == 1) gg.monitor.talk_t = 0;
+    if(self.text.length == 1 && self.speakers[0] == SPEAKER_AI) gg.monitor.talk_t = 0;
   }
 
   self.nq_group = function(text)
@@ -243,7 +322,7 @@ var exposition_box = function()
   self.advance = function()
   {
     self.displayed_i++;
-    if(self.displayed_i < self.text.length) gg.monitor.talk_t = 0;
+    if(self.displayed_i < self.text.length && self.speakers[self.displayed_i] == SPEAKER_AI) gg.monitor.talk_t = 0;
   }
 
   self.click = function(evt)
@@ -261,10 +340,19 @@ var exposition_box = function()
 
     gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
-
     gg.ctx.fillStyle = black;
+    gg.ctx.globalAlpha = 0.5;
+    fillBox(self,gg.ctx);
+    gg.ctx.globalAlpha = 1;
+
+    gg.ctx.fillStyle = white;
     gg.ctx.textAlign = "left";
     gg.ctx.font = self.font;
+    switch(self.speakers[self.displayed_i])
+    {
+      case SPEAKER_AI: gg.ctx.fillText("GEMMA",self.x+self.pad,self.y+self.font_h/2); break;
+      case SPEAKER_PLAYER: gg.ctx.fillText("YOU",self.x+self.pad,self.y+self.font_h/2); break;
+    }
     var y = self.y+self.pad;
     for(var i = 0; i < self.bubbles[self.displayed_i].length; i++)
     {
@@ -333,6 +421,7 @@ var timeline = function()
     if(self.t >= self.t_max)
     {
       self.fast_sim = 0;
+      self.t_target = self.t_max;
       self.t = self.t_max;
     }
   }
@@ -383,8 +472,6 @@ var editable_line = function()
   self.b = 0;
   self.correct_m = 0;
   self.correct_b = 0;
-  self.h_min = 0;
-  self.h_max = 0;
   self.v_min = 0;
   self.v_max = 0;
 
@@ -480,10 +567,10 @@ var editable_line = function()
   self.ey = 0;
   self.draw_params = function()
   {
-    self.sy = self.v(self.h_min);
-    self.ey = self.v(self.h_max);
-    self.sx = self.h_min;
-    self.ex = self.h_max;
+    self.sy = self.v(0);
+    self.ey = self.v(gg.timeline.t_max);
+    self.sx = 0;
+    self.ex = gg.timeline.t_max;
          if(self.sy < self.v_min && self.ey < self.v_min) { self.sy = self.v_min; self.ey = self.v_min; }
     else if(self.sy > self.v_max && self.ey > self.v_max) { self.sy = self.v_max; self.ey = self.v_max; }
     else
@@ -496,8 +583,8 @@ var editable_line = function()
 
     self.sy = mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, self.sy);
     self.ey = mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, self.ey);
-    self.sx = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, self.sx);
-    self.ex = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, self.ex);
+    self.sx = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, self.sx);
+    self.ex = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, self.ex);
 
     for(var i = 0; i < gg.table.n; i++)
       gg.table.predicted_data[i] = fdisp(self.v(gg.table.t_data[i]),1);
@@ -546,7 +633,18 @@ var editable_line = function()
     gg.ctx.fillStyle = black;
 
     strokeBox(self.graph,gg.ctx);
-    drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
+    if(gg.timeline.t < gg.timeline.t_max)
+    {
+      var t = gg.timeline.t/gg.timeline.t_max;
+      var tx = lerp(self.graph.x,self.graph.x+self.graph.w,t);
+      if(tx > self.sx)
+      {
+        t = min(invlerp(self.sx,self.ex,tx),1);
+        drawLine(self.sx,self.sy,lerp(self.sx,self.ex,t),lerp(self.sy,self.ey,t), gg.ctx);
+      }
+    }
+    else
+      drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
     gg.ctx.font = "12px Helvetica";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
     gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
@@ -575,18 +673,22 @@ var editable_line = function()
     strokeBox(self.binc_btn,gg.ctx);
     strokeBox(self.bdec_btn,gg.ctx);
 
-    gg.ctx.fillStyle = red;
-    for(var i = 0; i < gg.table.n; i++)
+    if(gg.table.data_visible)
     {
-      if(gg.table.known_data[i] != "-")
+      gg.ctx.fillStyle = red;
+      for(var i = 0; i < gg.table.n; i++)
       {
-        x = mapVal(self.h_min,self.h_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
-        y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
-        x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
-        y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
-        gg.ctx.fillRect(x-1,y-1,2,2);
+        if(gg.table.known_data[i] != "-")
+        {
+          x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
+          y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
+          x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
+          y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
+          gg.ctx.fillRect(x-1,y-1,2,2);
+        }
       }
     }
+
   }
 
 }
@@ -607,8 +709,6 @@ var editable_quadratic = function()
   self.correct_a = 0;
   self.correct_b = 0;
   self.correct_c = 0;
-  self.h_min = 0;
-  self.h_max = 0;
   self.v_min = 0;
   self.v_max = 0;
   self.samples = 100;
@@ -639,8 +739,13 @@ var editable_quadratic = function()
   self.eqn_w = 0;
   self.eqn_h = self.font_h;
   self.yeq_x = 0;
-  self.x2p_x = 0;
+  self.xt_x = 0;
   self.xp_x = 0;
+
+  self.v = function(x)
+  {
+    return (self.a*x+self.b)*x+self.c;
+  }
 
   self.calculate_table = function()
   {
@@ -648,9 +753,9 @@ var editable_quadratic = function()
     for(var i = 0; i < gg.table.n; i++)
     {
       gg.table.t_data[i] = i;
-      if(i < 3) gg.table.known_data[i] = self.correct_a*i*i + self.correct_b*i + self.correct_c;
+      if(i < 3) gg.table.known_data[i] = fdisp((self.correct_a*i+self.correct_b)*i + self.correct_c,1);
       else      gg.table.known_data[i] = "-";
-      gg.table.predicted_data[i] = self.a*i*i + self.b*i + self.c;
+      gg.table.predicted_data[i] = fdisp(self.v(i),1);
     }
     gg.table.verify();
   }
@@ -660,10 +765,10 @@ var editable_quadratic = function()
   {
     gg.ctx.font = self.font;
     self.btn_w = gg.ctx.measureText("-0.0").width;
-    self.eqn_w = gg.ctx.measureText("y = ").width+self.btn_w+gg.ctx.measureText("x² + ").width+self.btn_w+gg.ctx.measureText("x + ").width+self.btn_w;
+    self.eqn_w = gg.ctx.measureText("y = (").width+self.btn_w+gg.ctx.measureText("x + ").width+self.btn_w+gg.ctx.measureText(")x + ").width+self.btn_w;
     self.eqn_h = self.font_h;
-    self.eqn_x = self.x+self.w/3-self.eqn_w/2;
-    self.eqn_y = self.y+self.h/3-self.eqn_h/2;
+    self.eqn_x = self.x+self.w/2-self.eqn_w/2;
+    self.eqn_y = self.y+self.h/2-self.eqn_h/2;
 
     self.a_btn.w = self.btn_w;
     self.a_btn.h = self.font_h;
@@ -678,11 +783,11 @@ var editable_quadratic = function()
     self.c_btn.y = self.eqn_y;
 
     self.yeq_x = self.eqn_x;
-    self.a_btn.x = self.yeq_x+gg.ctx.measureText("y = ").width;
-    self.x2p_x = self.a_btn.x+self.a_btn.w;
-    self.b_btn.x = self.x2p_x+gg.ctx.measureText("x² + ").width;
+    self.a_btn.x = self.yeq_x+gg.ctx.measureText("y = (").width;
+    self.xt_x = self.a_btn.x+self.a_btn.w;
+    self.b_btn.x = self.xt_x+gg.ctx.measureText("x + ").width;
     self.xp_x = self.b_btn.x+self.b_btn.w;
-    self.c_btn.x = self.xp_x+gg.ctx.measureText("x + ").width;
+    self.c_btn.x = self.xp_x+gg.ctx.measureText(")x + ").width;
 
     self.ainc_btn.w = self.a_btn.w;
     self.ainc_btn.h = self.a_btn.h/2;
@@ -714,11 +819,6 @@ var editable_quadratic = function()
     self.draw_params();
   }
 
-  self.v = function(x)
-  {
-    return self.a*sqr(x)+self.b*x+self.c;
-  }
-
   self.xpts = [];
   self.ypts = [];
   self.draw_params = function()
@@ -727,9 +827,9 @@ var editable_quadratic = function()
     var y;
     for(var i = 0; i < self.samples; i++)
     {
-      x = mapVal(0,self.samples-1,self.h_min,self.h_max,i);
+      x = mapVal(0,self.samples-1,0,gg.timeline.t_max,i);
       y = self.v(x);
-      self.xpts[i] = mapVal(self.h_min, self.h_max, self.graph.x, self.graph.x+self.graph.w, x);
+      self.xpts[i] = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, x);
       self.ypts[i] = clamp(self.graph.y, self.graph.y+self.graph.h, mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, y)); //map then clamp separate because y flipped
     }
 
@@ -785,10 +885,16 @@ var editable_quadratic = function()
     gg.ctx.fillStyle = black;
 
     strokeBox(self.graph,gg.ctx);
+    var t = gg.timeline.t/gg.timeline.t_max;
+    var tn = self.samples*t;
+    var tr = tn%1;
+    tn = round(tn-tr);
     gg.ctx.beginPath();
     gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
-    for(var i = 0; i < self.samples; i++)
+    for(var i = 0; i < tn; i++)
       gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
+    if(tn < self.samples)
+      gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
     gg.ctx.stroke();
     gg.ctx.font = "12px Helvetica";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
@@ -800,9 +906,9 @@ var editable_quadratic = function()
 
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
-    gg.ctx.fillText("y = ",self.yeq_x,self.eqn_y+self.eqn_h);
-    gg.ctx.fillText("x² + ",self.x2p_x,self.eqn_y+self.eqn_h);
-    gg.ctx.fillText("x + ",self.xp_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("y = (",self.yeq_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("x + ",self.xt_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText(")x + ",self.xp_x,self.eqn_y+self.eqn_h);
     gg.ctx.textAlign = "right";
     gg.ctx.fillText(self.a,self.a_btn.x+self.a_btn.w,self.eqn_y+self.eqn_h);
     gg.ctx.fillText(self.b,self.b_btn.x+self.b_btn.w,self.eqn_y+self.eqn_h);
@@ -811,7 +917,7 @@ var editable_quadratic = function()
 
     gg.ctx.fillStyle = light_gray;
     gg.ctx.fillText("x = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
-    gg.ctx.fillText("y = "+fdisp(self.a*fdisp(pow(gg.timeline.t,2),1)+self.b*fdisp(gg.timeline.t,1)+self.c,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
+    gg.ctx.fillText("y = "+fdisp(self.v(gg.timeline.t),2),self.yeq_x,self.eqn_y+self.eqn_h*4);
 
     strokeBox(self.a_btn,gg.ctx);
     strokeBox(self.ainc_btn,gg.ctx);
@@ -823,16 +929,19 @@ var editable_quadratic = function()
     strokeBox(self.cinc_btn,gg.ctx);
     strokeBox(self.cdec_btn,gg.ctx);
 
-    gg.ctx.fillStyle = red;
-    for(var i = 0; i < gg.table.n; i++)
+    if(gg.table.data_visible)
     {
-      if(gg.table.known_data[i] != "-")
+      gg.ctx.fillStyle = red;
+      for(var i = 0; i < gg.table.n; i++)
       {
-        x = mapVal(self.h_min,self.h_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
-        y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
-        x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
-        y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
-        gg.ctx.fillRect(x-1,y-1,2,2);
+        if(gg.table.known_data[i] != "-")
+        {
+          x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
+          y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
+          x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
+          y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
+          gg.ctx.fillRect(x-1,y-1,2,2);
+        }
       }
     }
   }
@@ -967,6 +1076,7 @@ var message_box = function()
   self.max_top_y = 0;
   self.target_top_y = 0;
   self.bottom_y = 0;
+  self.data_y = 0;
 
   self.advance_t = self.thinking_buff-1;
   self.thinking_buff = 50;
@@ -1058,7 +1168,8 @@ var message_box = function()
     self.advance_t = 0;
     self.displayed_i++;
     self.calculate_top();
-    gg.monitor.talk_t = 0;
+    if(self.speakers[self.displayed_i-1] == SPEAKER_AI)
+      gg.monitor.talk_t = 0;
   }
 
   self.click = function(evt)
@@ -1159,6 +1270,7 @@ var message_box = function()
         gg.ctx.fillStyle = light_red;
         gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
+        self.data_y = y;
       }
       gg.ctx.fillStyle = black;
       y += self.pad;
@@ -1364,6 +1476,9 @@ var module_board = function()
 
   self.graph = {x:0,y:0,w:0,h:0};
 
+  self.v_min = 0;
+  self.v_max = 0;
+
   self.table_module = 0;
 
   self.clear = function()
@@ -1374,8 +1489,7 @@ var module_board = function()
     for(var i = 0; i < gg.table.n; i++)
     {
       gg.table.t_data[i] = i;
-      if(i < 3) gg.table.known_data[i] = 2*i+5;
-      else      gg.table.known_data[i] = "-";
+      gg.table.known_data[i] = "-";
       gg.table.predicted_data[i] = 0;
     }
     gg.table.verify();
@@ -1406,6 +1520,8 @@ var module_board = function()
   self.calculate_table = function()
   {
     gg.table.clear();
+    for(var i = 0; i < gg.table.n; i++)
+      gg.table.t_data[i] = i;
     for(var i = 1; i <= gg.timeline.t_max; i++)
     {
       var m;
@@ -1460,18 +1576,6 @@ var module_board = function()
         m.v[i] = fdisp(m.v[i],1);
       }
     }
-    for(var i = 0; i < self.modules.length; i++)
-    {
-      m = self.modules[i];
-      m.v_min = 9999;
-      m.v_max = -9999;
-      for(var j = 0; j <= gg.timeline.t_max; j++)
-      {
-        if(m.v[j] < m.v_min) m.v_min = m.v[j];
-        if(m.v[j] > m.v_max) m.v_max = m.v[j];
-      }
-      if(m.v_min == m.v_max) { m.v_min--; m.v_max++; }
-    }
     if(self.table_module)
     {
       for(var i = 0; i < gg.table.n; i++)
@@ -1482,7 +1586,24 @@ var module_board = function()
       for(var i = 0; i < gg.table.n; i++)
         gg.table.predicted_data[i] = 0;
     }
+
     gg.table.verify();
+    self.draw_params();
+  }
+
+  self.xpts = [];
+  self.ypts = [];
+  self.draw_params = function()
+  {
+    var x;
+    var y;
+    for(var i = 0; i <= gg.timeline.t_max; i++)
+    {
+      x = i;
+      y = self.table_module.v[i];
+      self.xpts[i] = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, x);
+      self.ypts[i] = clamp(self.graph.y, self.graph.y+self.graph.h, mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, y)); //map then clamp separate because y flipped
+    }
   }
 
   self.filter = function(keyer, blurer, dragger, clicker)
@@ -1532,42 +1653,42 @@ var module_board = function()
     {
       var m = self.table_module;
       var g = self.graph;
-      gg.ctx.strokeStyle = black;
+
+      strokeBox(self.graph,gg.ctx);
+      var t = gg.timeline.t;
+      var tr = gg.timeline.t%1;
+      var tn = round(gg.timeline.t-tr);
       gg.ctx.beginPath();
-      x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,0);
-      y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,m.v[0]);
-      gg.ctx.moveTo(x,y);
-      for(var i = 1; i < gg.timeline.t_max; i++)
-      {
-        x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,i);
-        y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,m.v[i]);
-        gg.ctx.lineTo(x,y);
-      }
+      gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
+      for(var i = 1; i <= tn; i++)
+        gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
+      if(tn < gg.timeline.t_max)
+        gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
       gg.ctx.stroke();
-      gg.ctx.fillStyle = black;
       gg.ctx.font = "12px Helvetica";
-      gg.ctx.fillText(fdisp(m.v_min),g.x-10,g.y+g.h);
-      gg.ctx.fillText(fdisp(m.v_max),g.x-10,g.y);
+      gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
+      gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
       gg.ctx.strokeStyle = gray;
       var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
       drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
-      gg.ctx.fillStyle = red;
-      for(var i = 0; i < gg.table.n; i++)
+      if(gg.table.data_visible)
       {
-        if(gg.table.known_data[i] != "-")
+        gg.ctx.fillStyle = red;
+        for(var i = 0; i < gg.table.n; i++)
         {
-          x = mapVal(0,gg.timeline.t_max-1,g.x,g.x+g.w,i);
-          y = mapVal(m.v_min,m.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
-          y = clamp(g.y,g.y+g.h,y);
-          gg.ctx.fillRect(x-1,y-1,2,2);
+          if(gg.table.known_data[i] != "-")
+          {
+            x = mapVal(0,gg.timeline.t_max,g.x,g.x+g.w,i);
+            y = mapVal(self.v_min,self.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
+            y = clamp(g.y,g.y+g.h,y);
+            gg.ctx.fillRect(x-1,y-1,2,2);
+          }
         }
       }
+
     }
   }
 
 }
-
-
-
