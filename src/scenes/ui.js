@@ -1045,7 +1045,14 @@ var table = function()
         gg.ctx.fillStyle = black;
         gg.ctx.fillText("-",x,y23+self.font_h/2);
       }
+
+      if(i == self.n-1 && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.data_dragger.dragging_sim)
+      {
+        var s = 20;
+        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y2-s/2,s,s);
+      }
     }
+
   }
 
 }
@@ -1140,6 +1147,7 @@ var message_box = function()
     self.emotes.push(emote);
     trigger.tstate = clone(trigger.state);
     self.triggers.push(trigger);
+    self.prompt_end = 0;
     self.requested_end = 0;
   }
 
@@ -1276,6 +1284,11 @@ var message_box = function()
         gg.ctx.fillStyle = light_red;
         gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
+        if(!gg.data_dragger.dragging_data && !gg.table.data_visible)
+        {
+          var s = 20;
+          gg.ctx.drawImage(gg.notice_img,self.x+self.pad-s/2,y-s/2,s,s);
+        }
         self.data_y = y;
       }
       gg.ctx.fillStyle = black;
@@ -1306,12 +1319,12 @@ var message_box = function()
       gg.ctx.fillStyle = light_gray;
       gg.ctx.fillRect(self.input_x,self.input_y,self.input_w,self.input_h);
     }
-    else
+    else //needs input
     {
       if(floor(self.advance_t/20)%2)
         drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
-      gg.ctx.fillStyle = red;
-      gg.ctx.fillRect(self.input_x+self.input_w-self.pad/2,self.input_y-self.pad/2,self.pad,self.pad);
+      var s = 20;
+      gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s/2,self.input_y-s/2,s,s);
     }
     gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
 
@@ -1336,8 +1349,8 @@ var message_box = function()
     gg.ctx.imageSmoothingEnabled = 1;
     if(self.prompt_end)
     {
-      gg.ctx.fillStyle = red;
-      gg.ctx.fillRect(self.monitor_x+self.monitor_w-self.pad/2,self.monitor_y-self.pad/2,self.pad,self.pad);
+      var s = 20;
+      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s/2,self.monitor_y-s/2,s,s);
     }
   }
 }

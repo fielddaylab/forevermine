@@ -272,6 +272,9 @@ var GamePlayScene = function(game, stage)
 
     gg.console_img = GenImg("assets/console.png");
     gg.background_img = GenImg("assets/background.jpg");
+    gg.notice_img = GenIcon(100,100);
+    gg.notice_img.context.fillStyle = red;
+    gg.notice_img.context.fillRect(0,0,100,100);
 
     gg.data_dragger = new data_dragger();
     gg.exposition_box = new exposition_box();
@@ -588,8 +591,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PREH:
       {
         clicker.filter(gg.exposition_box);
-        clicker.filter(gg.monitor);
-        if(gg.monitor.clicked && gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
           self.set_mode(MODE_PREH_TO_WORK);
         gg.exposition_box.tick();
       }
@@ -686,8 +688,7 @@ var GamePlayScene = function(game, stage)
       case MODE_POSTH:
       {
         clicker.filter(gg.exposition_box);
-        clicker.filter(gg.monitor);
-        if(gg.monitor.clicked && gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
           self.set_mode(MODE_POSTH_TO_NIGHT);
         gg.exposition_box.tick();
       }
