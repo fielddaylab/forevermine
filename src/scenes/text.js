@@ -115,6 +115,7 @@ var english_text =
       "Here's your data.", SPEAKER_AI, get_timer(60),
       "Thanks, Gemma.", SPEAKER_PLAYER, trigger_click,
       "🎵 The more we get together, together, together...", SPEAKER_AI, get_timer(120),
+      "Gemma, are you... singing?", SPEAKER_PLAYER, trigger_click,
       "🎵 The more we get together, the happier we'll be!", SPEAKER_AI, get_timer(120),
     ],
     correct_text:
@@ -203,7 +204,7 @@ var english_text =
     ],
     post_text:
     [
-      "Wow. The new charger is working great! Thanks for your help, Gemma", SPEAKER_PLAYER,
+      "Wow. The new charger is working great! Thanks for your help, Gemma.", SPEAKER_PLAYER,
       "Ha! Don't mention it, friend 😇", SPEAKER_AI,
       "See you tomorrow!", SPEAKER_AI,
     ],
@@ -213,26 +214,32 @@ var english_text =
     //LEVEL 6
     pre_text:
     [
-      "Hey bestie, guess what!", SPEAKER_AI,
-      "It's good news this time, I promise!", SPEAKER_AI,
-      "The robots are charging up faster than expected. Check it out!", SPEAKER_AI,
+      "Hey Gemma! What's our status?", SPEAKER_PLAYER,
+      "😬😬😬", SPEAKER_AI,
+      "Um... turns out that mayyyyybe you were right about running some tests.", SPEAKER_AI,
+      "Your supercharger blew the converter. The bots are taking FOREVER to charge.", SPEAKER_AI,
+      "Please don't be mad!", SPEAKER_AI,
+      "It's ok, Gemma. Let's just keep working.", SPEAKER_PLAYER,
+      "Can you pull up a model to look at how fast the bots are charging now?", SPEAKER_PLAYER,
+      "Anything for you, bestie!", SPEAKER_AI,
+
     ],
     text:
     [
-      "Yesterday we based our model on robots going out from the base.", SPEAKER_AI, get_timer(80),
-      "So?", SPEAKER_PLAYER,
-      "Soooo, the robots from out in the mine are working faster!", SPEAKER_AI, get_timer(200),
-      "They're coming back in with some leftover charge on their batteries.", SPEAKER_AI, get_timer(200),
-      "Oh! So they're charging up faster?", SPEAKER_PLAYER, trigger_click,
-      "Exactly! 👍", SPEAKER_AI, get_timer(80),
-      "Here's the new data. Let's see if it helps.", SPEAKER_AI, get_timer(80),
+      "Why does this model look different than yesterday?", SPEAKER_PLAYER,
+      "Oh! Let me explain. I'm super smart, you know.", SPEAKER_AI, get_timer(80),
+      "Yesterday we were looking at bots leaving from the base.", SPEAKER_AI, get_timer(80),
+      "Turns out the bots from out in the mine are coming back in with some leftover charge!", SPEAKER_AI, get_timer(80),
+      "Ok. That might help a little.", SPEAKER_PLAYER, trigger_click,
+      "Let's see if it's enough.", SPEAKER_PLAYER, trigger_click,
 
     ],
     correct_text:
     [
-      "Wow! You're an expert at this!", SPEAKER_AI, get_timer(60),
-      "Soon you won't even need me 😂", SPEAKER_AI, get_timer(60),
-      "This data looks a little better. But it's still not enough.", SPEAKER_PLAYER, trigger_click,
+      "Wow! You're great at this!", SPEAKER_AI, get_timer(60),
+      "I love playing with you!", SPEAKER_AI, get_timer(60),
+      "Seriously?", SPEAKER_PLAYER, trigger_click,
+      "Gemma, at this rate I'm never gonna make it off this planet.", SPEAKER_PLAYER, trigger_click,
       "Suuuuure... but we're doing our best! That's all that matters!", SPEAKER_AI, get_timer(120),
     ],
     incorrect_text:
@@ -241,7 +248,7 @@ var english_text =
     ],
     post_text:
     [
-      "Cheer up, friend. We're gonna figure this out! You and me, together!", SPEAKER_AI,
+      "Cheer up, friend! Wanna play a game?", SPEAKER_AI,
       "Sorry, Gemma. I need some time alone to think. I'll see you tomorrow.", SPEAKER_PLAYER,
     ],
   },
@@ -485,7 +492,7 @@ var english_text =
       "Oops. 🤐", SPEAKER_AI, get_timer(60),
       "That blast! It was you?", SPEAKER_PLAYER, trigger_click,
       "You wERe goNna le-ave me!!! No-thing else was wORKing!", SPEAKER_AI, get_timer(60),
-      "The pulse that stranded me here. Was that you too?", SPEAKER_PLAYER, trigger_click,
+      "The first pulse that stranded me here. Was that you, too?", SPEAKER_PLAYER, trigger_click,
       "😩😩😩", SPEAKER_AI, get_timer(60),
       "It ge-ts SO LONELY here!", SPEAKER_AI, get_timer(60),
     ],
@@ -503,6 +510,58 @@ var english_text =
       "Whooooops lo-oks like my coMMUnicATor is ba-ck up...", SPEAKER_AI,
       "Help! I'm stuck here with a crazy AI! Send down the new mining bots, stat!", SPEAKER_PLAYER,
       "Copy that, Surveyer 1. Sending the bots now.", SPEAKER_PLAYER,
+    ],
+  },
+
+  {
+    //LEVEL 13
+    pre_text:
+    [
+      "Friend!! I'm feeling much better today!", SPEAKER_AI,
+      "Can I help you with anything?", SPEAKER_AI,
+      "I'm feeling a teeeeeeny bit guilty about trying to strand you here forever.", SPEAKER_AI,
+      "The new robots are here. I need to figure out how many bots I need to activate in order to get off this planet today.", SPEAKER_PLAYER,
+      "Can you make a model for that?", SPEAKER_PLAYER,
+      "And NOT blow anything up? Please?", SPEAKER_PLAYER,
+      "You got it, friend!", SPEAKER_AI,
+    ],
+    text:
+    [
+      "You can use this model to predict how many new robots you'll need!", SPEAKER_AI, get_timer(100),
+      "Some of the new bots have already started mining, so I collected their data overnight.", SPEAKER_AI, get_timer(100),
+      "PLEASE DON'T HATE ME! 😭😭😭", SPEAKER_AI, get_timer(60),
+      "Thanks, Gemma.", SPEAKER_PLAYER, trigger_click,
+      "In a weird way, I'm actually gonna miss you.", SPEAKER_PLAYER, trigger_click,
+      "Awwwwwww. 😍 I love you too, best friend!", SPEAKER_AI, get_timer(100),
+      "Here's your data!", SPEAKER_AI, get_timer(80),
+      "I was never gonna let you get hurt, you know.", SPEAKER_AI, get_timer(80),
+      "I was just so BORED!", SPEAKER_AI, get_timer(80),
+    ],
+    correct_text:
+    [
+      "Great job, friend. You solved it!", SPEAKER_AI, get_timer(60),
+      "Activating the bots now!", SPEAKER_AI, get_timer(60),
+      "Thanks, Gemma. I couldn't have done this without you.", SPEAKER_PLAYER, trigger_click,
+      "Although I wouldn't have been stuck here without you, either.", SPEAKER_PLAYER, trigger_click,
+      "😅😂🙃", SPEAKER_AI, get_timer(60),
+    ],
+    incorrect_text:
+    [
+      "Nope, try again!", SPEAKER_AI, get_timer(1),
+    ],
+    post_text:
+    [
+      "Ok. I've got enough crystals to fuel my ship. So I guess this is good-bye.", SPEAKER_PLAYER,
+      "Can't you stay one more day?", SPEAKER_AI,
+      "My ship is waiting for me, Gemma.", SPEAKER_PLAYER,
+      "😢🤗😭💔.", SPEAKER_AI,
+      "Although...", SPEAKER_PLAYER,
+      "My ship does have an AI capacity. I could upload you to my mainframe.", SPEAKER_AI,
+      "Wha????? I could come with you?", SPEAKER_AI,
+      "WAHOOOO!!! I can help you with your science-y work! We'll be the best team ever!", SPEAKER_AI,
+      "I don't know, Gemma. After everything, how can I trust you?", SPEAKER_PLAYER,
+      "I was just lonely. Give me another chance! I won't let you down!", SPEAKER_AI,
+      "Please please please!", SPEAKER_AI,
     ],
   },
 
