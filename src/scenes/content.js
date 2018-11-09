@@ -21,6 +21,14 @@ var SPEAKER_DATA   = ENUM; ENUM++;
 var SPEAKER_SIM    = ENUM; ENUM++;
 var SPEAKER_NULL   = ENUM; ENUM++;
 
+ENUM = 0;
+var EMOTE_NULL       = ENUM; ENUM++;
+var EMOTE_EXCITED    = ENUM; ENUM++;
+var EMOTE_BASHFUL    = ENUM; ENUM++;
+var EMOTE_SAD        = ENUM; ENUM++;
+var EMOTE_PROCESSING = ENUM; ENUM++;
+var EMOTE_NULL       = ENUM; ENUM++;
+
 var modparam = function()
 {
   this.title = "";

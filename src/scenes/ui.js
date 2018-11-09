@@ -289,6 +289,7 @@ var exposition_box = function()
   self.text = [];
   self.bubbles = [];
   self.speakers = [];
+  self.emotes = [];
 
   self.displayed_i = 0;
 
@@ -302,21 +303,23 @@ var exposition_box = function()
     self.text = [];
     self.bubbles = []
     self.speakers = []
+    self.emotes = []
     self.displayed_i = 0;
   }
 
-  self.nq = function(text, speaker)
+  self.nq = function(text, speaker, emote)
   {
     self.text.push(text);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.speakers.push(speaker);
+    self.emotes.push(emote);
     if(self.text.length == 1 && self.speakers[0] == SPEAKER_AI) gg.monitor.talk_t = 0;
   }
 
   self.nq_group = function(text)
   {
-    for(var i = 0; i < text.length; i+=2)
-      self.nq(text[i],text[i+1]);
+    for(var i = 0; i < text.length; i+=3)
+      self.nq(text[i],text[i+1],text[i+2]);
   }
 
   self.advance = function()
@@ -1091,6 +1094,7 @@ var message_box = function()
   self.text = [];
   self.bubbles = [];
   self.speakers = [];
+  self.emotes = [];
   self.triggers = [];
 
   self.displayed_i = 0;
@@ -1117,6 +1121,7 @@ var message_box = function()
     self.text = [];
     self.bubbles = []
     self.speakers = []
+    self.emotes = []
     self.triggers = [];
     self.top_y = self.bottom_y;
     self.max_top_y = self.top_y;
@@ -1127,11 +1132,12 @@ var message_box = function()
     self.advance_t = self.thinking_buff;
   }
 
-  self.nq = function(text, speaker, trigger)
+  self.nq = function(text, speaker, emote, trigger)
   {
     self.text.push(text);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.speakers.push(speaker);
+    self.emotes.push(emote);
     trigger.tstate = clone(trigger.state);
     self.triggers.push(trigger);
     self.requested_end = 0;
@@ -1139,8 +1145,8 @@ var message_box = function()
 
   self.nq_group = function(text)
   {
-    for(var i = 0; i < text.length; i+=3)
-      self.nq(text[i],text[i+1],text[i+2]);
+    for(var i = 0; i < text.length; i+=4)
+      self.nq(text[i],text[i+1],text[i+2],text[i+3]);
   }
 
   self.calculate_top = function()
