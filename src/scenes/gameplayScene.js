@@ -118,6 +118,7 @@ var GamePlayScene = function(game, stage)
   var MODE_NULL           = ENUM; ENUM++;
   var MODE_MENU           = ENUM; ENUM++;
   var MODE_CINEMATIC      = ENUM; ENUM++;
+  var MODE_BOOT           = ENUM; ENUM++;
   var MODE_PREH           = ENUM; ENUM++;
   var MODE_PREH_TO_WORK   = ENUM; ENUM++;
   var MODE_WORK           = ENUM; ENUM++;
@@ -209,6 +210,8 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CINEMATIC:
         break;
+      case MODE_BOOT:
+        break;
       case MODE_PREH:
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
@@ -271,6 +274,7 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
 
     gg.console_img = GenImg("assets/console.png");
+    gg.dark_console_img = GenImg("assets/console.png");
     gg.background_img = GenImg("assets/background.jpg");
     gg.notice_img = GenIcon(100,100);
     gg.notice_img.context.fillStyle = red;
@@ -579,7 +583,18 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CINEMATIC:
       {
-        if(1) //when done...
+        clicker.filter(gg.monitor);
+        if(gg.monitor.clicked)
+          self.set_mode(MODE_BOOT);
+      }
+        break;
+      case MODE_BOOT:
+      {
+        if(gg.mode_t < gg.fade_t) //fade home
+        {
+          var t = gg.mode_t/gg.zoom_t;
+        }
+        else
         {
           gg.next_level = gg.levels[0];
           gg.exposition_box.clear();
@@ -587,7 +602,7 @@ var GamePlayScene = function(game, stage)
           self.set_mode(MODE_PREH);
         }
       }
-        break;
+      break;
       case MODE_PREH:
       {
         clicker.filter(gg.exposition_box);
@@ -781,11 +796,22 @@ var GamePlayScene = function(game, stage)
       case MODE_MENU:
       {
         self.draw_home();
+        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
       }
         break;
       case MODE_CINEMATIC:
       {
         self.draw_home();
+        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+      }
+        break;
+      case MODE_BOOT:
+      {
+        self.draw_home();
+        var t = gg.mode_t/gg.fade_t;
+        gg.globalAlpha = 1-t;
+        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+        gg.globalAlpha = 1;
       }
         break;
       case MODE_PREH:
