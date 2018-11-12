@@ -117,7 +117,10 @@ var LoadingScene = function(game, stage)
     //put asset paths in img_srcs
     img_srcs.push("assets/alert.png");
     img_srcs.push("assets/background.jpg");
+    img_srcs.push("assets/background_ui.jpg");
     img_srcs.push("assets/console.png");
+    img_srcs.push("assets/console_dark.png");
+    img_srcs.push("assets/bezel.png");
     img_srcs.push("assets/accessory_heart.png");
     img_srcs.push("assets/accessory_nervous.png");
     img_srcs.push("assets/eye.png");

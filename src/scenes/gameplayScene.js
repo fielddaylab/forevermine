@@ -24,9 +24,6 @@ var GamePlayScene = function(game, stage)
       gg.lab.ww = gg.canv.width;
       gg.lab.wh = gg.canv.height;
 
-      gg.module_board.ww = gg.canv.width;
-      gg.module_board.wh = gg.canv.height;
-
       gg.data_dragger.w = gg.canv.width;
       gg.data_dragger.h = gg.canv.height;
       gg.data_dragger.x = 0;
@@ -38,9 +35,9 @@ var GamePlayScene = function(game, stage)
       gg.exposition_box.y = gg.canv.height-10-gg.exposition_box.h;
       gg.exposition_box.size();
 
-      gg.message_box.w = 200;
-      gg.message_box.h = gg.canv.height;
-      gg.message_box.x = 0;
+      gg.message_box.w = 210;
+      gg.message_box.h = gg.canv.height-20;
+      gg.message_box.x = 14;
       gg.message_box.y = 0;
       gg.message_box.size();
 
@@ -49,10 +46,12 @@ var GamePlayScene = function(game, stage)
       b.x = gg.message_box.x+gg.message_box.w;
       b.w = gg.canv.width-b.x;
       b.y = 0;
+      b.ww = b.h;
+      b.wh = b.w;
       b.graph.w = graph_s;
       b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-10;
-      b.graph.y = 10;
+      b.graph.x = gg.canv.width-b.graph.w-30;
+      b.graph.y = 30;
       b.v_min = 0;
       b.v_max = 10;
       //acts as module cam
@@ -61,16 +60,16 @@ var GamePlayScene = function(game, stage)
       b.wx = 0;
       b.wy = 0;
 
-      gg.timeline.w = (gg.module_board.w-20)*(10/12);
-      gg.timeline.h = 30;
-      gg.timeline.x = 10+gg.module_board.x+(gg.module_board.w-20)*(1.5/12);
-      gg.timeline.y = gg.module_board.h-gg.timeline.h-65;
-      gg.timeline.size();
+      gg.table.h = 130;
+      gg.table.x = gg.message_box.x+gg.message_box.w+20;
+      gg.table.y = gg.canv.height-gg.table.h-10;
+      gg.table.w = gg.canv.width-gg.table.x-30;
 
-      gg.table.h = 100;
-      gg.table.x = gg.message_box.x+gg.message_box.w+10;
-      gg.table.y = gg.canv.height-gg.table.h;
-      gg.table.w = gg.canv.width-gg.table.x-10;
+      gg.timeline.w = gg.table.w;
+      gg.timeline.h = 40;
+      gg.timeline.x = gg.table.x;
+      gg.timeline.y = gg.table.y;
+      gg.timeline.size();
 
       b = gg.line;
       b.h = gg.canv.height;
@@ -79,8 +78,8 @@ var GamePlayScene = function(game, stage)
       b.w = gg.canv.width-b.x;
       b.graph.w = graph_s;
       b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-10;
-      b.graph.y = 10;
+      b.graph.x = gg.canv.width-b.graph.w-30;
+      b.graph.y = 30;
       b.v_min = 0;
       b.v_max = 10;
       b.size();
@@ -92,12 +91,11 @@ var GamePlayScene = function(game, stage)
       b.w = gg.canv.width-b.x;
       b.graph.w = graph_s;
       b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-10;
-      b.graph.y = 10;
+      b.graph.x = gg.canv.width-b.graph.w-30;
+      b.graph.y = 30;
       b.v_min = 0;
       b.v_max = 10;
       b.size();
-
 
     }
 
@@ -274,8 +272,10 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
 
     gg.console_img = GenImg("assets/console.png");
-    gg.dark_console_img = GenImg("assets/console.png");
+    gg.dark_console_img = GenImg("assets/console_dark.png");
     gg.background_img = GenImg("assets/background.jpg");
+    gg.background_ui_img = GenImg("assets/background_ui.jpg");
+    gg.bezel_img = GenImg("assets/bezel.png");
     gg.notice_img = GenImg("assets/alert.png");
 
     gg.data_dragger = new data_dragger();
@@ -759,17 +759,14 @@ var GamePlayScene = function(game, stage)
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 1;
     drawImageBox(gg.console_img,gg.lab,gg.ctx);
-    //strokeBox(gg.monitor,gg.ctx);
     gg.exposition_box.draw();
   }
 
   self.draw_work = function()
   {
-    gg.ctx.fillStyle = "#7A92AB";
-    gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
-    gg.ctx.strokeStyle = black;
-    gg.table.draw();
+    gg.ctx.drawImage(gg.background_ui_img,0,0,gg.canv.width,gg.canv.height);
     gg.timeline.draw();
+    gg.table.draw();
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:    gg.line.draw();         break;
@@ -779,6 +776,7 @@ var GamePlayScene = function(game, stage)
     gg.cur_level.draw();
     gg.message_box.draw();
     gg.data_dragger.draw();
+    gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
   }
 
   self.draw_night = function()

@@ -102,6 +102,9 @@ var monitor = function()
     var s = self.screen;
     var c = s.context;
 
+    //c.strokeStyle = red;
+    //c.strokeRect(0,0,s.width,s.height);
+
     c.fillStyle = self.bg_color;
     c.fillRect(0,0,s.width,s.height);
 
@@ -164,13 +167,9 @@ var data_dragger = function()
   {
     if(gg.table.simd_visible < gg.table.max_t) return 0;
     var t = gg.table;
-    //copied from draw!
     var y2 = t.y+t.h*2/3;
     var y3 = t.y+t.h;
-    var w = t.w/(t.n+1);
-    var x = t.x+(t.n)*w;
-    return ptWithin(x,y2,w,y3-y2,evt.doX,evt.doY);
-    //return ptWithin(t.x,t.y,t.w,t.h, evt.doX,evt.doY);
+    return ptWithin(t.x,y2,t.w,y3-y2,evt.doX,evt.doY);
   }
   //release
   self.ptWithinChat = function(evt)
@@ -225,8 +224,8 @@ var data_dragger = function()
         if(!self.dragging_data)
         {
           gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.message_box.data_y-10);
-          gg.ctx.fillRect(gg.message_box.w,gg.message_box.data_y-10,gg.canv.width-gg.message_box.w,50);
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.message_box.data_y-5);
+          gg.ctx.fillRect(gg.message_box.w,gg.message_box.data_y-5,gg.canv.width-gg.message_box.w,45);
           gg.ctx.fillRect(0,gg.message_box.data_y+40,gg.canv.width,gg.canv.height-gg.message_box.data_y-40);
           gg.ctx.fillStyle = white;
           gg.ctx.fillText("<- DRAG",gg.message_box.x+gg.message_box.w,gg.message_box.data_y+20);
@@ -234,8 +233,9 @@ var data_dragger = function()
         else
         {
           gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.message_box.w,gg.canv.height);
-          gg.ctx.fillRect(gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height-gg.table.h);
+          gg.ctx.fillRect(0,0,gg.table.x,gg.canv.height);
+          gg.ctx.fillRect(gg.table.x,0,gg.table.w,gg.canv.height-gg.table.h);
+          gg.ctx.fillRect(gg.table.x+gg.table.w,0,gg.canv.width-(gg.table.x+gg.table.w),gg.canv.height);
           gg.ctx.fillStyle = white;
           gg.ctx.fillText("\\/ DROP",gg.table.x+100,gg.table.y-20);
         }
@@ -244,16 +244,18 @@ var data_dragger = function()
       {
         if(!self.dragging_sim)
         {
+          var y2 = gg.table.y+gg.table.h*2/3;
           gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.table.y);
-          gg.ctx.fillRect(0,gg.table.y,gg.canv.width-100,gg.table.h);
+          gg.ctx.fillRect(0,0,gg.canv.width,y2);
+          gg.ctx.fillRect(0,y2,gg.table.x,gg.table.h);
+          gg.ctx.fillRect(gg.table.x+gg.table.w,y2,gg.canv.width-(gg.table.x+gg.table.w),gg.table.h);
           gg.ctx.fillStyle = white;
-          gg.ctx.fillText("DRAG ->",gg.canv.width-200,gg.table.y);
+          gg.ctx.fillText("DRAG ->",gg.canv.width-200,y2-40);
         }
         else
         {
           gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height);
+          gg.ctx.fillRect(gg.message_box.x+gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height);
           gg.ctx.fillStyle = white;
           gg.ctx.fillText("<- DROP",gg.message_box.w+10,gg.canv.height/2);
         }
@@ -373,6 +375,9 @@ var timeline = function()
   self.w = 0;
   self.h = 0;
 
+  self.sx = 0;
+  self.ex = 0;
+
   self.t = 0;
   self.t_target = 0;
   self.t_max = 10;
@@ -386,9 +391,12 @@ var timeline = function()
   self.size = function()
   {
     self.advance_btn.w = 50;
-    self.advance_btn.h = 50;
-    self.advance_btn.x = self.x-10-self.advance_btn.w;
-    self.advance_btn.y = self.y+self.h-self.advance_btn.h;
+    self.advance_btn.h = self.h;
+    self.advance_btn.x = self.x;
+    self.advance_btn.y = self.y;
+
+    self.sx = self.x+self.w*1.5/(self.t_max+2)
+    self.ex = self.x+self.w*(self.t_max+1.5)/(self.t_max+2);
   }
 
   self.dragStart = function(evt)
@@ -397,7 +405,7 @@ var timeline = function()
   }
   self.drag = function(evt)
   {
-    var t = clampMapVal(self.x,self.x+self.w,0,self.t_max,evt.doX);
+    var t = clampMapVal(self.sx,self.ex,0,self.t_max,evt.doX);
     self.t_target = ceil(t);
     self.t = t;
   }
@@ -431,28 +439,18 @@ var timeline = function()
 
   self.draw = function()
   {
+    //gg.ctx.strokeStyle = red;
+    //strokeBox(self,gg.ctx);
+
     strokeBox(self.advance_btn,gg.ctx);
 
     var t_x;
 
-/*
-    gg.ctx.strokeStyle = gray;
-    gg.ctx.beginPath();
-    for(var i = 1; i < self.t_max; i++)
-    {
-      t_x = mapVal(0,self.t_max,self.x,self.x+self.w,i);
-      gg.ctx.moveTo(t_x,self.y);
-      gg.ctx.lineTo(t_x,self.y+self.h);
-    }
-    gg.ctx.stroke();
-*/
-
     gg.ctx.strokeStyle = black;
-    t_x = mapVal(0,self.t_max,self.x,self.x+self.w,self.t);
+    t_x = mapVal(0,self.t_max,self.sx,self.ex,self.t);
     gg.ctx.fillStyle = white;
     var s = self.h;
-    gg.ctx.fillRect(t_x-s/2,self.y,s,s);
-    //drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
+    gg.ctx.fillRect(t_x-s/2,self.y,s,self.h);
 
     if(self.t < self.t_target)
     {
@@ -511,7 +509,7 @@ var editable_line = function()
   self.calculate_table = function()
   {
     gg.table.clear();
-    for(var i = 0; i < gg.table.n; i++)
+    for(var i = 0; i <= gg.timeline.t_max; i++)
     {
       gg.table.t_data[i] = i;
       if(i < 3) gg.table.known_data[i] = self.correct_m*i+self.correct_b;
@@ -594,7 +592,7 @@ var editable_line = function()
     self.sx = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, self.sx);
     self.ex = mapVal(0, gg.timeline.t_max, self.graph.x, self.graph.x+self.graph.w, self.ex);
 
-    for(var i = 0; i < gg.table.n; i++)
+    for(var i = 0; i <= gg.timeline.t_max; i++)
       gg.table.predicted_data[i] = fdisp(self.v(gg.table.t_data[i]),1);
     gg.table.verify();
   }
@@ -688,7 +686,7 @@ var editable_line = function()
     if(gg.table.data_visible)
     {
       gg.ctx.fillStyle = red;
-      for(var i = 0; i < gg.table.n; i++)
+      for(var i = 0; i <= gg.timeline.t_max; i++)
       {
         if(gg.table.known_data[i] != "-")
         {
@@ -762,7 +760,7 @@ var editable_quadratic = function()
   self.calculate_table = function()
   {
     gg.table.clear();
-    for(var i = 0; i < gg.table.n; i++)
+    for(var i = 0; i <= gg.timeline.t_max; i++)
     {
       gg.table.t_data[i] = i;
       if(i < 3) gg.table.known_data[i] = fdisp((self.correct_a*i+self.correct_b)*i + self.correct_c,1);
@@ -845,7 +843,7 @@ var editable_quadratic = function()
       self.ypts[i] = clamp(self.graph.y, self.graph.y+self.graph.h, mapVal(self.v_min, self.v_max, self.graph.y+self.graph.h, self.graph.y, y)); //map then clamp separate because y flipped
     }
 
-    for(var i = 0; i < gg.table.n; i++)
+    for(var i = 0; i <= gg.timeline.t_max; i++)
       gg.table.predicted_data[i] = fdisp(self.v(gg.table.t_data[i]),1);
     gg.table.verify();
   }
@@ -948,7 +946,7 @@ var editable_quadratic = function()
     if(gg.table.data_visible)
     {
       gg.ctx.fillStyle = red;
-      for(var i = 0; i < gg.table.n; i++)
+      for(var i = 0; i <= gg.timeline.t_max; i++)
       {
         if(gg.table.known_data[i] != "-")
         {
@@ -974,12 +972,10 @@ var table = function()
   self.font_h = 20;
   self.font = self.font_h+"px Helvetica";
 
-  self.bg_color = "#F0F9EC";
   self.predicted_color = "#94DEE8";
   self.known_color = "#5CC8D9";
   self.text_color = "#4D514B";
 
-  self.n = gg.timeline.t_max+1;
   self.t_data = [];
   self.known_data = [];
   self.predicted_data = [];
@@ -1012,9 +1008,10 @@ var table = function()
 
   self.draw = function()
   {
+    //gg.ctx.strokeStyle = red;
+    //strokeBox(self,gg.ctx);
+
     gg.ctx.lineWidth = 0.5;
-    gg.ctx.fillStyle = self.bg_color;
-    fillBox(self,gg.ctx);
 
     var y0 = self.y;
     var y1 = self.y+self.h/3;
@@ -1026,7 +1023,7 @@ var table = function()
     drawLine(self.x,y1,self.x+self.w,y1,gg.ctx);
     drawLine(self.x,y2,self.x+self.w,y2,gg.ctx);
     var x = self.x;
-    var w = self.w/(self.n+1);
+    var w = self.w/(gg.timeline.t_max+2);
 
     gg.ctx.fillStyle = self.known_color;
     gg.ctx.fillRect(x,y1,self.w,y2-y1);
@@ -1048,7 +1045,7 @@ var table = function()
 
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "center";
-    for(var i = 0; i < self.n; i++)
+    for(var i = 0; i <= gg.timeline.t_max; i++)
     {
       x = self.x+(i+2)*w;
       drawLine(x,y1,x,y3,gg.ctx);
@@ -1072,7 +1069,7 @@ var table = function()
         gg.ctx.fillText("-",x,y23+self.font_h/2);
       }
 
-      if(i == self.n-1 && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.data_dragger.dragging_sim)
+      if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.data_dragger.dragging_sim)
       {
         var s = 20;
         gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y2-s/2,s,s);
@@ -1108,7 +1105,6 @@ var message_box = function()
   self.font_h = 15;
   self.font = self.font_h+"px Helvetica";
 
-  self.bg_color = "#F0F9EC";
   self.ai_text_color = "#4D514C";
   self.you_text_color = "#FEFFFF";
   self.data_text_color = "#FF6666";
@@ -1291,8 +1287,9 @@ var message_box = function()
 
   self.draw = function()
   {
-    gg.ctx.fillStyle = self.bg_color;
-    gg.ctx.fillRect(self.x,self.y,self.w,self.h);
+    //gg.ctx.strokeStyle = red;
+    //strokeBox(self,gg.ctx);
+
     gg.ctx.lineWidth = 1;
     gg.ctx.fillStyle = black;
     gg.ctx.textAlign = "left";
@@ -1534,7 +1531,7 @@ var module_board = function()
     self.modules = [];
     self.modrels = [];
     gg.table.clear();
-    for(var i = 0; i < gg.table.n; i++)
+    for(var i = 0; i <= gg.timeline.t_max; i++)
     {
       gg.table.t_data[i] = i;
       gg.table.known_data[i] = "-";
@@ -1568,7 +1565,7 @@ var module_board = function()
   self.calculate_table = function()
   {
     gg.table.clear();
-    for(var i = 0; i < gg.table.n; i++)
+    for(var i = 0; i <= gg.timeline.t_max; i++)
       gg.table.t_data[i] = i;
     for(var i = 1; i <= gg.timeline.t_max; i++)
     {
@@ -1593,12 +1590,12 @@ var module_board = function()
     {
       for(var i = 0; i < 3; i++)
         gg.table.known_data[i] = self.table_module.correct_v[i];
-      for(var i = 3; i < gg.table.n; i++)
+      for(var i = 3; i <= gg.timeline.t_max; i++)
         gg.table.known_data[i] = "-";
     }
     else
     {
-      for(var i = 0; i < gg.table.n; i++)
+      for(var i = 0; i <= gg.timeline.t_max; i++)
         gg.table.known_data[i] = 0;
     }
   }
@@ -1626,12 +1623,12 @@ var module_board = function()
     }
     if(self.table_module)
     {
-      for(var i = 0; i < gg.table.n; i++)
+      for(var i = 0; i <= gg.timeline.t_max; i++)
         gg.table.predicted_data[i] = self.table_module.v[i];
     }
     else
     {
-      for(var i = 0; i < gg.table.n; i++)
+      for(var i = 0; i <= gg.timeline.t_max; i++)
         gg.table.predicted_data[i] = 0;
     }
 
@@ -1724,7 +1721,7 @@ var module_board = function()
       if(gg.table.data_visible)
       {
         gg.ctx.fillStyle = red;
-        for(var i = 0; i < gg.table.n; i++)
+        for(var i = 0; i <= gg.timeline.t_max; i++)
         {
           if(gg.table.known_data[i] != "-")
           {
