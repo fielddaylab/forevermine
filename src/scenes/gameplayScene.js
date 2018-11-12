@@ -272,6 +272,8 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
     gg.pano_t = 200;
 
+    gg.keylistener = {last_key:0,key_down:function(evt){gg.keylistener.last_key = evt.keyCode;console.log(evt.keyCode)},advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
+
     gg.console_img = GenImg("assets/console.png");
     gg.dark_console_img = GenImg("assets/console_dark.png");
     gg.background_img = GenImg("assets/background.jpg");
@@ -621,6 +623,7 @@ var GamePlayScene = function(game, stage)
   self.tick = function()
   {
     gg.mode_t++;
+    keyer.filter(gg.keylistener);
     gg.monitor.tick();
     switch(gg.mode)
     {
@@ -632,7 +635,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CINEMATIC:
       {
         clicker.filter(gg.monitor);
-        if(gg.monitor.clicked)
+        if(gg.monitor.clicked || gg.keylistener.advance())
           self.set_mode(MODE_BOOT);
       }
         break;
@@ -654,7 +657,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PREH:
       {
         clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
           self.set_mode(MODE_PREH_TO_WORK);
         gg.exposition_box.tick();
       }
@@ -694,7 +697,7 @@ var GamePlayScene = function(game, stage)
           dragger.filter(gg.message_box);
         }
 
-        if(gg.cur_level.correct && gg.message_box.requested_end)
+        if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
           self.set_mode(MODE_WORK_TO_FEED);
 
         gg.timeline.tick();
@@ -733,7 +736,7 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_FEED:
-        if(gg.mode_t < gg.fade_t*gg.cur_level.feedback_imgs.length) //display feedback
+        if(gg.mode_t < gg.fade_t*gg.cur_level.feedback_imgs.length && !gg.keylistener.advance()) //display feedback
         {
           var t = gg.mode_t/gg.fade_t*gg.cur_level.feedback_imgs.length;
         }
@@ -751,7 +754,7 @@ var GamePlayScene = function(game, stage)
       case MODE_POSTH:
       {
         clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
           self.set_mode(MODE_POSTH_TO_NIGHT);
         gg.exposition_box.tick();
       }
@@ -770,7 +773,7 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_NIGHT:
-        if(gg.mode_t < gg.pano_t) //display night
+        if(gg.mode_t < gg.pano_t && !gg.keylistener.advance()) //display night
         {
           var t = gg.mode_t/gg.pano_t;
         }
@@ -796,6 +799,8 @@ var GamePlayScene = function(game, stage)
     clicker.flush();
     dragger.flush();
     blurer.flush();
+
+    gg.keylistener.advance();
   };
 
   self.draw_home = function()
