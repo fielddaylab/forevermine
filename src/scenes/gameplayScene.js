@@ -810,7 +810,8 @@ var GamePlayScene = function(game, stage)
     gg.ctx.imageSmoothingEnabled = 0;
     if(gg.mode == MODE_FEED)
     {
-      drawImageBox(gg.cur_level.feedback_imgs[floor((gg.mode_t*2/gg.fade_t)%gg.cur_level.feedback_imgs.length)],gg.monitor,gg.ctx);
+      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t*2/gg.fade_t)%gg.cur_level.feedback_imgs.length)];
+      drawImageBox(img,gg.monitor,gg.ctx);
     }
     else
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -847,7 +848,6 @@ var GamePlayScene = function(game, stage)
     var vis_pano_fg_w = gg.canv.width/gg.canv.height*gg.pano_fg_img.height;
     var pano_fg_sx = 0;
     var pano_fg_ex = gg.pano_fg_img.width-vis_pano_fg_w;
-    console.log(pano_ex,pano_fg_ex);
     gg.ctx.drawImage(gg.pano_fg_img,lerp(pano_fg_sx,pano_fg_ex,t),0,vis_pano_fg_w,gg.pano_fg_img.height,0,0,gg.canv.width,gg.canv.height);
 
     gg.ctx.fillStyle = white;
