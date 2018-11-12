@@ -306,6 +306,8 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 1;
     for(var j = 0; j < 10; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -319,6 +321,8 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0.5;
     l.correct_b = 2;
     l.correct_c = 3;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -332,6 +336,8 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0;
     l.correct_b = 2;
     l.correct_c = 5;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -355,6 +361,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -378,6 +386,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -401,6 +411,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -424,6 +436,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -447,6 +461,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -482,6 +498,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -517,6 +535,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -528,6 +548,8 @@ var GamePlayScene = function(game, stage)
     l.b = 5;
     l.correct_m = 4;
     l.correct_b = 10;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -539,6 +561,8 @@ var GamePlayScene = function(game, stage)
     l.b = 10;
     l.correct_m = 0.5;
     l.correct_b = 11;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -552,6 +576,8 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 1;
     l.correct_b = 2;
     l.correct_c = 12;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
