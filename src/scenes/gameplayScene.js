@@ -270,6 +270,7 @@ var GamePlayScene = function(game, stage)
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
+    gg.pano_t = 200;
 
     gg.console_img = GenImg("assets/console.png");
     gg.dark_console_img = GenImg("assets/console_dark.png");
@@ -277,6 +278,9 @@ var GamePlayScene = function(game, stage)
     gg.background_ui_img = GenImg("assets/background_ui.jpg");
     gg.bezel_img = GenImg("assets/bezel.png");
     gg.notice_img = GenImg("assets/alert.png");
+    gg.pano_bg_img = GenImg("assets/pano_bg.jpg");
+    gg.pano_fg_img = GenImg("assets/pano_fg.png");
+    gg.pano_img = GenImg("assets/pano.png");
 
     gg.data_dragger = new data_dragger();
     gg.exposition_box = new exposition_box();
@@ -564,6 +568,28 @@ var GamePlayScene = function(game, stage)
     self.was_ready = 1;
     self.resize(stage);
     self.set_mode(MODE_MENU);
+    /*
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_CINEMATIC);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_BOOT);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_PREH);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_PREH_TO_WORK);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_WORK);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_WORK_TO_FEED);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_FEED);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_FEED_TO_POSTH);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_POSTH);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_POSTH_TO_NIGHT);
+    //*/
   };
 
   self.tick = function()
@@ -718,9 +744,9 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_NIGHT:
-        if(gg.mode_t < gg.fade_t) //display night
+        if(gg.mode_t < gg.pano_t) //display night
         {
-          var t = gg.mode_t/gg.fade_t;
+          var t = gg.mode_t/gg.pano_t;
         }
         else self.set_mode(MODE_NIGHT_TO_PREH);
         break;
@@ -779,9 +805,25 @@ var GamePlayScene = function(game, stage)
     gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
   }
 
-  self.draw_night = function()
+  self.draw_night = function(t)
   {
+    var t = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
+    gg.ctx.drawImage(gg.pano_bg_img,0,0,gg.canv.width,gg.canv.height);
+    var vis_pano_w = gg.canv.width/gg.canv.height*gg.pano_img.height;
+    var pano_sx = 0;
+    var pano_ex = gg.pano_img.width-vis_pano_w;
+    gg.ctx.drawImage(gg.pano_img,lerp(pano_sx,pano_ex,t),0,vis_pano_w,gg.pano_img.height,0,0,gg.canv.width,gg.canv.height);
+    var vis_pano_fg_w = gg.canv.width/gg.canv.height*gg.pano_fg_img.height;
+    var pano_fg_sx = 0;
+    var pano_fg_ex = gg.pano_fg_img.width-vis_pano_fg_w;
+    console.log(pano_ex,pano_fg_ex);
+    gg.ctx.drawImage(gg.pano_fg_img,lerp(pano_fg_sx,pano_fg_ex,t),0,vis_pano_fg_w,gg.pano_fg_img.height,0,0,gg.canv.width,gg.canv.height);
 
+    gg.ctx.fillStyle = white;
+    gg.ctx.font = "40px Helvetica";
+    gg.ctx.fillText("Day "+gg.cur_level.i, 20,60);
+    gg.ctx.font = "20px Helvetica";
+    gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,90);
   }
 
   self.draw = function()
@@ -878,25 +920,31 @@ var GamePlayScene = function(game, stage)
         {
           self.draw_home();
           gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
         else
         {
-          self.draw_night();
-          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
+          self.draw_night(t*gg.fade_t/(gg.fade_t*2+gg.pano_t));
+          gg.ctx.globalAlpha = 1-t;
+          gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
         break;
       case MODE_NIGHT:
-        self.draw_night();
+        var t = gg.mode_t/gg.pano_t;
+        self.draw_night((gg.fade_t+t*gg.pano_t)/(gg.fade_t*2+gg.pano_t));
         break;
       case MODE_NIGHT_TO_PREH:
         if(gg.mode_t < gg.fade_t)
         {
-          self.draw_night();
-          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          var t = gg.mode_t/gg.fade_t;
+          self.draw_night((gg.fade_t+gg.pano_t+t*gg.fade_t)/(gg.fade_t*2+gg.pano_t));
+          gg.ctx.globalAlpha = t;
+          gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
@@ -904,6 +952,7 @@ var GamePlayScene = function(game, stage)
         {
           self.draw_home();
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }

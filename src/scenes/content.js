@@ -58,6 +58,9 @@ var level = function()
   self.c = 0; //y = ax^2 + bx + c
   self.correct_c = 0;
 
+  self.pano_st = 0;
+  self.pano_et = 1;
+
   self.modparams = [];
   self.relparams = [];
 
