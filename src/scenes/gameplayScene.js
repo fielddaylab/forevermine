@@ -24,9 +24,6 @@ var GamePlayScene = function(game, stage)
       gg.lab.ww = gg.canv.width;
       gg.lab.wh = gg.canv.height;
 
-      gg.module_board.ww = gg.canv.width;
-      gg.module_board.wh = gg.canv.height;
-
       gg.data_dragger.w = gg.canv.width;
       gg.data_dragger.h = gg.canv.height;
       gg.data_dragger.x = 0;
@@ -38,9 +35,9 @@ var GamePlayScene = function(game, stage)
       gg.exposition_box.y = gg.canv.height-10-gg.exposition_box.h;
       gg.exposition_box.size();
 
-      gg.message_box.w = 200;
-      gg.message_box.h = gg.canv.height;
-      gg.message_box.x = 0;
+      gg.message_box.w = 210;
+      gg.message_box.h = gg.canv.height-20;
+      gg.message_box.x = 14;
       gg.message_box.y = 0;
       gg.message_box.size();
 
@@ -49,10 +46,12 @@ var GamePlayScene = function(game, stage)
       b.x = gg.message_box.x+gg.message_box.w;
       b.w = gg.canv.width-b.x;
       b.y = 0;
+      b.ww = b.h;
+      b.wh = b.w;
       b.graph.w = graph_s;
       b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-10;
-      b.graph.y = 10;
+      b.graph.x = gg.canv.width-b.graph.w-30;
+      b.graph.y = 30;
       b.v_min = 0;
       b.v_max = 10;
       //acts as module cam
@@ -61,16 +60,16 @@ var GamePlayScene = function(game, stage)
       b.wx = 0;
       b.wy = 0;
 
-      gg.timeline.w = (gg.module_board.w-20)*(10/12);
-      gg.timeline.h = 30;
-      gg.timeline.x = 10+gg.module_board.x+(gg.module_board.w-20)*(1.5/12);
-      gg.timeline.y = gg.module_board.h-gg.timeline.h-65;
-      gg.timeline.size();
+      gg.table.h = 130;
+      gg.table.x = gg.message_box.x+gg.message_box.w+20;
+      gg.table.y = gg.canv.height-gg.table.h-10;
+      gg.table.w = gg.canv.width-gg.table.x-30;
 
-      gg.table.h = 100;
-      gg.table.x = gg.message_box.x+gg.message_box.w+10;
-      gg.table.y = gg.canv.height-gg.table.h;
-      gg.table.w = gg.canv.width-gg.table.x-10;
+      gg.timeline.w = gg.table.w;
+      gg.timeline.h = 40;
+      gg.timeline.x = gg.table.x;
+      gg.timeline.y = gg.table.y;
+      gg.timeline.size();
 
       b = gg.line;
       b.h = gg.canv.height;
@@ -79,8 +78,8 @@ var GamePlayScene = function(game, stage)
       b.w = gg.canv.width-b.x;
       b.graph.w = graph_s;
       b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-10;
-      b.graph.y = 10;
+      b.graph.x = gg.canv.width-b.graph.w-30;
+      b.graph.y = 30;
       b.v_min = 0;
       b.v_max = 10;
       b.size();
@@ -92,12 +91,11 @@ var GamePlayScene = function(game, stage)
       b.w = gg.canv.width-b.x;
       b.graph.w = graph_s;
       b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-10;
-      b.graph.y = 10;
+      b.graph.x = gg.canv.width-b.graph.w-30;
+      b.graph.y = 30;
       b.v_min = 0;
       b.v_max = 10;
       b.size();
-
 
     }
 
@@ -274,8 +272,10 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
 
     gg.console_img = GenImg("assets/console.png");
-    gg.dark_console_img = GenImg("assets/console.png");
+    gg.dark_console_img = GenImg("assets/console_dark.png");
     gg.background_img = GenImg("assets/background.jpg");
+    gg.background_ui_img = GenImg("assets/background_ui.jpg");
+    gg.bezel_img = GenImg("assets/bezel.png");
     gg.notice_img = GenImg("assets/alert.png");
 
     gg.data_dragger = new data_dragger();
@@ -310,22 +310,24 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.type = LEVEL_QUADRATIC;
     l.a = 0;
-    l.b = 3;
-    l.c = 4;
-    l.correct_a = 0.2;
-    l.correct_b = 3;
-    l.correct_c = 4;
+    l.b = 2;
+    l.c = 1;
+    l.correct_a = 0.5;
+    l.correct_b = 2;
+    l.correct_c = 3;
     gg.levels.push(l);
     i++;
 
     //quadratic 2
     l = new level();
     l.i = i;
-    l.type = LEVEL_LINEAR;
-    l.m = 4;
-    l.b = 5;
-    l.correct_m = 3;
-    l.correct_b = 5;
+    l.type = LEVEL_QUADRATIC;
+    l.a = 0.5;
+    l.b = 2;
+    l.c = 3;
+    l.correct_a = 0;
+    l.correct_b = 2;
+    l.correct_c = 5;
     gg.levels.push(l);
     i++;
 
@@ -335,9 +337,8 @@ var GamePlayScene = function(game, stage)
     l.type = LEVEL_MODULE;
     m = new modparam();
     m.title = "Charge";
-    m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
+    m.v = 0;
+    m.correct_v = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
@@ -360,14 +361,13 @@ var GamePlayScene = function(game, stage)
     m = new modparam();
     m.title = "Charge";
     m.v = 0;
-    m.correct_v = 1;
-    m.active = 1;
+    m.correct_v = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
-    m.v = 0;
-    m.correct_v = 3;
+    m.v = 2;
+    m.correct_v = 2.5;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
@@ -383,15 +383,14 @@ var GamePlayScene = function(game, stage)
     l.type = LEVEL_MODULE;
     m = new modparam();
     m.title = "Charge";
-    m.v = 1;
-    m.correct_v = 2;
+    m.v = 0;
+    m.correct_v = 0.5;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
-    m.v = 2;
-    m.correct_v = 2;
-    m.active = 0;
+    m.v = 2.5;
+    m.correct_v = 2.5;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
@@ -409,14 +408,12 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
-    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Drill Motor";
-    m.v = 1;
+    m.v = 0;
     m.correct_v = 1;
-    m.active = 0;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
@@ -434,14 +431,12 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
-    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Drill Motor";
     m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
+    m.correct_v = 1.5;
     m.wx = -100;
     l.modparams.push(m);
     m = new relparam();
@@ -459,22 +454,19 @@ var GamePlayScene = function(game, stage)
     m.title = "Charge";
     m.v = 10;
     m.correct_v = 10;
-    m.active = 0;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Drill Motor";
-    m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
+    m.v = 1.5;
+    m.correct_v = 1.5;
     m.wx = -100;
     m.wy = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Solar Panel";
-    m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
+    m.v = 0;
+    m.correct_v = 0.75;
     m.wx = -100;
     m.wy = -100;
     l.modparams.push(m);
@@ -495,24 +487,21 @@ var GamePlayScene = function(game, stage)
     l.type = LEVEL_MODULE;
     m = new modparam();
     m.title = "Charge";
-    m.v = 10;
-    m.correct_v = 10;
-    m.active = 0;
+    m.v = 0.5;
+    m.correct_v = 0.5;
     m.wx = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Charge Rate";
-    m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
+    m.v = 2.5;
+    m.correct_v = 2.5;
     m.wx = -100;
     m.wy = 100;
     l.modparams.push(m);
     m = new modparam();
     m.title = "Solar Panel";
-    m.v = 1;
-    m.correct_v = 1;
-    m.active = 0;
+    m.v = 0;
+    m.correct_v = 0.75;
     m.wx = -100;
     m.wy = -100;
     l.modparams.push(m);
@@ -532,9 +521,20 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.type = LEVEL_LINEAR;
     l.m = 2;
-    l.b = 1;
+    l.b = 5;
     l.correct_m = 4;
-    l.correct_b = 4;
+    l.correct_b = 10;
+    gg.levels.push(l);
+    i++;
+
+    //line
+    l = new level();
+    l.i = i;
+    l.type = LEVEL_LINEAR;
+    l.m = 4;
+    l.b = 10;
+    l.correct_m = 0.5;
+    l.correct_b = 11;
     gg.levels.push(l);
     i++;
 
@@ -545,9 +545,9 @@ var GamePlayScene = function(game, stage)
     l.a = 0;
     l.b = 0;
     l.c = 0;
-    l.correct_a = 0.1;
-    l.correct_b = 0.2;
-    l.correct_c = 3;
+    l.correct_a = 1;
+    l.correct_b = 2;
+    l.correct_c = 12;
     gg.levels.push(l);
     i++;
 
@@ -759,17 +759,14 @@ var GamePlayScene = function(game, stage)
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 1;
     drawImageBox(gg.console_img,gg.lab,gg.ctx);
-    //strokeBox(gg.monitor,gg.ctx);
     gg.exposition_box.draw();
   }
 
   self.draw_work = function()
   {
-    gg.ctx.fillStyle = "#7A92AB";
-    gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
-    gg.ctx.strokeStyle = black;
-    gg.table.draw();
+    gg.ctx.drawImage(gg.background_ui_img,0,0,gg.canv.width,gg.canv.height);
     gg.timeline.draw();
+    gg.table.draw();
     switch(gg.cur_level.type)
     {
       case LEVEL_LINEAR:    gg.line.draw();         break;
@@ -779,6 +776,7 @@ var GamePlayScene = function(game, stage)
     gg.cur_level.draw();
     gg.message_box.draw();
     gg.data_dragger.draw();
+    gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
   }
 
   self.draw_night = function()
