@@ -188,7 +188,7 @@ var english_text =
       "Hey friend! Guess what guess what guess what!", SPEAKER_AI, EMOTE_EXCITED,
       "While you were asleep, I installed your fancy new supercharger!", SPEAKER_AI, EMOTE_NULL,
       "What?! Gemma, I still needed to run some tests!", SPEAKER_PLAYER, EMOTE_NULL,
-      "Hmmm. 🤔 I think the words you're looking for are, Thank you, Gemma.", SPEAKER_AI, EMOTE_PROCESSING,
+      "Hmmm. 🤔 I think the words you're looking for are, \"Thank you, Gemma.\"", SPEAKER_AI, EMOTE_PROCESSING,
       "By the way, the new charger coil is working great. Check it out!", SPEAKER_AI, EMOTE_NULL,
     ],
     text:
