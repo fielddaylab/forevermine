@@ -32,6 +32,7 @@ var EMOTE_NULL       = ENUM; ENUM++;
 var modparam = function()
 {
   this.title = "";
+  this.img = 0;
   this.v = 0;
   this.correct_v = 0;
   this.active = 1;

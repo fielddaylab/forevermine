@@ -1486,6 +1486,8 @@ var module = function()
   self.v_btn = new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.v[0] == v) return; self.v[0] = v; self.invalidate_sim(); gg.module_board.calculate(); });
   self.vdec_btn = new ButtonBox(0,0,0,0,    function() { self.v_btn.set(self.v_btn.number-0.1); });
 
+  self.img = 0;
+
   self.invalidate_sim = function()
   {
     gg.timeline.t = 0;
@@ -1510,7 +1512,7 @@ var module = function()
     self.vinc_btn.w = self.v_btn.w;
     self.vinc_btn.h = self.v_btn.h/2;
     self.vinc_btn.x = self.v_btn.x;
-    self.vinc_btn.y = self.v_btn.y-self.v_btn.h;
+    self.vinc_btn.y = self.v_btn.y-self.v_btn.h-25; //HACK
     self.vdec_btn.w = self.v_btn.w;
     self.vdec_btn.h = self.v_btn.h/2;
     self.vdec_btn.x = self.v_btn.x;
@@ -1527,6 +1529,7 @@ var module = function()
     gg.ctx.lineWidth = 1;
     var x;
     var y;
+    /*
     if(!self.active) { gg.ctx.fillStyle = very_light_gray; fillBox(self,gg.ctx); }
     gg.ctx.strokeStyle = dark_gray;
     gg.ctx.beginPath();
@@ -1542,18 +1545,23 @@ var module = function()
     gg.ctx.stroke();
     var t_x = mapVal(0,gg.timeline.t_max,self.x,self.x+self.w,gg.timeline.t);
     drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
+    */
     gg.ctx.strokeStyle = black;
-    strokeBox(self,gg.ctx);
+    drawImageBox(self.img,self,gg.ctx);
     if(self.active)
     {
-      //strokeBox(self.v_btn,gg.ctx);
-      strokeBox(self.vinc_btn,gg.ctx);
-      strokeBox(self.vdec_btn,gg.ctx);
+      drawImageBox(gg.arrow_up_img,self.vinc_btn,gg.ctx);
+      drawImageBox(gg.arrow_down_img,self.vdec_btn,gg.ctx);
     }
+    drawOutlineText(self.v[0],self.x+self.w/2,self.y+self.h-1,1,white,gg.ctx);
     gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h-1);
-    gg.ctx.fillStyle = gray;
-    if(floor(gg.timeline.t) != 0) gg.ctx.fillText(self.v[floor(gg.timeline.t)],self.x+self.w/2,self.y+self.h*2/3);
+    if(floor(gg.timeline.t) != 0)
+    {
+      drawOutlineText(self.v[floor(gg.timeline.t)],self.x+self.w/2,self.y+self.h*2/3,1,white,gg.ctx);
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(self.v[floor(gg.timeline.t)],self.x+self.w/2,self.y+self.h*2/3);
+    }
     gg.ctx.fillStyle = black;
   }
 }
@@ -1773,7 +1781,7 @@ var module_board = function()
   {
     gg.ctx.lineWidth = 1;
 
-    gg.ctx.font = "12px DisposableDroidBB";
+    gg.ctx.font = "20px DisposableDroidBB";
     gg.ctx.textAlign = "center";
     for(var i = 0; i < self.modules.length; i++)
       self.modules[i].draw();

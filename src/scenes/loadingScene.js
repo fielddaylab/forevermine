@@ -139,6 +139,8 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/pano_bg.jpg");
     img_srcs.push("assets/pano_fg.png");
     img_srcs.push("assets/pano.png");
+    img_srcs.push("assets/battery.png");
+    img_srcs.push("assets/drill.png");
     for(var i = 0; i < 10; i++)
       img_srcs.push("assets/feedback/0-"+i+".png");
     for(var i = 0; i < img_srcs.length; i++)
