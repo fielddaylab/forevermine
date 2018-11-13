@@ -688,7 +688,7 @@ var editable_line = function()
       if(gg.table.data_visible)
       {
         gg.ctx.fillStyle = white;
-        var s = 10;
+        var s = 15;
         for(var i = 0; i <= gg.timeline.t_max; i++)
         {
           if(gg.table.known_data[i] != "-")
@@ -697,7 +697,8 @@ var editable_line = function()
             y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
             x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
             y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
-            gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+            if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,x-s/2,y-s/2,s,s);
+            else gg.ctx.drawImage(gg.neq_pt_img,x-s/2,y-s/2,s,s);
           }
         }
       }
@@ -983,7 +984,7 @@ var editable_quadratic = function()
       if(gg.table.data_visible)
       {
         gg.ctx.fillStyle = white;
-        var s = 10;
+        var s = 15;
         for(var i = 0; i <= gg.timeline.t_max; i++)
         {
           if(gg.table.known_data[i] != "-")
@@ -992,7 +993,8 @@ var editable_quadratic = function()
             y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
             x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
             y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
-            gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+            if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,x-s/2,y-s/2,s,s);
+            else gg.ctx.drawImage(gg.neq_pt_img,x-s/2,y-s/2,s,s);
           }
         }
       }
@@ -1128,8 +1130,13 @@ var table = function()
       gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
       if(self.simd_visible >= i)
       {
-        if(self.data_visible && (self.known_data[i] == self.predicted_data[i] || self.correct))
-          gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
+        if(self.data_visible)
+        {
+          if(self.known_data[i] == self.predicted_data[i] || self.correct)
+            gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
+          else if(self.known_data[i] != "-")
+            gg.ctx.drawImage(gg.neq_img,x-10,y2-10,20,20);
+        }
         gg.ctx.fillText(self.predicted_data[i],x,y12+self.font_h/3);
       }
       else gg.ctx.fillText("-",x,y12+self.font_h/3);
@@ -1831,7 +1838,7 @@ var module_board = function()
         if(gg.table.data_visible)
         {
           gg.ctx.fillStyle = white;
-          var s = 10;
+          var s = 15;
           for(var i = 0; i <= gg.timeline.t_max; i++)
           {
             if(gg.table.known_data[i] != "-")
@@ -1839,7 +1846,8 @@ var module_board = function()
               x = mapVal(0,gg.timeline.t_max,g.x,g.x+g.w,i);
               y = mapVal(self.v_min,self.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
               y = clamp(g.y,g.y+g.h,y);
-              gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+              if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,x-s/2,y-s/2,s,s);
+              else gg.ctx.drawImage(gg.neq_pt_img,x-s/2,y-s/2,s,s);
             }
           }
         }

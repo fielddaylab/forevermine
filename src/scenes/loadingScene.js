@@ -117,6 +117,8 @@ var LoadingScene = function(game, stage)
     //put asset paths in img_srcs
     img_srcs.push("assets/eq.png");
     img_srcs.push("assets/eq_pt.png");
+    img_srcs.push("assets/neq.png");
+    img_srcs.push("assets/neq_pt.png");
     img_srcs.push("assets/timeline_scrubber.png");
     img_srcs.push("assets/arrow_up.png");
     img_srcs.push("assets/arrow_down.png");

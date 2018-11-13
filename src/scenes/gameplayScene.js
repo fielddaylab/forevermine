@@ -278,6 +278,8 @@ var GamePlayScene = function(game, stage)
 
     gg.eq_img = GenImg("assets/eq.png");
     gg.eq_pt_img = GenImg("assets/eq_pt.png");
+    gg.neq_img = GenImg("assets/neq.png");
+    gg.neq_pt_img = GenImg("assets/neq_pt.png");
     gg.timeline_scrubber_img = GenImg("assets/timeline_scrubber.png");
     gg.arrow_up_img = GenImg("assets/arrow_up.png");
     gg.arrow_down_img = GenImg("assets/arrow_down.png");
