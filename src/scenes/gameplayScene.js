@@ -235,6 +235,8 @@ var GamePlayScene = function(game, stage)
         gg.timeline.fast_sim = 1;
         break;
       case MODE_WORK_TO_FEED:
+        gg.line.blur();
+        gg.quadratic.blur();
         gg.exposition_box.clear();
         break;
       case MODE_FEED:
@@ -272,7 +274,7 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
     gg.pano_t = 200;
 
-    gg.keylistener = {last_key:0,key_down:function(evt){gg.keylistener.last_key = evt.keyCode;console.log(evt.keyCode)},advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
+    gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
 
     gg.eq_img = GenImg("assets/eq.png");
     gg.eq_pt_img = GenImg("assets/eq_pt.png");

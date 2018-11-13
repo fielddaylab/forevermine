@@ -623,6 +623,12 @@ var editable_line = function()
     return !check;
   }
 
+  self.blur = function()
+  {
+    self.m_btn.blur();
+    self.b_btn.blur();
+  }
+
   self.tick = function()
   {
   }
@@ -878,6 +884,13 @@ var editable_quadratic = function()
       if(check) check = !clicker.filter(self.cdec_btn);
     }
     return !check;
+  }
+
+  self.blur = function()
+  {
+    self.a_btn.blur();
+    self.b_btn.blur();
+    self.c_btn.blur();
   }
 
   self.tick = function()
@@ -1216,22 +1229,28 @@ var message_box = function()
   self.click = function(evt)
   {
     if(self.prompt_end && self.displayed_i == self.text.length && ptWithin(self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h,evt.doX,evt.doY))
+    {
       self.requested_end = 1;
+      return 1;
+    }
     if(self.displayed_i < self.text.length)
     {
       if(self.speakers[self.displayed_i] == SPEAKER_AI)
         self.advance();
       else if(ptWithin(self.input_x,self.input_y,self.input_w,self.input_h,evt.doX,evt.doY))
         self.advance();
+      return 1;
     }
+    return 0;
   }
 
   self.dragging = 0;
   self.drag_start_y = 0;
   self.dragStart = function(evt)
   {
-    self.click(evt)
+    if(self.click(evt)) { self.dragging = 0; return 0; }
     self.drag_start_y = evt.doY;
+    return 1;
   }
   self.drag = function(evt)
   {
