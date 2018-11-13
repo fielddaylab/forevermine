@@ -285,8 +285,8 @@ var exposition_box = function()
   self.text_w = 0;
 
   self.pad = 10;
-  self.font_h = 15;
-  self.font = self.font_h+"px Helvetica";
+  self.font_h = 30;
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.text = [];
   self.bubbles = [];
@@ -452,7 +452,7 @@ var timeline = function()
 
     if(self.t < self.t_target)
     {
-      gg.ctx.font = "12px Helvetica";
+      gg.ctx.font = "12px DisposableDroidBB";
       gg.ctx.fillStyle = light_gray;
       gg.ctx.fillText("simulating...",self.x,self.y-10);
     }
@@ -494,7 +494,7 @@ var editable_line = function()
   }
 
   self.font_h = 50;
-  self.font = self.font_h+"px Helvetica";
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.btn_w = 0;
   self.eqn_x = 0;
@@ -658,7 +658,7 @@ var editable_line = function()
     }
     else
       drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
-    gg.ctx.font = "12px Helvetica";
+    gg.ctx.font = "12px DisposableDroidBB";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
     gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
@@ -749,7 +749,7 @@ var editable_quadratic = function()
   }
 
   self.font_h = 50;
-  self.font = self.font_h+"px Helvetica";
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.btn_w = 0;
   self.eqn_x = 0;
@@ -924,7 +924,7 @@ var editable_quadratic = function()
     if(tn < self.samples)
       gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
     gg.ctx.stroke();
-    gg.ctx.font = "12px Helvetica";
+    gg.ctx.font = "12px DisposableDroidBB";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
     gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
@@ -989,7 +989,7 @@ var table = function()
   self.y = 0;
 
   self.font_h = 20;
-  self.font = self.font_h+"px Helvetica";
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.predicted_color = "#94DEE8";
   self.known_color = "#5CC8D9";
@@ -1050,7 +1050,7 @@ var table = function()
     gg.ctx.fillRect(x,y2,self.w,y3-y2);
 
     gg.ctx.fillStyle = self.text_color;
-    gg.ctx.font = "12px Helvetica";
+    gg.ctx.font = "16px DisposableDroidBB";
     gg.ctx.textAlign = "left";
     x = self.x+w;
     drawLine(x,y1,x,y3,gg.ctx);
@@ -1121,8 +1121,8 @@ var message_box = function()
   self.text_w = 0;
 
   self.pad = 10;
-  self.font_h = 15;
-  self.font = self.font_h+"px Helvetica";
+  self.font_h = 20;
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.ai_text_color = "#4D514C";
   self.you_text_color = "#FEFFFF";
@@ -1717,7 +1717,7 @@ var module_board = function()
   {
     gg.ctx.lineWidth = 1;
 
-    gg.ctx.font = "12px Helvetica";
+    gg.ctx.font = "12px DisposableDroidBB";
     gg.ctx.textAlign = "center";
     for(var i = 0; i < self.modules.length; i++)
       self.modules[i].draw();
@@ -1742,7 +1742,7 @@ var module_board = function()
       if(tn < gg.timeline.t_max)
         gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
       gg.ctx.stroke();
-      gg.ctx.font = "12px Helvetica";
+      gg.ctx.font = "12px DisposableDroidBB";
       gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
       gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
