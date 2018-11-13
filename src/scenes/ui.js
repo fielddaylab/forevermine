@@ -442,15 +442,13 @@ var timeline = function()
     //gg.ctx.strokeStyle = red;
     //strokeBox(self,gg.ctx);
 
-    strokeBox(self.advance_btn,gg.ctx);
+    //strokeBox(self.advance_btn,gg.ctx);
 
     var t_x;
 
-    gg.ctx.strokeStyle = black;
     t_x = mapVal(0,self.t_max,self.sx,self.ex,self.t);
-    gg.ctx.fillStyle = white;
     var s = self.h;
-    gg.ctx.fillRect(t_x-s/2,self.y,s,self.h);
+    gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y,s,self.h);
 
     if(self.t < self.t_target)
     {
@@ -662,12 +660,12 @@ var editable_line = function()
 
     //eqn
     gg.ctx.fillStyle = white;
-    fillBox(self.m_btn,gg.ctx);
-    fillBox(self.minc_btn,gg.ctx);
-    fillBox(self.mdec_btn,gg.ctx);
-    fillBox(self.b_btn,gg.ctx);
-    fillBox(self.binc_btn,gg.ctx);
-    fillBox(self.bdec_btn,gg.ctx);
+    drawImageBox(gg.number_bg_img,self.m_btn,gg.ctx);
+    drawImageBox(gg.arrow_up_img,self.minc_btn,gg.ctx);
+    drawImageBox(gg.arrow_down_img,self.mdec_btn,gg.ctx);
+    drawImageBox(gg.number_bg_img,self.b_btn,gg.ctx);
+    drawImageBox(gg.arrow_up_img,self.binc_btn,gg.ctx);
+    drawImageBox(gg.arrow_down_img,self.bdec_btn,gg.ctx);
 
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
@@ -918,15 +916,15 @@ var editable_quadratic = function()
 
     //eqn
     gg.ctx.fillStyle = white;
-    fillBox(self.a_btn,gg.ctx);
-    fillBox(self.ainc_btn,gg.ctx);
-    fillBox(self.adec_btn,gg.ctx);
-    fillBox(self.b_btn,gg.ctx);
-    fillBox(self.binc_btn,gg.ctx);
-    fillBox(self.bdec_btn,gg.ctx);
-    fillBox(self.c_btn,gg.ctx);
-    fillBox(self.cinc_btn,gg.ctx);
-    fillBox(self.cdec_btn,gg.ctx);
+    drawImageBox(gg.number_bg_img,self.a_btn,gg.ctx);
+    drawImageBox(gg.arrow_up_img,self.ainc_btn,gg.ctx);
+    drawImageBox(gg.arrow_down_img,self.adec_btn,gg.ctx);
+    drawImageBox(gg.number_bg_img,self.b_btn,gg.ctx);
+    drawImageBox(gg.arrow_up_img,self.binc_btn,gg.ctx);
+    drawImageBox(gg.arrow_down_img,self.bdec_btn,gg.ctx);
+    drawImageBox(gg.number_bg_img,self.c_btn,gg.ctx);
+    drawImageBox(gg.arrow_up_img,self.cinc_btn,gg.ctx);
+    drawImageBox(gg.arrow_down_img,self.cdec_btn,gg.ctx);
 
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
@@ -1380,6 +1378,8 @@ var message_box = function()
       var s = 20;
       gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s/2,self.monitor_y+self.monitor_h/4-s/2,s,s);
     }
+    var h = gg.neck_heart_img.height/gg.neck_heart_img.width*self.monitor_w;
+    gg.ctx.drawImage(gg.neck_heart_img,self.monitor_x,self.monitor_y+self.monitor_h-h/2,self.monitor_w,h);
   }
 
 }

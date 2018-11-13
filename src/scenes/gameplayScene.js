@@ -68,7 +68,7 @@ var GamePlayScene = function(game, stage)
       gg.timeline.w = gg.table.w;
       gg.timeline.h = 40;
       gg.timeline.x = gg.table.x;
-      gg.timeline.y = gg.table.y;
+      gg.timeline.y = gg.table.y+5;
       gg.timeline.size();
 
       b = gg.line;
@@ -274,12 +274,19 @@ var GamePlayScene = function(game, stage)
 
     gg.keylistener = {last_key:0,key_down:function(evt){gg.keylistener.last_key = evt.keyCode;console.log(evt.keyCode)},advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
 
+    gg.eq_img = GenImg("assets/eq.png");
+    gg.eq_pt_img = GenImg("assets/eq_pt.png");
+    gg.timeline_scrubber_img = GenImg("assets/timeline_scrubber.png");
+    gg.arrow_up_img = GenImg("assets/arrow_up.png");
+    gg.arrow_down_img = GenImg("assets/arrow_up.png");
+    gg.number_bg_img = GenImg("assets/number_bg.png");
     gg.console_img = GenImg("assets/console.png");
     gg.dark_console_img = GenImg("assets/console_dark.png");
     gg.background_img = GenImg("assets/background.jpg");
     gg.background_ui_img = GenImg("assets/background_ui.jpg");
     gg.bezel_img = GenImg("assets/bezel.png");
     gg.notice_img = GenImg("assets/alert.png");
+    gg.neck_heart_img = GenImg("assets/neck_heart.png");
     gg.pano_bg_img = GenImg("assets/pano_bg.jpg");
     gg.pano_fg_img = GenImg("assets/pano_fg.png");
     gg.pano_img = GenImg("assets/pano.png");
