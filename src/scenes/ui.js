@@ -686,6 +686,7 @@ var editable_line = function()
     if(gg.table.data_visible)
     {
       gg.ctx.fillStyle = red;
+      var s = 10;
       for(var i = 0; i <= gg.timeline.t_max; i++)
       {
         if(gg.table.known_data[i] != "-")
@@ -694,7 +695,7 @@ var editable_line = function()
           y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
           x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
           y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
-          gg.ctx.fillRect(x-1,y-1,2,2);
+          gg.ctx.fillRect(x-s/2,y-s/2,s,s);
         }
       }
     }
@@ -946,6 +947,7 @@ var editable_quadratic = function()
     if(gg.table.data_visible)
     {
       gg.ctx.fillStyle = red;
+      var s = 10;
       for(var i = 0; i <= gg.timeline.t_max; i++)
       {
         if(gg.table.known_data[i] != "-")
@@ -954,7 +956,7 @@ var editable_quadratic = function()
           y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
           x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
           y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
-          gg.ctx.fillRect(x-1,y-1,2,2);
+          gg.ctx.fillRect(x-s/2,y-s/2,s,s);
         }
       }
     }
@@ -1376,9 +1378,10 @@ var message_box = function()
     if(self.prompt_end)
     {
       var s = 20;
-      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s/2,self.monitor_y-s/2,s,s);
+      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s/2,self.monitor_y+self.monitor_h/4-s/2,s,s);
     }
   }
+
 }
 
 var module = function()
@@ -1721,6 +1724,7 @@ var module_board = function()
       if(gg.table.data_visible)
       {
         gg.ctx.fillStyle = red;
+        var s = 10;
         for(var i = 0; i <= gg.timeline.t_max; i++)
         {
           if(gg.table.known_data[i] != "-")
@@ -1728,7 +1732,7 @@ var module_board = function()
             x = mapVal(0,gg.timeline.t_max,g.x,g.x+g.w,i);
             y = mapVal(self.v_min,self.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
             y = clamp(g.y,g.y+g.h,y);
-            gg.ctx.fillRect(x-1,y-1,2,2);
+            gg.ctx.fillRect(x-s/2,y-s/2,s,s);
           }
         }
       }

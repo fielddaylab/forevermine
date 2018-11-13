@@ -270,6 +270,9 @@ var GamePlayScene = function(game, stage)
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
+    gg.pano_t = 200;
+
+    gg.keylistener = {last_key:0,key_down:function(evt){gg.keylistener.last_key = evt.keyCode;console.log(evt.keyCode)},advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
 
     gg.console_img = GenImg("assets/console.png");
     gg.dark_console_img = GenImg("assets/console_dark.png");
@@ -277,6 +280,9 @@ var GamePlayScene = function(game, stage)
     gg.background_ui_img = GenImg("assets/background_ui.jpg");
     gg.bezel_img = GenImg("assets/bezel.png");
     gg.notice_img = GenImg("assets/alert.png");
+    gg.pano_bg_img = GenImg("assets/pano_bg.jpg");
+    gg.pano_fg_img = GenImg("assets/pano_fg.png");
+    gg.pano_img = GenImg("assets/pano.png");
 
     gg.data_dragger = new data_dragger();
     gg.exposition_box = new exposition_box();
@@ -302,6 +308,8 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 1;
     for(var j = 0; j < 10; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -315,6 +323,8 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0.5;
     l.correct_b = 2;
     l.correct_c = 3;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -328,6 +338,8 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0;
     l.correct_b = 2;
     l.correct_c = 5;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -351,6 +363,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -374,6 +388,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -397,6 +413,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -420,6 +438,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -443,6 +463,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -478,6 +500,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -513,6 +537,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -524,6 +550,8 @@ var GamePlayScene = function(game, stage)
     l.b = 5;
     l.correct_m = 4;
     l.correct_b = 10;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -535,6 +563,8 @@ var GamePlayScene = function(game, stage)
     l.b = 10;
     l.correct_m = 0.5;
     l.correct_b = 11;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -548,6 +578,8 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 1;
     l.correct_b = 2;
     l.correct_c = 12;
+    l.pano_st = 0;
+    l.pano_et = 1;
     gg.levels.push(l);
     i++;
 
@@ -564,11 +596,34 @@ var GamePlayScene = function(game, stage)
     self.was_ready = 1;
     self.resize(stage);
     self.set_mode(MODE_MENU);
+    /*
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_CINEMATIC);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_BOOT);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_PREH);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_PREH_TO_WORK);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_WORK);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_WORK_TO_FEED);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_FEED);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_FEED_TO_POSTH);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_POSTH);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_POSTH_TO_NIGHT);
+    //*/
   };
 
   self.tick = function()
   {
     gg.mode_t++;
+    keyer.filter(gg.keylistener);
     gg.monitor.tick();
     switch(gg.mode)
     {
@@ -580,7 +635,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CINEMATIC:
       {
         clicker.filter(gg.monitor);
-        if(gg.monitor.clicked)
+        if(gg.monitor.clicked || gg.keylistener.advance())
           self.set_mode(MODE_BOOT);
       }
         break;
@@ -602,7 +657,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PREH:
       {
         clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
           self.set_mode(MODE_PREH_TO_WORK);
         gg.exposition_box.tick();
       }
@@ -642,7 +697,7 @@ var GamePlayScene = function(game, stage)
           dragger.filter(gg.message_box);
         }
 
-        if(gg.cur_level.correct && gg.message_box.requested_end)
+        if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
           self.set_mode(MODE_WORK_TO_FEED);
 
         gg.timeline.tick();
@@ -681,7 +736,7 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_FEED:
-        if(gg.mode_t < gg.fade_t*gg.cur_level.feedback_imgs.length) //display feedback
+        if(gg.mode_t < gg.fade_t*gg.cur_level.feedback_imgs.length && !gg.keylistener.advance()) //display feedback
         {
           var t = gg.mode_t/gg.fade_t*gg.cur_level.feedback_imgs.length;
         }
@@ -699,7 +754,7 @@ var GamePlayScene = function(game, stage)
       case MODE_POSTH:
       {
         clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length)
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
           self.set_mode(MODE_POSTH_TO_NIGHT);
         gg.exposition_box.tick();
       }
@@ -718,9 +773,9 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_NIGHT:
-        if(gg.mode_t < gg.fade_t) //display night
+        if(gg.mode_t < gg.pano_t && !gg.keylistener.advance()) //display night
         {
-          var t = gg.mode_t/gg.fade_t;
+          var t = gg.mode_t/gg.pano_t;
         }
         else self.set_mode(MODE_NIGHT_TO_PREH);
         break;
@@ -744,6 +799,8 @@ var GamePlayScene = function(game, stage)
     clicker.flush();
     dragger.flush();
     blurer.flush();
+
+    gg.keylistener.advance();
   };
 
   self.draw_home = function()
@@ -753,7 +810,8 @@ var GamePlayScene = function(game, stage)
     gg.ctx.imageSmoothingEnabled = 0;
     if(gg.mode == MODE_FEED)
     {
-      drawImageBox(gg.cur_level.feedback_imgs[floor((gg.mode_t*2/gg.fade_t)%gg.cur_level.feedback_imgs.length)],gg.monitor,gg.ctx);
+      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t*2/gg.fade_t)%gg.cur_level.feedback_imgs.length)];
+      drawImageBox(img,gg.monitor,gg.ctx);
     }
     else
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -779,9 +837,24 @@ var GamePlayScene = function(game, stage)
     gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
   }
 
-  self.draw_night = function()
+  self.draw_night = function(t)
   {
+    var t = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
+    gg.ctx.drawImage(gg.pano_bg_img,0,0,gg.canv.width,gg.canv.height);
+    var vis_pano_w = gg.canv.width/gg.canv.height*gg.pano_img.height;
+    var pano_sx = 0;
+    var pano_ex = gg.pano_img.width-vis_pano_w;
+    gg.ctx.drawImage(gg.pano_img,lerp(pano_sx,pano_ex,t),0,vis_pano_w,gg.pano_img.height,0,0,gg.canv.width,gg.canv.height);
+    var vis_pano_fg_w = gg.canv.width/gg.canv.height*gg.pano_fg_img.height;
+    var pano_fg_sx = 0;
+    var pano_fg_ex = gg.pano_fg_img.width-vis_pano_fg_w;
+    gg.ctx.drawImage(gg.pano_fg_img,lerp(pano_fg_sx,pano_fg_ex,t),0,vis_pano_fg_w,gg.pano_fg_img.height,0,0,gg.canv.width,gg.canv.height);
 
+    gg.ctx.fillStyle = white;
+    gg.ctx.font = "40px Helvetica";
+    gg.ctx.fillText("Day "+gg.cur_level.i, 20,60);
+    gg.ctx.font = "20px Helvetica";
+    gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,90);
   }
 
   self.draw = function()
@@ -878,25 +951,31 @@ var GamePlayScene = function(game, stage)
         {
           self.draw_home();
           gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
         else
         {
-          self.draw_night();
-          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
+          self.draw_night(t*gg.fade_t/(gg.fade_t*2+gg.pano_t));
+          gg.ctx.globalAlpha = 1-t;
+          gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
         break;
       case MODE_NIGHT:
-        self.draw_night();
+        var t = gg.mode_t/gg.pano_t;
+        self.draw_night((gg.fade_t+t*gg.pano_t)/(gg.fade_t*2+gg.pano_t));
         break;
       case MODE_NIGHT_TO_PREH:
         if(gg.mode_t < gg.fade_t)
         {
-          self.draw_night();
-          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          var t = gg.mode_t/gg.fade_t;
+          self.draw_night((gg.fade_t+gg.pano_t+t*gg.fade_t)/(gg.fade_t*2+gg.pano_t));
+          gg.ctx.globalAlpha = t;
+          gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
@@ -904,6 +983,7 @@ var GamePlayScene = function(game, stage)
         {
           self.draw_home();
           gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
