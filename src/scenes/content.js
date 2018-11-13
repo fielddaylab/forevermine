@@ -71,11 +71,13 @@ var level = function()
     tstate:0,
   };
 
-  self.pre_text = [];
-  self.text = [];
-  self.correct_text = [ "You did it! On to the next assignment...", trigger_timer];
-  self.incorrect_text = [ "I don't think that's right... try again.", trigger_timer];
-  self.post_text = [];
+  self.pre_text = [ "Good morning!", SPEAKER_AI, EMOTE_NULL, ]
+  self.text = [ "Here's the model data.", SPEAKER_AI, EMOTE_NULL, trigger_timer, ];
+  self.import_text = [ "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, trigger_timer, ];
+  self.export_text = [ "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, trigger_timer, ];
+  self.correct_text = [ "You did it! On to the next assignment...", SPEAKER_AI, EMOTE_NULL, trigger_timer, ];
+  self.incorrect_text = [ "I don't think that's right... try again.", SPEAKER_AI, EMOTE_NULL, trigger_timer, ];
+  self.post_text = [ "Goodnight!", SPEAKER_AI, EMOTE_NULL, ]
 
   self.feedback_imgs = [];
 

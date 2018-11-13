@@ -43,6 +43,14 @@ var english_text =
       "You can do this, bestie! 🤗",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
       "Here's the data. Drag it onto our workspace!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
     ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
     correct_text:
     [
       "YAYAYAY! 🙌",  SPEAKER_AI, EMOTE_EXCITED,get_timer(60),
@@ -82,6 +90,14 @@ var english_text =
       "Then we can make a new prediction.",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "Good luck, bestie! 🤞",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
     ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
     correct_text:
     [
       "You did it! 🎉",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
@@ -119,6 +135,14 @@ var english_text =
       "🎵 The more we get together, together, together...",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
       "Gemma, are you... singing?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "🎵 The more we get together, the happier we'll be!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+    ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
     ],
     correct_text:
     [
@@ -160,6 +184,14 @@ var english_text =
       "Ok, forget it. Can I have the data?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "Sure! Here ya go!",  SPEAKER_AI, EMOTE_EXCITED,get_timer(60),
     ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
     correct_text:
     [
       "Yay! Great job! 🎉",  SPEAKER_AI, EMOTE_EXCITED,get_timer(60),
@@ -196,6 +228,14 @@ var english_text =
       "Let's see how it compares with our baseline from yesterday!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
       "🎵 I've been workin' on the railroad, all the livelong day...",  SPEAKER_AI, EMOTE_NULL,get_timer(200),
       "🎵 I've been workin' on the railroad, just to pass the time away...",  SPEAKER_AI, EMOTE_NULL,get_timer(200),
+    ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
     ],
     correct_text:
     [
@@ -238,6 +278,14 @@ var english_text =
       "Use this model to see how fast the bots are charging up now!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
 
     ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
     correct_text:
     [
       "Whee! You matched up the numbers!",  SPEAKER_AI, EMOTE_EXCITED,get_timer(60),
@@ -278,6 +326,14 @@ var english_text =
       "Let's look at the drills we're using right now.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "Eeee this is so much fun!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
       "Here's the data!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+    ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
     ],
     correct_text:
     [
@@ -322,6 +378,14 @@ var english_text =
       "Gemma, I'm not mad. We're still friends. I don't blame you. Now can I PLEASE have the data?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "K.",  SPEAKER_AI, EMOTE_NULL,get_timer(200),
     ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
     correct_text:
     [
       "😬😱😓",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
@@ -364,6 +428,14 @@ var english_text =
       "Ummm.... I can't remember. 🙃",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "Here's the new data!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "Ok. Let's get this over with.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+    ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
     ],
     correct_text:
     [
@@ -408,6 +480,14 @@ var english_text =
       "And ok, I don't have an actual body.",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "But it's the thought that counts! 🍦🍦🍦",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
     ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
     correct_text:
     [
       "🙄 You got it right. Hooray.",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
@@ -446,6 +526,14 @@ var english_text =
       "The robots are cute and all.",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
       "But all they do is mine crystals and make little beeping noises, so we can't exactly have a conversation.",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
       "Are you even listening to me???",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
+    ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
     ],
     correct_text:
     [
@@ -490,6 +578,14 @@ var english_text =
       "ThaT was SO-ME blast!",  SPEAKER_AI, EMOTE_NULL,get_timer(40),
       "YoU are ju-st stuck here now!",  SPEAKER_AI, EMOTE_NULL,get_timer(40),
       "I gue-ss now we can han-g out fo-rever!",  SPEAKER_AI, EMOTE_NULL,get_timer(40),
+    ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
     ],
     correct_text:
     [
@@ -542,6 +638,14 @@ var english_text =
       "Here's your data!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
       "I was never gonna let you get hurt, you know.",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
       "I was just so BORED!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+    ],
+    import_text:
+    [
+      "Great! Now match the model to the data.", SPEAKER_AI, EMOTE_NULL, get_timer(60),
+    ],
+    export_text:
+    [
+      "Awesome- now submit the data to the chat!", SPEAKER_AI, EMOTE_NULL, get_timer(60),
     ],
     correct_text:
     [

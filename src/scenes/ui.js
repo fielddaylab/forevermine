@@ -199,6 +199,7 @@ var data_dragger = function()
     {
       gg.table.data_visible = 1;
       gg.table.verify();
+      gg.message_box.nq_group(gg.cur_level.import_text);
     }
     if(self.dragging_sim && self.ptWithinChat(evt))
     {
