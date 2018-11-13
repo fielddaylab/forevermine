@@ -30,18 +30,18 @@ var english_text =
     text:
     [
       "Here ya go, friend!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "My owners used this equation all the time! 💎💎💎",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "My owners used this model all the time! 💎💎💎",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
       "Wait... you mean 200 years ago?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "Yep! 😂",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "Don't worry! We can fix it up!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "Ok. What should I do?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "Oh, it's soooo easy!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "1️⃣ Change the numbers on the equation.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "2️⃣ Keep trying til the modeled and collected data matches.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "1️⃣ Drag the data into our workspace.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "2️⃣ Match the model to the collected data.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
       "3️⃣ Give your data to me and I'll predict if you're doomed! ☠️😂",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
       "Um... great.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "You can do this, bestie! 🤗",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
-      "Here's the data from last night. Drag it onto our workspace!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "Here's the data. Drag it onto our workspace!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
     ],
     correct_text:
     [
@@ -86,7 +86,6 @@ var english_text =
     [
       "You did it! 🎉",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "Looks like you're not gonna die after all!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
-      "Well, not right now.",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
     ],
     incorrect_text:
     [
