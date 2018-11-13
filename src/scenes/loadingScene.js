@@ -115,6 +115,11 @@ var LoadingScene = function(game, stage)
     loadingImageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put asset paths in img_srcs
+    img_srcs.push("assets/eq.png");
+    img_srcs.push("assets/eq_pt.png");
+    img_srcs.push("assets/timeline_scrubber.png");
+    img_srcs.push("assets/arrow_up.png");
+    img_srcs.push("assets/number_bg.png");
     img_srcs.push("assets/alert.png");
     img_srcs.push("assets/background.jpg");
     img_srcs.push("assets/background_ui.jpg");
@@ -125,6 +130,7 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/accessory_nervous.png");
     img_srcs.push("assets/eye.png");
     img_srcs.push("assets/mouth.png");
+    img_srcs.push("assets/neck_heart.png");
     img_srcs.push("assets/pano_bg.jpg");
     img_srcs.push("assets/pano_fg.png");
     img_srcs.push("assets/pano.png");
