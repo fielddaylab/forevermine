@@ -540,22 +540,24 @@ var editable_line = function()
     self.xp_x = self.m_btn.x+self.m_btn.w;
     self.b_btn.x = self.xp_x+gg.ctx.measureText("x + ").width;
 
-    self.minc_btn.w = self.m_btn.w;
+    var pad = 10;
+    var yoff = 5; //replicate in draw
+    self.minc_btn.w = self.m_btn.w/2;
     self.minc_btn.h = self.m_btn.h/2;
-    self.minc_btn.x = self.m_btn.x;
-    self.minc_btn.y = self.m_btn.y-self.m_btn.h;
-    self.mdec_btn.w = self.m_btn.w;
+    self.minc_btn.x = self.m_btn.x+self.m_btn.w/2-self.minc_btn.w/2;
+    self.minc_btn.y = self.m_btn.y-self.minc_btn.h-pad+yoff;
+    self.mdec_btn.w = self.m_btn.w/2;
     self.mdec_btn.h = self.m_btn.h/2;
-    self.mdec_btn.x = self.m_btn.x;
-    self.mdec_btn.y = self.m_btn.y+self.m_btn.h+self.m_btn.h/2;
-    self.binc_btn.w = self.b_btn.w;
+    self.mdec_btn.x = self.m_btn.x+self.m_btn.w/2-self.mdec_btn.w/2;
+    self.mdec_btn.y = self.m_btn.y+self.m_btn.h+pad+yoff;
+    self.binc_btn.w = self.b_btn.w/2;
     self.binc_btn.h = self.b_btn.h/2;
-    self.binc_btn.x = self.b_btn.x;
-    self.binc_btn.y = self.b_btn.y-self.b_btn.h;
-    self.bdec_btn.w = self.b_btn.w;
+    self.binc_btn.x = self.b_btn.x+self.b_btn.w/2-self.binc_btn.w/2;
+    self.binc_btn.y = self.b_btn.y-self.binc_btn.h-pad+yoff;
+    self.bdec_btn.w = self.b_btn.w/2;
     self.bdec_btn.h = self.b_btn.h/2;
-    self.bdec_btn.x = self.b_btn.x;
-    self.bdec_btn.y = self.b_btn.y+self.b_btn.h+self.b_btn.h/2;
+    self.bdec_btn.x = self.b_btn.x+self.b_btn.w/2-self.bdec_btn.w/2;
+    self.bdec_btn.y = self.b_btn.y+self.b_btn.h+pad+yoff;
 
     self.draw_params();
   }
@@ -665,11 +667,12 @@ var editable_line = function()
     drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
     //eqn
+    var yoff = 5;
     gg.ctx.fillStyle = white;
-    drawImageBox(gg.number_bg_img,self.m_btn,gg.ctx);
+    gg.ctx.drawImage(gg.number_bg_img,self.m_btn.x,self.m_btn.y+yoff,self.m_btn.w,self.m_btn.h);
     drawImageBox(gg.arrow_up_img,self.minc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.mdec_btn,gg.ctx);
-    drawImageBox(gg.number_bg_img,self.b_btn,gg.ctx);
+    gg.ctx.drawImage(gg.number_bg_img,self.b_btn.x,self.b_btn.y+yoff,self.b_btn.w,self.b_btn.h);
     drawImageBox(gg.arrow_up_img,self.binc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.bdec_btn,gg.ctx);
 
@@ -804,32 +807,34 @@ var editable_quadratic = function()
     self.xp_x = self.b_btn.x+self.b_btn.w;
     self.c_btn.x = self.xp_x+gg.ctx.measureText(")x + ").width;
 
-    self.ainc_btn.w = self.a_btn.w;
+    var pad = 10;
+    var yoff = 5; //replicate in draw
+    self.ainc_btn.w = self.a_btn.w/2;
     self.ainc_btn.h = self.a_btn.h/2;
-    self.ainc_btn.x = self.a_btn.x;
-    self.ainc_btn.y = self.a_btn.y-self.a_btn.h;
-    self.adec_btn.w = self.a_btn.w;
+    self.ainc_btn.x = self.a_btn.x+self.a_btn.w/2-self.ainc_btn.w/2;
+    self.ainc_btn.y = self.a_btn.y-self.ainc_btn.h-pad+yoff;
+    self.adec_btn.w = self.a_btn.w/2;
     self.adec_btn.h = self.a_btn.h/2;
-    self.adec_btn.x = self.a_btn.x;
-    self.adec_btn.y = self.a_btn.y+self.a_btn.h+self.a_btn.h/2;
+    self.adec_btn.x = self.a_btn.x+self.a_btn.w/2-self.adec_btn.w/2;
+    self.adec_btn.y = self.a_btn.y+self.a_btn.h+pad+yoff;
 
-    self.binc_btn.w = self.b_btn.w;
+    self.binc_btn.w = self.b_btn.w/2;
     self.binc_btn.h = self.b_btn.h/2;
-    self.binc_btn.x = self.b_btn.x;
-    self.binc_btn.y = self.b_btn.y-self.b_btn.h;
-    self.bdec_btn.w = self.b_btn.w;
+    self.binc_btn.x = self.b_btn.x+self.b_btn.w/2-self.binc_btn.w/2;
+    self.binc_btn.y = self.b_btn.y-self.binc_btn.h-pad+yoff;
+    self.bdec_btn.w = self.b_btn.w/2;
     self.bdec_btn.h = self.b_btn.h/2;
-    self.bdec_btn.x = self.b_btn.x;
-    self.bdec_btn.y = self.b_btn.y+self.b_btn.h+self.b_btn.h/2;
+    self.bdec_btn.x = self.b_btn.x+self.b_btn.w/2-self.bdec_btn.w/2;
+    self.bdec_btn.y = self.b_btn.y+self.b_btn.h+pad+yoff;
 
     self.cinc_btn.w = self.c_btn.w;
     self.cinc_btn.h = self.c_btn.h/2;
-    self.cinc_btn.x = self.c_btn.x;
-    self.cinc_btn.y = self.c_btn.y-self.c_btn.h;
-    self.cdec_btn.w = self.c_btn.w;
+    self.cinc_btn.x = self.c_btn.x+self.c_btn.w/2-self.cinc_btn.w/2;
+    self.cinc_btn.y = self.c_btn.y-self.cinc_btn.h-pad+yoff;
+    self.cdec_btn.w = self.c_btn.w/2;
     self.cdec_btn.h = self.c_btn.h/2;
-    self.cdec_btn.x = self.c_btn.x;
-    self.cdec_btn.y = self.c_btn.y+self.c_btn.h+self.c_btn.h/2;
+    self.cdec_btn.x = self.c_btn.x+self.c_btn.w/2-self.cdec_btn.w/2;
+    self.cdec_btn.y = self.c_btn.y+self.c_btn.h+pad+yoff;
 
     self.draw_params();
   }
@@ -928,14 +933,15 @@ var editable_quadratic = function()
     drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
     //eqn
+    var yoff = 5;
     gg.ctx.fillStyle = white;
-    drawImageBox(gg.number_bg_img,self.a_btn,gg.ctx);
+    gg.ctx.drawImage(gg.number_bg_img,self.a_btn.x,self.a_btn.y+yoff,self.a_btn.w,self.a_btn.h);
     drawImageBox(gg.arrow_up_img,self.ainc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.adec_btn,gg.ctx);
-    drawImageBox(gg.number_bg_img,self.b_btn,gg.ctx);
+    gg.ctx.drawImage(gg.number_bg_img,self.b_btn.x,self.b_btn.y+yoff,self.b_btn.w,self.b_btn.h);
     drawImageBox(gg.arrow_up_img,self.binc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.bdec_btn,gg.ctx);
-    drawImageBox(gg.number_bg_img,self.c_btn,gg.ctx);
+    gg.ctx.drawImage(gg.number_bg_img,self.c_btn.x,self.c_btn.y+yoff,self.c_btn.w,self.c_btn.h);
     drawImageBox(gg.arrow_up_img,self.cinc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.cdec_btn,gg.ctx);
 
