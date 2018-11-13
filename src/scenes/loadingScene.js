@@ -214,7 +214,7 @@ var LoadingScene = function(game, stage)
     if(ticks_since_ready >= post_load_countdown)
     {
       if(ticks_since_loading_ready > 550) game.nextScene();
-      game.nextScene();
+      //game.nextScene();
     }
   };
 
