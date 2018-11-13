@@ -15,16 +15,9 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 99999;
 
-  self.bg_color = "#F0F9EC";
+  self.bg_color = "#F1F9EB";
 
-  self.eye_img = GenIcon(100,100);
-  self.eye_img.context.fillStyle = red;
-  self.eye_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
   self.eye_img = GenImg("assets/eye.png");
-
-  self.mouth_img = GenIcon(100,100);
-  self.mouth_img.context.fillStyle = red;
-  self.mouth_img.context.fillRect(0,0,self.eye_img.width,self.eye_img.height);
   self.mouth_img = GenImg("assets/mouth.png");
 
   self.eyes_nx = 0;
@@ -219,6 +212,7 @@ var data_dragger = function()
   {
     if(gg.cur_level.i == 0)
     {
+      gg.ctx.font = "30px DisposableDroidBB";
       if(!gg.table.data_visible && gg.message_box.displayed_i > 0 && gg.message_box.speakers[gg.message_box.displayed_i-1] == SPEAKER_DATA)
       {
         if(!self.dragging_data)
@@ -250,7 +244,7 @@ var data_dragger = function()
           gg.ctx.fillRect(0,y2,gg.table.x,gg.table.h);
           gg.ctx.fillRect(gg.table.x+gg.table.w,y2,gg.canv.width-(gg.table.x+gg.table.w),gg.table.h);
           gg.ctx.fillStyle = white;
-          gg.ctx.fillText("DRAG ->",gg.canv.width-200,y2-40);
+          gg.ctx.fillText("DRAG \\/",gg.canv.width-200,y2-40);
         }
         else
         {
@@ -285,8 +279,8 @@ var exposition_box = function()
   self.text_w = 0;
 
   self.pad = 10;
-  self.font_h = 15;
-  self.font = self.font_h+"px Helvetica";
+  self.font_h = 30;
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.text = [];
   self.bubbles = [];
@@ -452,7 +446,7 @@ var timeline = function()
 
     if(self.t < self.t_target)
     {
-      gg.ctx.font = "12px Helvetica";
+      gg.ctx.font = "12px DisposableDroidBB";
       gg.ctx.fillStyle = light_gray;
       gg.ctx.fillText("simulating...",self.x,self.y-10);
     }
@@ -494,7 +488,7 @@ var editable_line = function()
   }
 
   self.font_h = 50;
-  self.font = self.font_h+"px Helvetica";
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.btn_w = 0;
   self.eqn_x = 0;
@@ -658,7 +652,7 @@ var editable_line = function()
     }
     else
       drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
-    gg.ctx.font = "12px Helvetica";
+    gg.ctx.font = "12px DisposableDroidBB";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
     gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
@@ -692,7 +686,7 @@ var editable_line = function()
 
     if(gg.table.data_visible)
     {
-      gg.ctx.fillStyle = red;
+      gg.ctx.fillStyle = white;
       var s = 10;
       for(var i = 0; i <= gg.timeline.t_max; i++)
       {
@@ -749,7 +743,7 @@ var editable_quadratic = function()
   }
 
   self.font_h = 50;
-  self.font = self.font_h+"px Helvetica";
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.btn_w = 0;
   self.eqn_x = 0;
@@ -924,7 +918,7 @@ var editable_quadratic = function()
     if(tn < self.samples)
       gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
     gg.ctx.stroke();
-    gg.ctx.font = "12px Helvetica";
+    gg.ctx.font = "12px DisposableDroidBB";
     gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
     gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
@@ -963,7 +957,7 @@ var editable_quadratic = function()
 
     if(gg.table.data_visible)
     {
-      gg.ctx.fillStyle = red;
+      gg.ctx.fillStyle = white;
       var s = 10;
       for(var i = 0; i <= gg.timeline.t_max; i++)
       {
@@ -988,9 +982,10 @@ var table = function()
   self.x = 0;
   self.y = 0;
 
-  self.font_h = 20;
-  self.font = self.font_h+"px Helvetica";
+  self.font_h = 25;
+  self.font = self.font_h+"px DisposableDroidBB";
 
+  self.bg_color = "#F1F9EB";
   self.predicted_color = "#94DEE8";
   self.known_color = "#5CC8D9";
   self.text_color = "#4D514B";
@@ -1030,7 +1025,8 @@ var table = function()
     //gg.ctx.strokeStyle = red;
     //strokeBox(self,gg.ctx);
 
-    gg.ctx.lineWidth = 0.5;
+    gg.ctx.strokeStyle = self.bg_color;
+    gg.ctx.lineWidth = 3;
 
     var y0 = self.y;
     var y1 = self.y+self.h/3;
@@ -1039,31 +1035,35 @@ var table = function()
     var y01 = lerp(y0,y1,0.5);
     var y12 = lerp(y1,y2,0.5);
     var y23 = lerp(y2,y3,0.5);
-    drawLine(self.x,y1,self.x+self.w,y1,gg.ctx);
-    drawLine(self.x,y2,self.x+self.w,y2,gg.ctx);
     var x = self.x;
     var w = self.w/(gg.timeline.t_max+2);
 
-    gg.ctx.fillStyle = self.known_color;
-    gg.ctx.fillRect(x,y1,self.w,y2-y1);
     gg.ctx.fillStyle = self.predicted_color;
+    gg.ctx.fillRect(x,y1,self.w,y2-y1);
+    gg.ctx.fillStyle = self.known_color;
     gg.ctx.fillRect(x,y2,self.w,y3-y2);
 
+    drawLine(self.x,y1,self.x+self.w,y1,gg.ctx);
+    drawLine(self.x,y2,self.x+self.w,y2,gg.ctx);
+
     gg.ctx.fillStyle = self.text_color;
-    gg.ctx.font = "12px Helvetica";
+    gg.ctx.font = "16px DisposableDroidBB";
     gg.ctx.textAlign = "left";
     x = self.x+w;
     drawLine(x,y1,x,y3,gg.ctx);
     x -= w;
     gg.ctx.fillStyle = black;
     gg.ctx.fillText("DAY",x,y01+self.font_h/2);
-    gg.ctx.fillText("Collected",x,y12+self.font_h/2-13);
+    gg.ctx.fillText("Modeled",x,y12+self.font_h/2-13);
     gg.ctx.fillText("Data",x,y12+self.font_h/2);
-    gg.ctx.fillText("Modeled",x,y23+self.font_h/2-13);
+    gg.ctx.fillStyle = white;
+    gg.ctx.fillText("Collected",x,y23+self.font_h/2-13);
     gg.ctx.fillText("Data",x,y23+self.font_h/2);
 
+    gg.ctx.fillStyle = black;
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "center";
+
     for(var i = 0; i <= gg.timeline.t_max; i++)
     {
       x = self.x+(i+2)*w;
@@ -1071,22 +1071,17 @@ var table = function()
       x -= w/2;
       gg.ctx.fillStyle = black;
       gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
-      gg.ctx.fillStyle = red;
-      if(self.data_visible)
-        gg.ctx.fillText(self.known_data[i],x,y12+self.font_h/2);
-      else
-        gg.ctx.fillText("-",x,y12+self.font_h/2);
       if(self.simd_visible >= i)
       {
-        if(self.data_visible && (self.known_data[i] == self.predicted_data[i] || self.correct)) gg.ctx.fillStyle = green;
-        else gg.ctx.fillStyle = black;
-        gg.ctx.fillText(self.predicted_data[i],x,y23+self.font_h/2);
+        if(self.data_visible && (self.known_data[i] == self.predicted_data[i] || self.correct))
+          gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
+        gg.ctx.fillText(self.predicted_data[i],x,y12+self.font_h/3);
       }
-      else
-      {
-        gg.ctx.fillStyle = black;
-        gg.ctx.fillText("-",x,y23+self.font_h/2);
-      }
+      else gg.ctx.fillText("-",x,y12+self.font_h/3);
+
+      gg.ctx.fillStyle = white;
+      if(self.data_visible) gg.ctx.fillText(self.known_data[i],x,y23+self.font_h/2);
+      else gg.ctx.fillText("-",x,y23+self.font_h/2);
 
       if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.data_dragger.dragging_sim)
       {
@@ -1121,8 +1116,8 @@ var message_box = function()
   self.text_w = 0;
 
   self.pad = 10;
-  self.font_h = 15;
-  self.font = self.font_h+"px Helvetica";
+  self.font_h = 20;
+  self.font = self.font_h+"px DisposableDroidBB";
 
   self.ai_text_color = "#4D514C";
   self.you_text_color = "#FEFFFF";
@@ -1717,7 +1712,7 @@ var module_board = function()
   {
     gg.ctx.lineWidth = 1;
 
-    gg.ctx.font = "12px Helvetica";
+    gg.ctx.font = "12px DisposableDroidBB";
     gg.ctx.textAlign = "center";
     for(var i = 0; i < self.modules.length; i++)
       self.modules[i].draw();
@@ -1742,7 +1737,7 @@ var module_board = function()
       if(tn < gg.timeline.t_max)
         gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
       gg.ctx.stroke();
-      gg.ctx.font = "12px Helvetica";
+      gg.ctx.font = "12px DisposableDroidBB";
       gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
       gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
@@ -1752,7 +1747,7 @@ var module_board = function()
 
       if(gg.table.data_visible)
       {
-        gg.ctx.fillStyle = red;
+        gg.ctx.fillStyle = white;
         var s = 10;
         for(var i = 0; i <= gg.timeline.t_max; i++)
         {

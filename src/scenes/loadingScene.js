@@ -12,7 +12,7 @@ var LoadingScene = function(game, stage)
     canvas = canv.canvas;
     ctx = canv.context;
 
-    ctx.font = "20px Helvetica";
+    ctx.font = "20px DisposableDroidBB";
   }
   self.resize(stage);
 
@@ -145,7 +145,7 @@ var LoadingScene = function(game, stage)
     imageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put font paths in font_srcs
-    //font_srcs.push("FontName"); //NEEDS DEFINITION IN index.html CSS!!
+    font_srcs.push("DisposableDroidBB"); //NEEDS DEFINITION IN index.html CSS!!
     font_canv_s = 25;
     font_canv = GenIcon(font_canv_s,font_canv_s);
     // uncomment below for preview

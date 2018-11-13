@@ -860,9 +860,9 @@ var GamePlayScene = function(game, stage)
     gg.ctx.drawImage(gg.pano_fg_img,lerp(pano_fg_sx,pano_fg_ex,t),0,vis_pano_fg_w,gg.pano_fg_img.height,0,0,gg.canv.width,gg.canv.height);
 
     gg.ctx.fillStyle = white;
-    gg.ctx.font = "40px Helvetica";
+    gg.ctx.font = "40px DisposableDroidBB";
     gg.ctx.fillText("Day "+gg.cur_level.i, 20,60);
-    gg.ctx.font = "20px Helvetica";
+    gg.ctx.font = "20px DisposableDroidBB";
     gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,90);
   }
 
