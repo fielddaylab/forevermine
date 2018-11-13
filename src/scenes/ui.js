@@ -653,6 +653,7 @@ var editable_line = function()
         gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
       }
       gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
+      gg.ctx.fillText("DAYS",self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
       for(var i = 1; i < self.v_max-self.v_min; i++)
       {
         y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
@@ -846,7 +847,7 @@ var editable_quadratic = function()
     self.bdec_btn.x = self.b_btn.x+self.b_btn.w/2-self.bdec_btn.w/2;
     self.bdec_btn.y = self.b_btn.y+self.b_btn.h+pad+yoff;
 
-    self.cinc_btn.w = self.c_btn.w;
+    self.cinc_btn.w = self.c_btn.w/2;
     self.cinc_btn.h = self.c_btn.h/2;
     self.cinc_btn.x = self.c_btn.x+self.c_btn.w/2-self.cinc_btn.w/2;
     self.cinc_btn.y = self.c_btn.y-self.cinc_btn.h-pad+yoff;
@@ -948,6 +949,7 @@ var editable_quadratic = function()
         gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
       }
       gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
+      gg.ctx.fillText("DAYS",self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
       for(var i = 1; i < self.v_max-self.v_min; i++)
       {
         y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
@@ -1138,7 +1140,7 @@ var table = function()
 
       if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.data_dragger.dragging_sim)
       {
-        var s = 40;
+        var s = 30;
         gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y2-s/2,s,s);
       }
     }
@@ -1390,7 +1392,7 @@ var message_box = function()
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
         if(!gg.data_dragger.dragging_data && !gg.table.data_visible)
         {
-          var s = 40;
+          var s = 30;
           gg.ctx.drawImage(gg.notice_img,self.x+self.pad+self.bubble_w-s/2,y-s/2,s,s);
         }
         self.data_y = y;
@@ -1430,7 +1432,7 @@ var message_box = function()
       if(floor(self.advance_t/20)%2)
         drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
       gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
-      var s = 40;
+      var s = 30;
       gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s/2,self.input_y-s/2,s,s);
     }
 
@@ -1452,7 +1454,7 @@ var message_box = function()
     gg.ctx.imageSmoothingEnabled = 1;
     if(self.prompt_end)
     {
-      var s = 40;
+      var s = 30;
       gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s/2,self.monitor_y+self.monitor_h/4-s/2,s,s);
     }
     var h = gg.neck_heart_img.height/gg.neck_heart_img.width*self.monitor_w;
@@ -1790,6 +1792,7 @@ var module_board = function()
         gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
       }
       gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
+      gg.ctx.fillText("DAYS",self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
       for(var i = 1; i < self.v_max-self.v_min; i++)
       {
         y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
