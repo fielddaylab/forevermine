@@ -258,13 +258,11 @@ var data_dragger = function()
     }
     if(self.dragging_data)
     {
-      gg.ctx.fillStyle = red;
-      gg.ctx.fillRect(self.last_evt.doX,self.last_evt.doY,100,100);
+      gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
     }
     if(self.dragging_sim)
     {
-      gg.ctx.fillStyle = green;
-      gg.ctx.fillRect(self.last_evt.doX,self.last_evt.doY,100,100);
+      gg.ctx.drawImage(gg.submit_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
     }
   }
 }
@@ -1394,9 +1392,10 @@ var message_box = function()
       }
       else if(self.speakers[i] == SPEAKER_DATA)
       {
-        gg.ctx.fillStyle = self.data_text_color;
-        gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
-        gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
+        //gg.ctx.fillStyle = self.data_text_color;
+        //gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
+        //gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
+        gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
         if(!gg.data_dragger.dragging_data && !gg.table.data_visible)
         {
           var s = 30;

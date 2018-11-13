@@ -124,6 +124,8 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/arrow_down.png");
     img_srcs.push("assets/number_bg.png");
     img_srcs.push("assets/alert.png");
+    img_srcs.push("assets/data.png");
+    img_srcs.push("assets/submit.png");
     img_srcs.push("assets/background.jpg");
     img_srcs.push("assets/background_ui.jpg");
     img_srcs.push("assets/console.png");
