@@ -516,7 +516,7 @@ var editable_line = function()
   {
     gg.ctx.font = self.font;
     self.btn_w = gg.ctx.measureText("-0.0").width;
-    self.eqn_w = gg.ctx.measureText("y = ").width+self.btn_w+gg.ctx.measureText("x + ").width+self.btn_w;
+    self.eqn_w = gg.ctx.measureText("Y = ").width+self.btn_w+gg.ctx.measureText("X + ").width+self.btn_w;
     self.eqn_h = self.font_h;
     self.eqn_x = self.x+self.w/3-self.eqn_w/2;
     self.eqn_y = self.y+self.h/3-self.eqn_h/2;
@@ -530,9 +530,9 @@ var editable_line = function()
     self.b_btn.y = self.eqn_y;
 
     self.yeq_x = self.eqn_x;
-    self.m_btn.x = self.yeq_x+gg.ctx.measureText("y = ").width;
+    self.m_btn.x = self.yeq_x+gg.ctx.measureText("Y = ").width;
     self.xp_x = self.m_btn.x+self.m_btn.w;
-    self.b_btn.x = self.xp_x+gg.ctx.measureText("x + ").width;
+    self.b_btn.x = self.xp_x+gg.ctx.measureText("X + ").width;
 
     var pad = 10;
     var yoff = 5; //replicate in draw
@@ -634,31 +634,72 @@ var editable_line = function()
     var x;
     var y;
 
-    gg.ctx.lineWidth = 1;
-    gg.ctx.strokeStyle = black;
-    gg.ctx.fillStyle = black;
-
     //graph
-    strokeBox(self.graph,gg.ctx);
-    if(gg.timeline.t < gg.timeline.t_max)
     {
-      var t = gg.timeline.t/gg.timeline.t_max;
-      var tx = lerp(self.graph.x,self.graph.x+self.graph.w,t);
-      if(tx > self.sx)
+      gg.ctx.fillStyle = white;
+      gg.ctx.font = "18px DisposableDroidBB";
+      gg.ctx.lineWidth = 2;
+      gg.ctx.strokeStyle = white;
+
+        //grid
+      strokeBox(self.graph,gg.ctx);
+      gg.ctx.beginPath();
+      for(var i = 1; i < gg.timeline.t_max; i++)
       {
-        t = min(invlerp(self.sx,self.ex,tx),1);
-        drawLine(self.sx,self.sy,lerp(self.sx,self.ex,t),lerp(self.sy,self.ey,t), gg.ctx);
+        x = lerp(self.graph.x,self.graph.x+self.graph.w,i/gg.timeline.t_max);
+        gg.ctx.moveTo(x,self.graph.y);
+        gg.ctx.lineTo(x,self.graph.y+self.graph.h);
+        gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
+      }
+      gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
+      for(var i = 1; i < self.v_max-self.v_min; i++)
+      {
+        y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
+        gg.ctx.moveTo(self.graph.x,y);
+        gg.ctx.lineTo(self.graph.x+self.graph.w,y);
+        gg.ctx.fillText(i,self.graph.x-10,y+7);
+      }
+      gg.ctx.fillText(self.v_max,self.graph.x-10,self.graph.y+7);
+      gg.ctx.stroke();
+
+        //line
+      gg.ctx.strokeStyle = black;
+      if(gg.timeline.t < gg.timeline.t_max)
+      {
+        var t = gg.timeline.t/gg.timeline.t_max;
+        var tx = lerp(self.graph.x,self.graph.x+self.graph.w,t);
+        if(tx > self.sx)
+        {
+          t = min(invlerp(self.sx,self.ex,tx),1);
+          drawLine(self.sx,self.sy,lerp(self.sx,self.ex,t),lerp(self.sy,self.ey,t), gg.ctx);
+        }
+      }
+      else
+        drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
+
+        //tl
+      gg.ctx.strokeStyle = gray;
+      var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
+      drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
+
+        //icons
+      if(gg.table.data_visible)
+      {
+        gg.ctx.fillStyle = white;
+        var s = 10;
+        for(var i = 0; i <= gg.timeline.t_max; i++)
+        {
+          if(gg.table.known_data[i] != "-")
+          {
+            x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
+            y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
+            x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
+            y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
+            gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+          }
+        }
       }
     }
-    else
-      drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
-    gg.ctx.font = "12px DisposableDroidBB";
-    gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
-    gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
-
-    gg.ctx.strokeStyle = gray;
-    var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
-    drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
     //eqn
     var yoff = 5;
@@ -672,8 +713,8 @@ var editable_line = function()
 
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
-    gg.ctx.fillText("y = ",self.yeq_x,self.eqn_y+self.eqn_h);
-    gg.ctx.fillText("x + ",self.xp_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("Y = ",self.yeq_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("X + ",self.xp_x,self.eqn_y+self.eqn_h);
     gg.ctx.textAlign = "right";
     gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.m,self.m_btn.x+self.m_btn.w,self.eqn_y+self.eqn_h);
@@ -681,25 +722,8 @@ var editable_line = function()
     gg.ctx.textAlign = "left";
 
     gg.ctx.fillStyle = light_gray;
-    gg.ctx.fillText("x = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
-    gg.ctx.fillText("y = "+fdisp(self.m*fdisp(gg.timeline.t,1)+self.b,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
-
-    if(gg.table.data_visible)
-    {
-      gg.ctx.fillStyle = white;
-      var s = 10;
-      for(var i = 0; i <= gg.timeline.t_max; i++)
-      {
-        if(gg.table.known_data[i] != "-")
-        {
-          x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
-          y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
-          x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
-          y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
-          gg.ctx.fillRect(x-s/2,y-s/2,s,s);
-        }
-      }
-    }
+    gg.ctx.fillText("X = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
+    gg.ctx.fillText("Y = "+fdisp(self.m*fdisp(gg.timeline.t,1)+self.b,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
 
   }
 
@@ -777,7 +801,7 @@ var editable_quadratic = function()
   {
     gg.ctx.font = self.font;
     self.btn_w = gg.ctx.measureText("-0.0").width;
-    self.eqn_w = gg.ctx.measureText("y = (").width+self.btn_w+gg.ctx.measureText("x + ").width+self.btn_w+gg.ctx.measureText(")x + ").width+self.btn_w;
+    self.eqn_w = gg.ctx.measureText("Y = (").width+self.btn_w+gg.ctx.measureText("X + ").width+self.btn_w+gg.ctx.measureText(")X + ").width+self.btn_w;
     self.eqn_h = self.font_h;
     self.eqn_x = self.x+self.w/2-self.eqn_w/2;
     self.eqn_y = self.y+self.h/2-self.eqn_h/2;
@@ -795,11 +819,11 @@ var editable_quadratic = function()
     self.c_btn.y = self.eqn_y;
 
     self.yeq_x = self.eqn_x;
-    self.a_btn.x = self.yeq_x+gg.ctx.measureText("y = (").width;
+    self.a_btn.x = self.yeq_x+gg.ctx.measureText("Y = (").width;
     self.xt_x = self.a_btn.x+self.a_btn.w;
-    self.b_btn.x = self.xt_x+gg.ctx.measureText("x + ").width;
+    self.b_btn.x = self.xt_x+gg.ctx.measureText("X + ").width;
     self.xp_x = self.b_btn.x+self.b_btn.w;
-    self.c_btn.x = self.xp_x+gg.ctx.measureText(")x + ").width;
+    self.c_btn.x = self.xp_x+gg.ctx.measureText(")X + ").width;
 
     var pad = 10;
     var yoff = 5; //replicate in draw
@@ -906,25 +930,70 @@ var editable_quadratic = function()
     gg.ctx.fillStyle = black;
 
     //graph
-    strokeBox(self.graph,gg.ctx);
-    var t = gg.timeline.t/gg.timeline.t_max;
-    var tn = self.samples*t;
-    var tr = tn%1;
-    tn = round(tn-tr);
-    gg.ctx.beginPath();
-    gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
-    for(var i = 0; i < tn; i++)
-      gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
-    if(tn < self.samples)
-      gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
-    gg.ctx.stroke();
-    gg.ctx.font = "12px DisposableDroidBB";
-    gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
-    gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
+    {
+      gg.ctx.fillStyle = white;
+      gg.ctx.font = "18px DisposableDroidBB";
+      gg.ctx.lineWidth = 2;
+      gg.ctx.strokeStyle = white;
 
-    gg.ctx.strokeStyle = gray;
-    var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
-    drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
+        //grid
+      strokeBox(self.graph,gg.ctx);
+      gg.ctx.beginPath();
+      for(var i = 1; i < gg.timeline.t_max; i++)
+      {
+        x = lerp(self.graph.x,self.graph.x+self.graph.w,i/gg.timeline.t_max);
+        gg.ctx.moveTo(x,self.graph.y);
+        gg.ctx.lineTo(x,self.graph.y+self.graph.h);
+        gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
+      }
+      gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
+      for(var i = 1; i < self.v_max-self.v_min; i++)
+      {
+        y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
+        gg.ctx.moveTo(self.graph.x,y);
+        gg.ctx.lineTo(self.graph.x+self.graph.w,y);
+        gg.ctx.fillText(i,self.graph.x-10,y+7);
+      }
+      gg.ctx.fillText(self.v_max,self.graph.x-10,self.graph.y+7);
+      gg.ctx.stroke();
+
+        //line
+      gg.ctx.strokeStyle = black;
+      var t = gg.timeline.t/gg.timeline.t_max;
+      var tn = self.samples*t;
+      var tr = tn%1;
+      tn = round(tn-tr);
+      gg.ctx.beginPath();
+      gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
+      for(var i = 0; i < tn; i++)
+        gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
+      if(tn < self.samples)
+        gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
+      gg.ctx.stroke();
+
+        //tl
+      gg.ctx.strokeStyle = gray;
+      var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
+      drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
+
+        //icons
+      if(gg.table.data_visible)
+      {
+        gg.ctx.fillStyle = white;
+        var s = 10;
+        for(var i = 0; i <= gg.timeline.t_max; i++)
+        {
+          if(gg.table.known_data[i] != "-")
+          {
+            x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
+            y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
+            x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
+            y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
+            gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+          }
+        }
+      }
+    }
 
     //eqn
     var yoff = 5;
@@ -941,9 +1010,9 @@ var editable_quadratic = function()
 
     gg.ctx.font = self.font;
     gg.ctx.textAlign = "left";
-    gg.ctx.fillText("y = (",self.yeq_x,self.eqn_y+self.eqn_h);
-    gg.ctx.fillText("x + ",self.xt_x,self.eqn_y+self.eqn_h);
-    gg.ctx.fillText(")x + ",self.xp_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("Y = (",self.yeq_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText("X + ",self.xt_x,self.eqn_y+self.eqn_h);
+    gg.ctx.fillText(")X + ",self.xp_x,self.eqn_y+self.eqn_h);
     gg.ctx.textAlign = "right";
     gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.a,self.a_btn.x+self.a_btn.w,self.eqn_y+self.eqn_h);
@@ -952,25 +1021,8 @@ var editable_quadratic = function()
     gg.ctx.textAlign = "left";
 
     gg.ctx.fillStyle = light_gray;
-    gg.ctx.fillText("x = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
-    gg.ctx.fillText("y = "+fdisp(self.v(gg.timeline.t),2),self.yeq_x,self.eqn_y+self.eqn_h*4);
-
-    if(gg.table.data_visible)
-    {
-      gg.ctx.fillStyle = white;
-      var s = 10;
-      for(var i = 0; i <= gg.timeline.t_max; i++)
-      {
-        if(gg.table.known_data[i] != "-")
-        {
-          x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.table.t_data[i]);
-          y = mapVal(self.v_min,self.v_max,self.graph.y+self.graph.h,self.graph.y,gg.table.known_data[i]);
-          x = clamp(self.graph.x,self.graph.x+self.graph.w,x);
-          y = clamp(self.graph.y,self.graph.y+self.graph.h,y);
-          gg.ctx.fillRect(x-s/2,y-s/2,s,s);
-        }
-      }
-    }
+    gg.ctx.fillText("X = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
+    gg.ctx.fillText("Y = "+fdisp(self.v(gg.timeline.t),2),self.yeq_x,self.eqn_y+self.eqn_h*4);
   }
 }
 
@@ -1085,7 +1137,7 @@ var table = function()
 
       if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.data_dragger.dragging_sim)
       {
-        var s = 20;
+        var s = 40;
         gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y2-s/2,s,s);
       }
     }
@@ -1337,7 +1389,7 @@ var message_box = function()
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
         if(!gg.data_dragger.dragging_data && !gg.table.data_visible)
         {
-          var s = 20;
+          var s = 40;
           gg.ctx.drawImage(gg.notice_img,self.x+self.pad+self.bubble_w-s/2,y-s/2,s,s);
         }
         self.data_y = y;
@@ -1377,7 +1429,7 @@ var message_box = function()
       if(floor(self.advance_t/20)%2)
         drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
       gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
-      var s = 20;
+      var s = 40;
       gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s/2,self.input_y-s/2,s,s);
     }
 
@@ -1399,7 +1451,7 @@ var message_box = function()
     gg.ctx.imageSmoothingEnabled = 1;
     if(self.prompt_end)
     {
-      var s = 20;
+      var s = 40;
       gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s/2,self.monitor_y+self.monitor_h/4-s/2,s,s);
     }
     var h = gg.neck_heart_img.height/gg.neck_heart_img.width*self.monitor_w;
@@ -1719,49 +1771,80 @@ var module_board = function()
     for(var i = 0; i < self.modrels.length; i++)
       self.modrels[i].draw();
 
-    strokeBox(self.graph,gg.ctx);
-
-    if(self.table_module)
+    //graph
     {
-      var m = self.table_module;
-      var g = self.graph;
+      gg.ctx.fillStyle = white;
+      gg.ctx.font = "18px DisposableDroidBB";
+      gg.ctx.lineWidth = 2;
+      gg.ctx.strokeStyle = white;
 
+        //grid
       strokeBox(self.graph,gg.ctx);
-      var t = gg.timeline.t;
-      var tr = gg.timeline.t%1;
-      var tn = round(gg.timeline.t-tr);
       gg.ctx.beginPath();
-      gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
-      for(var i = 1; i <= tn; i++)
-        gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
-      if(tn < gg.timeline.t_max)
-        gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
+      for(var i = 1; i < gg.timeline.t_max; i++)
+      {
+        x = lerp(self.graph.x,self.graph.x+self.graph.w,i/gg.timeline.t_max);
+        gg.ctx.moveTo(x,self.graph.y);
+        gg.ctx.lineTo(x,self.graph.y+self.graph.h);
+        gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
+      }
+      gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
+      for(var i = 1; i < self.v_max-self.v_min; i++)
+      {
+        y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
+        gg.ctx.moveTo(self.graph.x,y);
+        gg.ctx.lineTo(self.graph.x+self.graph.w,y);
+        gg.ctx.fillText(i,self.graph.x-10,y+7);
+      }
+      gg.ctx.fillText(self.v_max,self.graph.x-10,self.graph.y+7);
       gg.ctx.stroke();
-      gg.ctx.font = "12px DisposableDroidBB";
-      gg.ctx.fillText(fdisp(self.v_min),self.graph.x-10,self.graph.y+self.graph.h);
-      gg.ctx.fillText(fdisp(self.v_max),self.graph.x-10,self.graph.y);
 
+          //line
+      if(self.table_module)
+      {
+        var m = self.table_module;
+        var g = self.graph;
+        var t = gg.timeline.t;
+        var tr = gg.timeline.t%1;
+        var tn = round(gg.timeline.t-tr);
+        gg.ctx.beginPath();
+        gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
+        for(var i = 1; i <= tn; i++)
+          gg.ctx.lineTo(self.xpts[i],self.ypts[i]);
+        if(tn < gg.timeline.t_max)
+          gg.ctx.lineTo(lerp(self.xpts[tn],self.xpts[tn+1],tr),lerp(self.ypts[tn],self.ypts[tn+1],tr));
+        gg.ctx.stroke();
+      }
+
+        //tl
       gg.ctx.strokeStyle = gray;
       var t_x = mapVal(0,gg.timeline.t_max,self.graph.x,self.graph.x+self.graph.w,gg.timeline.t);
       drawLine(t_x,self.graph.y,t_x,self.graph.y+self.graph.h,gg.ctx);
 
-      if(gg.table.data_visible)
+        //icons
+      if(self.table_module)
       {
-        gg.ctx.fillStyle = white;
-        var s = 10;
-        for(var i = 0; i <= gg.timeline.t_max; i++)
+        if(gg.table.data_visible)
         {
-          if(gg.table.known_data[i] != "-")
+          gg.ctx.fillStyle = white;
+          var s = 10;
+          for(var i = 0; i <= gg.timeline.t_max; i++)
           {
-            x = mapVal(0,gg.timeline.t_max,g.x,g.x+g.w,i);
-            y = mapVal(self.v_min,self.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
-            y = clamp(g.y,g.y+g.h,y);
-            gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+            if(gg.table.known_data[i] != "-")
+            {
+              x = mapVal(0,gg.timeline.t_max,g.x,g.x+g.w,i);
+              y = mapVal(self.v_min,self.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
+              y = clamp(g.y,g.y+g.h,y);
+              gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+            }
           }
         }
       }
 
     }
+
+
+
   }
 
 }
