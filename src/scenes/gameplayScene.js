@@ -867,9 +867,9 @@ var GamePlayScene = function(game, stage)
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "40px DisposableDroidBB";
-    gg.ctx.fillText("Day "+gg.cur_level.i, 20,60);
+    gg.ctx.fillText("Day "+gg.cur_level.i, 20,gg.canv.height-80);
     gg.ctx.font = "20px DisposableDroidBB";
-    gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,90);
+    gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,gg.canv.height-80+30);
   }
 
   self.HACKTXT = function(txt)
