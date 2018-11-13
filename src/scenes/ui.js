@@ -1121,6 +1121,7 @@ var message_box = function()
   self.ai_text_color = "#4D514C";
   self.you_text_color = "#FEFFFF";
   self.data_text_color = "#FF6666";
+  self.bg_color = "#F1F9EB";
 
   self.top_y = 0;
   self.max_top_y = 0;
@@ -1255,7 +1256,7 @@ var message_box = function()
   self.drag = function(evt)
   {
     self.target_top_y += evt.doY-self.drag_start_y;
-    if(self.target_top_y > self.y+self.w) self.target_top_y = self.y+self.w;
+    if(self.target_top_y > self.y+self.w+self.pad) self.target_top_y = self.y+self.w+self.pad;
     if(self.target_top_y < self.max_top_y) self.target_top_y = self.max_top_y;
     self.drag_start_y = evt.doY;
   }
@@ -1361,6 +1362,9 @@ var message_box = function()
     gg.ctx.textAlign = "left";
 
     //"input" box
+    gg.ctx.fillStyle = self.bg_color;
+    gg.ctx.fillRect(self.x,self.input_y-self.pad+1,self.w,self.h);
+
     if(!self.prompt_player_input)
     {
       gg.ctx.fillStyle = light_gray;
