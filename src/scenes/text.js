@@ -23,30 +23,31 @@ var english_text =
     pre_text:
     [
       "Good morning, new best friend!!! Wanna play?", SPEAKER_AI, EMOTE_NULL,
-      "I've got work to do, Gemma.", SPEAKER_PLAYER, EMOTE_NULL,
-      "Can I help? Please please please?!", SPEAKER_AI, EMOTE_NULL,
-      "Sure. You're a Predictionator, right?", SPEAKER_PLAYER, EMOTE_NULL,
-      "I need to predict if we'll get enough fuel crystals in time.", SPEAKER_PLAYER, EMOTE_NULL,
-      "Oh, that's easy! Let's do it!", SPEAKER_AI, EMOTE_NULL,
+      "I'm running out of oxygen, Gemma.", SPEAKER_PLAYER, EMOTE_NULL,
+      "Can you help me predict if we'll get enough fuel in time?", SPEAKER_PLAYER, EMOTE_NULL,
+      "Ooh, sounds like fun!", SPEAKER_AI, EMOTE_NULL,
     ],
     text:
     [
-      "I used to help my owners make predictions all the time!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "Wasn't that 200 years ago?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Here ya go, friend!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "My owners used this equation all the time! 💎💎💎",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "Wait... you mean 200 years ago?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "Yep! 😂",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
-      "Soooo what am I supposed to do?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "Don't worry, friend. I'll talk you through it!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "You need to change the numbers on the equation.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "Keep trying til the numbers on the table match up!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "Ok. Thanks, Gemma.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Don't worry! We can fix it up!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
+      "Ok. What should I do?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Oh, it's soooo easy!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "1️⃣ Change the numbers on the equation.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "2️⃣ Keep trying til the modeled and collected data matches.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "3️⃣ Give your data to me and I'll predict if you're doomed! ☠️😂",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "Um... great.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "You can do this, bestie! 🤗",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
-      "Here's the data from last night. Drag it onto the workspace!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "Here's the data from last night. Drag it onto our workspace!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
     ],
     correct_text:
     [
       "YAYAYAY! 🙌",  SPEAKER_AI, EMOTE_EXCITED,get_timer(60),
       "Guess what? You just made a model!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
-      "Oh... and also it looks like you're gonna run out of oxygen and die.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "Oh... and also it looks like you're gonna die. Bummer.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
       "😬😬😬",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
     ],
     incorrect_text:
@@ -56,8 +57,8 @@ var english_text =
     post_text:
     [
       "Wheee! That was fun!", SPEAKER_AI, EMOTE_EXCITED,
-      "Awwww, don't be sad, friend.", SPEAKER_AI, EMOTE_NULL,
-      "Why don't you get some sleep? I'm sure you'll feel better in the morning!", SPEAKER_AI, EMOTE_NULL,
+      "Awwww, don't look so sad, friend.", SPEAKER_AI, EMOTE_NULL,
+      "Why don't you get some sleep? I'm sure you'll feel better tomorrow!", SPEAKER_AI, EMOTE_NULL,
     ],
   },
 
@@ -66,21 +67,19 @@ var english_text =
     pre_text:
     [
       "Good morning, bestie!", SPEAKER_AI, EMOTE_NULL,
-      "Guess what guess what?!", SPEAKER_AI, EMOTE_NULL,
+      "Guess what?!", SPEAKER_AI, EMOTE_NULL,
       "You might not die after all! Check it out!", SPEAKER_AI, EMOTE_NULL,
     ],
     text:
     [
-      "The robots discovered a huge pocket of crystals last night.",  SPEAKER_AI, EMOTE_NULL,get_timer(200),
-      "They're SOOOO excited!",  SPEAKER_AI, EMOTE_EXCITED,get_timer(200),
+      "The robots found a HUGE pocket of fuel last night.",  SPEAKER_AI, EMOTE_NULL,get_timer(100),
+      "They're bringing back crystals super fast!",  SPEAKER_AI, EMOTE_EXCITED,get_timer(100),
       "Wow! That's great!",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "Yeah, it's adorable! 🤖🤖🤖",  SPEAKER_AI, EMOTE_NULL,get_timer(200),
-      "Um... I meant it's great that we're getting more crystals.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "Oh! That too.",  SPEAKER_AI, EMOTE_NULL,get_timer(200),
-      "Can we predict if it'll be enough?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "Sure! I've got a new model ready!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
-      "The last number in the equation already matches up.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "You need to change the other 2 numbers.",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
+      "Yeah, the bots are SUPER excited! It's adorable 🤖💎🐶",  SPEAKER_AI, EMOTE_EXCITED,get_timer(200),
+      "Um... I meant it's great that I might not die.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Can we predict if this will be enough?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Sure! Just match up the data like last time.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "Then we can make a new prediction.",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "Good luck, bestie! 🤞",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
     ],
     correct_text:
@@ -95,11 +94,10 @@ var english_text =
     ],
     post_text:
     [
-      "Yes! At this rate, I'll be out of here in no time!", SPEAKER_PLAYER, EMOTE_NULL,
-      "I better go get my ship ready.", SPEAKER_PLAYER, EMOTE_NULL,
-      "Wait... already? You just got here!", SPEAKER_AI, EMOTE_SAD,
-      "Thanks for all your help, Gemma.", SPEAKER_PLAYER, EMOTE_NULL,
-      "See you tomorrow!", SPEAKER_PLAYER, EMOTE_NULL,
+      "Yes! I'm actually gonna escape this dumb planet!", SPEAKER_PLAYER, EMOTE_NULL,
+      "Um... no offense, Gemma.", SPEAKER_PLAYER, EMOTE_NULL,
+      "None taken, bestie!", SPEAKER_AI, EMOTE_NULL,
+      "See you tomorrow!", SPEAKER_AI, EMOTE_NULL,
     ],
   },
 
@@ -108,16 +106,16 @@ var english_text =
     pre_text:
     [
       "Good morning, sleepyhead!", SPEAKER_AI, EMOTE_NULL,
-      "How's the work going?", SPEAKER_PLAYER, EMOTE_NULL,
-      "Welllll... about that. I've got some bad news.", SPEAKER_AI, EMOTE_NULL,
+      "Hey, Gemma. How are the bots doing?", SPEAKER_PLAYER, EMOTE_NULL,
+      "Welllll... I've got some bad news.", SPEAKER_AI, EMOTE_NULL,
     ],
     text:
     [
-      "The big pocket of crystals is running out. 😞",  SPEAKER_AI, EMOTE_NULL,get_timer(100),
-      "Poor little bots. They're so disappointed.",  SPEAKER_AI, EMOTE_SAD,get_timer(100),
-      "Ok. Can you pull up a new model?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "I need to predict if I'm still gonna make it.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "Great idea!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
+      "The big pocket of crystals is all used up. 😞",  SPEAKER_AI, EMOTE_NULL,get_timer(100),
+      "Poor little bots. They're so sad.",  SPEAKER_AI, EMOTE_SAD,get_timer(100),
+      "Ok. I need to predict if I'm still gonna make it.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Can you pull up the new data?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Sure thing, bestie!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "We make such a good team! 😍",  SPEAKER_AI, EMOTE_EXCITED,get_timer(60),
       "🎵 The more we get together, together, together...",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
       "Gemma, are you... singing?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
@@ -125,7 +123,7 @@ var english_text =
     ],
     correct_text:
     [
-      "Welp, looks like you're doomed. 🤷",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "Welp, looks like you're doomed. Again. 🤷",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
     ],
     incorrect_text:
     [
@@ -133,11 +131,13 @@ var english_text =
     ],
     post_text:
     [
-      "What's the new plan, bestie?", SPEAKER_AI, EMOTE_PROCESSING,
-      "I'm gonna build something to help the bots work faster.",  SPEAKER_PLAYER, EMOTE_NULL,
-      "Can we start by looking at the robots' batteries?", SPEAKER_PLAYER, EMOTE_NULL,
-      "Oooh, sure!", SPEAKER_AI, EMOTE_EXCITED,
-      "I'll get a new model ready. See you tomorrow!", SPEAKER_AI, EMOTE_NULL,
+      "Look on the bright side. At least we're together!", SPEAKER_AI, EMOTE_PROCESSING,
+      "Can we look at how fast the robots' batteries are charging?", SPEAKER_PLAYER, EMOTE_NULL,
+      "Maybe I can help them charge faster.", SPEAKER_PLAYER, EMOTE_NULL,
+      "Oooh, sounds like fun!", SPEAKER_AI, EMOTE_EXCITED,
+      "But I need a nap first 😴 All this prediction-ating makes me sleepy.", SPEAKER_AI, EMOTE_NULL,
+      "Gemma, this is sort of urgent--", SPEAKER_PLAYER, EMOTE_NULL,
+      "See you tomorrow, bestie!", SPEAKER_AI, EMOTE_NULL,
     ],
   },
 
@@ -145,22 +145,20 @@ var english_text =
     //LEVEL 4
     pre_text:
     [
-      "There you are, friend!", SPEAKER_AI, EMOTE_NULL,
-      "Where were you? What took so long???", SPEAKER_AI, EMOTE_NULL,
-      "Um... I was sleeping.", SPEAKER_AI, EMOTE_NULL,
-      "BOR-ing. Let's get to work!", SPEAKER_AI, EMOTE_EXCITED,
+      "Ooh, you're here! Good morning, friend!!!", SPEAKER_AI, EMOTE_NULL,
+      "I got you a present! 🎁 Check it out!", SPEAKER_AI, EMOTE_EXCITED,
     ],
     text:
     [
       "This model is from wayyy back when my owners lived here.",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
-      "We can use it to look at the batteries!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "We can use it to look at how fast the bots are charging up!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
       "Gemma, this is perfect!",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "Anything for you, bestie! 💗",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
+      "Eeeee! Glad you like it, friend 💗",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "It's weird. The mine seems operational. Why did your old owners leave?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "It wasn't my fault! 😭😭😭",  SPEAKER_AI, EMOTE_SAD,get_timer(60),
+      "I didn't say it was your fault. I was just wondering...",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "😭😭😭",  SPEAKER_AI, EMOTE_SAD,get_timer(60),
-      "Aw, don't cry, Gemma. I was just wondering...",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "😭😭😭",  SPEAKER_AI, EMOTE_SAD,get_timer(60),
-      "Fine. Sorry I asked. Can I have the data?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Ok, forget it. Can I have the data?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "Sure! Here ya go!",  SPEAKER_AI, EMOTE_EXCITED,get_timer(60),
     ],
     correct_text:
@@ -173,11 +171,10 @@ var english_text =
     ],
     post_text:
     [
-      "So, what now?", SPEAKER_AI, EMOTE_NULL,
-      "We've got our baseline.", SPEAKER_PLAYER, EMOTE_NULL,
+      "So what now?", SPEAKER_AI, EMOTE_NULL,
+      "We've got our baseline for the robots' batteries.", SPEAKER_PLAYER, EMOTE_NULL,
       "Now I'm gonna make a supercharger!", SPEAKER_PLAYER, EMOTE_NULL,
       "Ooh, that's so cool! 🤩", SPEAKER_AI, EMOTE_EXCITED,
-      "See you tomorrow, bestie!", SPEAKER_AI, EMOTE_NULL,
     ],
   },
 
@@ -188,16 +185,16 @@ var english_text =
       "Hey friend! Guess what guess what guess what!", SPEAKER_AI, EMOTE_EXCITED,
       "While you were asleep, I installed your fancy new supercharger!", SPEAKER_AI, EMOTE_NULL,
       "What?! Gemma, I still needed to run some tests!", SPEAKER_PLAYER, EMOTE_NULL,
-      "Hmmm. 🤔 I think the words you're looking for are, \"Thank you, Gemma.\"", SPEAKER_AI, EMOTE_PROCESSING,
-      "By the way, the new charger coil is working great. Check it out!", SPEAKER_AI, EMOTE_NULL,
+      "Oh, calm down, silly. The charger is working great!", SPEAKER_AI, EMOTE_PROCESSING,
+      "Check it out!", SPEAKER_AI, EMOTE_NULL,
     ],
     text:
     [
       "The bots are charging up super fast now!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
-      "I guess that's good.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "You're welcome! 😜",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
-      "I collected some new data.",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
-      "See how it compares with our baseline from yesterday!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "Well... I guess that's good.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Told you so! 😜",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "Here's the new data.",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "Let's see how it compares with our baseline from yesterday!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
       "🎵 I've been workin' on the railroad, all the livelong day...",  SPEAKER_AI, EMOTE_NULL,get_timer(200),
       "🎵 I've been workin' on the railroad, just to pass the time away...",  SPEAKER_AI, EMOTE_NULL,get_timer(200),
     ],
@@ -221,25 +218,25 @@ var english_text =
     //LEVEL 6
     pre_text:
     [
-      "Hey, Gemma! What's our status?", SPEAKER_PLAYER, EMOTE_NULL,
-      "😬😬😬", SPEAKER_AI, EMOTE_BASHFUL,
-      "Turns out that mayyyyybe you were right about running some tests first.", SPEAKER_AI, EMOTE_NULL,
-      "Your supercharger blew the converter.", SPEAKER_AI, EMOTE_SAD,
-      "What??", SPEAKER_PLAYER, EMOTE_NULL,
-      "Yeahhh... the bots are taking FOREVER to charge.", SPEAKER_AI, EMOTE_BASHFUL,
-      "Please don't be mad!", SPEAKER_AI, EMOTE_NULL,
-      "It's ok, Gemma. We can fix this.", SPEAKER_PLAYER, EMOTE_NULL,
+      "Good morning, Gemma!", SPEAKER_PLAYER, EMOTE_NULL,
+      "Can you pull up the crystal-predicting model?", SPEAKER_PLAYER, EMOTE_NULL,
+      "Nope!", SPEAKER_AI, EMOTE_NULL,
+      "Um... what do you mean, nope?", SPEAKER_PLAYER, EMOTE_NULL,
+      "I kinda sorta lost it.", SPEAKER_AI, EMOTE_BASHFUL,
+      "What?? You're a computer. How could you lose it?", SPEAKER_PLAYER, EMOTE_NULL,
+      "It's super messy in here!", SPEAKER_AI, EMOTE_BASHFUL,
+      "Gemma, I need that model to predict if I'm gonna survive!", SPEAKER_PLAYER, EMOTE_NULL,
+      "BOR-ing! I've got something wayyyyy cooler to show you!", SPEAKER_AI, EMOTE_BASHFUL,
 
     ],
     text:
     [
-      "Let's see how fast the bots are charging now.", SPEAKER_PLAYER, EMOTE_NULL,
-      "Hmm... this model looks different than yesterday.", SPEAKER_PLAYER, EMOTE_NULL,
-      "Oh! I can explain.",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
-      "The bots are coming back in with some leftover charge!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
-      "That's what the extra part of the equation is for.",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
-      "Ok. That should help the bots move a little faster.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "Let's see if it's enough.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Guess what guess what guess what!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "The bots are coming back from the mine with some leftover charge!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "Hmmm.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "So they're charging faster than we thought?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Yep! 👍",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
+      "Use this model to see how fast the bots are charging up now!",  SPEAKER_AI, EMOTE_NULL,get_timer(80),
 
     ],
     correct_text:
@@ -247,9 +244,9 @@ var english_text =
       "Whee! You matched up the numbers!",  SPEAKER_AI, EMOTE_EXCITED,get_timer(60),
       "This is so much fun!",  SPEAKER_AI, EMOTE_NULL,get_timer(60),
       "Seriously?",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
-      "Gemma, at this rate I'm gonna die here.",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
+      "Gemma, I still don't know if I'm gonna survive or not!",  SPEAKER_PLAYER, EMOTE_NULL,trigger_click,
       "Suuuuure... ",  SPEAKER_AI, EMOTE_BASHFUL,get_timer(120),
-      "But we're doing our best. That's all that matters!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
+      "But we're having fun. That's all that matters!",  SPEAKER_AI, EMOTE_NULL,get_timer(120),
     ],
     incorrect_text:
     [
@@ -258,9 +255,9 @@ var english_text =
     post_text:
     [
       "Cheer up, friend!", SPEAKER_AI, EMOTE_NULL,
-      "Wanna go play fetch with the robots?", SPEAKER_AI, EMOTE_NULL,
-      "Sorry, Gemma. I need to think.", SPEAKER_PLAYER, EMOTE_NULL,
-      "I'll see you tomorrow.", SPEAKER_PLAYER, EMOTE_NULL,
+      "I'll find the crystal-predicting model eventually.", SPEAKER_AI, EMOTE_NULL,
+      "Why don't we look for another way to help the bots work faster?", SPEAKER_AI, EMOTE_NULL,
+      "I bet that'll cheer you up!", SPEAKER_PLAYER, EMOTE_NULL,
     ],
   },
 
