@@ -1510,16 +1510,16 @@ var module = function()
     self.v_btn.w = self.w/2;
     self.v_btn.h = self.h/2;
     self.v_btn.x = self.x+self.w/2-self.v_btn.w/2;
-    self.v_btn.y = self.y+self.h-self.v_btn.h;
+    self.v_btn.y = self.y+self.h/2-self.v_btn.h/2;
 
     self.vinc_btn.w = self.v_btn.w;
     self.vinc_btn.h = self.v_btn.h/2;
     self.vinc_btn.x = self.v_btn.x;
-    self.vinc_btn.y = self.v_btn.y-self.v_btn.h-25; //HACK
+    self.vinc_btn.y = self.v_btn.y-self.vinc_btn.h; //HACK
     self.vdec_btn.w = self.v_btn.w;
     self.vdec_btn.h = self.v_btn.h/2;
     self.vdec_btn.x = self.v_btn.x;
-    self.vdec_btn.y = self.v_btn.y+self.v_btn.h+self.v_btn.h/2;
+    self.vdec_btn.y = self.v_btn.y+self.v_btn.h;
   }
 
   self.tick = function()
@@ -1530,6 +1530,7 @@ var module = function()
   self.draw = function()
   {
     gg.ctx.lineWidth = 1;
+    var i;
     var x;
     var y;
     /*
@@ -1550,22 +1551,30 @@ var module = function()
     drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
     */
     gg.ctx.strokeStyle = black;
-    drawImageBox(self.img,self,gg.ctx);
     if(self.active)
     {
       drawImageBox(gg.arrow_up_img,self.vinc_btn,gg.ctx);
       drawImageBox(gg.arrow_down_img,self.vdec_btn,gg.ctx);
     }
-    drawOutlineText(self.v[0],self.x+self.w/2,self.y+self.h-1,1,white,gg.ctx);
+    drawImageBox(self.img,self,gg.ctx);
+
+    //0
+    i = 0;
+    x = self.x+self.w/2;
+    y = self.y+self.h*2/3+10;
+    drawOutlineText("("+self.v[i]+")",x,y,3,white,gg.ctx);
     gg.ctx.fillStyle = black;
-    gg.ctx.fillText(self.v[0],self.x+self.w/2,self.y+self.h-1);
-    if(floor(gg.timeline.t) != 0)
-    {
-      drawOutlineText(self.v[floor(gg.timeline.t)],self.x+self.w/2,self.y+self.h*2/3,1,white,gg.ctx);
-      gg.ctx.fillStyle = black;
-      gg.ctx.fillText(self.v[floor(gg.timeline.t)],self.x+self.w/2,self.y+self.h*2/3);
-    }
+    gg.ctx.fillText("("+self.v[i]+")",x,y);
+
+    //t
+    i = floor(gg.timeline.t);
+    x = self.x+self.w/2;
+    y = self.y+self.h*1/3+10;
+    drawOutlineText(self.v[i],x,y,3,white,gg.ctx);
     gg.ctx.fillStyle = black;
+    gg.ctx.fillText(self.v[i],x,y);
+
+    //strokeBox(self.v_btn,gg.ctx);
   }
 }
 
@@ -1587,15 +1596,15 @@ var modrel = function()
       t = round(t-td);
       var x;
       var y;
-      var s = 20;
+      var s = 25;
       if(td > 0 && td < 1)
       {
         x = lerp(self.src.x+self.src.w,self.dst.x,td);
         y = lerp(self.src.y+self.src.h/2,self.dst.y+self.dst.h/2,td);
         gg.ctx.fillStyle = white;
-        gg.ctx.fillRect(x-s/2,y-s/2,s,s);
+        gg.ctx.fillRect(x-s,y-s/2,s*2,s);
         gg.ctx.fillStyle = black;
-        gg.ctx.fillText(self.src.v[t],x,y+s/2);
+        gg.ctx.fillText("+"+self.src.v[t],x,y+s/2);
       }
     }
   }
@@ -1644,8 +1653,8 @@ var module_board = function()
     var m = new module();
     m.wx = 0;
     m.wy = 0;
-    m.ww = 50;
-    m.wh = 50;
+    m.ww = 100;
+    m.wh = 100;
     for(var i = 0; i < gg.timeline.t_max; i++)
       m.v[i] = 0;
     m.v_btn.set(m.v[0]);
@@ -1784,7 +1793,7 @@ var module_board = function()
   {
     gg.ctx.lineWidth = 1;
 
-    gg.ctx.font = "20px DisposableDroidBB";
+    gg.ctx.font = "40px DisposableDroidBB";
     gg.ctx.textAlign = "center";
     for(var i = 0; i < self.modules.length; i++)
       self.modules[i].draw();
