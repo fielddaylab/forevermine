@@ -224,7 +224,6 @@ var GamePlayScene = function(game, stage)
         self.reset_level();
         gg.message_box.clear();
         gg.message_box.nq_group(gg.cur_level.text);
-        gg.message_box.nq("DATA:", SPEAKER_DATA, EMOTE_NULL, {})
         break;
       case MODE_WORK:
         gg.home_cam.wx = gg.monitor.wx;

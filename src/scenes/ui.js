@@ -148,10 +148,10 @@ var data_dragger = function()
       if(mb.speakers[i] == SPEAKER_DATA && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
         return 1;
       y += mb.pad;
-      if(mb.speakers[i] != SPEAKER_DATA)
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
-      else
+      if(mb.speakers[i] == SPEAKER_DATA || mb.speakers[i] == SPEAKER_SIM)
         y += mb.font_h+mb.pad;
+      else
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
       y += mb.pad;
     }
     return 0;
@@ -203,6 +203,7 @@ var data_dragger = function()
     }
     if(self.dragging_sim && self.ptWithinChat(evt))
     {
+      gg.message_box.nq("SIM:",SPEAKER_SIM,EMOTE_NULL,get_timer(0));
       gg.cur_level.submit(gg.table.correct);
     }
     self.dragging_data = 0;
@@ -1065,9 +1066,12 @@ var table = function()
 
   self.verify = function()
   {
+    var old_correct = self.correct;
     self.correct = self.data_visible;
     for(var i = 0; i < self.predicted_data.length && i < self.known_data.length; i++)
       if(self.predicted_data[i] != self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
+    if(self.correct && !old_correct)
+      gg.message_box.nq_group(gg.cur_level.export_text);
   }
 
   self.tick = function()
@@ -1265,7 +1269,7 @@ var message_box = function()
     for(var i = 0; i < self.displayed_i; i++)
     {
       self.max_top_y -= self.pad;
-      if(self.speakers[i] == SPEAKER_DATA)
+      if(self.speakers[i] == SPEAKER_DATA || self.speakers[i] == SPEAKER_SIM)
         self.max_top_y -= self.font_h+self.pad;
       else
       {
@@ -1336,8 +1340,6 @@ var message_box = function()
       if(self.triggers[self.displayed_i].tstate <= 0)
         self.advance();
     }
-    if(self.displayed_i < self.text.length && self.speakers[self.displayed_i] == SPEAKER_DATA)
-      self.advance();
 
     var old_prompt_ai_typing = self.prompt_ai_typing
     self.prompt_player_input = 0;
@@ -1392,20 +1394,26 @@ var message_box = function()
       }
       else if(self.speakers[i] == SPEAKER_DATA)
       {
-        //gg.ctx.fillStyle = self.data_text_color;
-        //gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
-        //gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad));
         gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
         if(!gg.data_dragger.dragging_data && !gg.table.data_visible)
         {
           var s = 30;
-          gg.ctx.drawImage(gg.notice_img,self.x+self.pad+self.bubble_w-s/2,y-s/2,s,s);
+          gg.ctx.drawImage(gg.notice_img,self.x+self.pad+self.bubble_w-s,y,s,s);
         }
         self.data_y = y;
       }
+      else if(self.speakers[i] == SPEAKER_SIM)
+      {
+        gg.ctx.drawImage(gg.submit_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
+      }
       gg.ctx.fillStyle = black;
       y += self.pad;
-      if(self.speakers[i] != SPEAKER_DATA)
+      if(self.speakers[i] == SPEAKER_DATA || self.speakers[i] == SPEAKER_SIM)
+      {
+        gg.ctx.textAlign = "left"; gg.ctx.fillStyle = self.ai_text_color; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+        y += self.font_h+self.pad;
+      }
+      else
       {
         for(var j = 0; j < self.bubbles[i].length; j++)
         {
@@ -1413,11 +1421,6 @@ var message_box = function()
           else                                   { gg.ctx.textAlign = "left";  gg.ctx.fillStyle = self.you_text_color; gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,       y+self.font_h); }
           y += self.font_h+self.pad;
         }
-      }
-      else
-      {
-        gg.ctx.textAlign = "left"; gg.ctx.fillStyle = self.ai_text_color; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
-        y += self.font_h+self.pad;
       }
       y += self.pad;
     }
