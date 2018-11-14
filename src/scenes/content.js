@@ -52,12 +52,16 @@ var level = function()
   self.type = LEVEL_NULL;
   self.m = 0; //y = mx + b
   self.correct_m = 0;
+  self.m_label = "starting";
   self.a = 0; //y = ax^2 + bx + c
   self.correct_a = 0;
+  self.a_label = "accelleration";
   self.b = 0; //y = ax^2 + bx + c && y = mx + b
   self.correct_b = 0;
+  self.b_label = "rate";
   self.c = 0; //y = ax^2 + bx + c
   self.correct_c = 0;
+  self.c_label = "starting";
 
   self.pano_st = 0;
   self.pano_et = 1;
@@ -79,6 +83,12 @@ var level = function()
   self.correct_text = [ "You did it! On to the next assignment...", SPEAKER_AI, EMOTE_NULL, trigger_timer, ];
   self.incorrect_text = [ "I don't think that's right... try again.", SPEAKER_AI, EMOTE_NULL, trigger_timer, ];
   self.post_text = [ "Goodnight!", SPEAKER_AI, EMOTE_NULL, ]
+
+  self.x_n = 10;
+  self.t_speed = 0.01;
+  self.fast_t_speed = 0.1;
+  self.x_label = "DAYS";
+  self.y_label = "CRYSTALS";
 
   self.feedback_imgs = [];
 

@@ -221,6 +221,8 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_PREH_TO_WORK: //takes on next as current
         gg.cur_level = gg.next_level;
+        gg.timeline.t_speed = gg.cur_level.t_speed;
+        gg.timeline.fast_t_speed = gg.cur_level.fast_t_speed;
         self.reset_level();
         gg.message_box.clear();
         gg.message_box.nq_group(gg.cur_level.text);
@@ -322,6 +324,11 @@ var GamePlayScene = function(game, stage)
     l.b = 0;
     l.correct_m = 2;
     l.correct_b = 1;
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "DAYS";
+    l.y_label = "CRYSTALS";
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0;
@@ -339,6 +346,11 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0.5;
     l.correct_b = 2;
     l.correct_c = 3;
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.05;
@@ -356,6 +368,11 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0;
     l.correct_b = 2;
     l.correct_c = 5;
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.1;
@@ -385,6 +402,11 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.025;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
     for(var j = 0; j < 5; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.15;
@@ -414,6 +436,11 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.05;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
     for(var j = 0; j < 5; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.25;
@@ -443,6 +470,11 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.05;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
     for(var j = 0; j < 5; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.35;
@@ -472,6 +504,11 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.05;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
     l.pano_st = 0;
     l.pano_et = 1;
     gg.levels.push(l);
@@ -499,6 +536,11 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
     l.pano_st = 0;
     l.pano_et = 1;
     gg.levels.push(l);
@@ -539,6 +581,11 @@ var GamePlayScene = function(game, stage)
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
     l.pano_st = 0;
     l.pano_et = 1;
     gg.levels.push(l);
@@ -579,6 +626,11 @@ var GamePlayScene = function(game, stage)
     m.src_i = 2;
     m.dst_i = 0;
     l.relparams.push(m);
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
     l.pano_st = 0;
     l.pano_et = 1;
     gg.levels.push(l);
@@ -592,6 +644,11 @@ var GamePlayScene = function(game, stage)
     l.b = 5;
     l.correct_m = 4;
     l.correct_b = 10;
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
     l.pano_st = 0;
     l.pano_et = 1;
     gg.levels.push(l);
@@ -605,6 +662,11 @@ var GamePlayScene = function(game, stage)
     l.b = 10;
     l.correct_m = 0.5;
     l.correct_b = 11;
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
     l.pano_st = 0;
     l.pano_et = 1;
     gg.levels.push(l);
@@ -620,6 +682,11 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 1;
     l.correct_b = 2;
     l.correct_c = 12;
+    l.x_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
     l.pano_st = 0;
     l.pano_et = 1;
     gg.levels.push(l);

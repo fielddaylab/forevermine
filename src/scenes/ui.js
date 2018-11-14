@@ -376,6 +376,8 @@ var timeline = function()
   self.t_target = 0;
   self.t_max = 10;
   self.fast_sim = 0;
+  self.t_speed = 0.01;
+  self.fast_t_speed = 0.1;
 
   self.advance_btn = {x:0,y:0,w:0,h:0,click:function(evt){
     self.t_target++;
@@ -417,10 +419,10 @@ var timeline = function()
 
   self.tick = function()
   {
-    if(self.fast_sim && self.t < self.t_max) self.t += 0.1;
+    if(self.fast_sim && self.t < self.t_max) self.t += self.fast_t_speed;
     else
     {
-      if(self.t < self.t_target && !self.dragging) self.t += 0.01;
+      if(self.t < self.t_target && !self.dragging) self.t += self.t_speed;
       if(self.t > self.t_target) self.t = self.t_target;
     }
     if(self.t >= self.t_max)
@@ -652,7 +654,7 @@ var editable_line = function()
         gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
       }
       gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
-      gg.ctx.fillText("DAYS",self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
+      gg.ctx.fillText(gg.cur_level.x_label,self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
       for(var i = 1; i < self.v_max-self.v_min; i++)
       {
         y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
@@ -661,6 +663,9 @@ var editable_line = function()
         gg.ctx.fillText(i,self.graph.x-10,y+7);
       }
       gg.ctx.fillText(self.v_max,self.graph.x-10,self.graph.y+7);
+      gg.ctx.textAlign = "right";
+      gg.ctx.fillText(gg.cur_level.y_label,self.graph.x-20,self.graph.y+self.graph.h/2);
+      gg.ctx.textAlign = "center";
       gg.ctx.stroke();
 
         //line
@@ -949,7 +954,7 @@ var editable_quadratic = function()
         gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
       }
       gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
-      gg.ctx.fillText("DAYS",self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
+      gg.ctx.fillText(gg.cur_level.x_label,self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
       for(var i = 1; i < self.v_max-self.v_min; i++)
       {
         y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
@@ -958,6 +963,9 @@ var editable_quadratic = function()
         gg.ctx.fillText(i,self.graph.x-10,y+7);
       }
       gg.ctx.fillText(self.v_max,self.graph.x-10,self.graph.y+7);
+      gg.ctx.textAlign = "right";
+      gg.ctx.fillText(gg.cur_level.y_label,self.graph.x-20,self.graph.y+self.graph.h/2);
+      gg.ctx.textAlign = "center";
       gg.ctx.stroke();
 
         //line
@@ -1112,7 +1120,7 @@ var table = function()
     drawLine(x,y1,x,y3,gg.ctx);
     x -= w;
     gg.ctx.fillStyle = black;
-    gg.ctx.fillText("DAY",x,y01+self.font_h/2);
+    gg.ctx.fillText(gg.cur_level.x_label,x,y01+self.font_h/2);
     gg.ctx.fillText("Modeled",x,y12+self.font_h/2-13);
     gg.ctx.fillText("Data",x,y12+self.font_h/2);
     gg.ctx.fillStyle = white;
@@ -1558,13 +1566,11 @@ var module = function()
     }
     drawImageBox(self.img,self,gg.ctx);
 
-    //0
-    i = 0;
+    //title
     x = self.x+self.w/2;
-    y = self.y+self.h*2/3+10;
-    drawOutlineText("("+self.v[i]+")",x,y,3,white,gg.ctx);
+    y = self.y-30;
     gg.ctx.fillStyle = black;
-    gg.ctx.fillText("("+self.v[i]+")",x,y);
+    gg.ctx.fillText(self.title,x,y);
 
     //t
     i = floor(gg.timeline.t);
@@ -1573,6 +1579,17 @@ var module = function()
     drawOutlineText(self.v[i],x,y,3,white,gg.ctx);
     gg.ctx.fillStyle = black;
     gg.ctx.fillText(self.v[i],x,y);
+
+    if(self.v[0] != self.v[2] || self.v[0] != self.v[i]) //strange
+    {
+    //0
+    i = 0;
+    x = self.x+self.w/2;
+    y = self.y+self.h*2/3+10;
+    drawOutlineText("("+self.v[i]+")",x,y,3,white,gg.ctx);
+    gg.ctx.fillStyle = black;
+    gg.ctx.fillText("("+self.v[i]+")",x,y);
+    }
 
     //strokeBox(self.v_btn,gg.ctx);
   }
@@ -1818,7 +1835,7 @@ var module_board = function()
         gg.ctx.fillText(i,x,self.graph.y+self.graph.h+15);
       }
       gg.ctx.fillText(gg.timeline.t_max,self.graph.x+self.graph.w,self.graph.y+self.graph.h+15);
-      gg.ctx.fillText("DAYS",self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
+      gg.ctx.fillText(gg.cur_level.x_label,self.graph.x+self.graph.w/2,self.graph.y+self.graph.h+30);
       for(var i = 1; i < self.v_max-self.v_min; i++)
       {
         y = lerp(self.graph.y+self.graph.h,self.graph.y,i/(self.v_max-self.v_min));
@@ -1827,6 +1844,9 @@ var module_board = function()
         gg.ctx.fillText(i,self.graph.x-10,y+7);
       }
       gg.ctx.fillText(self.v_max,self.graph.x-10,self.graph.y+7);
+      gg.ctx.textAlign = "right";
+      gg.ctx.fillText(gg.cur_level.y_label,self.graph.x-20,self.graph.y+self.graph.h/2);
+      gg.ctx.textAlign = "center";
       gg.ctx.stroke();
 
           //line
@@ -1837,6 +1857,7 @@ var module_board = function()
         var t = gg.timeline.t;
         var tr = gg.timeline.t%1;
         var tn = round(gg.timeline.t-tr);
+        gg.ctx.strokeStyle = black;
         gg.ctx.beginPath();
         gg.ctx.moveTo(self.xpts[0],self.ypts[0]);
         for(var i = 1; i <= tn; i++)
