@@ -691,7 +691,9 @@ var GamePlayScene = function(game, stage)
         }
         else
         {
-          gg.next_level = gg.levels[0];
+          var urlj = jsonFromURL();
+          if(urlj && urlj["level"]) gg.next_level = gg.levels[parseInt(urlj["level"])];
+          else gg.next_level = gg.levels[0];
           gg.exposition_box.clear();
           gg.exposition_box.nq_group(gg.next_level.pre_text);
           self.set_mode(MODE_PREH);

@@ -60,12 +60,14 @@ function size_containers(w,h)
 
 function resize()
 {
-  var w = window.innerWidth;
-  var h = window.innerHeight;
+  //var w = window.innerWidth;
+  //var h = window.innerHeight;
   //if(w > game_width)  w = game_width;
   //if(h > game_height) h = game_height;
   //if(h < game_height) w = h/game_height*game_width;
   //w = h/game_height*game_width;
+  var w = game_width;
+  var h = game_height;
   if(g) g.resize({width:w,height:h});
   size_containers(w,h);
 }
