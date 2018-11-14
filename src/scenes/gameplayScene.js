@@ -273,7 +273,8 @@ var GamePlayScene = function(game, stage)
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
-    gg.pano_t = 200;
+    gg.feedf_t = 30;
+    gg.pano_t = 250;
 
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
 
@@ -780,7 +781,7 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_FEED:
-        if(gg.mode_t < gg.fade_t*gg.cur_level.feedback_imgs.length && !gg.keylistener.advance()) //display feedback
+        if(gg.mode_t < gg.feedf_t*gg.cur_level.feedback_imgs.length*2 && !gg.keylistener.advance()) //display feedback
         {
           var t = gg.mode_t/gg.fade_t*gg.cur_level.feedback_imgs.length;
         }
@@ -854,7 +855,7 @@ var GamePlayScene = function(game, stage)
     gg.ctx.imageSmoothingEnabled = 0;
     if(gg.mode == MODE_FEED)
     {
-      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t*2/gg.fade_t)%gg.cur_level.feedback_imgs.length)];
+      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.feedf_t)%gg.cur_level.feedback_imgs.length)];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else
