@@ -64,7 +64,7 @@ var english_text =
     ],
     post_text:
     [
-      "Wheee! That was fun!", SPEAKER_AI, EMOTE_EXCITED,
+      "Wheee! That was fun! Look at those bots go!", SPEAKER_AI, EMOTE_EXCITED,
       "Awwww, don't look so sad, friend.", SPEAKER_AI, EMOTE_NULL,
       "Why don't you get some sleep? I'm sure you'll feel better tomorrow!", SPEAKER_AI, EMOTE_NULL,
     ],
@@ -678,4 +678,3 @@ var english_text =
 ];
 
 var used_text = english_text;
-
