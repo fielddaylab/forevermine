@@ -710,11 +710,14 @@ var editable_line = function()
 
     //eqn
     var yoff = 5;
+    var b;
     gg.ctx.fillStyle = white;
     gg.ctx.drawImage(gg.number_bg_img,self.m_btn.x,self.m_btn.y+yoff,self.m_btn.w,self.m_btn.h);
+    b = self.m_btn; if(b.highlit) { gg.ctx.fillStyle = "#63ADC3"; gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2); gg.ctx.fillStyle = white; }
     drawImageBox(gg.arrow_up_img,self.minc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.mdec_btn,gg.ctx);
     gg.ctx.drawImage(gg.number_bg_img,self.b_btn.x,self.b_btn.y+yoff,self.b_btn.w,self.b_btn.h);
+    b = self.b_btn; if(b.highlit) { gg.ctx.fillStyle = "#63ADC3"; gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2); gg.ctx.fillStyle = white; }
     drawImageBox(gg.arrow_up_img,self.binc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.bdec_btn,gg.ctx);
 
@@ -1009,14 +1012,18 @@ var editable_quadratic = function()
 
     //eqn
     var yoff = 5;
+    var b;
     gg.ctx.fillStyle = white;
     gg.ctx.drawImage(gg.number_bg_img,self.a_btn.x,self.a_btn.y+yoff,self.a_btn.w,self.a_btn.h);
+    b = self.a_btn; if(b.highlit) { gg.ctx.fillStyle = "#63ADC3"; gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2); gg.ctx.fillStyle = white; }
     drawImageBox(gg.arrow_up_img,self.ainc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.adec_btn,gg.ctx);
     gg.ctx.drawImage(gg.number_bg_img,self.b_btn.x,self.b_btn.y+yoff,self.b_btn.w,self.b_btn.h);
+    b = self.b_btn; if(b.highlit) { gg.ctx.fillStyle = "#63ADC3"; gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2); gg.ctx.fillStyle = white; }
     drawImageBox(gg.arrow_up_img,self.binc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.bdec_btn,gg.ctx);
     gg.ctx.drawImage(gg.number_bg_img,self.c_btn.x,self.c_btn.y+yoff,self.c_btn.w,self.c_btn.h);
+    b = self.c_btn; if(b.highlit) { gg.ctx.fillStyle = "#63ADC3"; gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2); gg.ctx.fillStyle = white; }
     drawImageBox(gg.arrow_up_img,self.cinc_btn,gg.ctx);
     drawImageBox(gg.arrow_down_img,self.cdec_btn,gg.ctx);
 
