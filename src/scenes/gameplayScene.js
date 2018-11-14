@@ -322,8 +322,8 @@ var GamePlayScene = function(game, stage)
     l.b = 0;
     l.correct_m = 2;
     l.correct_b = 1;
-    for(var j = 0; j < 10; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0;
     l.pano_et = 0.05;
     gg.levels.push(l);
@@ -339,6 +339,8 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0.5;
     l.correct_b = 2;
     l.correct_c = 3;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.05;
     l.pano_et = 0.1;
     gg.levels.push(l);
@@ -354,6 +356,8 @@ var GamePlayScene = function(game, stage)
     l.correct_a = 0;
     l.correct_b = 2;
     l.correct_c = 5;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.1;
     l.pano_et = 0.15;
     gg.levels.push(l);
@@ -381,6 +385,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    for(var j = 0; j < 5; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.15;
     l.pano_et = 0.2;
     gg.levels.push(l);
@@ -408,6 +414,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    for(var j = 0; j < 5; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.25;
     l.pano_et = 0.3;
     gg.levels.push(l);
@@ -435,6 +443,8 @@ var GamePlayScene = function(game, stage)
     m.src_i = 1;
     m.dst_i = 0;
     l.relparams.push(m);
+    for(var j = 0; j < 5; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0.35;
     l.pano_et = 0.4;
     gg.levels.push(l);
