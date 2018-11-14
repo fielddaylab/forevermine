@@ -13,8 +13,8 @@ var LoadingScene = function(game, stage)
     ctx = canv.context;
 
     ctx.font = "20px DisposableDroidBB";
+    if(keyer) keyer.detach(); keyer = new Keyer({source:canvas});
   }
-  self.resize(stage);
 
   var pad;
   var barw;
@@ -61,13 +61,6 @@ var LoadingScene = function(game, stage)
     n_audios_loaded++;
   };
 
-  self.resize = function(stage)
-  {
-    canv = stage.canv;
-    canvas = canv.canvas;
-    ctx = canv.context;
-  }
-
   var tryfont = function()
   {
     font_canv.context.fillStyle = "#FFFFFF";
@@ -76,10 +69,14 @@ var LoadingScene = function(game, stage)
     font_canv.context.fillText("a",12,22);
   }
 
+  var keyer;
+  var keylistener;
   self.ready = function()
   {
     pad = 20;
     barw = (canv.width/4);
+
+    keylistener = {last_key:0,key_down:function(evt){ keylistener.last_key = evt.keyCode; },advance:function(){if(keylistener.last_key == 32 /*space*/) { keylistener.last_key = 0; return 1; } else { keylistener.last_key = 0; return 0; } }};
 
     loading_percent_loaded = 0;
     ticks_since_loading_ready = 0;
@@ -198,10 +195,14 @@ var LoadingScene = function(game, stage)
       audios[i].load();
     }
     audioLoaded(); //call once to prevent 0/0 != 100% bug
+
+    self.resize(stage);
   };
 
   self.tick = function()
   {
+    keyer.filter(keylistener);
+
     //font main-thread loaded test
     for(var i = 0; i < font_srcs.length; i++)
     {
@@ -233,9 +234,10 @@ var LoadingScene = function(game, stage)
     if(percent_loaded >= 1.0) ticks_since_ready++;
     if(ticks_since_ready >= post_load_countdown)
     {
-      if(ticks_since_loading_ready > 550) game.nextScene();
-      game.nextScene();
+      if(ticks_since_loading_ready > 550 || keylistener.advance()) game.nextScene();
     }
+
+    if(keyer) keyer.flush();
   };
 
   self.draw = function()
@@ -333,6 +335,7 @@ var LoadingScene = function(game, stage)
     audios = [];//just used them to cache assets in browser; let garbage collector handle 'em.
     imgs = [];//just used them to cache assets in browser; let garbage collector handle 'em.
     loading_imgs = [];//just used them to cache assets in browser; let garbage collector handle 'em.
+    if(keyer) keyer.detach(); keyer = 0;
   };
 };
 
