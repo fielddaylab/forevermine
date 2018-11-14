@@ -160,9 +160,9 @@ var data_dragger = function()
   {
     if(gg.table.simd_visible < gg.table.max_t) return 0;
     var t = gg.table;
-    var y2 = t.y+t.h*2/3;
+    var y1 = t.y+t.h*1/3;
     var y3 = t.y+t.h;
-    return ptWithin(t.x,y2,t.w,y3-y2,evt.doX,evt.doY);
+    return ptWithin(t.x,y1,t.w,y3-y1,evt.doX,evt.doY);
   }
   //release
   self.ptWithinChat = function(evt)
@@ -240,13 +240,13 @@ var data_dragger = function()
       {
         if(!self.dragging_sim)
         {
-          var y2 = gg.table.y+gg.table.h*2/3;
+          var y1 = gg.table.y+gg.table.h*1/3;
           gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,y2);
-          gg.ctx.fillRect(0,y2,gg.table.x,gg.table.h);
-          gg.ctx.fillRect(gg.table.x+gg.table.w,y2,gg.canv.width-(gg.table.x+gg.table.w),gg.table.h);
+          gg.ctx.fillRect(0,0,gg.canv.width,y1);
+          gg.ctx.fillRect(0,y1,gg.table.x,gg.table.h);
+          gg.ctx.fillRect(gg.table.x+gg.table.w,y1,gg.canv.width-(gg.table.x+gg.table.w),gg.table.h);
           gg.ctx.fillStyle = white;
-          gg.ctx.fillText("DRAG \\/",gg.canv.width-200,y2-40);
+          gg.ctx.fillText("DRAG \\/",gg.canv.width-200,y1-20);
         }
         else
         {
@@ -1150,7 +1150,7 @@ var table = function()
       if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.data_dragger.dragging_sim)
       {
         var s = 30;
-        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y2-s/2,s,s);
+        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y1-s/2,s,s);
       }
     }
 
