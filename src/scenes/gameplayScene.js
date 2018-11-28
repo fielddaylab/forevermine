@@ -104,16 +104,18 @@ var GamePlayScene = function(game, stage)
   var MODE_MENU           = ENUM; ENUM++;
   var MODE_CINEMATIC      = ENUM; ENUM++;
   var MODE_BOOT           = ENUM; ENUM++;
-  var MODE_PREH           = ENUM; ENUM++;
-  var MODE_PREH_TO_WORK   = ENUM; ENUM++;
-  var MODE_WORK           = ENUM; ENUM++;
-  var MODE_WORK_TO_FEED   = ENUM; ENUM++;
+  var MODE_PREH0          = ENUM; ENUM++;
+  var MODE_PREH0_TO_FEED  = ENUM; ENUM++;
   var MODE_FEED           = ENUM; ENUM++;
-  var MODE_FEED_TO_POSTH  = ENUM; ENUM++;
+  var MODE_FEED_TO_PREH1  = ENUM; ENUM++;
+  var MODE_PREH1          = ENUM; ENUM++;
+  var MODE_PREH1_TO_WORK  = ENUM; ENUM++;
+  var MODE_WORK           = ENUM; ENUM++;
+  var MODE_WORK_TO_POSTH  = ENUM; ENUM++;
   var MODE_POSTH          = ENUM; ENUM++;
   var MODE_POSTH_TO_NIGHT = ENUM; ENUM++;
   var MODE_NIGHT          = ENUM; ENUM++;
-  var MODE_NIGHT_TO_PREH  = ENUM; ENUM++;
+  var MODE_NIGHT_TO_PREH0 = ENUM; ENUM++;
   var MODE_COUNT          = ENUM; ENUM++;
 
   self.reset_level = function()
@@ -198,15 +200,14 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_BOOT:
         break;
-      case MODE_PREH:
+      case MODE_PREH0:
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
         gg.home_cam.ww = gg.lab.ww;
         gg.home_cam.wh = gg.lab.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
-        break;
-      case MODE_PREH_TO_WORK: //takes on next as current
+        //assume pre_text_0 already enqueued
         gg.cur_level = gg.next_level;
         gg.timeline.t_speed = gg.cur_level.t_speed;
         gg.timeline.fast_t_speed = gg.cur_level.fast_t_speed;
@@ -214,7 +215,18 @@ var GamePlayScene = function(game, stage)
         gg.graph.v_max = gg.cur_level.y_n;
         self.reset_level();
         gg.message_box.clear();
-        gg.message_box.nq_group(gg.cur_level.text);
+        break;
+      case MODE_PREH0_TO_FEED:
+        break;
+      case MODE_FEED:
+        break;
+      case MODE_FEED_TO_PREH1:
+        gg.exposition_box.nq_group(gg.cur_level.pre_text_1);
+        break;
+      case MODE_PREH1:
+        break;
+      case MODE_PREH1_TO_WORK:
+        gg.message_box.nq_group(gg.cur_level.text_0);
         break;
       case MODE_WORK:
         gg.home_cam.wx = gg.monitor.wx;
@@ -225,20 +237,10 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         gg.timeline.fast_sim = 1;
         break;
-      case MODE_WORK_TO_FEED:
+      case MODE_WORK_TO_POSTH:
         gg.line.blur();
         gg.quadratic.blur();
         gg.exposition_box.clear();
-        break;
-      case MODE_FEED:
-        gg.home_cam.wx = gg.lab.wx;
-        gg.home_cam.wy = gg.lab.wy;
-        gg.home_cam.ww = gg.lab.ww;
-        gg.home_cam.wh = gg.lab.wh;
-        screenSpace(gg.home_cam,gg.canv,gg.lab);
-        screenSpace(gg.home_cam,gg.canv,gg.monitor);
-        break;
-      case MODE_FEED_TO_POSTH:
         gg.exposition_box.nq_group(gg.cur_level.post_text);
         break;
       case MODE_POSTH:
@@ -247,10 +249,10 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_NIGHT:
         break;
-      case MODE_NIGHT_TO_PREH: //sets next level
+      case MODE_NIGHT_TO_PREH0: //sets next level
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
-        gg.exposition_box.nq_group(gg.next_level.pre_text);
+        gg.exposition_box.nq_group(gg.next_level.pre_text_0);
         break;
     }
 
@@ -698,12 +700,15 @@ var GamePlayScene = function(game, stage)
     for(var i = 0; i < gg.levels.length; i++)
     {
       var l = gg.levels[i];
-      l.pre_text       = used_text[i].pre_text;
-      l.text           = used_text[i].text;
+      l.pre_text_0     = used_text[i].pre_text_0;
+      l.pre_text_1     = used_text[i].pre_text_1;
+      l.text_0         = used_text[i].text_0;
+      l.text_1         = used_text[i].text_1;
       l.import_text    = used_text[i].import_text;
       l.export_text    = used_text[i].export_text;
       l.incorrect_text = used_text[i].incorrect_text;
-      l.correct_text   = used_text[i].correct_text;
+      l.correct_text_0 = used_text[i].correct_text_0;
+      l.correct_text_1 = used_text[i].correct_text_1;
       l.post_text      = used_text[i].post_text;
     }
 
@@ -716,21 +721,30 @@ var GamePlayScene = function(game, stage)
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_BOOT);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PREH);
+    self.set_mode(MODE_PREH0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PREH_TO_WORK);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK_TO_FEED);
+    self.set_mode(MODE_PREH0_TO_FEED);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_FEED);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_FEED_TO_POSTH);
+    self.set_mode(MODE_FEED_TO_PREH1);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_PREH1);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_PREH1_TO_WORK);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_WORK);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_WORK_TO_POSTH);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_POSTH);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_POSTH_TO_NIGHT);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_NIGHT);
+    for(var i = 0; i < 100; i++) self.tick();
+    self.set_mode(MODE_NIGHT_TO_PREH0);
+    for(var i = 0; i < 100; i++) self.tick();
     //*/
   };
 
@@ -765,20 +779,53 @@ var GamePlayScene = function(game, stage)
           if(urlj && urlj["level"]) gg.next_level = gg.levels[parseInt(urlj["level"])];
           else gg.next_level = gg.levels[0];
           gg.exposition_box.clear();
-          gg.exposition_box.nq_group(gg.next_level.pre_text);
-          self.set_mode(MODE_PREH);
+          gg.exposition_box.nq_group(gg.next_level.pre_text_0);
+          self.set_mode(MODE_PREH0);
         }
       }
       break;
-      case MODE_PREH:
+      case MODE_PREH0:
       {
         clicker.filter(gg.exposition_box);
         if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
-          self.set_mode(MODE_PREH_TO_WORK);
+          self.set_mode(MODE_PREH0_TO_FEED);
         gg.exposition_box.tick();
       }
         break;
-      case MODE_PREH_TO_WORK:
+      case MODE_PREH0_TO_FEED:
+      {
+        if(gg.mode_t < gg.fade_t)
+        {
+          var t = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
+        }
+        else self.set_mode(MODE_FEED);
+      }
+        break;
+      case MODE_FEED:
+        if(gg.mode_t < gg.feedf_t*gg.cur_level.feedback_imgs.length*2 && !gg.keylistener.advance()) //display feedback
+        {
+          var t = gg.mode_t/gg.fade_t*gg.cur_level.feedback_imgs.length;
+        }
+        else self.set_mode(MODE_FEED_TO_PREH1);
+        break;
+      case MODE_FEED_TO_PREH1:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to face
+        {
+          var t = gg.mode_t/gg.fade_t;
+        }
+        else self.set_mode(MODE_PREH1);
+      }
+        break;
+      case MODE_PREH1:
+      {
+        clicker.filter(gg.exposition_box);
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
+          self.set_mode(MODE_PREH1_TO_WORK);
+        gg.exposition_box.tick();
+      }
+        break;
+      case MODE_PREH1_TO_WORK:
       {
         if(gg.mode_t <= gg.zoom_t) //zoom to work
         {
@@ -814,7 +861,7 @@ var GamePlayScene = function(game, stage)
         }
 
         if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
-          self.set_mode(MODE_WORK_TO_FEED);
+          self.set_mode(MODE_WORK_TO_POSTH);
 
         gg.graph.tick();
         gg.timeline.tick();
@@ -823,7 +870,7 @@ var GamePlayScene = function(game, stage)
         if(!gg.cur_level.correct) gg.message_box.prompt_end = 0;
       }
         break;
-      case MODE_WORK_TO_FEED:
+      case MODE_WORK_TO_POSTH:
       {
         if(gg.mode_t < gg.fade_t) //fade to face
         {
@@ -848,22 +895,6 @@ var GamePlayScene = function(game, stage)
           gg.home_cam.wh = gg.lab.wh;
           screenSpace(gg.home_cam,gg.canv,gg.lab);
           screenSpace(gg.home_cam,gg.canv,gg.monitor);
-        }
-        else self.set_mode(MODE_FEED);
-      }
-        break;
-      case MODE_FEED:
-        if(gg.mode_t < gg.feedf_t*gg.cur_level.feedback_imgs.length*2 && !gg.keylistener.advance()) //display feedback
-        {
-          var t = gg.mode_t/gg.fade_t*gg.cur_level.feedback_imgs.length;
-        }
-        else self.set_mode(MODE_FEED_TO_POSTH);
-        break;
-      case MODE_FEED_TO_POSTH:
-      {
-        if(gg.mode_t < gg.fade_t) //fade to face
-        {
-          var t = gg.mode_t/gg.fade_t;
         }
         else self.set_mode(MODE_POSTH);
       }
@@ -896,7 +927,7 @@ var GamePlayScene = function(game, stage)
         }
         else self.set_mode(MODE_NIGHT_TO_PREH);
         break;
-      case MODE_NIGHT_TO_PREH:
+      case MODE_NIGHT_TO_PREH0:
       {
         if(gg.mode_t < gg.fade_t) //fade to black
         {
@@ -906,7 +937,7 @@ var GamePlayScene = function(game, stage)
         {
           var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
         }
-        else self.set_mode(MODE_PREH);
+        else self.set_mode(MODE_PREH0);
       }
         break;
     }
@@ -1016,12 +1047,40 @@ var GamePlayScene = function(game, stage)
         gg.ctx.globalAlpha = 1;
       }
         break;
-      case MODE_PREH:
+      case MODE_PREH0:
       {
         self.draw_home();
       }
         break;
-      case MODE_PREH_TO_WORK:
+      case MODE_PREH0_TO_FEED:
+      {
+        if(gg.mode_t <= gg.zoom_t) //zoom to work
+        {
+          var t = gg.mode_t/gg.fade_t;
+          self.draw_home();
+        }
+      }
+        break;
+      case MODE_FEED:
+      {
+        self.draw_home();
+      }
+        break;
+      case MODE_FEED_TO_PREH1:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to face
+        {
+          var t = gg.mode_t/gg.fade_t;
+          self.draw_home();
+        }
+      }
+        break;
+      case MODE_PREH1:
+      {
+        self.draw_home();
+      }
+        break;
+      case MODE_PREH1_TO_WORK:
       {
         if(gg.mode_t <= gg.zoom_t) //zoom to work
         {
@@ -1041,7 +1100,7 @@ var GamePlayScene = function(game, stage)
         self.draw_work();
       }
         break;
-      case MODE_WORK_TO_FEED:
+      case MODE_WORK_TO_POSTH:
       {
         if(gg.mode_t < gg.fade_t) //fade to face
         {
@@ -1056,20 +1115,6 @@ var GamePlayScene = function(game, stage)
         }
         else if(gg.mode_t < gg.fade_t+gg.zoom_t+gg.fade_t) //fade to feed
         {
-          self.draw_home();
-        }
-      }
-        break;
-      case MODE_FEED:
-      {
-        self.draw_home();
-      }
-        break;
-      case MODE_FEED_TO_POSTH:
-      {
-        if(gg.mode_t < gg.fade_t) //fade to face
-        {
-          var t = gg.mode_t/gg.fade_t;
           self.draw_home();
         }
       }
@@ -1100,7 +1145,7 @@ var GamePlayScene = function(game, stage)
         var t = gg.mode_t/gg.pano_t;
         self.draw_night((gg.fade_t+t*gg.pano_t)/(gg.fade_t*2+gg.pano_t));
         break;
-      case MODE_NIGHT_TO_PREH:
+      case MODE_NIGHT_TO_PREH0:
         if(gg.mode_t < gg.fade_t)
         {
           var t = gg.mode_t/gg.fade_t;
