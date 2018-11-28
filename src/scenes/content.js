@@ -15,12 +15,13 @@ var TRIGGER_TIMER = ENUM; ENUM++;
 var TRIGGER_COUNT = ENUM; ENUM++;
 
 ENUM = 0;
-var SPEAKER_NULL   = ENUM; ENUM++;
-var SPEAKER_PLAYER = ENUM; ENUM++;
-var SPEAKER_AI     = ENUM; ENUM++;
-var SPEAKER_DATA   = ENUM; ENUM++;
-var SPEAKER_SIM    = ENUM; ENUM++;
-var SPEAKER_NULL   = ENUM; ENUM++;
+var SPEAKER_NULL    = ENUM; ENUM++;
+var SPEAKER_PLAYER  = ENUM; ENUM++;
+var SPEAKER_AI      = ENUM; ENUM++;
+var SPEAKER_ADVANCE = ENUM; ENUM++;
+var SPEAKER_DATA    = ENUM; ENUM++;
+var SPEAKER_SIM     = ENUM; ENUM++;
+var SPEAKER_NULL    = ENUM; ENUM++;
 
 ENUM = 0;
 var EMOTE_NULL       = ENUM; ENUM++;
@@ -63,6 +64,7 @@ var level = function()
   self.c = 0; //y = ax^2 + bx + c
   self.correct_c = 0;
   self.c_label = "starting";
+  self.text_stage = 0;
 
   self.pano_st = 0;
   self.pano_et = 1;
@@ -75,6 +77,11 @@ var level = function()
     fn:noop,
     state:0,
     tstate:0,
+  };
+  var trigger_click = {
+    type:TRIGGER_CLICK,
+    fn:noop,
+    state:0,
   };
 
   self.pre_text_0 = [ "Good morning! Here's what happened.", SPEAKER_AI, EMOTE_NULL, ]
@@ -105,12 +112,14 @@ var level = function()
 
     if(self.correct)
     {
-      gg.message_box.nq_group(self.correct_text);
+      gg.message_box.nq_group(self.correct_text_0);
+      self.text_stage++;
       self.submitted_correct();
     }
     else
     {
       gg.message_box.nq_group(self.incorrect_text);
+      //self.text_stage++; //do not increment!
       self.submitted_incorrect();
     }
   }

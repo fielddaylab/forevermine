@@ -201,6 +201,7 @@ var data_dragger = function()
       gg.table.data_visible = 1;
       gg.table.verify();
       gg.message_box.nq_group(gg.cur_level.import_text);
+      gg.cur_level.text_stage++;
     }
     if(self.dragging_sim && self.ptWithinChat(evt))
     {
@@ -1076,7 +1077,10 @@ var table = function()
     for(var i = 0; i < self.predicted_data.length && i < self.known_data.length; i++)
       if(self.predicted_data[i] != self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
     if(self.correct && !old_correct)
+    {
       gg.message_box.nq_group(gg.cur_level.export_text);
+      gg.cur_level.text_stage++;
+    }
   }
 
   self.tick = function()
@@ -1208,6 +1212,7 @@ var message_box = function()
 
   self.gave_data = 0;
   self.requested_end = 0;
+  self.requested_advance = 0;
 
   self.text = [];
   self.bubbles = [];
@@ -1246,6 +1251,7 @@ var message_box = function()
     self.target_top_y = self.max_top_y;
     self.gave_data = 0;
     self.requested_end = 0;
+    self.requested_advance = 0;
     self.displayed_i = 0;
     self.advance_t = self.thinking_buff;
   }
@@ -1260,6 +1266,7 @@ var message_box = function()
     self.triggers.push(trigger);
     self.prompt_end = 0;
     self.requested_end = 0;
+    self.requested_advance = 0;
   }
 
   self.nq_group = function(text)
@@ -1311,6 +1318,10 @@ var message_box = function()
       else if(ptWithin(self.input_x,self.input_y,self.input_w,self.input_h,evt.doX,evt.doY))
         self.advance();
       return 1;
+    }
+    else
+    {
+      self.requested_advance = 1;
     }
     return 0;
   }

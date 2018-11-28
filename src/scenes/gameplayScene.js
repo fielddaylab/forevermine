@@ -121,6 +121,7 @@ var GamePlayScene = function(game, stage)
   self.reset_level = function()
   {
     gg.cur_level.correct = 0;
+    gg.cur_level.text_stage = 1;
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     switch(gg.cur_level.type)
@@ -222,11 +223,13 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_FEED_TO_PREH1:
         gg.exposition_box.nq_group(gg.cur_level.pre_text_1);
+        gg.cur_level.text_stage++;
         break;
       case MODE_PREH1:
         break;
       case MODE_PREH1_TO_WORK:
         gg.message_box.nq_group(gg.cur_level.text_0);
+        gg.cur_level.text_stage++;
         break;
       case MODE_WORK:
         gg.home_cam.wx = gg.monitor.wx;
@@ -242,6 +245,7 @@ var GamePlayScene = function(game, stage)
         gg.quadratic.blur();
         gg.exposition_box.clear();
         gg.exposition_box.nq_group(gg.cur_level.post_text);
+        gg.cur_level.text_stage++;
         break;
       case MODE_POSTH:
         break;
@@ -253,6 +257,7 @@ var GamePlayScene = function(game, stage)
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
         gg.exposition_box.nq_group(gg.next_level.pre_text_0);
+        gg.cur_level.text_stage++;
         break;
     }
 
@@ -780,6 +785,7 @@ var GamePlayScene = function(game, stage)
           else gg.next_level = gg.levels[0];
           gg.exposition_box.clear();
           gg.exposition_box.nq_group(gg.next_level.pre_text_0);
+          gg.next_level.text_stage++;
           self.set_mode(MODE_PREH0);
         }
       }
@@ -860,6 +866,36 @@ var GamePlayScene = function(game, stage)
           dragger.filter(gg.message_box);
         }
 
+        if(gg.message_box.requested_advance)
+        {
+          switch(gg.cur_level.text_stage)
+          {
+            case 0: //impossible
+            case 1: //pre_text_0 complete
+            case 2: //pre_text_1 complete
+            case 3: //text_0 complete
+              if(gg.cur_level.text_1.length)
+              {
+                gg.message_box.nq_group(gg.cur_level.text_1);
+                gg.cur_level.text_stage++;
+              }
+              break;
+            case 4: //text_1 complete
+            case 5: //import_text complete
+            case 6: //export_text complete
+              break;
+            case 7: //correct_text_0 complete
+              if(gg.cur_level.correct_text_1.length)
+              {
+                gg.message_box.nq_group(gg.cur_level.correct_text_1);
+                gg.cur_level.text_stage++;
+              }
+              break;
+            case 8: //correct_text_1 complete
+            case 9: //post_text complete
+              break;
+          }
+        }
         if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
           self.set_mode(MODE_WORK_TO_POSTH);
 
@@ -925,7 +961,7 @@ var GamePlayScene = function(game, stage)
         {
           var t = gg.mode_t/gg.pano_t;
         }
-        else self.set_mode(MODE_NIGHT_TO_PREH);
+        else self.set_mode(MODE_NIGHT_TO_PREH0);
         break;
       case MODE_NIGHT_TO_PREH0:
       {
