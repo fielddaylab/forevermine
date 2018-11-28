@@ -1809,6 +1809,7 @@ var module_board = function()
 
     //graph
     {
+      var g = gg.graph;
       gg.ctx.fillStyle = white;
       gg.ctx.font = "18px DisposableDroidBB";
       gg.ctx.lineWidth = 2;
@@ -1818,7 +1819,6 @@ var module_board = function()
       if(self.table_module)
       {
         var m = self.table_module;
-        var g = gg.graph;
         var t = gg.timeline.t;
         var tr = gg.timeline.t%1;
         var tn = round(gg.timeline.t-tr);
@@ -1837,6 +1837,8 @@ var module_board = function()
       {
         if(gg.table.data_visible)
         {
+          var x;
+          var y;
           gg.ctx.fillStyle = white;
           var s = 15;
           for(var i = 0; i <= gg.timeline.t_max; i++)
@@ -1844,7 +1846,7 @@ var module_board = function()
             if(gg.table.known_data[i] != "-")
             {
               x = mapVal(0,gg.timeline.t_max,g.x,g.x+g.w,i);
-              y = mapVal(0,gg.graph.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
+              y = mapVal(0,g.v_max,g.y+g.h,g.y,gg.table.known_data[i]);
               y = clamp(g.y,g.y+g.h,y);
               if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,x-s/2,y-s/2,s,s);
               else gg.ctx.drawImage(gg.neq_pt_img,x-s/2,y-s/2,s,s);
