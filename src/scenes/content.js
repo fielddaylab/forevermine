@@ -1,3 +1,4 @@
+'use strict';
 var ENUM;
 
 ENUM = 0;
@@ -85,6 +86,7 @@ var level = function()
   self.post_text = [ "Goodnight!", SPEAKER_AI, EMOTE_NULL, ]
 
   self.x_n = 10;
+  self.y_n = 10;
   self.t_speed = 0.01;
   self.fast_t_speed = 0.1;
   self.x_label = "DAYS";

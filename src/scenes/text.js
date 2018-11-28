@@ -1,3 +1,4 @@
+'use strict';
 var trigger_click = {
   type:TRIGGER_CLICK,
   fn:noop,

@@ -1,3 +1,4 @@
+'use strict';
 var NullScene = function(game, stage)
 {
   var self = this;

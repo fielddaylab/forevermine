@@ -1,3 +1,4 @@
+'use strict';
 var GamePlayScene = function(game, stage)
 {
   var self = this;
@@ -13,7 +14,6 @@ var GamePlayScene = function(game, stage)
     if(self.was_ready)
     {
       var b;
-      var graph_s = 200;
 
       gg.monitor.ww = 422;
       gg.monitor.wh = 320;
@@ -48,12 +48,6 @@ var GamePlayScene = function(game, stage)
       b.y = 0;
       b.ww = b.h;
       b.wh = b.w;
-      b.graph.w = graph_s;
-      b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-30;
-      b.graph.y = 30;
-      b.v_min = 0;
-      b.v_max = 10;
       //acts as module cam
       b.ww = gg.canv.width;
       b.wh = gg.canv.height;
@@ -64,6 +58,11 @@ var GamePlayScene = function(game, stage)
       gg.table.x = gg.message_box.x+gg.message_box.w+20;
       gg.table.y = gg.canv.height-gg.table.h-10;
       gg.table.w = gg.canv.width-gg.table.x-30;
+
+      gg.graph.w = 200;
+      gg.graph.h = 200;
+      gg.graph.x = gg.canv.width-gg.graph.w-30;
+      gg.graph.y = 30;
 
       gg.timeline.w = gg.table.w;
       gg.timeline.h = 40;
@@ -76,12 +75,6 @@ var GamePlayScene = function(game, stage)
       b.x = gg.message_box.x+gg.message_box.w;
       b.y = 0;
       b.w = gg.canv.width-b.x;
-      b.graph.w = graph_s;
-      b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-30;
-      b.graph.y = 30;
-      b.v_min = 0;
-      b.v_max = 10;
       b.size();
 
       b = gg.quadratic;
@@ -89,12 +82,6 @@ var GamePlayScene = function(game, stage)
       b.x = gg.message_box.x+gg.message_box.w;
       b.y = 0;
       b.w = gg.canv.width-b.x;
-      b.graph.w = graph_s;
-      b.graph.h = graph_s;
-      b.graph.x = gg.canv.width-b.graph.w-30;
-      b.graph.y = 30;
-      b.v_min = 0;
-      b.v_max = 10;
       b.size();
 
     }
@@ -223,6 +210,8 @@ var GamePlayScene = function(game, stage)
         gg.cur_level = gg.next_level;
         gg.timeline.t_speed = gg.cur_level.t_speed;
         gg.timeline.fast_t_speed = gg.cur_level.fast_t_speed;
+        gg.timeline.t_max = gg.cur_level.x_n;
+        gg.graph.v_max = gg.cur_level.y_n;
         self.reset_level();
         gg.message_box.clear();
         gg.message_box.nq_group(gg.cur_level.text);
@@ -305,6 +294,7 @@ var GamePlayScene = function(game, stage)
     gg.data_dragger = new data_dragger();
     gg.exposition_box = new exposition_box();
     gg.message_box = new message_box();
+    gg.graph = new graph();
     gg.timeline = new timeline();
     gg.table = new table();
     gg.module_board = new module_board();
@@ -325,6 +315,7 @@ var GamePlayScene = function(game, stage)
     l.correct_m = 2;
     l.correct_b = 1;
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "DAYS";
@@ -347,6 +338,7 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 2;
     l.correct_c = 3;
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -369,6 +361,7 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 2;
     l.correct_c = 5;
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -403,6 +396,7 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.025;
     l.x_label = "HOURS";
@@ -437,6 +431,7 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.05;
     l.x_label = "HOURS";
@@ -471,6 +466,7 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.05;
     l.x_label = "HOURS";
@@ -505,6 +501,7 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.05;
     l.x_label = "HOURS";
@@ -537,6 +534,7 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -582,6 +580,7 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -627,6 +626,7 @@ var GamePlayScene = function(game, stage)
     m.dst_i = 0;
     l.relparams.push(m);
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -645,6 +645,7 @@ var GamePlayScene = function(game, stage)
     l.correct_m = 4;
     l.correct_b = 10;
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -663,6 +664,7 @@ var GamePlayScene = function(game, stage)
     l.correct_m = 0.5;
     l.correct_b = 11;
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -683,6 +685,7 @@ var GamePlayScene = function(game, stage)
     l.correct_b = 2;
     l.correct_c = 12;
     l.x_n = 10;
+    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -813,6 +816,7 @@ var GamePlayScene = function(game, stage)
         if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
           self.set_mode(MODE_WORK_TO_FEED);
 
+        gg.graph.tick();
         gg.timeline.tick();
         gg.cur_level.tick();
         gg.message_box.tick();
@@ -936,6 +940,7 @@ var GamePlayScene = function(game, stage)
   self.draw_work = function()
   {
     gg.ctx.drawImage(gg.background_ui_img,0,0,gg.canv.width,gg.canv.height);
+    gg.graph.draw();
     gg.timeline.draw();
     gg.table.draw();
     switch(gg.cur_level.type)
