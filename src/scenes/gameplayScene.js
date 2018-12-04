@@ -41,19 +41,6 @@ var GamePlayScene = function(game, stage)
       gg.message_box.y = 0;
       gg.message_box.size();
 
-      b = gg.module_board;
-      b.h = gg.canv.height;
-      b.x = gg.message_box.x+gg.message_box.w;
-      b.w = gg.canv.width-b.x;
-      b.y = 0;
-      b.ww = b.h;
-      b.wh = b.w;
-      //acts as module cam
-      b.ww = gg.canv.width;
-      b.wh = gg.canv.height;
-      b.wx = 0;
-      b.wy = 0;
-
       gg.table.h = 130;
       gg.table.x = gg.message_box.x+gg.message_box.w+20;
       gg.table.y = gg.canv.height-gg.table.h-10;
@@ -70,20 +57,10 @@ var GamePlayScene = function(game, stage)
       gg.timeline.y = gg.table.y+5;
       gg.timeline.size();
 
-      b = gg.line;
-      b.h = gg.canv.height;
-      b.x = gg.message_box.x+gg.message_box.w;
-      b.y = 0;
-      b.w = gg.canv.width-b.x;
-      b.size();
-
-      b = gg.quadratic;
-      b.h = gg.canv.height;
-      b.x = gg.message_box.x+gg.message_box.w;
-      b.y = 0;
-      b.w = gg.canv.width-b.x;
-      b.size();
-
+      gg.line.h = gg.canv.height;
+      gg.line.x = gg.message_box.x+gg.message_box.w;
+      gg.line.y = 0;
+      gg.line.w = gg.canv.width-gg.line.x;
     }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
@@ -100,23 +77,23 @@ var GamePlayScene = function(game, stage)
   var blurer;
 
   var ENUM = 0;
-  var MODE_NULL           = ENUM; ENUM++;
-  var MODE_MENU           = ENUM; ENUM++;
-  var MODE_CINEMATIC      = ENUM; ENUM++;
-  var MODE_BOOT           = ENUM; ENUM++;
-  var MODE_PREH0          = ENUM; ENUM++;
-  var MODE_PREH0_TO_FEED  = ENUM; ENUM++;
-  var MODE_FEED           = ENUM; ENUM++;
-  var MODE_FEED_TO_PREH1  = ENUM; ENUM++;
-  var MODE_PREH1          = ENUM; ENUM++;
-  var MODE_PREH1_TO_WORK  = ENUM; ENUM++;
-  var MODE_WORK           = ENUM; ENUM++;
-  var MODE_WORK_TO_POSTH  = ENUM; ENUM++;
-  var MODE_POSTH          = ENUM; ENUM++;
-  var MODE_POSTH_TO_NIGHT = ENUM; ENUM++;
-  var MODE_NIGHT          = ENUM; ENUM++;
-  var MODE_NIGHT_TO_PREH0 = ENUM; ENUM++;
-  var MODE_COUNT          = ENUM; ENUM++;
+  var MODE_NULL          = ENUM; ENUM++;
+  var MODE_MENU          = ENUM; ENUM++;
+  var MODE_CINEMATIC     = ENUM; ENUM++;
+  var MODE_BOOT          = ENUM; ENUM++;
+  var MODE_PRE0          = ENUM; ENUM++;
+  var MODE_PRE0_TO_CTX   = ENUM; ENUM++;
+  var MODE_CTX           = ENUM; ENUM++;
+  var MODE_CTX_TO_PRE1   = ENUM; ENUM++;
+  var MODE_PRE1          = ENUM; ENUM++;
+  var MODE_PRE1_TO_WORK  = ENUM; ENUM++;
+  var MODE_WORK          = ENUM; ENUM++;
+  var MODE_WORK_TO_POST  = ENUM; ENUM++;
+  var MODE_POST          = ENUM; ENUM++;
+  var MODE_POST_TO_NIGHT = ENUM; ENUM++;
+  var MODE_NIGHT         = ENUM; ENUM++;
+  var MODE_NIGHT_TO_PRE0 = ENUM; ENUM++;
+  var MODE_COUNT         = ENUM; ENUM++;
 
   self.reset_level = function()
   {
@@ -124,68 +101,64 @@ var GamePlayScene = function(game, stage)
     gg.cur_level.text_stage = 1;
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
-    switch(gg.cur_level.type)
+    gg.line.consume_cur_level();
+  }
+
+  self.draw_home = function()
+  {
+    strokeBox(gg.lab,gg.ctx);
+    drawImageBox(gg.background_img,gg.lab,gg.ctx);
+    gg.ctx.imageSmoothingEnabled = 0;
+    if(gg.mode == MODE_CTX)
     {
-      case LEVEL_LINEAR:
-        gg.line.m = gg.cur_level.m;
-        gg.line.m_btn.set(gg.cur_level.m);
-        gg.line.b = gg.cur_level.b;
-        gg.line.b_btn.set(gg.cur_level.b);
-        gg.line.correct_m = gg.cur_level.correct_m;
-        gg.line.correct_b = gg.cur_level.correct_b;
-        gg.line.calculate_table();
-        gg.line.draw_params();
-        break;
-      case LEVEL_QUADRATIC:
-        gg.quadratic.a = gg.cur_level.a;
-        gg.quadratic.a_btn.set(gg.cur_level.a);
-        gg.quadratic.b = gg.cur_level.b;
-        gg.quadratic.b_btn.set(gg.cur_level.b);
-        gg.quadratic.c = gg.cur_level.c;
-        gg.quadratic.c_btn.set(gg.cur_level.c);
-        gg.quadratic.correct_a = gg.cur_level.correct_a;
-        gg.quadratic.correct_b = gg.cur_level.correct_b;
-        gg.quadratic.correct_c = gg.cur_level.correct_c;
-        gg.quadratic.calculate_table();
-        gg.quadratic.draw_params();
-        break;
-      case LEVEL_MODULE:
-        var m;
-        var mp;
-        gg.module_board.clear();
-        for(var i = 0; i < gg.cur_level.modparams.length; i++)
-        {
-          m = gg.module_board.gen_module();
-          mp = gg.cur_level.modparams[i];
-          m.title = mp.title;
-          m.img = mp.img;
-          m.v[0] = mp.v;
-          m.v_btn.set(m.v[0]);
-          m.correct_v[0] = mp.correct_v;
-          m.active = mp.active;
-          m.wx = mp.wx;
-          m.wy = mp.wy;
-          screenSpace(gg.module_board,gg.canv,m);
-          m.size();
-          if(i == 0) gg.module_board.table_module = m;
-        }
-        for(var i = 0; i < gg.cur_level.relparams.length; i++)
-        {
-          m = gg.module_board.gen_modrel();
-          mp = gg.cur_level.relparams[i];
-          m.src = gg.module_board.modules[mp.src_i];
-          m.dst = gg.module_board.modules[mp.dst_i];
-        }
-        gg.module_board.calculate_table();
-        gg.module_board.calculate();
-        break;
+      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.feedf_t)%gg.cur_level.feedback_imgs.length)];
+      drawImageBox(img,gg.monitor,gg.ctx);
     }
+    else
+      drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+    gg.ctx.imageSmoothingEnabled = 1;
+    drawImageBox(gg.console_img,gg.lab,gg.ctx);
+    gg.exposition_box.draw();
+  }
+
+  self.draw_work = function()
+  {
+    gg.ctx.drawImage(gg.background_ui_img,0,0,gg.canv.width,gg.canv.height);
+    gg.graph.draw();
+    gg.timeline.draw();
+    gg.table.draw();
+    gg.line.draw();
+    gg.cur_level.draw();
+    gg.message_box.draw();
+    gg.data_dragger.draw();
+    gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
+  }
+
+  self.draw_night = function(t)
+  {
+    var t = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
+    gg.ctx.drawImage(gg.pano_bg_img,0,0,gg.canv.width,gg.canv.height);
+    var vis_pano_w = gg.canv.width/gg.canv.height*gg.pano_img.height;
+    var pano_sx = 0;
+    var pano_ex = gg.pano_img.width-vis_pano_w;
+    gg.ctx.drawImage(gg.pano_img,lerp(pano_sx,pano_ex,t),0,vis_pano_w,gg.pano_img.height,0,0,gg.canv.width,gg.canv.height);
+    var vis_pano_fg_w = gg.canv.width/gg.canv.height*gg.pano_fg_img.height;
+    var pano_fg_sx = 0;
+    var pano_fg_ex = gg.pano_fg_img.width-vis_pano_fg_w;
+    gg.ctx.drawImage(gg.pano_fg_img,lerp(pano_fg_sx,pano_fg_ex,t),0,vis_pano_fg_w,gg.pano_fg_img.height,0,0,gg.canv.width,gg.canv.height);
+
+    gg.ctx.fillStyle = white;
+    gg.ctx.font = "40px DisposableDroidBB";
+    gg.ctx.fillText("Day "+gg.cur_level.i, 20,gg.canv.height-80);
+    gg.ctx.font = "20px DisposableDroidBB";
+    gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,gg.canv.height-80+30);
   }
 
   self.set_mode = function(mode)
   {
     gg.mode = mode;
     gg.mode_t = 0;
+    gg.mode_p = 0;
 
     switch(mode)
     {
@@ -201,7 +174,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_BOOT:
         break;
-      case MODE_PREH0:
+      case MODE_PRE0:
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
         gg.home_cam.ww = gg.lab.ww;
@@ -217,18 +190,18 @@ var GamePlayScene = function(game, stage)
         self.reset_level();
         gg.message_box.clear();
         break;
-      case MODE_PREH0_TO_FEED:
+      case MODE_PRE0_TO_CTX:
         break;
-      case MODE_FEED:
+      case MODE_CTX:
         break;
-      case MODE_FEED_TO_PREH1:
-        gg.exposition_box.nq_group(gg.cur_level.pre_text_1);
+      case MODE_CTX_TO_PRE1:
+        gg.exposition_box.nq_group(gg.cur_level.text.lets_go);
         gg.cur_level.text_stage++;
         break;
-      case MODE_PREH1:
+      case MODE_PRE1:
         break;
-      case MODE_PREH1_TO_WORK:
-        gg.message_box.nq_group(gg.cur_level.text_0);
+      case MODE_PRE1_TO_WORK:
+        gg.message_box.nq_group(gg.cur_level.text.status);
         gg.cur_level.text_stage++;
         break;
       case MODE_WORK:
@@ -240,27 +213,401 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         gg.timeline.fast_sim = 1;
         break;
-      case MODE_WORK_TO_POSTH:
+      case MODE_WORK_TO_POST:
         gg.line.blur();
-        gg.quadratic.blur();
         gg.exposition_box.clear();
-        gg.exposition_box.nq_group(gg.cur_level.post_text);
+        gg.exposition_box.nq_group(gg.cur_level.text.post);
         gg.cur_level.text_stage++;
         break;
-      case MODE_POSTH:
+      case MODE_POST:
         break;
-      case MODE_POSTH_TO_NIGHT:
+      case MODE_POST_TO_NIGHT:
         break;
       case MODE_NIGHT:
         break;
-      case MODE_NIGHT_TO_PREH0: //sets next level
+      case MODE_NIGHT_TO_PRE0: //sets next level
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
-        gg.exposition_box.nq_group(gg.next_level.pre_text_0);
+        gg.exposition_box.nq_group(gg.next_level.text.context);
         gg.cur_level.text_stage++;
         break;
     }
+  }
 
+  self.tick_mode = function()
+  {
+    switch(gg.mode)
+    {
+      case MODE_MENU:
+        clicker.filter(gg.monitor);
+        //if(gg.monitor.clicked)
+          self.set_mode(MODE_CINEMATIC);
+        break;
+      case MODE_CINEMATIC:
+      {
+        clicker.filter(gg.monitor);
+        if(gg.monitor.clicked || gg.keylistener.advance())
+          self.set_mode(MODE_BOOT);
+      }
+        break;
+      case MODE_BOOT:
+      {
+        gg.mode_p = gg.mode_t/gg.fade_t;
+        if(gg.mode_p < 1) //fade home
+        {
+        }
+        else
+        {
+          var urlj = jsonFromURL();
+          if(urlj && urlj["level"]) gg.next_level = gg.levels[parseInt(urlj["level"])];
+          else gg.next_level = gg.levels[0];
+          gg.exposition_box.clear();
+          gg.exposition_box.nq_group(gg.next_level.text.context);
+          gg.next_level.text_stage++;
+          self.set_mode(MODE_PRE0);
+        }
+      }
+      break;
+      case MODE_PRE0:
+      {
+        gg.mode_p = 0.5;
+        clicker.filter(gg.exposition_box);
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
+          self.set_mode(MODE_PRE0_TO_CTX);
+        gg.exposition_box.tick();
+      }
+        break;
+      case MODE_PRE0_TO_CTX:
+      {
+        gg.mode_p = gg.mode_t/gg.fade_t;
+        if(gg.mode_p < 1)
+        {
+        }
+        else self.set_mode(MODE_CTX);
+      }
+        break;
+      case MODE_CTX:
+        gg.mode_p = gg.feedf_t*gg.cur_level.feedback_imgs.length*2;
+        if(gg.mode_p < 1 && !gg.keylistener.advance()) //display feedback
+        {
+        }
+        else self.set_mode(MODE_CTX_TO_PRE1);
+        break;
+      case MODE_CTX_TO_PRE1:
+      {
+        gg.mode_p = gg.mode_t/gg.fade_t;
+        if(gg.mode_p < 1) //fade to face
+        {
+        }
+        else self.set_mode(MODE_PRE1);
+      }
+        break;
+      case MODE_PRE1:
+      {
+        gg.mode_p = 0.5;
+        clicker.filter(gg.exposition_box);
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
+          self.set_mode(MODE_PRE1_TO_WORK);
+        gg.exposition_box.tick();
+      }
+        break;
+      case MODE_PRE1_TO_WORK:
+      {
+        gg.mode_p = gg.mode_t/(gg.zoom_t+gg.fade_t);
+        if(gg.mode_p < 1)
+        {
+          if(gg.mode_t <= gg.zoom_t) //zoom to work
+          {
+            var zoom_p = gg.mode_t/gg.zoom_t;
+            gg.home_cam.wx = lerp(gg.lab.wx,gg.monitor.wx,zoom_p);
+            gg.home_cam.wy = lerp(gg.lab.wy,gg.monitor.wy,zoom_p);
+            gg.home_cam.ww = lerp(gg.lab.ww,gg.monitor.wh/gg.lab.wh*gg.lab.ww,zoom_p);
+            gg.home_cam.wh = lerp(gg.lab.wh,gg.monitor.wh,zoom_p);
+            screenSpace(gg.home_cam,gg.canv,gg.lab);
+            screenSpace(gg.home_cam,gg.canv,gg.monitor);
+          }
+          else if(gg.mode_t < gg.zoom_t+gg.fade_t) //fade to work
+          {
+            var fade_p = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
+          }
+        }
+        else self.set_mode(MODE_WORK);
+      }
+        break;
+      case MODE_WORK:
+      {
+        gg.mode_p = 0.5;
+        gg.table.tick();
+        dragger.filter(gg.data_dragger);
+        if(!gg.data_dragger.dragging)
+        {
+          gg.line.filter(keyer,blurer,dragger,clicker);
+          gg.line.tick();
+          gg.timeline.filter(dragger,clicker);
+          dragger.filter(gg.message_box);
+        }
+
+        if(gg.message_box.requested_advance)
+        {
+          switch(gg.cur_level.text_stage)
+          {
+            case 0: //context
+            case 1: //lets_go
+            case 2: //status
+              break;
+            case 3: //data
+              if(gg.cur_level.text.data.length)
+              {
+                gg.message_box.nq_group(gg.cur_level.text.data);
+                gg.cur_level.text_stage++;
+              }
+              break;
+            case 4: //labels
+            case 5: //constants
+            case 6: //submit
+            case 7: //review
+              break;
+            case 8: //debrief
+              if(gg.cur_level.text.debrief.length)
+              {
+                gg.message_box.nq_group(gg.cur_level.text.debrief);
+                gg.cur_level.text_stage++;
+              }
+              break;
+            case 9: //post
+              break;
+          }
+        }
+        if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
+          self.set_mode(MODE_WORK_TO_POST);
+
+        gg.graph.tick();
+        gg.timeline.tick();
+        gg.cur_level.tick();
+        gg.message_box.tick();
+        if(!gg.cur_level.correct) gg.message_box.prompt_end = 0;
+      }
+        break;
+      case MODE_WORK_TO_POST:
+      {
+        gg.mode_p = gg.mode_t/(gg.fade_t+gg.zoom_t);
+        if(gg.mode_p < 1)
+        {
+          self.tick_zoomtowork((gg.fade_t+gg.zoom_t)-gg.mode_t);
+          if(t < gg.fade_t) //fade to work
+          {
+            var fade_p = gg.mode_t/gg.fade_t;
+          }
+          else if(t-gg.fade_t <= gg.zoom_t) //zoom to work
+          {
+            var zoom_p = (gg.mode_t-gg.fade_t)/gg.zoom_t;
+            gg.home_cam.wx = lerp(gg.monitor.wx,gg.lab.wx,zoom_p);
+            gg.home_cam.wy = lerp(gg.monitor.wy,gg.lab.wy,zoom_p);
+            gg.home_cam.ww = lerp(gg.monitor.wh/gg.lab.wh*gg.lab.ww,gg.lab.ww,zoom_p);
+            gg.home_cam.wh = lerp(gg.monitor.wh,gg.lab.wh,zoom_p);
+            screenSpace(gg.home_cam,gg.canv,gg.lab);
+            screenSpace(gg.home_cam,gg.canv,gg.monitor);
+          }
+        }
+        else self.set_mode(MODE_POST);
+      }
+        break;
+      case MODE_POST:
+      {
+        clicker.filter(gg.exposition_box);
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
+          self.set_mode(MODE_POST_TO_NIGHT);
+        gg.exposition_box.tick();
+      }
+        break;
+      case MODE_POST_TO_NIGHT:
+      {
+        gg.mode_p = gg.mode_t/(gg.fade_t+gg.fade_t);
+        if(gg.mode_t < gg.fade_t) //fade to black
+        {
+          var fade_p = gg.mode_t/gg.fade_t;
+        }
+        else if(gg.mode_t < gg.fade_t+gg.fade_t) //fade to night
+        {
+          var fade_p = (gg.mode_t-gg.fade_t)/gg.fade_t;
+        }
+        else self.set_mode(MODE_NIGHT);
+      }
+        break;
+      case MODE_NIGHT:
+        gg.mode_p = gg.mode_t/gg.pano_t;
+        if(gg.mode_t < gg.pano_t && !gg.keylistener.advance()) //display night
+        {
+          var pan_p = gg.mode_t/gg.pano_t;
+        }
+        else self.set_mode(MODE_NIGHT_TO_PRE0);
+        break;
+      case MODE_NIGHT_TO_PRE0:
+      {
+        gg.mode_p = gg.mode_t/(gg.fade_t+gg.fade_t);
+        if(gg.mode_t < gg.fade_t) //fade to black
+        {
+          var fade_p = gg.mode_t/gg.fade_t;
+        }
+        else if(gg.mode_t < gg.fade_t+gg.fade_t) //fade to home
+        {
+          var fade_p = (gg.mode_t-gg.fade_t)/gg.fade_t;
+        }
+        else self.set_mode(MODE_PRE0);
+      }
+        break;
+    }
+  }
+
+  self.draw_mode = function()
+  {
+    switch(gg.mode)
+    {
+      case MODE_MENU:
+      {
+        self.draw_home();
+        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+      }
+        break;
+      case MODE_CINEMATIC:
+      {
+        self.draw_home();
+        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+        var s = 40;
+        gg.ctx.drawImage(gg.notice_img,gg.monitor.x+gg.monitor.w-s/2,gg.monitor.y-s/2,s,s);
+        gg.ctx.fillStyle = white;
+        gg.ctx.font = "20px DisposableDroidBB";
+        for(var i = 0; i < self.txt_lines.length; i++)
+          gg.ctx.fillText(self.txt_lines[i],gg.monitor.x+10,gg.monitor.y+30+i*25);
+      }
+        break;
+      case MODE_BOOT:
+      {
+        self.draw_home();
+        var t = gg.mode_t/gg.fade_t;
+        gg.ctx.globalAlpha = 1-t;
+        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+        gg.ctx.globalAlpha = 1;
+      }
+        break;
+      case MODE_PRE0:
+      {
+        self.draw_home();
+      }
+        break;
+      case MODE_PRE0_TO_CTX:
+      {
+        if(gg.mode_t <= gg.zoom_t) //zoom to work
+        {
+          var t = gg.mode_t/gg.fade_t;
+          self.draw_home();
+        }
+      }
+        break;
+      case MODE_CTX:
+      {
+        self.draw_home();
+      }
+        break;
+      case MODE_CTX_TO_PRE1:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to face
+        {
+          var t = gg.mode_t/gg.fade_t;
+          self.draw_home();
+        }
+      }
+        break;
+      case MODE_PRE1:
+      {
+        self.draw_home();
+      }
+        break;
+      case MODE_PRE1_TO_WORK:
+      {
+        if(gg.mode_t <= gg.zoom_t) //zoom to work
+        {
+          self.draw_home();
+        }
+        else if(gg.mode_t < gg.zoom_t+gg.fade_t) //fade to work
+        {
+          self.draw_work();
+          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.zoom_t)/gg.fade_t);
+          self.draw_home();
+          gg.ctx.globalAlpha = 1;
+        }
+      }
+        break;
+      case MODE_WORK:
+      {
+        self.draw_work();
+      }
+        break;
+      case MODE_WORK_TO_POST:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to face
+        {
+          self.draw_work();
+          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          self.draw_home();
+          gg.ctx.globalAlpha = 1;
+        }
+        else if(gg.mode_t < gg.fade_t+gg.zoom_t) //zoom to home
+        {
+          self.draw_home();
+        }
+        else if(gg.mode_t < gg.fade_t+gg.zoom_t+gg.fade_t) //fade to feed
+        {
+          self.draw_home();
+        }
+      }
+        break;
+      case MODE_POST:
+        self.draw_home();
+        break;
+      case MODE_POST_TO_NIGHT:
+        if(gg.mode_t < gg.fade_t)
+        {
+          self.draw_home();
+          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        else
+        {
+          var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
+          self.draw_night(t*gg.fade_t/(gg.fade_t*2+gg.pano_t));
+          gg.ctx.globalAlpha = 1-t;
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        break;
+      case MODE_NIGHT:
+        var t = gg.mode_t/gg.pano_t;
+        self.draw_night((gg.fade_t+t*gg.pano_t)/(gg.fade_t*2+gg.pano_t));
+        break;
+      case MODE_NIGHT_TO_PRE0:
+        if(gg.mode_t < gg.fade_t)
+        {
+          var t = gg.mode_t/gg.fade_t;
+          self.draw_night((gg.fade_t+gg.pano_t+t*gg.fade_t)/(gg.fade_t*2+gg.pano_t));
+          gg.ctx.globalAlpha = t;
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        else
+        {
+          self.draw_home();
+          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        break;
+    }
   }
 
   self.ready = function()
@@ -304,9 +651,7 @@ var GamePlayScene = function(game, stage)
     gg.graph = new graph();
     gg.timeline = new timeline();
     gg.table = new table();
-    gg.module_board = new module_board();
     gg.line = new editable_line();
-    gg.quadratic = new editable_quadratic();
 
     gg.levels = [];
     var l;
@@ -316,406 +661,27 @@ var GamePlayScene = function(game, stage)
     //line
     l = new level();
     l.i = i;
-    l.type = LEVEL_LINEAR;
-    l.m = 1;
-    l.b = 0;
-    l.correct_m = 2;
-    l.correct_b = 1;
+    l.m_starting = [0,];
+    l.m_correct = [0,];
+    l.m_label = ["rate",];
+    l.m_icon = [GenImg("assets/shadow.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [0,];
+    l.b_label = ["initial",];
+    l.b_icon = [GenImg("assets/shadow.png"),];
     l.x_n = 10;
     l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
-    l.x_label = "DAYS";
+    l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     l.pano_st = 0;
     l.pano_et = 0.05;
+    l.text = used_text[i];
     gg.levels.push(l);
     i++;
-
-    //quadratic
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_QUADRATIC;
-    l.a = 0;
-    l.b = 2;
-    l.c = 1;
-    l.correct_a = 0.5;
-    l.correct_b = 2;
-    l.correct_c = 3;
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
-    l.pano_st = 0.05;
-    l.pano_et = 0.1;
-    gg.levels.push(l);
-    i++;
-
-    //quadratic 2
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_QUADRATIC;
-    l.a = 0.5;
-    l.b = 2;
-    l.c = 3;
-    l.correct_a = 0;
-    l.correct_b = 2;
-    l.correct_c = 5;
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
-    l.pano_st = 0.1;
-    l.pano_et = 0.15;
-    gg.levels.push(l);
-    i++;
-
-    //charge rate
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Charge";
-    m.img = gg.battery_img;
-    m.v = 0;
-    m.correct_v = 0;
-    m.wx = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Charge Rate";
-    m.img = gg.battery_img;
-    m.v = 0;
-    m.correct_v = 2;
-    m.wx = -100;
-    l.modparams.push(m);
-    m = new relparam();
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.025;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    for(var j = 0; j < 5; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
-    l.pano_st = 0.15;
-    l.pano_et = 0.2;
-    gg.levels.push(l);
-    i++;
-
-    //improved charge rate
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Charge";
-    m.img = gg.battery_img;
-    m.v = 0;
-    m.correct_v = 0;
-    m.wx = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Charge Rate";
-    m.img = gg.battery_img;
-    m.v = 2;
-    m.correct_v = 2.5;
-    m.wx = -100;
-    l.modparams.push(m);
-    m = new relparam();
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.05;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    for(var j = 0; j < 5; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
-    l.pano_st = 0.25;
-    l.pano_et = 0.3;
-    gg.levels.push(l);
-    i++;
-
-    //charge starting
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Charge";
-    m.img = gg.battery_img;
-    m.v = 0;
-    m.correct_v = 0.5;
-    m.wx = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Charge Rate";
-    m.img = gg.battery_img;
-    m.v = 2.5;
-    m.correct_v = 2.5;
-    m.wx = -100;
-    l.modparams.push(m);
-    m = new relparam();
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.05;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    for(var j = 0; j < 5; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
-    l.pano_st = 0.35;
-    l.pano_et = 0.4;
-    gg.levels.push(l);
-    i++;
-
-    //discharge
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Charge";
-    m.img = gg.battery_img;
-    m.v = 10;
-    m.correct_v = 10;
-    m.wx = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Drill Motor";
-    m.img = gg.drill_img;
-    m.v = 0;
-    m.correct_v = 1;
-    m.wx = -100;
-    l.modparams.push(m);
-    m = new relparam();
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.05;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    l.pano_st = 0;
-    l.pano_et = 1;
-    gg.levels.push(l);
-    i++;
-
-    //discharge new drills
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Charge";
-    m.img = gg.battery_img;
-    m.v = 10;
-    m.correct_v = 10;
-    m.wx = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Drill Motor";
-    m.img = gg.drill_img;
-    m.v = 1;
-    m.correct_v = 1.5;
-    m.wx = -100;
-    l.modparams.push(m);
-    m = new relparam();
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    l.pano_st = 0;
-    l.pano_et = 1;
-    gg.levels.push(l);
-    i++;
-
-    //conflicting discharge
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Charge";
-    m.img = gg.battery_img;
-    m.v = 10;
-    m.correct_v = 10;
-    m.wx = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Drill Motor";
-    m.img = gg.drill_img;
-    m.v = 1.5;
-    m.correct_v = 1.5;
-    m.wx = -100;
-    m.wy = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Solar Panel";
-    m.img = gg.battery_img;
-    m.v = 0;
-    m.correct_v = 0.75;
-    m.wx = -100;
-    m.wy = -100;
-    l.modparams.push(m);
-    m = new relparam();
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    m = new relparam();
-    m.src_i = 2;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    l.pano_st = 0;
-    l.pano_et = 1;
-    gg.levels.push(l);
-    i++;
-
-    //double charge
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_MODULE;
-    m = new modparam();
-    m.title = "Charge";
-    m.img = gg.battery_img;
-    m.v = 0.5;
-    m.correct_v = 0.5;
-    m.wx = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Charge Rate";
-    m.img = gg.battery_img;
-    m.v = 2.5;
-    m.correct_v = 2.5;
-    m.wx = -100;
-    m.wy = 100;
-    l.modparams.push(m);
-    m = new modparam();
-    m.title = "Solar Panel";
-    m.img = gg.battery_img;
-    m.v = 0;
-    m.correct_v = 0.75;
-    m.wx = -100;
-    m.wy = -100;
-    l.modparams.push(m);
-    m = new relparam();
-    m.src_i = 1;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    m = new relparam();
-    m.src_i = 2;
-    m.dst_i = 0;
-    l.relparams.push(m);
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    l.pano_st = 0;
-    l.pano_et = 1;
-    gg.levels.push(l);
-    i++;
-
-    //line
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_LINEAR;
-    l.m = 2;
-    l.b = 5;
-    l.correct_m = 4;
-    l.correct_b = 10;
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
-    l.pano_st = 0;
-    l.pano_et = 1;
-    gg.levels.push(l);
-    i++;
-
-    //line
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_LINEAR;
-    l.m = 4;
-    l.b = 10;
-    l.correct_m = 0.5;
-    l.correct_b = 11;
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
-    l.pano_st = 0;
-    l.pano_et = 1;
-    gg.levels.push(l);
-    i++;
-
-    //shipments quadratic
-    l = new level();
-    l.i = i;
-    l.type = LEVEL_QUADRATIC;
-    l.a = 0;
-    l.b = 0;
-    l.c = 0;
-    l.correct_a = 1;
-    l.correct_b = 2;
-    l.correct_c = 12;
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
-    l.pano_st = 0;
-    l.pano_et = 1;
-    gg.levels.push(l);
-    i++;
-
-    for(var i = 0; i < gg.levels.length; i++)
-    {
-      var l = gg.levels[i];
-      l.pre_text_0     = used_text[i].pre_text_0;
-      l.pre_text_1     = used_text[i].pre_text_1;
-      l.text_0         = used_text[i].text_0;
-      l.text_1         = used_text[i].text_1;
-      l.import_text    = used_text[i].import_text;
-      l.export_text    = used_text[i].export_text;
-      l.incorrect_text = used_text[i].incorrect_text;
-      l.correct_text_0 = used_text[i].correct_text_0;
-      l.correct_text_1 = used_text[i].correct_text_1;
-      l.post_text      = used_text[i].post_text;
-    }
 
     self.was_ready = 1;
     self.resize(stage);
@@ -726,29 +692,29 @@ var GamePlayScene = function(game, stage)
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_BOOT);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PREH0);
+    self.set_mode(MODE_PRE0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PREH0_TO_FEED);
+    self.set_mode(MODE_PRE0_TO_CTX);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_FEED);
+    self.set_mode(MODE_CTX);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_FEED_TO_PREH1);
+    self.set_mode(MODE_CTX_TO_PRE1);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PREH1);
+    self.set_mode(MODE_PRE1);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PREH1_TO_WORK);
+    self.set_mode(MODE_PRE1_TO_WORK);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_WORK);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK_TO_POSTH);
+    self.set_mode(MODE_WORK_TO_POST);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_POSTH);
+    self.set_mode(MODE_POST);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_POSTH_TO_NIGHT);
+    self.set_mode(MODE_POST_TO_NIGHT);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_NIGHT);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_NIGHT_TO_PREH0);
+    self.set_mode(MODE_NIGHT_TO_PRE0);
     for(var i = 0; i < 100; i++) self.tick();
     //*/
   };
@@ -758,225 +724,7 @@ var GamePlayScene = function(game, stage)
     gg.mode_t++;
     keyer.filter(gg.keylistener);
     gg.monitor.tick();
-    switch(gg.mode)
-    {
-      case MODE_MENU:
-        clicker.filter(gg.monitor);
-        //if(gg.monitor.clicked)
-          self.set_mode(MODE_CINEMATIC);
-        break;
-      case MODE_CINEMATIC:
-      {
-        clicker.filter(gg.monitor);
-        if(gg.monitor.clicked || gg.keylistener.advance())
-          self.set_mode(MODE_BOOT);
-      }
-        break;
-      case MODE_BOOT:
-      {
-        if(gg.mode_t < gg.fade_t) //fade home
-        {
-          var t = gg.mode_t/gg.zoom_t;
-        }
-        else
-        {
-          var urlj = jsonFromURL();
-          if(urlj && urlj["level"]) gg.next_level = gg.levels[parseInt(urlj["level"])];
-          else gg.next_level = gg.levels[0];
-          gg.exposition_box.clear();
-          gg.exposition_box.nq_group(gg.next_level.pre_text_0);
-          gg.next_level.text_stage++;
-          self.set_mode(MODE_PREH0);
-        }
-      }
-      break;
-      case MODE_PREH0:
-      {
-        clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
-          self.set_mode(MODE_PREH0_TO_FEED);
-        gg.exposition_box.tick();
-      }
-        break;
-      case MODE_PREH0_TO_FEED:
-      {
-        if(gg.mode_t < gg.fade_t)
-        {
-          var t = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
-        }
-        else self.set_mode(MODE_FEED);
-      }
-        break;
-      case MODE_FEED:
-        if(gg.mode_t < gg.feedf_t*gg.cur_level.feedback_imgs.length*2 && !gg.keylistener.advance()) //display feedback
-        {
-          var t = gg.mode_t/gg.fade_t*gg.cur_level.feedback_imgs.length;
-        }
-        else self.set_mode(MODE_FEED_TO_PREH1);
-        break;
-      case MODE_FEED_TO_PREH1:
-      {
-        if(gg.mode_t < gg.fade_t) //fade to face
-        {
-          var t = gg.mode_t/gg.fade_t;
-        }
-        else self.set_mode(MODE_PREH1);
-      }
-        break;
-      case MODE_PREH1:
-      {
-        clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
-          self.set_mode(MODE_PREH1_TO_WORK);
-        gg.exposition_box.tick();
-      }
-        break;
-      case MODE_PREH1_TO_WORK:
-      {
-        if(gg.mode_t <= gg.zoom_t) //zoom to work
-        {
-          var t = gg.mode_t/gg.zoom_t;
-          gg.home_cam.wx = lerp(gg.lab.wx,gg.monitor.wx,t);
-          gg.home_cam.wy = lerp(gg.lab.wy,gg.monitor.wy,t);
-          gg.home_cam.ww = lerp(gg.lab.ww,gg.monitor.wh/gg.lab.wh*gg.lab.ww,t);
-          gg.home_cam.wh = lerp(gg.lab.wh,gg.monitor.wh,t);
-          screenSpace(gg.home_cam,gg.canv,gg.lab);
-          screenSpace(gg.home_cam,gg.canv,gg.monitor);
-        }
-        else if(gg.mode_t < gg.zoom_t+gg.fade_t) //fade to work
-        {
-          var t = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
-        }
-        else self.set_mode(MODE_WORK);
-      }
-        break;
-      case MODE_WORK:
-      {
-        gg.table.tick();
-        dragger.filter(gg.data_dragger);
-        if(!gg.data_dragger.dragging)
-        {
-          switch(gg.cur_level.type)
-          {
-            case LEVEL_LINEAR:    gg.line.filter(keyer,blurer,dragger,clicker);         gg.line.tick();         break;
-            case LEVEL_QUADRATIC: gg.quadratic.filter(keyer,blurer,dragger,clicker);    gg.quadratic.tick();    break;
-            case LEVEL_MODULE:    gg.module_board.filter(keyer,blurer,dragger,clicker); gg.module_board.tick(); break;
-          }
-          gg.timeline.filter(dragger,clicker);
-          dragger.filter(gg.message_box);
-        }
-
-        if(gg.message_box.requested_advance)
-        {
-          switch(gg.cur_level.text_stage)
-          {
-            case 0: //impossible
-            case 1: //pre_text_0 complete
-            case 2: //pre_text_1 complete
-            case 3: //text_0 complete
-              if(gg.cur_level.text_1.length)
-              {
-                gg.message_box.nq_group(gg.cur_level.text_1);
-                gg.cur_level.text_stage++;
-              }
-              break;
-            case 4: //text_1 complete
-            case 5: //import_text complete
-            case 6: //export_text complete
-              break;
-            case 7: //correct_text_0 complete
-              if(gg.cur_level.correct_text_1.length)
-              {
-                gg.message_box.nq_group(gg.cur_level.correct_text_1);
-                gg.cur_level.text_stage++;
-              }
-              break;
-            case 8: //correct_text_1 complete
-            case 9: //post_text complete
-              break;
-          }
-        }
-        if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
-          self.set_mode(MODE_WORK_TO_POSTH);
-
-        gg.graph.tick();
-        gg.timeline.tick();
-        gg.cur_level.tick();
-        gg.message_box.tick();
-        if(!gg.cur_level.correct) gg.message_box.prompt_end = 0;
-      }
-        break;
-      case MODE_WORK_TO_POSTH:
-      {
-        if(gg.mode_t < gg.fade_t) //fade to face
-        {
-          var t = gg.mode_t/gg.fade_t;
-        }
-        else if(gg.mode_t < gg.fade_t+gg.zoom_t) //zoom to home
-        {
-          var t = (gg.mode_t-gg.fade_t)/gg.zoom_t;
-          gg.home_cam.wx = lerp(gg.monitor.wx,gg.lab.wx,t);
-          gg.home_cam.wy = lerp(gg.monitor.wy,gg.lab.wy,t);
-          gg.home_cam.ww = lerp(gg.monitor.wh/gg.lab.wh*gg.lab.ww,gg.lab.ww,t);
-          gg.home_cam.wh = lerp(gg.monitor.wh,gg.lab.wh,t);
-          screenSpace(gg.home_cam,gg.canv,gg.lab);
-          screenSpace(gg.home_cam,gg.canv,gg.monitor);
-        }
-        else if(gg.mode_t < gg.fade_t+gg.zoom_t+gg.fade_t) //fade to feed
-        {
-          var t = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
-          gg.home_cam.wx = gg.lab.wx;
-          gg.home_cam.wy = gg.lab.wy;
-          gg.home_cam.ww = gg.lab.ww;
-          gg.home_cam.wh = gg.lab.wh;
-          screenSpace(gg.home_cam,gg.canv,gg.lab);
-          screenSpace(gg.home_cam,gg.canv,gg.monitor);
-        }
-        else self.set_mode(MODE_POSTH);
-      }
-        break;
-      case MODE_POSTH:
-      {
-        clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
-          self.set_mode(MODE_POSTH_TO_NIGHT);
-        gg.exposition_box.tick();
-      }
-        break;
-      case MODE_POSTH_TO_NIGHT:
-      {
-        if(gg.mode_t < gg.fade_t) //fade to black
-        {
-          var t = gg.mode_t/gg.fade_t;
-        }
-        else if(gg.mode_t < gg.fade_t+gg.fade_t) //fade to night
-        {
-          var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
-        }
-        else self.set_mode(MODE_NIGHT);
-      }
-        break;
-      case MODE_NIGHT:
-        if(gg.mode_t < gg.pano_t && !gg.keylistener.advance()) //display night
-        {
-          var t = gg.mode_t/gg.pano_t;
-        }
-        else self.set_mode(MODE_NIGHT_TO_PREH0);
-        break;
-      case MODE_NIGHT_TO_PREH0:
-      {
-        if(gg.mode_t < gg.fade_t) //fade to black
-        {
-          var t = gg.mode_t/gg.fade_t;
-        }
-        else if(gg.mode_t < gg.fade_t+gg.fade_t) //fade to home
-        {
-          var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
-        }
-        else self.set_mode(MODE_PREH0);
-      }
-        break;
-    }
+    self.tick_mode();
 
     keyer.flush();
     hoverer.flush();
@@ -986,61 +734,6 @@ var GamePlayScene = function(game, stage)
 
     gg.keylistener.advance();
   };
-
-  self.draw_home = function()
-  {
-    strokeBox(gg.lab,gg.ctx);
-    drawImageBox(gg.background_img,gg.lab,gg.ctx);
-    gg.ctx.imageSmoothingEnabled = 0;
-    if(gg.mode == MODE_FEED)
-    {
-      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.feedf_t)%gg.cur_level.feedback_imgs.length)];
-      drawImageBox(img,gg.monitor,gg.ctx);
-    }
-    else
-      drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
-    gg.ctx.imageSmoothingEnabled = 1;
-    drawImageBox(gg.console_img,gg.lab,gg.ctx);
-    gg.exposition_box.draw();
-  }
-
-  self.draw_work = function()
-  {
-    gg.ctx.drawImage(gg.background_ui_img,0,0,gg.canv.width,gg.canv.height);
-    gg.graph.draw();
-    gg.timeline.draw();
-    gg.table.draw();
-    switch(gg.cur_level.type)
-    {
-      case LEVEL_LINEAR:    gg.line.draw();         break;
-      case LEVEL_QUADRATIC: gg.quadratic.draw();    break;
-      case LEVEL_MODULE:    gg.module_board.draw(); break;
-    }
-    gg.cur_level.draw();
-    gg.message_box.draw();
-    gg.data_dragger.draw();
-    gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
-  }
-
-  self.draw_night = function(t)
-  {
-    var t = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
-    gg.ctx.drawImage(gg.pano_bg_img,0,0,gg.canv.width,gg.canv.height);
-    var vis_pano_w = gg.canv.width/gg.canv.height*gg.pano_img.height;
-    var pano_sx = 0;
-    var pano_ex = gg.pano_img.width-vis_pano_w;
-    gg.ctx.drawImage(gg.pano_img,lerp(pano_sx,pano_ex,t),0,vis_pano_w,gg.pano_img.height,0,0,gg.canv.width,gg.canv.height);
-    var vis_pano_fg_w = gg.canv.width/gg.canv.height*gg.pano_fg_img.height;
-    var pano_fg_sx = 0;
-    var pano_fg_ex = gg.pano_fg_img.width-vis_pano_fg_w;
-    gg.ctx.drawImage(gg.pano_fg_img,lerp(pano_fg_sx,pano_fg_ex,t),0,vis_pano_fg_w,gg.pano_fg_img.height,0,0,gg.canv.width,gg.canv.height);
-
-    gg.ctx.fillStyle = white;
-    gg.ctx.font = "40px DisposableDroidBB";
-    gg.ctx.fillText("Day "+gg.cur_level.i, 20,gg.canv.height-80);
-    gg.ctx.font = "20px DisposableDroidBB";
-    gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,gg.canv.height-80+30);
-  }
 
   self.HACKTXT = function(txt)
   {
@@ -1054,153 +747,7 @@ var GamePlayScene = function(game, stage)
         `
       );
     gg.monitor.draw(); //draws to self- not to screen
-    switch(gg.mode)
-    {
-      case MODE_MENU:
-      {
-        self.draw_home();
-        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
-      }
-        break;
-      case MODE_CINEMATIC:
-      {
-        self.draw_home();
-        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
-        var s = 40;
-        gg.ctx.drawImage(gg.notice_img,gg.monitor.x+gg.monitor.w-s/2,gg.monitor.y-s/2,s,s);
-        gg.ctx.fillStyle = white;
-        gg.ctx.font = "20px DisposableDroidBB";
-        for(var i = 0; i < self.txt_lines.length; i++)
-          gg.ctx.fillText(self.txt_lines[i],gg.monitor.x+10,gg.monitor.y+30+i*25);
-      }
-        break;
-      case MODE_BOOT:
-      {
-        self.draw_home();
-        var t = gg.mode_t/gg.fade_t;
-        gg.ctx.globalAlpha = 1-t;
-        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
-        gg.ctx.globalAlpha = 1;
-      }
-        break;
-      case MODE_PREH0:
-      {
-        self.draw_home();
-      }
-        break;
-      case MODE_PREH0_TO_FEED:
-      {
-        if(gg.mode_t <= gg.zoom_t) //zoom to work
-        {
-          var t = gg.mode_t/gg.fade_t;
-          self.draw_home();
-        }
-      }
-        break;
-      case MODE_FEED:
-      {
-        self.draw_home();
-      }
-        break;
-      case MODE_FEED_TO_PREH1:
-      {
-        if(gg.mode_t < gg.fade_t) //fade to face
-        {
-          var t = gg.mode_t/gg.fade_t;
-          self.draw_home();
-        }
-      }
-        break;
-      case MODE_PREH1:
-      {
-        self.draw_home();
-      }
-        break;
-      case MODE_PREH1_TO_WORK:
-      {
-        if(gg.mode_t <= gg.zoom_t) //zoom to work
-        {
-          self.draw_home();
-        }
-        else if(gg.mode_t < gg.zoom_t+gg.fade_t) //fade to work
-        {
-          self.draw_work();
-          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.zoom_t)/gg.fade_t);
-          self.draw_home();
-          gg.ctx.globalAlpha = 1;
-        }
-      }
-        break;
-      case MODE_WORK:
-      {
-        self.draw_work();
-      }
-        break;
-      case MODE_WORK_TO_POSTH:
-      {
-        if(gg.mode_t < gg.fade_t) //fade to face
-        {
-          self.draw_work();
-          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
-          self.draw_home();
-          gg.ctx.globalAlpha = 1;
-        }
-        else if(gg.mode_t < gg.fade_t+gg.zoom_t) //zoom to home
-        {
-          self.draw_home();
-        }
-        else if(gg.mode_t < gg.fade_t+gg.zoom_t+gg.fade_t) //fade to feed
-        {
-          self.draw_home();
-        }
-      }
-        break;
-      case MODE_POSTH:
-        self.draw_home();
-        break;
-      case MODE_POSTH_TO_NIGHT:
-        if(gg.mode_t < gg.fade_t)
-        {
-          self.draw_home();
-          gg.ctx.globalAlpha = gg.mode_t/gg.fade_t;
-          gg.ctx.fillStyle = black;
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
-          gg.ctx.globalAlpha = 1;
-        }
-        else
-        {
-          var t = (gg.mode_t-gg.fade_t)/gg.fade_t;
-          self.draw_night(t*gg.fade_t/(gg.fade_t*2+gg.pano_t));
-          gg.ctx.globalAlpha = 1-t;
-          gg.ctx.fillStyle = black;
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
-          gg.ctx.globalAlpha = 1;
-        }
-        break;
-      case MODE_NIGHT:
-        var t = gg.mode_t/gg.pano_t;
-        self.draw_night((gg.fade_t+t*gg.pano_t)/(gg.fade_t*2+gg.pano_t));
-        break;
-      case MODE_NIGHT_TO_PREH0:
-        if(gg.mode_t < gg.fade_t)
-        {
-          var t = gg.mode_t/gg.fade_t;
-          self.draw_night((gg.fade_t+gg.pano_t+t*gg.fade_t)/(gg.fade_t*2+gg.pano_t));
-          gg.ctx.globalAlpha = t;
-          gg.ctx.fillStyle = black;
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
-          gg.ctx.globalAlpha = 1;
-        }
-        else
-        {
-          self.draw_home();
-          gg.ctx.globalAlpha = 1-((gg.mode_t-gg.fade_t)/gg.fade_t);
-          gg.ctx.fillStyle = black;
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
-          gg.ctx.globalAlpha = 1;
-        }
-        break;
-    }
+    self.draw_mode();
   };
 
   self.cleanup = function()
