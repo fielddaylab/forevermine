@@ -109,10 +109,26 @@ var GamePlayScene = function(game, stage)
     strokeBox(gg.lab,gg.ctx);
     drawImageBox(gg.background_img,gg.lab,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 0;
-    if(gg.mode == MODE_CTX)
+    if(gg.mode == MODE_PRE0_TO_CTX)
+    {
+      var img = gg.cur_level.feedback_imgs[0];
+      drawImageBox(img,gg.monitor,gg.ctx);
+      gg.ctx.globalAlpha = 1-gg.mode_p;
+      drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+      gg.ctx.globalAlpha = 1;
+    }
+    else if(gg.mode == MODE_CTX)
     {
       var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.feedf_t)%gg.cur_level.feedback_imgs.length)];
       drawImageBox(img,gg.monitor,gg.ctx);
+    }
+    else if(gg.mode == MODE_CTX_TO_PRE1)
+    {
+      var img = gg.cur_level.feedback_imgs[gg.cur_level.feedback_imgs.length-1];
+      drawImageBox(img,gg.monitor,gg.ctx);
+      gg.ctx.globalAlpha = gg.mode_p;
+      drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+      gg.ctx.globalAlpha = 1;
     }
     else
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -287,7 +303,7 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_CTX:
-        gg.mode_p = gg.feedf_t*gg.cur_level.feedback_imgs.length*2;
+        gg.mode_p = gg.mode_t/(gg.feedf_t*gg.cur_level.feedback_imgs.length*2);
         if(gg.mode_p < 1 && !gg.keylistener.advance()) //display feedback
         {
         }
@@ -497,11 +513,8 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_PRE0_TO_CTX:
       {
-        if(gg.mode_t <= gg.zoom_t) //zoom to work
-        {
-          var t = gg.mode_t/gg.fade_t;
+        if(gg.mode_t <= gg.fade_t)
           self.draw_home();
-        }
       }
         break;
       case MODE_CTX:
