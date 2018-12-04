@@ -206,7 +206,18 @@ var data_dragger = function()
     if(self.dragging_sim && self.ptWithinChat(evt))
     {
       gg.message_box.nq(get_timer(0),"SIM:",CONTENT_SIM,EMOTE_NULL);
-      gg.cur_level.submit(gg.table.correct);
+      if(gg.table.correct)
+      {
+        gg.cur_level.correct = 1;
+        gg.message_box.nq_group(gg.cur_level.text.review);
+        gg.cur_level.text_stage++;
+      }
+      else
+      {
+        gg.message_box.nq_group(gg.cur_level.text.submitted_incorrect);
+        //gg.cur_level.text_stage++; //do not increment!
+      }
+
     }
     self.dragging_data = 0;
     self.dragging_sim = 0;
@@ -284,7 +295,7 @@ var exposition_box = function()
   self.font_h = 30;
   self.font = self.font_h+"px DisposableDroidBB";
 
-  self.text = [];
+  self.texts = [];
   self.bubbles = [];
   self.types = [];
   self.metas = [];
@@ -307,11 +318,11 @@ var exposition_box = function()
 
   self.nq = function(text, type, meta)
   {
-    self.text.push(text);
+    self.texts.push(text);
     self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
     self.types.push(type);
     self.metas.push(meta);
-    if(self.text.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
+    if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
   }
 
   self.nq_group = function(text)
@@ -323,12 +334,12 @@ var exposition_box = function()
   self.advance = function()
   {
     self.displayed_i++;
-    if(self.displayed_i < self.text.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
+    if(self.displayed_i < self.texts.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
   }
 
   self.click = function(evt)
   {
-    if(self.displayed_i < self.text.length) self.advance();
+    if(self.displayed_i < self.texts.length) self.advance();
   }
 
   self.tick = function()
@@ -337,7 +348,7 @@ var exposition_box = function()
 
   self.draw = function()
   {
-    if(self.displayed_i >= self.text.length) return;
+    if(self.displayed_i >= self.texts.length) return;
 
     gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
@@ -566,7 +577,7 @@ var editable_line = function()
     for(var i = 0; i < gg.cur_level.m_starting.length; i++)
     {
       self.m[i] = gg.cur_level.m_starting[i];
-      self.m_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.m[i] == v) return; self.m[i] = v; self.calc_m_total(); self.calculate_table(); self.draw_params();self.invalidate_sim();  });})(i);
+      self.m_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.m[i] == v) return; self.m[i] = v; self.calc_m_total(); self.calculate_table(); self.draw_params(); self.invalidate_sim();  });})(i);
       self.minc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number+0.1); });})(i);
       self.mdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number-0.1); });})(i);
     }
@@ -577,7 +588,7 @@ var editable_line = function()
     for(var i = 0; i < gg.cur_level.b_starting.length; i++)
     {
       self.b[i] = gg.cur_level.b_starting[i];
-      self.b_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.b[i] == v) return; self.b[i] = v; self.calc_b_total(); self.calculate_table(); self.draw_params(); self.invalidate_sim(); });})(i);
+      self.b_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.b[i] == v) return; self.b[i] = v; self.calc_b_total(); self.calculate_table(); self.draw_params();  self.invalidate_sim(); });})(i);
       self.binc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number+0.1); });})(i);
       self.bdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number-0.1); });})(i);
     }
@@ -743,7 +754,6 @@ var editable_line = function()
 
   self.calculate_table = function()
   {
-    gg.table.clear();
     var m_correct_total = 0; for(var i = 0; i < gg.cur_level.m_correct.length; i++) m_correct_total += gg.cur_level.m_correct[i];
     var b_correct_total = 0; for(var i = 0; i < gg.cur_level.b_correct.length; i++) b_correct_total += gg.cur_level.b_correct[i];
     for(var i = 0; i <= gg.timeline.t_max; i++)
@@ -1091,7 +1101,6 @@ var message_box = function()
   self.prompt_ai_typing = 0;
   self.prompt_end = 0;
 
-  self.gave_data = 0;
   self.requested_end = 0;
   self.requested_advance = 0;
 
@@ -1131,7 +1140,6 @@ var message_box = function()
     self.top_y = self.bottom_y;
     self.max_top_y = self.top_y;
     self.target_top_y = self.max_top_y;
-    self.gave_data = 0;
     self.requested_end = 0;
     self.requested_advance = 0;
     self.displayed_i = 0;

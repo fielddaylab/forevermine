@@ -232,10 +232,10 @@ var GamePlayScene = function(game, stage)
       case MODE_WORK_TO_POST:
         gg.line.blur();
         gg.exposition_box.clear();
-        gg.exposition_box.nq_group(gg.cur_level.text.post);
-        gg.cur_level.text_stage++;
         break;
       case MODE_POST:
+        gg.exposition_box.nq_group(gg.cur_level.text.post);
+        gg.cur_level.text_stage++;
         break;
       case MODE_POST_TO_NIGHT:
         break;
@@ -288,7 +288,7 @@ var GamePlayScene = function(game, stage)
       {
         gg.mode_p = 0.5;
         clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
           self.set_mode(MODE_PRE0_TO_CTX);
         gg.exposition_box.tick();
       }
@@ -322,7 +322,7 @@ var GamePlayScene = function(game, stage)
       {
         gg.mode_p = 0.5;
         clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
           self.set_mode(MODE_PRE1_TO_WORK);
         gg.exposition_box.tick();
       }
@@ -409,12 +409,11 @@ var GamePlayScene = function(game, stage)
         gg.mode_p = gg.mode_t/(gg.fade_t+gg.zoom_t);
         if(gg.mode_p < 1)
         {
-          self.tick_zoomtowork((gg.fade_t+gg.zoom_t)-gg.mode_t);
-          if(t < gg.fade_t) //fade to work
+          if(gg.mode_t < gg.fade_t) //fade to work
           {
             var fade_p = gg.mode_t/gg.fade_t;
           }
-          else if(t-gg.fade_t <= gg.zoom_t) //zoom to work
+          else if(gg.mode_t-gg.fade_t <= gg.zoom_t) //zoom to work
           {
             var zoom_p = (gg.mode_t-gg.fade_t)/gg.zoom_t;
             gg.home_cam.wx = lerp(gg.monitor.wx,gg.lab.wx,zoom_p);
@@ -431,7 +430,7 @@ var GamePlayScene = function(game, stage)
       case MODE_POST:
       {
         clicker.filter(gg.exposition_box);
-        if(gg.exposition_box.displayed_i >= gg.exposition_box.text.length || gg.keylistener.advance())
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
           self.set_mode(MODE_POST_TO_NIGHT);
         gg.exposition_box.tick();
       }
@@ -675,11 +674,11 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.m_starting = [0,];
-    l.m_correct = [0,];
+    l.m_correct = [1,];
     l.m_label = ["rate",];
     l.m_icon = [GenImg("assets/shadow.png"),];
     l.b_starting = [0,];
-    l.b_correct = [0,];
+    l.b_correct = [1,];
     l.b_label = ["initial",];
     l.b_icon = [GenImg("assets/shadow.png"),];
     l.x_n = 10;

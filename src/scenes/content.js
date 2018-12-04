@@ -60,22 +60,6 @@ var level = function()
     self.correct = 0;
   }
 
-  self.submit = function(correct)
-  {
-    self.correct = correct;
-
-    if(self.correct)
-    {
-      gg.message_box.nq_group(self.text.submit);
-      self.text_stage++;
-    }
-    else
-    {
-      gg.message_box.nq_group(self.text.submit_incorrect);
-      //self.text_stage++; //do not increment!
-    }
-  }
-
   self.tick = function()
   {
 
