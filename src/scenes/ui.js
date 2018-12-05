@@ -539,13 +539,26 @@ var editable_line = function()
   self.font_h = 50;
   self.font = self.font_h+"px DisposableDroidBB";
 
+  self.label_selector_n = -1;
+
+  self.m_label = [0];
   self.m = [0];
+  self.b_label = [0];
   self.b = [0];
   self.m_total = 0;
   self.b_total = 0;
   self.eqn_strings = [""];
   self.eqn_ws = [0];
   self.eqn_xs = [0];
+
+  self.m_select_btn = [];
+  self.m_btn = [];
+  self.minc_btn = [];
+  self.mdec_btn = [];
+  self.b_select_btn = [];
+  self.b_btn = [];
+  self.binc_btn = [];
+  self.bdec_btn = [];
 
   //line
   self.sx = 0;
@@ -576,7 +589,9 @@ var editable_line = function()
     self.mdec_btn = [];
     for(var i = 0; i < gg.cur_level.m_starting.length; i++)
     {
+      self.m_label[i] = 0;
       self.m[i] = gg.cur_level.m_starting[i];
+      self.m_select_btn[i] = (function(i){return new ButtonBox(0,0,0,0,function(v){ self.label_selector_n = i; });})(i);
       self.m_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.m[i] == v) return; self.m[i] = v; self.calc_m_total(); self.calculate_table(); self.draw_params(); self.invalidate_sim();  });})(i);
       self.minc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number+0.1); });})(i);
       self.mdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number-0.1); });})(i);
@@ -587,7 +602,9 @@ var editable_line = function()
     self.bdec_btn = [];
     for(var i = 0; i < gg.cur_level.b_starting.length; i++)
     {
+      self.b_label[i] = 0;
       self.b[i] = gg.cur_level.b_starting[i];
+      self.b_select_btn[i] = (function(i){return new ButtonBox(0,0,0,0,function(v){ self.label_selector_n = self.m_select_btn.length+i; });})(i);
       self.b_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.b[i] == v) return; self.b[i] = v; self.calc_b_total(); self.calculate_table(); self.draw_params();  self.invalidate_sim(); });})(i);
       self.binc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number+0.1); });})(i);
       self.bdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number-0.1); });})(i);
@@ -721,6 +738,10 @@ var editable_line = function()
     {
       self.m_btn[i].h = self.btn_h;
       self.m_btn[i].y = self.eqn_y;
+      self.m_select_btn[i].x = self.m_btn[i].x;
+      self.m_select_btn[i].y = self.m_btn[i].y;
+      self.m_select_btn[i].w = self.m_btn[i].w;
+      self.m_select_btn[i].h = self.m_btn[i].h;
       self.minc_btn[i].w = self.m_btn[i].w/2;
       self.minc_btn[i].h = self.m_btn[i].h/2;
       self.minc_btn[i].x = self.m_btn[i].x+self.m_btn[i].w/2-self.minc_btn[i].w/2;
@@ -734,6 +755,10 @@ var editable_line = function()
     {
       self.b_btn[i].h = self.btn_h;
       self.b_btn[i].y = self.eqn_y;
+      self.b_select_btn[i].x = self.b_btn[i].x;
+      self.b_select_btn[i].y = self.b_btn[i].y;
+      self.b_select_btn[i].w = self.b_btn[i].w;
+      self.b_select_btn[i].h = self.b_btn[i].h;
       self.binc_btn[i].w = self.b_btn[i].w/2;
       self.binc_btn[i].h = self.b_btn[i].h/2;
       self.binc_btn[i].x = self.b_btn[i].x+self.b_btn[i].w/2-self.binc_btn[i].w/2;
@@ -795,27 +820,35 @@ var editable_line = function()
   self.filter = function(keyer,blurer,dragger,clicker)
   {
     var check = 1;
-    if(keyer)
+    if(gg.cur_level.text_stage < 6)
     {
-      for(var i = 0; i < self.m_btn.length; i++) keyer.filter(self.m_btn[i]);
-      for(var i = 0; i < self.b_btn.length; i++) keyer.filter(self.b_btn[i]);
+      for(var i = 0; check && i < self.m_select_btn.length; i++) check = !clicker.filter(self.m_select_btn[i]);
+      for(var i = 0; check && i < self.b_select_btn.length; i++) check = !clicker.filter(self.b_select_btn[i]);
     }
-    if(blurer)
+    else
     {
-      for(var i = 0; i < self.m_btn.length; i++) blurer.filter(self.m_btn[i]);
-      for(var i = 0; i < self.b_btn.length; i++) blurer.filter(self.b_btn[i]);
-    }
-    if(dragger)
-    {
-      for(var i = 0; check && i < self.m_btn.length; i++) check = !dragger.filter(self.m_btn[i]);
-      for(var i = 0; check && i < self.b_btn.length; i++) check = !dragger.filter(self.b_btn[i]);
-    }
-    if(clicker)
-    {
-      for(var i = 0; check && i < self.minc_btn.length; i++) check = !clicker.filter(self.minc_btn[i]);
-      for(var i = 0; check && i < self.mdec_btn.length; i++) check = !clicker.filter(self.mdec_btn[i]);
-      for(var i = 0; check && i < self.binc_btn.length; i++) check = !clicker.filter(self.binc_btn[i]);
-      for(var i = 0; check && i < self.bdec_btn.length; i++) check = !clicker.filter(self.bdec_btn[i]);
+      if(keyer)
+      {
+        for(var i = 0; i < self.m_btn.length; i++) keyer.filter(self.m_btn[i]);
+        for(var i = 0; i < self.b_btn.length; i++) keyer.filter(self.b_btn[i]);
+      }
+      if(blurer)
+      {
+        for(var i = 0; i < self.m_btn.length; i++) blurer.filter(self.m_btn[i]);
+        for(var i = 0; i < self.b_btn.length; i++) blurer.filter(self.b_btn[i]);
+      }
+      if(dragger)
+      {
+        for(var i = 0; check && i < self.m_btn.length; i++) check = !dragger.filter(self.m_btn[i]);
+        for(var i = 0; check && i < self.b_btn.length; i++) check = !dragger.filter(self.b_btn[i]);
+      }
+      if(clicker)
+      {
+        for(var i = 0; check && i < self.minc_btn.length; i++) check = !clicker.filter(self.minc_btn[i]);
+        for(var i = 0; check && i < self.mdec_btn.length; i++) check = !clicker.filter(self.mdec_btn[i]);
+        for(var i = 0; check && i < self.binc_btn.length; i++) check = !clicker.filter(self.binc_btn[i]);
+        for(var i = 0; check && i < self.bdec_btn.length; i++) check = !clicker.filter(self.bdec_btn[i]);
+      }
     }
     return !check;
   }
@@ -881,22 +914,48 @@ var editable_line = function()
     var yoff = 5;
     var b;
     gg.ctx.font = self.font;
-    gg.ctx.fillStyle = "#63ADC3"; //blue highlit
-    for(var i = 0; i < self.m_btn.length; i++)
+
+    if(gg.cur_level.text_stage < 6)
     {
-      b = self.m_btn[i];
-      gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
-      if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
-      drawImageBox(gg.arrow_up_img,self.minc_btn[i],gg.ctx);
-      drawImageBox(gg.arrow_down_img,self.mdec_btn[i],gg.ctx);
+      for(var i = 0; i < self.m_select_btn.length; i++)
+      {
+        b = self.m_select_btn[i];
+        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+      }
+      for(var i = 0; i < self.b_select_btn.length; i++)
+      {
+        b = self.b_select_btn[i];
+        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+      }
+
+      if(self.label_selector_n > -1)
+      {
+        if(self.label_selector_n < self.m_select_btn.length)
+          b = self.m_select_btn[self.label_selector_n];
+        else
+          b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
+        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+      }
     }
-    for(var i = 0; i < self.b_btn.length; i++)
+    else
     {
-      b = self.b_btn[i];
-      gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
-      if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
-      drawImageBox(gg.arrow_up_img,self.binc_btn[i],gg.ctx);
-      drawImageBox(gg.arrow_down_img,self.bdec_btn[i],gg.ctx);
+      gg.ctx.fillStyle = "#63ADC3"; //blue highlit
+      for(var i = 0; i < self.m_btn.length; i++)
+      {
+        b = self.m_btn[i];
+        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+        if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
+        drawImageBox(gg.arrow_up_img,self.minc_btn[i],gg.ctx);
+        drawImageBox(gg.arrow_down_img,self.mdec_btn[i],gg.ctx);
+      }
+      for(var i = 0; i < self.b_btn.length; i++)
+      {
+        b = self.b_btn[i];
+        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+        if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
+        drawImageBox(gg.arrow_up_img,self.binc_btn[i],gg.ctx);
+        drawImageBox(gg.arrow_down_img,self.bdec_btn[i],gg.ctx);
+      }
     }
 
     gg.ctx.fillStyle = white;
