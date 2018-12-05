@@ -148,6 +148,27 @@ var GamePlayScene = function(game, stage)
     gg.message_box.draw();
     gg.data_dragger.draw();
     gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
+    gg.ctx.fillStyle = red;
+    switch(gg.cur_level.text_stage)
+    {
+      case 0: //context
+      case 1: //lets_go
+      case 2: //status
+        break;
+      case 3: //data
+        gg.ctx.fillText("GRAPH GOES HERE",gg.stage.width/2,gg.stage.height/2);
+        break;
+      case 4: //labels
+      case 5: //constants
+      case 6: //submit
+      case 7: //review
+      break;
+      case 8: //debrief
+        gg.ctx.fillText("GRAPH GOES HERE",gg.stage.width/2,gg.stage.height/2);
+        break;
+      case 9: //post
+        break;
+    }
   }
 
   self.draw_night = function(t)
