@@ -102,6 +102,20 @@ var Hoverer = function(init)
     }
     return hit;
   }
+  self.consume = function(hovering, hover, unhover)
+  {
+    var evt;
+    for(var i = 0; i < evts.length; i++)
+    {
+      evt = evts[i];
+      switch(evt_types[i])
+      {
+        case EVT_TYPE_UNHOVER:   if(hovering) { unhover(evt); hovering = 0; } break;
+        case EVT_TYPE_AMBIGUOUS: if(!hovering) { hover(evt); hovering = 1; } break;
+      }
+    }
+    return hovering;
+  }
   self.flush = function()
   {
     evts = [];

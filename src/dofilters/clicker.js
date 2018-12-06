@@ -40,6 +40,15 @@ var Clicker = function(init)
     }
     return hit;
   }
+  self.consume = function(click)
+  {
+    var evt;
+    for(var i = 0; i < evts.length; i++)
+    {
+      evt = evts[i];
+      click(evt);
+    }
+  }
   self.flush = function()
   {
     evts = [];

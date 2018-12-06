@@ -99,6 +99,7 @@ var GamePlayScene = function(game, stage)
   {
     gg.cur_level.correct = 0;
     gg.cur_level.text_stage = 1;
+    gg.table.data_visible = 0;
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     gg.line.consume_cur_level();

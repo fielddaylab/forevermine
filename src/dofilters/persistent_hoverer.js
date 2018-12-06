@@ -100,6 +100,20 @@ var PersistentHoverer = function(init)
     }
     return hit;
   }
+  self.consume = function(hovering, hover, unhover)
+  {
+    var evt;
+    for(var i = 0; i < evts.length; i++)
+    {
+      evt = evts[i];
+      switch(evt_types[i])
+      {
+        case EVT_TYPE_UNHOVER: if(hovering) { hovering = 0; unhover(evt); } break;
+        case EVT_TYPE_AMBIGUOUS: hovering = 1; hover(evt); break;
+      }
+    }
+    return hovering;
+  }
   self.flush = function()
   {
     evts = [];

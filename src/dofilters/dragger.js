@@ -129,6 +129,21 @@ var Dragger = function(init)
     }
     return hit;
   }
+  self.consume = function(dragging,dragStart,drag,dragFinish)
+  {
+    var evt;
+    for(var i = 0; i < evts.length; i++)
+    {
+      evt = evts[i];
+      switch(evt_types[i])
+      {
+        case EVT_TYPE_DOWN: if(!dragging) { dragStart(evt); dragging = 1; } break;
+        case EVT_TYPE_MOVE: if(dragging)  { drag(evt); dragging = 1; } break;
+        case EVT_TYPE_UP:   if(dragging)  { draggable.dragFinish(evt); dragging = 0; } break;
+      }
+    }
+    return dragging;
+  }
   self.flush = function()
   {
     evts = [];

@@ -86,6 +86,28 @@ var Keyer = function(init)
     }
     return hit;
   }
+  self.consume = function(key, key_letter, key_down, key_up)
+  {
+    var k;
+    for(var i = 0; i < evts.length; i++)
+    {
+      switch(evt_types[i])
+      {
+        case KEY_EVT_PRESS:
+        {
+          if(key) key(evts[i]);
+          if(key_letter)
+          {
+            k = String.fromCharCode(evts[i].charCode).toLowerCase();
+            if(k != "") key_letter(k);
+          }
+        }
+        break;
+        case KEY_EVT_DOWN: if(key_down) key_down(evts[i]); break;
+        case KEY_EVT_UP: if(key_up) key_up(evts[i]); break;
+      }
+    }
+  }
   self.flush = function()
   {
     evts = [];

@@ -41,6 +41,15 @@ var Blurer = function(init)
     }
     return hit;
   }
+  self.consume = function(blur)
+  {
+    var evt;
+    for(var i = 0; i < evts.length; i++)
+    {
+      evt = evts[i];
+      blur(evt);
+    }
+  }
   self.flush = function()
   {
     evts = [];
