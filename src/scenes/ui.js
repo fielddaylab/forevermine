@@ -126,7 +126,7 @@ var monitor = function()
   }
 }
 
-var data_dragger = function()
+var content_dragger = function()
 {
   var self = this;
   self.w = 0;
@@ -136,6 +136,8 @@ var data_dragger = function()
 
   self.dragging_data = 0;
   self.dragging_sim = 0;
+  self.dragging_constant = 0;
+  self.constant_val = 0;
   self.last_evt = 0;
 
   //drag
@@ -149,7 +151,7 @@ var data_dragger = function()
       if(mb.types[i] == CONTENT_DATA && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
         return 1;
       y += mb.pad;
-      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM)
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h+mb.pad;
       else
         y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
@@ -164,6 +166,31 @@ var data_dragger = function()
     var y1 = t.y+t.h*1/3;
     var y3 = t.y+t.h;
     return ptWithin(t.x,y1,t.w,y3-y1,evt.doX,evt.doY);
+  }
+  self.ptWithinConstant = function(evt)
+  {
+    var mb = gg.message_box;
+    //copied from mb draw
+    var y = mb.top_y;
+    for(var i = 0; i < mb.displayed_i; i++)
+    {
+      if(mb.types[i] == CONTENT_CONSTANT && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
+      {
+        var c = 0;
+        for(var j = 0; j < gg.cur_level.m_label.length; j++)
+          if(mb.bubbles[i][0] == gg.cur_level.m_label[j]) self.constant_val = gg.cur_level.m_correct[j];
+        for(var j = 0; j < gg.cur_level.b_label.length; j++)
+          if(mb.bubbles[i][0] == gg.cur_level.b_label[j]) self.constant_val = gg.cur_level.b_correct[j];
+        return 1;
+      }
+      y += mb.pad;
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_CONSTANT)
+        y += mb.font_h+mb.pad;
+      else
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+      y += mb.pad;
+    }
+    return 0;
   }
   //release
   self.ptWithinChat = function(evt)
@@ -181,11 +208,13 @@ var data_dragger = function()
   {
     self.dragging_data = 0;
     self.dragging_sim = 0;
+    self.dragging_constant = 0;
 
     self.drag(evt);
 
-    if(!gg.table.data_visible && self.ptWithinData(evt)) { self.dragging_data = 1; return 1; }
-    if(gg.table.data_visible && self.ptWithinSim(evt))   { self.dragging_sim = 1;  return 1; }
+    if(!gg.table.data_visible && self.ptWithinData(evt)) { self.dragging_data = 1;     return 1; }
+    if(gg.table.data_visible && self.ptWithinSim(evt))   { self.dragging_sim = 1;      return 1; }
+    if(self.ptWithinConstant(evt))                       { self.dragging_constant = 1; return 1; }
     self.dragging = 0;
     return 0;
   }
@@ -219,8 +248,22 @@ var data_dragger = function()
       }
 
     }
+    if(self.dragging_constant)
+    {
+      for(var i = 0; i < gg.line.m_btn.length; i++)
+      {
+        if(ptWithinBox(gg.line.m_btn[i],evt.doX,evt.doY))
+          gg.line.m_btn[i].set(self.constant_val);
+      }
+      for(var i = 0; i < gg.line.b_btn.length; i++)
+      {
+        if(ptWithinBox(gg.line.b_btn[i],evt.doX,evt.doY))
+          gg.line.b_btn[i].set(self.constant_val);
+      }
+    }
     self.dragging_data = 0;
     self.dragging_sim = 0;
+    self.dragging_constant = 0;
   }
 
   self.draw = function()
@@ -277,6 +320,11 @@ var data_dragger = function()
     if(self.dragging_sim)
     {
       gg.ctx.drawImage(gg.submit_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
+    }
+    if(self.dragging_constant)
+    {
+      gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
+      gg.ctx.textAlign = "center"; gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(self.constant_val,self.last_evt.doX,self.last_evt.doY);
     }
   }
 }
@@ -396,6 +444,7 @@ var graph = function()
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "18px DisposableDroidBB";
+    gg.ctx.textAlign = "center";
     gg.ctx.lineWidth = 2;
     gg.ctx.strokeStyle = white;
 
@@ -1193,7 +1242,7 @@ var table = function()
       if(self.data_visible) gg.ctx.fillText(self.known_data[i],x,y23+self.font_h/2);
       else gg.ctx.fillText("-",x,y23+self.font_h/2);
 
-      if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.data_dragger.dragging_sim)
+      if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)
       {
         var s = 30;
         gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y1-s/2,s,s);
@@ -1239,6 +1288,7 @@ var message_box = function()
   self.target_top_y = 0;
   self.bottom_y = 0;
   self.data_y = 0;
+  self.constant_ys = [];
 
   self.advance_t = self.thinking_buff-1;
   self.thinking_buff = 50;
@@ -1448,12 +1498,23 @@ var message_box = function()
       else if(self.types[i] == CONTENT_DATA)
       {
         gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
-        if(!gg.data_dragger.dragging_data && !gg.table.data_visible)
+        if(!gg.content_dragger.dragging_data && !gg.table.data_visible)
         {
           var s = 30;
           gg.ctx.drawImage(gg.notice_img,self.x+self.pad+self.bubble_w-s,y,s,s);
         }
         self.data_y = y;
+      }
+      else if(self.types[i] == CONTENT_CONSTANT)
+      {
+        gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
+        var c = 0;
+        for(var j = 0; j < gg.cur_level.m_label.length; j++)
+          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) c = gg.cur_level.m_correct[j];
+        for(var j = 0; j < gg.cur_level.b_label.length; j++)
+          if(self.bubbles[i][0] == gg.cur_level.b_label[j]) c = gg.cur_level.b_correct[j];
+        gg.ctx.textAlign = "center"; gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.pad+self.bubble_w/2, y+(self.pad+self.font_h+self.pad)*2/3);
+        self.constant_ys.push(y);
       }
       else if(self.types[i] == CONTENT_SIM)
       {
@@ -1461,17 +1522,17 @@ var message_box = function()
       }
       gg.ctx.fillStyle = black;
       y += self.pad;
-      if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM)
+      if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM || self.types[i] == CONTENT_CONSTANT)
       {
-        gg.ctx.textAlign = "left"; gg.ctx.fillStyle = self.ai_text_color; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+        gg.ctx.textAlign = "left"; gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
         y += self.font_h+self.pad;
       }
       else
       {
         for(var j = 0; j < self.bubbles[i].length; j++)
         {
-          if(self.types[i] == CONTENT_PLAYER) { gg.ctx.textAlign = "right"; gg.ctx.fillStyle = self.ai_text_color; gg.ctx.fillText(self.bubbles[i][j],self.x+self.w-self.pad*2,y+self.font_h); }
-          else                                   { gg.ctx.textAlign = "left";  gg.ctx.fillStyle = self.you_text_color; gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,       y+self.font_h); }
+          if(self.types[i] == CONTENT_PLAYER) { gg.ctx.textAlign = "right"; gg.ctx.fillStyle = self.ai_text_color;  gg.ctx.fillText(self.bubbles[i][j],self.x+self.w-self.pad*2,y+self.font_h); }
+          else                                { gg.ctx.textAlign = "left";  gg.ctx.fillStyle = self.you_text_color; gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,       y+self.font_h); }
           y += self.font_h+self.pad;
         }
       }

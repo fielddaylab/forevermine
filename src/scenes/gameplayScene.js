@@ -24,10 +24,10 @@ var GamePlayScene = function(game, stage)
       gg.lab.ww = gg.canv.width;
       gg.lab.wh = gg.canv.height;
 
-      gg.data_dragger.w = gg.canv.width;
-      gg.data_dragger.h = gg.canv.height;
-      gg.data_dragger.x = 0;
-      gg.data_dragger.y = 0;
+      gg.content_dragger.w = gg.canv.width;
+      gg.content_dragger.h = gg.canv.height;
+      gg.content_dragger.x = 0;
+      gg.content_dragger.y = 0;
 
       gg.exposition_box.w = gg.canv.width-20;
       gg.exposition_box.h = 100;
@@ -147,7 +147,7 @@ var GamePlayScene = function(game, stage)
     gg.line.draw();
     gg.cur_level.draw();
     gg.message_box.draw();
-    gg.data_dragger.draw();
+    gg.content_dragger.draw();
     gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
     gg.ctx.fillStyle = red;
     switch(gg.cur_level.text_stage)
@@ -376,8 +376,8 @@ var GamePlayScene = function(game, stage)
       {
         gg.mode_p = 0.5;
         gg.table.tick();
-        dragger.filter(gg.data_dragger);
-        if(!gg.data_dragger.dragging)
+        dragger.filter(gg.content_dragger);
+        if(!gg.content_dragger.dragging)
         {
           gg.line.filter(keyer,blurer,dragger,clicker);
           gg.line.tick();
@@ -679,7 +679,7 @@ var GamePlayScene = function(game, stage)
     gg.battery_img = GenImg("assets/battery.png");
     gg.drill_img = GenImg("assets/drill.png");
 
-    gg.data_dragger = new data_dragger();
+    gg.content_dragger = new content_dragger();
     gg.exposition_box = new exposition_box();
     gg.message_box = new message_box();
     gg.graph = new graph();
@@ -697,11 +697,11 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.m_starting = [0,];
     l.m_correct = [1,];
-    l.m_label = ["rate",];
+    l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/shadow.png"),];
     l.b_starting = [0,];
     l.b_correct = [1,];
-    l.b_label = ["initial",];
+    l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/shadow.png"),];
     l.x_n = 10;
     l.y_n = 10;

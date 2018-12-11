@@ -30,11 +30,11 @@ var level = function()
   self.i = 0;
   self.m_starting = [0,];
   self.m_correct = [0,];
-  self.m_label = ["rate",];
+  self.m_label = ["Rate",];
   self.m_icon = [GenIcon(10,10),];
   self.b_starting = [0,];
   self.b_correct = [0,];
-  self.b_label = ["initial",];
+  self.b_label = ["Initial",];
   self.b_icon = [GenIcon(10,10),];
 
   self.x_n = 10;
