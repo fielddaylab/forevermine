@@ -675,8 +675,8 @@ var editable_line = function()
     var m_i = 0;
     var b_i = 0;
 
-    self.btn_w = gg.ctx.measureText("-0.0").width;
-    self.btn_h = self.font_h*1.1;
+    self.btn_w = gg.ctx.measureText("-0.0").width*2;
+    self.btn_h = self.font_h*2;
     self.eqn_w = 0;
     self.eqn_y = gg.stage.height/2;
 
@@ -757,7 +757,7 @@ var editable_line = function()
     eqn_i = 0;
     m_i = 0;
     b_i = 0;
-    var x = gg.stage.width/2-self.eqn_w/2;
+    var x = gg.message_box.w+(gg.stage.width-gg.message_box.w)/2-self.eqn_w/2;
     self.eqn_xs[eqn_i] = x;
     x += self.eqn_ws[eqn_i];
     eqn_i++;
@@ -792,11 +792,11 @@ var editable_line = function()
       self.m_select_btn[i].w = self.m_btn[i].w;
       self.m_select_btn[i].h = self.m_btn[i].h;
       self.minc_btn[i].w = self.m_btn[i].w/2;
-      self.minc_btn[i].h = self.m_btn[i].h/2;
+      self.minc_btn[i].h = self.m_btn[i].h/4;
       self.minc_btn[i].x = self.m_btn[i].x+self.m_btn[i].w/2-self.minc_btn[i].w/2;
       self.minc_btn[i].y = self.m_btn[i].y-self.minc_btn[i].h-pad+yoff;
       self.mdec_btn[i].w = self.m_btn[i].w/2;
-      self.mdec_btn[i].h = self.m_btn[i].h/2;
+      self.mdec_btn[i].h = self.m_btn[i].h/4;
       self.mdec_btn[i].x = self.m_btn[i].x+self.m_btn[i].w/2-self.mdec_btn[i].w/2;
       self.mdec_btn[i].y = self.m_btn[i].y+self.m_btn[i].h+pad+yoff;
     }
@@ -809,11 +809,11 @@ var editable_line = function()
       self.b_select_btn[i].w = self.b_btn[i].w;
       self.b_select_btn[i].h = self.b_btn[i].h;
       self.binc_btn[i].w = self.b_btn[i].w/2;
-      self.binc_btn[i].h = self.b_btn[i].h/2;
+      self.binc_btn[i].h = self.b_btn[i].h/4;
       self.binc_btn[i].x = self.b_btn[i].x+self.b_btn[i].w/2-self.binc_btn[i].w/2;
       self.binc_btn[i].y = self.b_btn[i].y-self.binc_btn[i].h-pad+yoff;
       self.bdec_btn[i].w = self.b_btn[i].w/2;
-      self.bdec_btn[i].h = self.b_btn[i].h/2;
+      self.bdec_btn[i].h = self.b_btn[i].h/4;
       self.bdec_btn[i].x = self.b_btn[i].x+self.b_btn[i].w/2-self.bdec_btn[i].w/2;
       self.bdec_btn[i].y = self.b_btn[i].y+self.b_btn[i].h+pad+yoff;
     }
@@ -973,6 +973,7 @@ var editable_line = function()
   {
     var x;
     var y;
+    var pad = 10;
 
     //graph
     {
@@ -1022,37 +1023,29 @@ var editable_line = function()
     var total_labels = gg.cur_level.m_label.length+gg.cur_level.b_label.length;
     var mlen = gg.cur_level.m_label.length;
 
+    //eqn strings
+    gg.ctx.font = self.font;
+    gg.ctx.fillStyle = white;
+    gg.ctx.textAlign = "left";
+    for(var i = 0; i < self.eqn_strings.length; i++)
+      gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+    //boxes
+    for(var i = 0; i < self.m_select_btn.length; i++)
+    {
+      b = self.m_select_btn[i];
+      gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+    }
+    for(var i = 0; i < self.b_select_btn.length; i++)
+    {
+      b = self.b_select_btn[i];
+      gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+    }
+
+    gg.ctx.fillStyle = black;
+
+    //selector
     if(gg.cur_level.text_stage < 6)
     {
-      //icon selector
-      gg.ctx.font = "12px DisposableDroidBB";
-      gg.ctx.fillStyle = black;
-      gg.ctx.textAlign = "left";
-      for(var i = 0; i < self.m_select_btn.length; i++)
-      {
-        b = self.m_select_btn[i];
-        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
-        if(self.m_label[i] > -1)
-        {
-          if(self.m_label[i] < mlen)
-            gg.ctx.fillText(gg.cur_level.m_label[self.m_label[i]],b.x+(i/total_labels)*b.w,b.y+yoff+b.h/2);
-          else
-            gg.ctx.fillText(gg.cur_level.b_label[self.m_label[i]-mlen],b.x+((i+mlen)/total_labels)*b.w,b.y+yoff+b.h/2);
-        }
-      }
-      for(var i = 0; i < self.b_select_btn.length; i++)
-      {
-        b = self.b_select_btn[i];
-        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
-        if(self.b_label[i] > -1)
-        {
-          if(self.b_label[i] < mlen)
-            gg.ctx.fillText(gg.cur_level.m_label[self.b_label[i]],b.x+(i/total_labels)*b.w,b.y+yoff+b.h/2);
-          else
-            gg.ctx.fillText(gg.cur_level.b_label[self.b_label[i]-mlen],b.x+((i+mlen)/total_labels)*b.w,b.y+yoff+b.h/2);
-        }
-      }
-
       if(self.label_selector_n > -1)
       {
         if(self.label_selector_n < self.m_select_btn.length)
@@ -1073,7 +1066,6 @@ var editable_line = function()
       for(var i = 0; i < self.m_btn.length; i++)
       {
         b = self.m_btn[i];
-        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
         if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
         drawImageBox(gg.arrow_up_img,self.minc_btn[i],gg.ctx);
         drawImageBox(gg.arrow_down_img,self.mdec_btn[i],gg.ctx);
@@ -1081,36 +1073,54 @@ var editable_line = function()
       for(var i = 0; i < self.b_btn.length; i++)
       {
         b = self.b_btn[i];
-        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
         if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
         drawImageBox(gg.arrow_up_img,self.binc_btn[i],gg.ctx);
         drawImageBox(gg.arrow_down_img,self.bdec_btn[i],gg.ctx);
       }
+      gg.ctx.fillStyle = black;
     }
 
-    //eqn strings
-    gg.ctx.font = self.font;
-    gg.ctx.fillStyle = white;
-    gg.ctx.textAlign = "left";
-    for(var i = 0; i < self.eqn_strings.length; i++)
-      gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+    //labels
+    for(var i = 0; i < self.m_select_btn.length; i++)
+    {
+      b = self.m_select_btn[i];
+      if(self.m_label[i] > -1)
+      {
+        if(self.m_label[i] < mlen)
+          gg.ctx.fillText(gg.cur_level.m_label[self.m_label[i]],b.x+pad,b.y+yoff+b.h-pad);
+        else
+          gg.ctx.fillText(gg.cur_level.b_label[self.m_label[i]-mlen],b.x+pad,b.y+yoff+b.h-pad);
+      }
+    }
+    for(var i = 0; i < self.b_select_btn.length; i++)
+    {
+      b = self.b_select_btn[i];
+      if(self.b_label[i] > -1)
+      {
+        if(self.b_label[i] < mlen)
+          gg.ctx.fillText(gg.cur_level.m_label[self.b_label[i]],b.x+pad,b.y+yoff+b.h-pad);
+        else
+          gg.ctx.fillText(gg.cur_level.b_label[self.b_label[i]-mlen],b.x+pad,b.y+yoff+b.h-pad);
+      }
+    }
 
     //value strings
+    gg.ctx.textAlign = "right";
     if(gg.cur_level.text_stage > 5)
     {
-      gg.ctx.fillStyle = black;
-      gg.ctx.textAlign = "right";
       for(var i = 0; i < self.m_btn.length; i++)
       {
         b = self.m_btn[i];
-        gg.ctx.fillText(self.m[i],b.x+b.w,self.eqn_y+self.font_h);
+        gg.ctx.fillText(self.m[i],b.x+b.w-pad,self.eqn_y+self.font_h);
       }
       for(var i = 0; i < self.b_btn.length; i++)
       {
         b = self.b_btn[i];
-        gg.ctx.fillText(self.b[i],b.x+b.w,self.eqn_y+self.font_h);
+        gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+self.font_h);
       }
     }
+
+    gg.ctx.textAlign = "left";
 
 /*
     gg.ctx.fillStyle = light_gray;
