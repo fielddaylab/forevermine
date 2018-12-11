@@ -150,26 +150,6 @@ var GamePlayScene = function(game, stage)
     gg.content_dragger.draw();
     gg.ctx.drawImage(gg.bezel_img,0,0,gg.canv.width,gg.canv.height);
     gg.ctx.fillStyle = red;
-    switch(gg.cur_level.text_stage)
-    {
-      case 0: //context
-      case 1: //lets_go
-      case 2: //status
-        break;
-      case 3: //data
-        gg.ctx.fillText("GRAPH GOES HERE",gg.stage.width/2,gg.stage.height/2);
-        break;
-      case 4: //labels
-      case 5: //constants
-      case 6: //submit
-      case 7: //review
-      break;
-      case 8: //debrief
-        gg.ctx.fillText("GRAPH GOES HERE",gg.stage.width/2,gg.stage.height/2);
-        break;
-      case 9: //post
-        break;
-    }
   }
 
   self.draw_night = function(t)
@@ -197,6 +177,7 @@ var GamePlayScene = function(game, stage)
     gg.mode = mode;
     gg.mode_t = 0;
     gg.mode_p = 0;
+    gg.stage_t = 0;
 
     switch(mode)
     {
@@ -235,12 +216,14 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX_TO_PRE1:
         gg.exposition_box.nq_group(gg.cur_level.text.lets_go);
         gg.cur_level.text_stage++;
+        gg.stage_t = 0;
         break;
       case MODE_PRE1:
         break;
       case MODE_PRE1_TO_WORK:
         gg.message_box.nq_group(gg.cur_level.text.status);
         gg.cur_level.text_stage++;
+        gg.stage_t = 0;
         break;
       case MODE_WORK:
         gg.home_cam.wx = gg.monitor.wx;
@@ -258,6 +241,7 @@ var GamePlayScene = function(game, stage)
       case MODE_POST:
         gg.exposition_box.nq_group(gg.cur_level.text.post);
         gg.cur_level.text_stage++;
+        gg.stage_t = 0;
         break;
       case MODE_POST_TO_NIGHT:
         break;
@@ -268,6 +252,7 @@ var GamePlayScene = function(game, stage)
         gg.exposition_box.clear();
         gg.exposition_box.nq_group(gg.next_level.text.context);
         gg.cur_level.text_stage++;
+        gg.stage_t = 0;
         break;
     }
   }
@@ -302,6 +287,7 @@ var GamePlayScene = function(game, stage)
           gg.exposition_box.clear();
           gg.exposition_box.nq_group(gg.next_level.text.context);
           gg.next_level.text_stage++;
+          gg.stage_t = 0;
           self.set_mode(MODE_PRE0);
         }
       }
@@ -385,6 +371,34 @@ var GamePlayScene = function(game, stage)
           dragger.filter(gg.message_box);
         }
 
+        switch(gg.cur_level.text_stage)
+        {
+          case 0: //context
+          case 1: //lets_go
+          case 2: //status
+            gg.graph.stretch = 0;
+            break;
+          case 3: //data
+            if(gg.mode == MODE_WORK)
+              gg.graph.stretch = min(gg.stage_t,100)/100;
+            else gg.graph.stretch = 0;
+            break;
+          case 4: //labels
+            gg.graph.stretch = 1-(min(gg.stage_t,100)/100);
+            break;
+          case 5: //constants
+          case 6: //submit
+          case 7: //review
+            gg.graph.stretch = 0;
+          break;
+          case 8: //debrief
+            gg.graph.stretch = min(gg.stage_t,100)/100;
+            break;
+          case 9: //post
+            gg.graph.stretch = 0;
+            break;
+        }
+
         if(gg.message_box.requested_advance)
         {
           switch(gg.cur_level.text_stage)
@@ -398,6 +412,7 @@ var GamePlayScene = function(game, stage)
               {
                 gg.message_box.nq_group(gg.cur_level.text.data);
                 gg.cur_level.text_stage++;
+                gg.stage_t = 0;
               }
               break;
             case 4: //labels
@@ -410,6 +425,7 @@ var GamePlayScene = function(game, stage)
               {
                 gg.message_box.nq_group(gg.cur_level.text.debrief);
                 gg.cur_level.text_stage++;
+                gg.stage_t = 0;
               }
               break;
             case 9: //post
@@ -756,6 +772,7 @@ var GamePlayScene = function(game, stage)
   self.tick = function()
   {
     gg.mode_t++;
+    gg.stage_t++;
     keyer.filter(gg.keylistener);
     gg.monitor.tick();
     self.tick_mode();

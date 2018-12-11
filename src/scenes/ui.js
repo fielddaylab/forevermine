@@ -231,6 +231,7 @@ var content_dragger = function()
       gg.table.verify();
       gg.message_box.nq_group(gg.cur_level.text.labels);
       gg.cur_level.text_stage++;
+      gg.stage_t = 0;
     }
     if(self.dragging_sim && self.ptWithinChat(evt))
     {
@@ -240,6 +241,7 @@ var content_dragger = function()
         gg.cur_level.correct = 1;
         gg.message_box.nq_group(gg.cur_level.text.review);
         gg.cur_level.text_stage++;
+        gg.stage_t = 0;
       }
       else
       {
@@ -429,8 +431,26 @@ var graph = function()
   self.y = 0;
   self.w = 0;
   self.h = 0;
+  self.stretch = 0; //0 = hours, 1 = days
 
   self.v_max = 10;
+
+  self.x_for_t = function(t)
+  {
+    var p = 100;
+    var sx = lerp(self.x,gg.message_box.w+p,self.stretch);
+    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-(2*p),self.stretch);
+    return lerp(sx,sx+sw,t/gg.timeline.t_max);
+  }
+  self.stretched_x = function(x)
+  {
+    if(self.stretch == 0) return x;
+    var max_days = 14;
+    var p = 100;
+    var sx = lerp(self.x,gg.message_box.w+p,self.stretch);
+    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-(2*p),self.stretch);
+    return mapVal(self.x,self.x+self.w,sx,sx+sw*lerp(1,(gg.timeline.t_max/(24*max_days)),self.stretch),x);
+  }
 
   self.tick = function()
   {
@@ -439,8 +459,16 @@ var graph = function()
 
   self.draw = function()
   {
+    var t = self.stretch;
+    var p = 100;
+    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-(2*p),t);
+    var sh = self.h;
+    var sx = lerp(self.x,gg.message_box.w+p,t);
+    var sy = self.y;
     var x;
     var y;
+
+    var max_days = 14;
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "18px DisposableDroidBB";
@@ -448,35 +476,62 @@ var graph = function()
     gg.ctx.lineWidth = 2;
     gg.ctx.strokeStyle = white;
 
-      //grid
-    strokeBox(self,gg.ctx);
-    gg.ctx.beginPath();
-    for(var i = 1; i < gg.timeline.t_max; i++)
+    //grid
+    gg.ctx.strokeRect(sx,sy,sw,sh);
+      //vertical lines
+    if(t < 0.5)
     {
-      x = lerp(self.x,self.x+self.w,i/gg.timeline.t_max);
-      gg.ctx.moveTo(x,self.y);
-      gg.ctx.lineTo(x,self.y+self.h);
-      gg.ctx.fillText(i,x,self.y+self.h+15);
+      var ex = lerp(sx+sw,sx+sw*(gg.timeline.t_max/(24*max_days)),t);
+      gg.ctx.globalAlpha = 1-(t*2);
+      gg.ctx.beginPath();
+      for(var i = 1; i < gg.timeline.t_max; i++)
+      {
+        x = lerp(sx,ex,i/gg.timeline.t_max);
+        gg.ctx.moveTo(x,sy);
+        gg.ctx.lineTo(x,sy+sh);
+        gg.ctx.fillText(i,x,sy+sh+15);
+      }
+      gg.ctx.stroke();
+      gg.ctx.fillText(gg.timeline.t_max,ex,sy+sh+15);
+      gg.ctx.fillText(gg.cur_level.x_label,sx+sw/2,sy+sh+30);
+      gg.ctx.globalAlpha = 1;
     }
-    gg.ctx.fillText(gg.timeline.t_max,self.x+self.w,self.y+self.h+15);
-    gg.ctx.fillText(gg.cur_level.x_label,self.x+self.w/2,self.y+self.h+30);
+    else
+    {
+      var ex = lerp(sx+sw*((24*max_days)/gg.timeline.t_max),sx+sw,t);
+      gg.ctx.globalAlpha = (t-0.5)*2;
+      gg.ctx.beginPath();
+      for(var i = 1; i < max_days; i++)
+      {
+        x = lerp(sx,ex,i/max_days);
+        gg.ctx.moveTo(x,sy);
+        gg.ctx.lineTo(x,sy+sh);
+        gg.ctx.fillText(i,x,sy+sh+15);
+      }
+      gg.ctx.stroke();
+      gg.ctx.fillText(max_days,ex,sy+sh+15);
+      gg.ctx.fillText("DAYS",sx+sw/2,sy+sh+30);
+      gg.ctx.globalAlpha = 1;
+    }
+      //horizontal lines
+    gg.ctx.beginPath();
     for(var i = 1; i < self.v_max; i++)
     {
-      y = lerp(self.y+self.h,self.y,i/self.v_max);
-      gg.ctx.moveTo(self.x,y);
-      gg.ctx.lineTo(self.x+self.w,y);
-      gg.ctx.fillText(i,self.x-10,y+7);
+      y = lerp(sy+sh,sy,i/self.v_max);
+      gg.ctx.moveTo(sx,y);
+      gg.ctx.lineTo(sx+sw,y);
+      gg.ctx.fillText(i,sx-10,y+7);
     }
-    gg.ctx.fillText(self.v_max,self.x-10,self.y+7);
-    gg.ctx.textAlign = "right";
-    gg.ctx.fillText(gg.cur_level.y_label,self.x-20,self.y+self.h/2);
-    gg.ctx.textAlign = "center";
     gg.ctx.stroke();
+    gg.ctx.fillText(self.v_max,sx-10,sy+7);
+    gg.ctx.textAlign = "right";
+    gg.ctx.fillText(gg.cur_level.y_label,sx-20,sy+sh/2);
+    gg.ctx.textAlign = "center";
 
       //tl
     gg.ctx.strokeStyle = gray;
-    var t_x = mapVal(0,gg.timeline.t_max,self.x,self.x+self.w,gg.timeline.t);
-    drawLine(t_x,self.y,t_x,self.y+self.h,gg.ctx);
+    var t_x = mapVal(0,gg.timeline.t_max,sx,sx+sw,gg.timeline.t);
+    drawLine(t_x,sy,t_x,sy+sh,gg.ctx);
   }
 }
 
@@ -913,6 +968,7 @@ var editable_line = function()
         {
           gg.message_box.nq_group(gg.cur_level.text.constants);
           gg.cur_level.text_stage++;
+          gg.stage_t = 0;
         }
         else
         {
@@ -987,15 +1043,15 @@ var editable_line = function()
       if(gg.timeline.t < gg.timeline.t_max)
       {
         var t = gg.timeline.t/gg.timeline.t_max;
-        var tx = lerp(gg.graph.x,gg.graph.x+gg.graph.w,t);
+        var tx = gg.graph.x_for_t(gg.timeline.t);
         if(tx > self.sx)
         {
           t = min(invlerp(self.sx,self.ex,tx),1);
-          drawLine(self.sx,self.sy,lerp(self.sx,self.ex,t),lerp(self.sy,self.ey,t), gg.ctx);
+          drawLine(gg.graph.stretched_x(self.sx),self.sy,gg.graph.stretched_x(lerp(self.sx,self.ex,t)),lerp(self.sy,self.ey,t), gg.ctx);
         }
       }
       else
-        drawLine(self.sx,self.sy,self.ex,self.ey, gg.ctx);
+        drawLine(gg.graph.stretched_x(self.sx),self.sy,gg.graph.stretched_x(self.ex),self.ey, gg.ctx);
 
         //icons
       if(gg.table.data_visible)
@@ -1010,8 +1066,8 @@ var editable_line = function()
             y = mapVal(0,gg.graph.v_max,gg.graph.y+gg.graph.h,gg.graph.y,gg.table.known_data[i]);
             x = clamp(gg.graph.x,gg.graph.x+gg.graph.w,x);
             y = clamp(gg.graph.y,gg.graph.y+gg.graph.h,y);
-            if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,x-s/2,y-s/2,s,s);
-            else gg.ctx.drawImage(gg.neq_pt_img,x-s/2,y-s/2,s,s);
+            if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,gg.graph.stretched_x(x)-s/2,y-s/2,s,s);
+            else gg.ctx.drawImage(gg.neq_pt_img,gg.graph.stretched_x(x)-s/2,y-s/2,s,s);
           }
         }
       }
@@ -1178,6 +1234,7 @@ var table = function()
     {
       gg.message_box.nq_group(gg.cur_level.text.submit);
       gg.cur_level.text_stage++;
+      gg.stage_t = 0;
     }
   }
 
