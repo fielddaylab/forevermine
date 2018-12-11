@@ -324,7 +324,7 @@ var content_dragger = function()
     if(self.dragging_constant)
     {
       gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
-      gg.ctx.textAlign = "center"; gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(self.constant_val,self.last_evt.doX,self.last_evt.doY);
+      gg.ctx.fillStyle = gg.message_box.data_text_color; gg.ctx.fillText(self.constant_val,self.last_evt.doX+30,self.last_evt.doY);
     }
   }
 }
@@ -1044,6 +1044,7 @@ var editable_line = function()
     gg.ctx.fillStyle = black;
 
     //selector
+    gg.ctx.font = "20px DisposableDroidBB";
     if(gg.cur_level.text_stage < 6)
     {
       if(self.label_selector_n > -1)
@@ -1054,9 +1055,9 @@ var editable_line = function()
           b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
         gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff+b.h,b.w,b.h);
         for(var i = 0; i < gg.cur_level.m_label.length; i++)
-          gg.ctx.fillText(gg.cur_level.m_label[i],b.x+(i/total_labels)*b.w,b.y+yoff+b.h+b.h/2);
+          gg.ctx.fillText(gg.cur_level.m_label[i],b.x+(i/total_labels)*b.w+pad,b.y+yoff+b.h+b.h/2);
         for(var i = 0; i < gg.cur_level.b_label.length; i++)
-          gg.ctx.fillText(gg.cur_level.b_label[i],b.x+((i+mlen)/total_labels)*b.w,b.y+yoff+b.h+b.h/2);
+          gg.ctx.fillText(gg.cur_level.b_label[i],b.x+((i+mlen)/total_labels)*b.w+pad,b.y+yoff+b.h+b.h/2);
       }
     }
     else
@@ -1106,6 +1107,7 @@ var editable_line = function()
 
     //value strings
     gg.ctx.textAlign = "right";
+    gg.ctx.font = self.font;
     if(gg.cur_level.text_stage > 5)
     {
       for(var i = 0; i < self.m_btn.length; i++)
@@ -1523,7 +1525,7 @@ var message_box = function()
           if(self.bubbles[i][0] == gg.cur_level.m_label[j]) c = gg.cur_level.m_correct[j];
         for(var j = 0; j < gg.cur_level.b_label.length; j++)
           if(self.bubbles[i][0] == gg.cur_level.b_label[j]) c = gg.cur_level.b_correct[j];
-        gg.ctx.textAlign = "center"; gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.pad+self.bubble_w/2, y+(self.pad+self.font_h+self.pad)*2/3);
+        gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.pad+self.bubble_w/2+30, y+(self.pad+self.font_h+self.pad)*2/3);
         self.constant_ys.push(y);
       }
       else if(self.types[i] == CONTENT_SIM)
