@@ -1092,12 +1092,12 @@ var editable_line = function()
     for(var i = 0; i < self.m_select_btn.length; i++)
     {
       b = self.m_select_btn[i];
-      gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+      gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
     }
     for(var i = 0; i < self.b_select_btn.length; i++)
     {
       b = self.b_select_btn[i];
-      gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff,b.w,b.h);
+      gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
     }
 
     gg.ctx.fillStyle = black;
@@ -1112,7 +1112,7 @@ var editable_line = function()
           b = self.m_select_btn[self.label_selector_n];
         else
           b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
-        gg.ctx.drawImage(gg.number_bg_img,b.x,b.y+yoff+b.h,b.w,b.h);
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+b.h,b.w,b.h);
         for(var i = 0; i < gg.cur_level.m_label.length; i++)
           gg.ctx.fillText(gg.cur_level.m_label[i],b.x+(i/total_labels)*b.w+pad,b.y+yoff+b.h+b.h/2);
         for(var i = 0; i < gg.cur_level.b_label.length; i++)

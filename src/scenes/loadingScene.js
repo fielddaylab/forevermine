@@ -126,6 +126,11 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/submit.png");
     img_srcs.push("assets/background.jpg");
     img_srcs.push("assets/background_ui.jpg");
+    img_srcs.push("assets/constant_bg.png");
+    img_srcs.push("assets/crycollected.png");
+    img_srcs.push("assets/cryinitial.png");
+    img_srcs.push("assets/cryrate.png");
+    img_srcs.push("assets/time.png");
     img_srcs.push("assets/console.png");
     img_srcs.push("assets/console_dark.png");
     img_srcs.push("assets/bezel.png");
