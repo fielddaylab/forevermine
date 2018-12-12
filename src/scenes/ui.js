@@ -146,6 +146,7 @@ var content_dragger = function()
     var mb = gg.message_box;
     //copied from mb draw
     var y = mb.top_y;
+    if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
     for(var i = 0; i < mb.displayed_i; i++)
     {
       if(mb.types[i] == CONTENT_DATA && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
@@ -162,6 +163,7 @@ var content_dragger = function()
   self.ptWithinSim = function(evt)
   {
     if(gg.table.simd_visible < gg.table.max_t) return 0;
+    if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
     var t = gg.table;
     var y1 = t.y+t.h*1/3;
     var y3 = t.y+t.h;
@@ -172,6 +174,7 @@ var content_dragger = function()
     var mb = gg.message_box;
     //copied from mb draw
     var y = mb.top_y;
+    if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
     for(var i = 0; i < mb.displayed_i; i++)
     {
       if(mb.types[i] == CONTENT_CONSTANT && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
@@ -212,9 +215,9 @@ var content_dragger = function()
 
     self.drag(evt);
 
-    if(!gg.table.data_visible && self.ptWithinData(evt)) { self.dragging_data = 1;     return 1; }
-    if(gg.table.data_visible && self.ptWithinSim(evt))   { self.dragging_sim = 1;      return 1; }
-    if(self.ptWithinConstant(evt))                       { self.dragging_constant = 1; return 1; }
+    if(!gg.table.data_visible && self.ptWithinData(evt))                                { self.dragging_data = 1;     return 1; }
+    if(gg.table.data_visible && gg.cur_level.text_stage < 8 && self.ptWithinSim(evt))   { self.dragging_sim = 1;      return 1; }
+    if(self.ptWithinConstant(evt))                                                      { self.dragging_constant = 1; return 1; }
     self.dragging = 0;
     return 0;
   }
@@ -588,7 +591,7 @@ var timeline = function()
     var check = true;
     if(check) check = !clicker.filter(self.advance_btn);
     if(check) check = !dragger.filter(self);
-    return check;
+    return !check;
   }
 
   self.tick = function()

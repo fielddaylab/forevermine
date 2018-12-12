@@ -363,13 +363,14 @@ var GamePlayScene = function(game, stage)
       {
         gg.mode_p = 0.5;
         gg.table.tick();
+        var check = 1;
         dragger.filter(gg.content_dragger);
         if(!gg.content_dragger.dragging)
         {
-          gg.line.filter(keyer,blurer,dragger,clicker);
+          if(check) check = !gg.line.filter(keyer,blurer,dragger,clicker);
           gg.line.tick();
-          gg.timeline.filter(dragger,clicker);
-          dragger.filter(gg.message_box);
+          if(check) check = !gg.timeline.filter(dragger,clicker);
+          if(check) check = !dragger.filter(gg.message_box);
         }
 
         switch(gg.cur_level.text_stage)
