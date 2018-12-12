@@ -395,7 +395,7 @@ var GamePlayScene = function(game, stage)
             gg.graph.stretch = min(gg.stage_t,100)/100;
             break;
           case 9: //post
-            gg.graph.stretch = 0;
+            gg.graph.stretch = 1;
             break;
         }
 
@@ -439,7 +439,7 @@ var GamePlayScene = function(game, stage)
         gg.timeline.tick();
         gg.cur_level.tick();
         gg.message_box.tick();
-        if(!gg.cur_level.correct) gg.message_box.prompt_end = 0;
+        if(gg.cur_level.text_stage != 9) gg.message_box.prompt_end = 0;
       }
         break;
       case MODE_WORK_TO_POST:
