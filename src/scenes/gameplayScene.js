@@ -222,6 +222,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_PRE1_TO_WORK:
         gg.message_box.nq_group(gg.cur_level.text.status);
+        gg.graph.stretch = 0;
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
