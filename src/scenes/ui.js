@@ -1114,9 +1114,17 @@ var editable_line = function()
           b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
         gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+b.h,b.w,b.h);
         for(var i = 0; i < gg.cur_level.m_label.length; i++)
-          gg.ctx.fillText(gg.cur_level.m_label[i],b.x+(i/total_labels)*b.w+pad,b.y+yoff+b.h+b.h/2);
+        {
+          var x = b.x+(i/total_labels)*b.w+pad;
+          gg.ctx.drawImage(gg.cur_level.m_icon[i],x,b.y+yoff+b.h+b.h/2,b.h/2,b.h/2);
+          gg.ctx.fillText(gg.cur_level.m_label[i],x,b.y+yoff+b.h+b.h/2);
+        }
         for(var i = 0; i < gg.cur_level.b_label.length; i++)
-          gg.ctx.fillText(gg.cur_level.b_label[i],b.x+((i+mlen)/total_labels)*b.w+pad,b.y+yoff+b.h+b.h/2);
+        {
+          var x = b.x+((i+mlen)/total_labels)*b.w+pad;
+          gg.ctx.drawImage(gg.cur_level.b_icon[i],x,b.y+yoff+b.h+b.h/2,b.h/2,b.h/2);
+          gg.ctx.fillText(gg.cur_level.b_label[i],x,b.y+yoff+b.h+b.h/2);
+        }
       }
     }
     else
@@ -1147,9 +1155,17 @@ var editable_line = function()
       if(self.m_label[i] > -1)
       {
         if(self.m_label[i] < mlen)
-          gg.ctx.fillText(gg.cur_level.m_label[self.m_label[i]],b.x+pad,b.y+yoff+b.h-pad);
+        {
+          var x = b.x+pad;
+          gg.ctx.drawImage(gg.cur_level.m_icon[self.m_label[i]],x,b.y+yoff,b.h/2,b.h/2);
+          gg.ctx.fillText(gg.cur_level.m_label[self.m_label[i]],x,b.y+yoff+b.h-pad);
+        }
         else
-          gg.ctx.fillText(gg.cur_level.b_label[self.m_label[i]-mlen],b.x+pad,b.y+yoff+b.h-pad);
+        {
+          var x = b.x+pad;
+          gg.ctx.drawImage(gg.cur_level.b_icon[self.m_label[i]-mlen],x,b.y+yoff,b.h/2,b.h/2);
+          gg.ctx.fillText(gg.cur_level.b_label[self.m_label[i]-mlen],x,b.y+yoff+b.h-pad);
+        }
       }
     }
     for(var i = 0; i < self.b_select_btn.length; i++)
@@ -1158,9 +1174,17 @@ var editable_line = function()
       if(self.b_label[i] > -1)
       {
         if(self.b_label[i] < mlen)
-          gg.ctx.fillText(gg.cur_level.m_label[self.b_label[i]],b.x+pad,b.y+yoff+b.h-pad);
+        {
+          var x = b.x+pad;
+          gg.ctx.drawImage(gg.cur_level.m_icon[self.m_label[i]],x,b.y+yoff,b.h/2,b.h/2);
+          gg.ctx.fillText(gg.cur_level.m_label[self.m_label[i]],x,b.y+yoff+b.h-pad);
+        }
         else
-          gg.ctx.fillText(gg.cur_level.b_label[self.b_label[i]-mlen],b.x+pad,b.y+yoff+b.h-pad);
+        {
+          var x = b.x+pad;
+          gg.ctx.drawImage(gg.cur_level.b_icon[self.b_label[i]-mlen],x,b.y+yoff,b.h/2,b.h/2);
+          gg.ctx.fillText(gg.cur_level.b_label[self.b_label[i]-mlen],x,b.y+yoff+b.h-pad);
+        }
       }
     }
 
