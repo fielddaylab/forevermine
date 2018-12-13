@@ -77,23 +77,27 @@ var GamePlayScene = function(game, stage)
   var blurer;
 
   var ENUM = 0;
-  var MODE_NULL          = ENUM; ENUM++;
-  var MODE_MENU          = ENUM; ENUM++;
-  var MODE_CINEMATIC     = ENUM; ENUM++;
-  var MODE_BOOT          = ENUM; ENUM++;
-  var MODE_PRE0          = ENUM; ENUM++;
-  var MODE_PRE0_TO_CTX   = ENUM; ENUM++;
-  var MODE_CTX           = ENUM; ENUM++;
-  var MODE_CTX_TO_PRE1   = ENUM; ENUM++;
-  var MODE_PRE1          = ENUM; ENUM++;
-  var MODE_PRE1_TO_WORK  = ENUM; ENUM++;
-  var MODE_WORK          = ENUM; ENUM++;
-  var MODE_WORK_TO_POST  = ENUM; ENUM++;
-  var MODE_POST          = ENUM; ENUM++;
-  var MODE_POST_TO_NIGHT = ENUM; ENUM++;
-  var MODE_NIGHT         = ENUM; ENUM++;
-  var MODE_NIGHT_TO_PRE0 = ENUM; ENUM++;
-  var MODE_COUNT         = ENUM; ENUM++;
+  var MODE_NULL        = ENUM; ENUM++;
+  var MODE_MENU        = ENUM; ENUM++;
+  var MODE_CINEMATIC   = ENUM; ENUM++;
+  var MODE_BOOT        = ENUM; ENUM++;
+  var MODE_PRE0        = ENUM; ENUM++;
+  var MODE_CTX_IN      = ENUM; ENUM++;
+  var MODE_CTX         = ENUM; ENUM++;
+  var MODE_CTX_OUT     = ENUM; ENUM++;
+  var MODE_PRE1        = ENUM; ENUM++;
+  var MODE_WORK_IN     = ENUM; ENUM++;
+  var MODE_WORK        = ENUM; ENUM++;
+  var MODE_WORK_OUT    = ENUM; ENUM++;
+  var MODE_POST0       = ENUM; ENUM++;
+  var MODE_IMPROVE_IN  = ENUM; ENUM++;
+  var MODE_IMPROVE     = ENUM; ENUM++;
+  var MODE_IMPROVE_OUT = ENUM; ENUM++;
+  var MODE_POST1       = ENUM; ENUM++;
+  var MODE_LAB_OUT     = ENUM; ENUM++;
+  var MODE_NIGHT       = ENUM; ENUM++;
+  var MODE_LAB_IN      = ENUM; ENUM++;
+  var MODE_COUNT       = ENUM; ENUM++;
 
   self.reset_level = function()
   {
@@ -110,7 +114,7 @@ var GamePlayScene = function(game, stage)
     strokeBox(gg.lab,gg.ctx);
     drawImageBox(gg.background_img,gg.lab,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 0;
-    if(gg.mode == MODE_PRE0_TO_CTX)
+    if(gg.mode == MODE_CTX_IN)
     {
       var img = gg.cur_level.feedback_imgs[0];
       drawImageBox(img,gg.monitor,gg.ctx);
@@ -123,7 +127,28 @@ var GamePlayScene = function(game, stage)
       var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.feedf_t)%gg.cur_level.feedback_imgs.length)];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
-    else if(gg.mode == MODE_CTX_TO_PRE1)
+    else if(gg.mode == MODE_CTX_OUT)
+    {
+      var img = gg.cur_level.feedback_imgs[gg.cur_level.feedback_imgs.length-1];
+      drawImageBox(img,gg.monitor,gg.ctx);
+      gg.ctx.globalAlpha = gg.mode_p;
+      drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+      gg.ctx.globalAlpha = 1;
+    }
+    else if(gg.mode == MODE_IMPROVE_IN)
+    {
+      var img = gg.cur_level.feedback_imgs[0];
+      drawImageBox(img,gg.monitor,gg.ctx);
+      gg.ctx.globalAlpha = 1-gg.mode_p;
+      drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
+      gg.ctx.globalAlpha = 1;
+    }
+    else if(gg.mode == MODE_IMPROVE)
+    {
+      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.feedf_t)%gg.cur_level.feedback_imgs.length)];
+      drawImageBox(img,gg.monitor,gg.ctx);
+    }
+    else if(gg.mode == MODE_IMPROVE_OUT)
     {
       var img = gg.cur_level.feedback_imgs[gg.cur_level.feedback_imgs.length-1];
       drawImageBox(img,gg.monitor,gg.ctx);
@@ -209,18 +234,18 @@ var GamePlayScene = function(game, stage)
         self.reset_level();
         gg.message_box.clear();
         break;
-      case MODE_PRE0_TO_CTX:
+      case MODE_CTX_IN:
         break;
       case MODE_CTX:
         break;
-      case MODE_CTX_TO_PRE1:
+      case MODE_CTX_OUT:
         gg.exposition_box.nq_group(gg.cur_level.text.lets_go);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
       case MODE_PRE1:
         break;
-      case MODE_PRE1_TO_WORK:
+      case MODE_WORK_IN:
         gg.message_box.nq_group(gg.cur_level.text.status);
         gg.graph.stretch = 0;
         gg.cur_level.text_stage++;
@@ -235,20 +260,31 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         gg.timeline.fast_sim = 1;
         break;
-      case MODE_WORK_TO_POST:
+      case MODE_WORK_OUT:
         gg.line.blur();
         gg.exposition_box.clear();
         break;
-      case MODE_POST:
+      case MODE_POST0:
+        gg.exposition_box.nq_group(gg.cur_level.text.improve);
+        gg.cur_level.text_stage++;
+        gg.stage_t = 0;
+        break;
+      case MODE_IMPROVE_IN:
+        break;
+      case MODE_IMPROVE:
+        break;
+      case MODE_IMPROVE_OUT:
         gg.exposition_box.nq_group(gg.cur_level.text.post);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
-      case MODE_POST_TO_NIGHT:
+      case MODE_POST1:
+        break;
+      case MODE_LAB_OUT:
         break;
       case MODE_NIGHT:
         break;
-      case MODE_NIGHT_TO_PRE0: //sets next level
+      case MODE_LAB_IN: //sets next level
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
         gg.exposition_box.nq_group(gg.next_level.text.context);
@@ -298,11 +334,11 @@ var GamePlayScene = function(game, stage)
         gg.mode_p = 0.5;
         clicker.filter(gg.exposition_box);
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
-          self.set_mode(MODE_PRE0_TO_CTX);
+          self.set_mode(MODE_CTX_IN);
         gg.exposition_box.tick();
       }
         break;
-      case MODE_PRE0_TO_CTX:
+      case MODE_CTX_IN:
       {
         gg.mode_p = gg.mode_t/gg.fade_t;
         if(gg.mode_p < 1)
@@ -312,13 +348,15 @@ var GamePlayScene = function(game, stage)
       }
         break;
       case MODE_CTX:
+      {
         gg.mode_p = gg.mode_t/(gg.feedf_t*gg.cur_level.feedback_imgs.length*2);
         if(gg.mode_p < 1 && !gg.keylistener.advance()) //display feedback
         {
         }
-        else self.set_mode(MODE_CTX_TO_PRE1);
+        else self.set_mode(MODE_CTX_OUT);
+      }
         break;
-      case MODE_CTX_TO_PRE1:
+      case MODE_CTX_OUT:
       {
         gg.mode_p = gg.mode_t/gg.fade_t;
         if(gg.mode_p < 1) //fade to face
@@ -332,11 +370,11 @@ var GamePlayScene = function(game, stage)
         gg.mode_p = 0.5;
         clicker.filter(gg.exposition_box);
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
-          self.set_mode(MODE_PRE1_TO_WORK);
+          self.set_mode(MODE_WORK_IN);
         gg.exposition_box.tick();
       }
         break;
-      case MODE_PRE1_TO_WORK:
+      case MODE_WORK_IN:
       {
         gg.mode_p = gg.mode_t/(gg.zoom_t+gg.fade_t);
         if(gg.mode_p < 1)
@@ -396,8 +434,10 @@ var GamePlayScene = function(game, stage)
           case 8: //debrief
             gg.graph.stretch = min(gg.stage_t,100)/100;
             break;
-          case 9: //post
+          case 9: //improve
             gg.graph.stretch = 1;
+            break;
+          case 10: //post
             break;
         }
 
@@ -430,12 +470,14 @@ var GamePlayScene = function(game, stage)
                 gg.stage_t = 0;
               }
               break;
-            case 9: //post
+            case 9: //improve
+              break;
+            case 10: //post
               break;
           }
         }
         if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
-          self.set_mode(MODE_WORK_TO_POST);
+          self.set_mode(MODE_WORK_OUT);
 
         gg.graph.tick();
         gg.timeline.tick();
@@ -444,7 +486,7 @@ var GamePlayScene = function(game, stage)
         if(gg.cur_level.text_stage != 9) gg.message_box.prompt_end = 0;
       }
         break;
-      case MODE_WORK_TO_POST:
+      case MODE_WORK_OUT:
       {
         gg.mode_p = gg.mode_t/(gg.fade_t+gg.zoom_t);
         if(gg.mode_p < 1)
@@ -464,18 +506,53 @@ var GamePlayScene = function(game, stage)
             screenSpace(gg.home_cam,gg.canv,gg.monitor);
           }
         }
-        else self.set_mode(MODE_POST);
+        else self.set_mode(MODE_POST0);
       }
         break;
-      case MODE_POST:
+      case MODE_POST0:
       {
         clicker.filter(gg.exposition_box);
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
-          self.set_mode(MODE_POST_TO_NIGHT);
+          self.set_mode(MODE_IMPROVE_IN);
         gg.exposition_box.tick();
       }
         break;
-      case MODE_POST_TO_NIGHT:
+      case MODE_IMPROVE_IN:
+      {
+        gg.mode_p = gg.mode_t/gg.fade_t;
+        if(gg.mode_p < 1)
+        {
+        }
+        else self.set_mode(MODE_IMPROVE);
+      }
+        break;
+      case MODE_IMPROVE:
+      {
+        gg.mode_p = gg.mode_t/(gg.feedf_t*gg.cur_level.feedback_imgs.length*2);
+        if(gg.mode_p < 1 && !gg.keylistener.advance()) //display feedback
+        {
+        }
+        else self.set_mode(MODE_IMPROVE_OUT);
+      }
+        break;
+      case MODE_IMPROVE_OUT:
+      {
+        gg.mode_p = gg.mode_t/gg.fade_t;
+        if(gg.mode_p < 1) //fade to face
+        {
+        }
+        else self.set_mode(MODE_POST1);
+      }
+        break;
+      case MODE_POST1:
+      {
+        clicker.filter(gg.exposition_box);
+        if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
+          self.set_mode(MODE_LAB_OUT);
+        gg.exposition_box.tick();
+      }
+        break;
+      case MODE_LAB_OUT:
       {
         gg.mode_p = gg.mode_t/(gg.fade_t+gg.fade_t);
         if(gg.mode_t < gg.fade_t) //fade to black
@@ -495,9 +572,9 @@ var GamePlayScene = function(game, stage)
         {
           var pan_p = gg.mode_t/gg.pano_t;
         }
-        else self.set_mode(MODE_NIGHT_TO_PRE0);
+        else self.set_mode(MODE_LAB_IN);
         break;
-      case MODE_NIGHT_TO_PRE0:
+      case MODE_LAB_IN:
       {
         gg.mode_p = gg.mode_t/(gg.fade_t+gg.fade_t);
         if(gg.mode_t < gg.fade_t) //fade to black
@@ -550,7 +627,7 @@ var GamePlayScene = function(game, stage)
         self.draw_home();
       }
         break;
-      case MODE_PRE0_TO_CTX:
+      case MODE_CTX_IN:
       {
         if(gg.mode_t <= gg.fade_t)
           self.draw_home();
@@ -561,7 +638,7 @@ var GamePlayScene = function(game, stage)
         self.draw_home();
       }
         break;
-      case MODE_CTX_TO_PRE1:
+      case MODE_CTX_OUT:
       {
         if(gg.mode_t < gg.fade_t) //fade to face
         {
@@ -575,7 +652,7 @@ var GamePlayScene = function(game, stage)
         self.draw_home();
       }
         break;
-      case MODE_PRE1_TO_WORK:
+      case MODE_WORK_IN:
       {
         if(gg.mode_t <= gg.zoom_t) //zoom to work
         {
@@ -595,7 +672,7 @@ var GamePlayScene = function(game, stage)
         self.draw_work();
       }
         break;
-      case MODE_WORK_TO_POST:
+      case MODE_WORK_OUT:
       {
         if(gg.mode_t < gg.fade_t) //fade to face
         {
@@ -614,10 +691,33 @@ var GamePlayScene = function(game, stage)
         }
       }
         break;
-      case MODE_POST:
+      case MODE_POST0:
         self.draw_home();
         break;
-      case MODE_POST_TO_NIGHT:
+      case MODE_IMPROVE_IN:
+      {
+        if(gg.mode_t <= gg.fade_t)
+          self.draw_home();
+      }
+        break;
+      case MODE_IMPROVE:
+      {
+        self.draw_home();
+      }
+        break;
+      case MODE_IMPROVE_OUT:
+      {
+        if(gg.mode_t < gg.fade_t) //fade to face
+        {
+          var t = gg.mode_t/gg.fade_t;
+          self.draw_home();
+        }
+      }
+        break;
+      case MODE_POST1:
+        self.draw_home();
+        break;
+      case MODE_LAB_OUT:
         if(gg.mode_t < gg.fade_t)
         {
           self.draw_home();
@@ -640,7 +740,7 @@ var GamePlayScene = function(game, stage)
         var t = gg.mode_t/gg.pano_t;
         self.draw_night((gg.fade_t+t*gg.pano_t)/(gg.fade_t*2+gg.pano_t));
         break;
-      case MODE_NIGHT_TO_PRE0:
+      case MODE_LAB_IN:
         if(gg.mode_t < gg.fade_t)
         {
           var t = gg.mode_t/gg.fade_t;
@@ -751,27 +851,27 @@ var GamePlayScene = function(game, stage)
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_PRE0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PRE0_TO_CTX);
+    self.set_mode(MODE_CTX_IN);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_CTX);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CTX_TO_PRE1);
+    self.set_mode(MODE_CTX_OUT);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_PRE1);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PRE1_TO_WORK);
+    self.set_mode(MODE_WORK_IN);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_WORK);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK_TO_POST);
+    self.set_mode(MODE_WORK_OUT);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_POST);
+    self.set_mode(MODE_POST0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_POST_TO_NIGHT);
+    self.set_mode(MODE_LAB_OUT);
     for(var i = 0; i < 100; i++) self.tick();
     self.set_mode(MODE_NIGHT);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_NIGHT_TO_PRE0);
+    self.set_mode(MODE_LAB_IN);
     for(var i = 0; i < 100; i++) self.tick();
     //*/
   };
