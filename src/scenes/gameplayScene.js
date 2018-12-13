@@ -246,9 +246,19 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE1:
         break;
       case MODE_WORK_IN:
-        gg.message_box.nq_group(gg.cur_level.text.status);
+        if(gg.cur_level.skip_zoom)
+        {
+          //gg.message_box.nq_group(gg.cur_level.text.status);//skip!
+          gg.cur_level.text_stage++;
+          gg.message_box.nq_group(gg.cur_level.text.data);
+          gg.cur_level.text_stage++;
+        }
+        else
+        {
+          gg.message_box.nq_group(gg.cur_level.text.status);
+          gg.cur_level.text_stage++;
+        }
         gg.graph.stretch = 0;
-        gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
       case MODE_WORK:
@@ -294,6 +304,15 @@ var GamePlayScene = function(game, stage)
     }
   }
 
+  self.skip_to_mode = function(mode)
+  {
+    while(gg.mode != mode)
+    {
+      if(gg.mode == MODE_LAB_IN) self.set_mode(MODE_PRE0)
+      else self.set_mode(gg.mode+1)
+    }
+  }
+
   self.tick_mode = function()
   {
     switch(gg.mode)
@@ -334,7 +353,12 @@ var GamePlayScene = function(game, stage)
         gg.mode_p = 0.5;
         clicker.filter(gg.exposition_box);
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
-          self.set_mode(MODE_CTX_IN);
+        {
+          if(gg.cur_level.skip_context)
+            self.skip_to_mode(MODE_WORK_IN);
+          else
+            self.set_mode(MODE_CTX_IN);
+        }
         gg.exposition_box.tick();
       }
         break;
@@ -513,7 +537,17 @@ var GamePlayScene = function(game, stage)
       {
         clicker.filter(gg.exposition_box);
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
-          self.set_mode(MODE_IMPROVE_IN);
+        {
+          if(gg.cur_level.skip_system)
+          {
+            if(gg.cur_level.skip_night)
+              self.skip_to_mode(MODE_WORK_IN);
+            else
+              self.skip_to_mode(MODE_NIGHT_IN);
+          }
+          else
+            self.set_mode(MODE_IMPROVE_IN);
+        }
         gg.exposition_box.tick();
       }
         break;
@@ -548,7 +582,12 @@ var GamePlayScene = function(game, stage)
       {
         clicker.filter(gg.exposition_box);
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
-          self.set_mode(MODE_LAB_OUT);
+        {
+          if(gg.cur_level.skip_night)
+            self.skip_to_mode(MODE_WORK_IN);
+          else
+            self.set_mode(MODE_LAB_OUT);
+        }
         gg.exposition_box.tick();
       }
         break;
@@ -832,10 +871,19 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
+    l.day = 0;
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_labels = 0;
+    l.skip_system = 0;
+    l.skip_night = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;

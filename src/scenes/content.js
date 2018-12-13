@@ -44,9 +44,19 @@ var level = function()
   self.x_label = "HOURS";
   self.y_label = "CRYSTALS";
 
+  self.day = 0;
+
   self.feedback_imgs = [];
+  self.system_imgs = [];
+  self.pano_img = GenIcon(10,10);
   self.pano_st = 0;
   self.pano_et = 1;
+
+  self.skip_context = 0;
+  self.skip_zoom = 0;
+  self.skip_labels = 0;
+  self.skip_system = 0;
+  self.skip_night = 0;
 
   self.text = {}; //see text.js for format
 

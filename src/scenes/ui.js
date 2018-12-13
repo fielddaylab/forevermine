@@ -232,8 +232,18 @@ var content_dragger = function()
     {
       gg.table.data_visible = 1;
       gg.table.verify();
-      gg.message_box.nq_group(gg.cur_level.text.labels);
-      gg.cur_level.text_stage++;
+      if(gg.cur_level.skip_labels)
+      {
+        //gg.message_box.nq_group(gg.cur_level.text.labels);//skip!
+        gg.cur_level.text_stage++;
+        gg.message_box.nq_group(gg.cur_level.text.constants);
+        gg.cur_level.text_stage++;
+      }
+      else
+      {
+        gg.message_box.nq_group(gg.cur_level.text.labels);
+        gg.cur_level.text_stage++;
+      }
       gg.stage_t = 0;
     }
     if(self.dragging_sim && self.ptWithinChat(evt))
