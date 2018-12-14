@@ -854,7 +854,7 @@ var GamePlayScene = function(game, stage)
     var m;
     var i = 0;
 
-    //line
+    //check crystals
     l = new level();
     l.i = i;
     l.m_starting = [0,];
@@ -887,6 +887,249 @@ var GamePlayScene = function(game, stage)
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
+
+    //crystal increase
+    l = new level();
+    l.i = i;
+    l.m_starting = [0,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [1,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
+    l.day = 0;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano_img = GenIcon(10,10);
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_labels = 0;
+    l.skip_system = 0;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    gg.levels.push(l);
+    i++;
+
+    //crystal return to normal
+    l = new level();
+    l.i = i;
+    l.m_starting = [0,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [1,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
+    l.day = 0;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano_img = GenIcon(10,10);
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_labels = 0;
+    l.skip_system = 0;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    gg.levels.push(l);
+    i++;
+
+    //check out battery
+    l = new level();
+    l.i = i;
+    l.m_starting = [0,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [1,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
+    l.day = 0;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano_img = GenIcon(10,10);
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_labels = 0;
+    l.skip_system = 0;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    gg.levels.push(l);
+    i++;
+
+    //improve charge rate
+    l = new level();
+    l.i = i;
+    l.m_starting = [0,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [1,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
+    l.day = 0;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano_img = GenIcon(10,10);
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_labels = 0;
+    l.skip_system = 0;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    gg.levels.push(l);
+    i++;
+
+    //check crystals
+    l = new level();
+    l.i = i;
+    l.m_starting = [0,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [1,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
+    l.day = 0;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano_img = GenIcon(10,10);
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_labels = 0;
+    l.skip_system = 0;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    gg.levels.push(l);
+    i++;
+
+    //initial charge rate
+    l = new level();
+    l.i = i;
+    l.m_starting = [0,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [1,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
+    l.day = 0;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano_img = GenIcon(10,10);
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_labels = 0;
+    l.skip_system = 0;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    gg.levels.push(l);
+    i++;
+
+    //check crystals
+    l = new level();
+    l.i = i;
+    l.m_starting = [0,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [1,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CRYSTALS";
+    l.day = 0;
+    for(var j = 0; j < 3; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano_img = GenIcon(10,10);
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_labels = 0;
+    l.skip_system = 0;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    gg.levels.push(l);
+    i++;
+
+
+
+
+
 
     self.was_ready = 1;
     self.resize(stage);
