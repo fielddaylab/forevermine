@@ -254,6 +254,11 @@ var content_dragger = function()
         gg.cur_level.correct = 1;
         gg.message_box.nq_group(gg.cur_level.text.review);
         gg.cur_level.text_stage++;
+        if(gg.cur_level.skip_zoom)
+        {
+          gg.message_box.nq_group(gg.cur_level.text.debrief);
+          gg.cur_level.text_stage++;
+        }
         gg.stage_t = 0;
       }
       else
@@ -713,6 +718,7 @@ var editable_line = function()
       self.m[i] = gg.cur_level.m_starting[i];
       self.m_select_btn[i] = (function(i){return new ButtonBox(0,0,0,0,function(v){ self.label_selector_n = i; });})(i);
       self.m_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.m[i] == v) return; self.m[i] = v; self.calc_m_total(); self.calculate_table(); self.draw_params(); self.invalidate_sim();  });})(i);
+      self.m_btn[i].set(gg.cur_level.m_starting[i]);
       self.minc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number+0.1); });})(i);
       self.mdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number-0.1); });})(i);
     }
@@ -729,6 +735,7 @@ var editable_line = function()
       self.b[i] = gg.cur_level.b_starting[i];
       self.b_select_btn[i] = (function(i){return new ButtonBox(0,0,0,0,function(v){ self.label_selector_n = self.m_select_btn.length+i; });})(i);
       self.b_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.b[i] == v) return; self.b[i] = v; self.calc_b_total(); self.calculate_table(); self.draw_params();  self.invalidate_sim(); });})(i);
+      self.b_btn[i].set(gg.cur_level.b_starting[i]);
       self.binc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number+0.1); });})(i);
       self.bdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number-0.1); });})(i);
     }

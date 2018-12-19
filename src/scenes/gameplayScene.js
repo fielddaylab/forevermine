@@ -443,12 +443,13 @@ var GamePlayScene = function(game, stage)
             gg.graph.stretch = 0;
             break;
           case 3: //data
-            if(gg.mode == MODE_WORK)
+            if(gg.mode == MODE_WORK && !gg.cur_level.skip_zoom)
               gg.graph.stretch = min(gg.stage_t,100)/100;
             else gg.graph.stretch = 0;
             break;
           case 4: //labels
-            gg.graph.stretch = 1-(min(gg.stage_t,100)/100);
+            if(!gg.cur_level.skip_zoom)
+              gg.graph.stretch = 1-(min(gg.stage_t,100)/100);
             break;
           case 5: //constants
           case 6: //submit
@@ -456,10 +457,12 @@ var GamePlayScene = function(game, stage)
             gg.graph.stretch = 0;
           break;
           case 8: //debrief
-            gg.graph.stretch = min(gg.stage_t,100)/100;
+            if(!gg.cur_level.skip_zoom)
+              gg.graph.stretch = min(gg.stage_t,100)/100;
             break;
           case 9: //improve
-            gg.graph.stretch = 1;
+            if(!gg.cur_level.skip_zoom)
+              gg.graph.stretch = 1;
             break;
           case 10: //post
             break;
