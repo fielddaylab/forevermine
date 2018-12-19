@@ -543,7 +543,7 @@ var GamePlayScene = function(game, stage)
             if(gg.cur_level.skip_night)
               self.skip_to_mode(MODE_WORK_IN);
             else
-              self.skip_to_mode(MODE_NIGHT_IN);
+              self.skip_to_mode(MODE_LAB_OUT);
           }
           else
             self.set_mode(MODE_IMPROVE_IN);
@@ -882,7 +882,7 @@ var GamePlayScene = function(game, stage)
     l.skip_context = 0;
     l.skip_zoom = 0;
     l.skip_labels = 0;
-    l.skip_system = 0;
+    l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
     gg.levels.push(l);
@@ -891,12 +891,12 @@ var GamePlayScene = function(game, stage)
     //crystal increase
     l = new level();
     l.i = i;
-    l.m_starting = [0,];
-    l.m_correct = [1,];
+    l.m_starting = [1,];
+    l.m_correct = [2,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [0,];
-    l.b_correct = [1,];
+    l.b_starting = [1,];
+    l.b_correct = [2,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
@@ -905,7 +905,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
-    l.day = 0;
+    l.day = 1;
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
@@ -915,8 +915,8 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
-    l.skip_labels = 0;
-    l.skip_system = 0;
+    l.skip_labels = 1;
+    l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
     gg.levels.push(l);
@@ -925,12 +925,12 @@ var GamePlayScene = function(game, stage)
     //crystal return to normal
     l = new level();
     l.i = i;
-    l.m_starting = [0,];
+    l.m_starting = [2,];
     l.m_correct = [1,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [0,];
-    l.b_correct = [1,];
+    l.b_starting = [2,];
+    l.b_correct = [3,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
@@ -939,7 +939,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
-    l.day = 0;
+    l.day = 2;
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
@@ -949,7 +949,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
-    l.skip_labels = 0;
+    l.skip_labels = 1;
     l.skip_system = 0;
     l.skip_night = 0;
     l.text = used_text[i];
@@ -960,11 +960,11 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.m_starting = [0,];
-    l.m_correct = [1,];
+    l.m_correct = [0.5,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [0,];
-    l.b_correct = [1,];
+    l.b_correct = [0,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
@@ -973,7 +973,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 0;
+    l.day = 3;
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
@@ -982,9 +982,9 @@ var GamePlayScene = function(game, stage)
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
-    l.skip_zoom = 0;
+    l.skip_zoom = 1;
     l.skip_labels = 0;
-    l.skip_system = 0;
+    l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
     gg.levels.push(l);
@@ -993,12 +993,12 @@ var GamePlayScene = function(game, stage)
     //improve charge rate
     l = new level();
     l.i = i;
-    l.m_starting = [0,];
+    l.m_starting = [0.5,];
     l.m_correct = [1,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [0,];
-    l.b_correct = [1,];
+    l.b_correct = [0,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
@@ -1007,7 +1007,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 0;
+    l.day = 3;
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
@@ -1016,9 +1016,9 @@ var GamePlayScene = function(game, stage)
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
-    l.skip_zoom = 0;
-    l.skip_labels = 0;
-    l.skip_system = 0;
+    l.skip_zoom = 1;
+    l.skip_labels = 1;
+    l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
     gg.levels.push(l);
@@ -1027,12 +1027,12 @@ var GamePlayScene = function(game, stage)
     //check crystals
     l = new level();
     l.i = i;
-    l.m_starting = [0,];
-    l.m_correct = [1,];
+    l.m_starting = [1,];
+    l.m_correct = [1.1,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [0,];
-    l.b_correct = [1,];
+    l.b_starting = [2,];
+    l.b_correct = [4,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
@@ -1041,7 +1041,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
-    l.day = 0;
+    l.day = 4;
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
@@ -1049,11 +1049,11 @@ var GamePlayScene = function(game, stage)
     l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
-    l.skip_context = 0;
+    l.skip_context = 1;
     l.skip_zoom = 0;
-    l.skip_labels = 0;
-    l.skip_system = 0;
-    l.skip_night = 0;
+    l.skip_labels = 1;
+    l.skip_system = 1;
+    l.skip_night = 1;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1066,7 +1066,7 @@ var GamePlayScene = function(game, stage)
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [0,];
-    l.b_correct = [1,];
+    l.b_correct = [0.2,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
@@ -1075,7 +1075,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 0;
+    l.day = 4;
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
@@ -1084,9 +1084,9 @@ var GamePlayScene = function(game, stage)
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
-    l.skip_zoom = 0;
-    l.skip_labels = 0;
-    l.skip_system = 0;
+    l.skip_zoom = 1;
+    l.skip_labels = 1;
+    l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
     gg.levels.push(l);
@@ -1095,12 +1095,12 @@ var GamePlayScene = function(game, stage)
     //check crystals
     l = new level();
     l.i = i;
-    l.m_starting = [0,];
-    l.m_correct = [1,];
+    l.m_starting = [1.1,];
+    l.m_correct = [1.2,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [0,];
-    l.b_correct = [1,];
+    l.b_starting = [4,];
+    l.b_correct = [5,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
@@ -1109,7 +1109,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
-    l.day = 0;
+    l.day = 5;
     for(var j = 0; j < 3; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
@@ -1119,7 +1119,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
-    l.skip_labels = 0;
+    l.skip_labels = 1;
     l.skip_system = 0;
     l.skip_night = 0;
     l.text = used_text[i];

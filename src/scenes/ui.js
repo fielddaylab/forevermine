@@ -706,7 +706,10 @@ var editable_line = function()
     self.mdec_btn = [];
     for(var i = 0; i < gg.cur_level.m_starting.length; i++)
     {
-      self.m_label[i] = -1;
+      if(gg.cur_level.skip_labels)
+        self.m_label[i] = i;
+      else
+        self.m_label[i] = -1;
       self.m[i] = gg.cur_level.m_starting[i];
       self.m_select_btn[i] = (function(i){return new ButtonBox(0,0,0,0,function(v){ self.label_selector_n = i; });})(i);
       self.m_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.m[i] == v) return; self.m[i] = v; self.calc_m_total(); self.calculate_table(); self.draw_params(); self.invalidate_sim();  });})(i);
@@ -719,7 +722,10 @@ var editable_line = function()
     self.bdec_btn = [];
     for(var i = 0; i < gg.cur_level.b_starting.length; i++)
     {
-      self.b_label[i] = -1;
+      if(gg.cur_level.skip_labels)
+        self.b_label[i] = self.m_select_btn.length+i;
+      else
+        self.b_label[i] = -1;
       self.b[i] = gg.cur_level.b_starting[i];
       self.b_select_btn[i] = (function(i){return new ButtonBox(0,0,0,0,function(v){ self.label_selector_n = self.m_select_btn.length+i; });})(i);
       self.b_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.b[i] == v) return; self.b[i] = v; self.calc_b_total(); self.calculate_table(); self.draw_params();  self.invalidate_sim(); });})(i);
