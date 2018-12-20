@@ -235,6 +235,8 @@ var GamePlayScene = function(game, stage)
         gg.message_box.clear();
         break;
       case MODE_CTX_IN:
+        if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.context);
+        gg.cur_level.text_stage++;
         break;
       case MODE_CTX:
         break;
@@ -275,6 +277,12 @@ var GamePlayScene = function(game, stage)
         gg.exposition_box.clear();
         break;
       case MODE_POST0:
+        gg.home_cam.wx = gg.lab.wx;
+        gg.home_cam.wy = gg.lab.wy;
+        gg.home_cam.ww = gg.lab.ww;
+        gg.home_cam.wh = gg.lab.wh;
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
         if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.improve);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
@@ -297,7 +305,7 @@ var GamePlayScene = function(game, stage)
       case MODE_LAB_IN: //sets next level
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
-        if(!skipping) gg.exposition_box.nq_group(gg.next_level.text.context);
+        if(!skipping) gg.exposition_box.nq_group(gg.next_level.text.pre_context);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
@@ -345,7 +353,7 @@ var GamePlayScene = function(game, stage)
           if(urlj && urlj["level"]) gg.next_level = gg.levels[parseInt(urlj["level"])];
           else gg.next_level = gg.levels[0];
           gg.exposition_box.clear();
-          gg.exposition_box.nq_group(gg.next_level.text.context);
+          gg.exposition_box.nq_group(gg.next_level.text.pre_context);
           gg.next_level.text_stage++;
           gg.stage_t = 0;
           self.set_mode(MODE_PRE0,0);
@@ -369,6 +377,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX_IN:
       {
         gg.mode_p = gg.mode_t/gg.fade_t;
+        clicker.filter(gg.exposition_box);
         if(gg.mode_p < 1)
         {
         }
@@ -378,10 +387,9 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX:
       {
         gg.mode_p = gg.mode_t/(gg.feedf_t*gg.cur_level.feedback_imgs.length*2);
-        if(gg.mode_p < 1 && !gg.keylistener.advance()) //display feedback
-        {
-        }
-        else self.set_mode(MODE_CTX_OUT,0);
+        clicker.filter(gg.exposition_box);
+        if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
+          self.set_mode(MODE_CTX_OUT,0);
       }
         break;
       case MODE_CTX_OUT:
@@ -441,34 +449,35 @@ var GamePlayScene = function(game, stage)
 
         switch(gg.cur_level.text_stage)
         {
-          case 0: //context
-          case 1: //lets_go
-          case 2: //status
+          case 0: //pre_context
+          case 1: //context
+          case 2: //lets_go
+          case 3: //status
             gg.graph.stretch = 0;
             break;
-          case 3: //data
+          case 4: //data
             if(gg.mode == MODE_WORK && !gg.cur_level.skip_zoom)
               gg.graph.stretch = min(gg.stage_t,100)/100;
             else gg.graph.stretch = 0;
             break;
-          case 4: //labels
+          case 5: //labels
             if(!gg.cur_level.skip_zoom)
               gg.graph.stretch = 1-(min(gg.stage_t,100)/100);
             break;
-          case 5: //constants
-          case 6: //submit
-          case 7: //review
+          case 6: //constants
+          case 7: //submit
+          case 8: //review
             gg.graph.stretch = 0;
           break;
-          case 8: //debrief
+          case 9: //debrief
             if(!gg.cur_level.skip_zoom)
               gg.graph.stretch = min(gg.stage_t,100)/100;
             break;
-          case 9: //improve
+          case 10: //improve
             if(!gg.cur_level.skip_zoom)
               gg.graph.stretch = 1;
             break;
-          case 10: //post
+          case 11: //post
             break;
         }
 
@@ -476,11 +485,12 @@ var GamePlayScene = function(game, stage)
         {
           switch(gg.cur_level.text_stage)
           {
-            case 0: //context
-            case 1: //lets_go
-            case 2: //status
+            case 0: //pre_context
+            case 1: //context
+            case 2: //lets_go
+            case 3: //status
               break;
-            case 3: //data
+            case 4: //data
               if(gg.cur_level.text.data.length)
               {
                 gg.message_box.nq_group(gg.cur_level.text.data);
@@ -488,22 +498,19 @@ var GamePlayScene = function(game, stage)
                 gg.stage_t = 0;
               }
               break;
-            case 4: //labels
-            case 5: //constants
-            case 6: //submit
-            case 7: //review
+            case 5: //labels
+            case 6: //constants
+            case 7: //submit
+            case 8: //review
               break;
-            case 8: //debrief
-              if(gg.cur_level.text.debrief.length)
-              {
-                gg.message_box.nq_group(gg.cur_level.text.debrief);
-                gg.cur_level.text_stage++;
-                gg.stage_t = 0;
-              }
+            case 9: //debrief
+              gg.message_box.nq_group(gg.cur_level.text.debrief);
+              gg.cur_level.text_stage++;
+              gg.stage_t = 0;
               break;
-            case 9: //improve
+            case 10: //improve
               break;
-            case 10: //post
+            case 11: //post
               break;
           }
         }
@@ -514,7 +521,7 @@ var GamePlayScene = function(game, stage)
         gg.timeline.tick();
         gg.cur_level.tick();
         gg.message_box.tick();
-        if(gg.cur_level.text_stage != 9) gg.message_box.prompt_end = 0;
+        if(gg.cur_level.text_stage != 10) gg.message_box.prompt_end = 0;
       }
         break;
       case MODE_WORK_OUT:

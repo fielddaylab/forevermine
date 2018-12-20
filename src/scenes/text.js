@@ -17,10 +17,9 @@ var get_timer = function(t)
 
 var english_text =
 [
-
   //check crystals
   { //one level. copy and paste from this { to the following } to create a new level
-    context: //LAB: you've just awoken. lead into show context animation.
+    pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Eeeeeeee! 🎉 Finally, someone to talk to!", CONTENT_AI, EMOTE_NULL,
       "I'm your Crystal Intake Specialist. You can call me Cris!", CONTENT_AI, EMOTE_NULL,
@@ -31,6 +30,10 @@ var english_text =
       "Um, sure. Why not?", CONTENT_PLAYER, EMOTE_NULL,
       "Yippeeee! 🤗", CONTENT_AI, EMOTE_NULL,
       "Don't worry, friend! I'll help you!", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Here they are mining.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
@@ -112,13 +115,17 @@ var english_text =
 
   //crystal increase
   { //one level. copy and paste from this { to the following } to create a new level
-    context: //LAB: you've just awoken. lead into show context animation.
+    pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Good morning, bestie!!! Guess what?", CONTENT_AI, EMOTE_NULL,
       "You fixed your communicator and called for help?", CONTENT_PLAYER, EMOTE_NULL,
       "Nope! 😂 Comms are still fried!", CONTENT_AI, EMOTE_NULL,
       "But! The robots hit a HUGE pocket of crystals last night!", CONTENT_AI, EMOTE_NULL,
       "They're mining SUPER fast!", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Here they are mining.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
@@ -191,11 +198,15 @@ var english_text =
 
   //crystal return to normal
   { //one level. copy and paste from this { to the following } to create a new level
-    context: //LAB: you've just awoken. lead into show context animation.
+    pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Good morning, sleepyhead!", CONTENT_AI, EMOTE_NULL,
       "Morning, Cris! How are those little bots doing?", CONTENT_PLAYER, EMOTE_NULL,
       "Welllll.... about that.", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Here they are mining.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
@@ -268,10 +279,14 @@ var english_text =
 
   //check out battery
   { //one level. copy and paste from this { to the following } to create a new level
-    context: //LAB: you've just awoken. lead into show context animation.
+    pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Yay! You're here!", CONTENT_AI, EMOTE_NULL,
       "I collected some data on the robots' batteries last night.", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Here they are mining.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
@@ -337,13 +352,17 @@ var english_text =
 
   //improve charge rate
   { //one level. copy and paste from this { to the following } to create a new level
-    context: //LAB: you've just awoken. lead into show context animation.
+    pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Hey, friend! Guess what guess what guess what!", CONTENT_AI, EMOTE_NULL,
       "Um... ", CONTENT_AI, EMOTE_NULL,
       "While you were asleep, I installed your fancy new supercharger!", CONTENT_AI, EMOTE_NULL,
       "What?! Cris, I still needed to run some tests!", CONTENT_AI, EMOTE_NULL,
       "Oh, calm down, silly. The charger is working great!", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Here they are mining.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
@@ -410,9 +429,13 @@ var english_text =
 
   //check crystals
   { //one level. copy and paste from this { to the following } to create a new level
-    context: //LAB: you've just awoken. lead into show context animation.
+    pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Hey bestie! Ready to see how our bots are doing?", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Here they are mining.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
@@ -478,7 +501,7 @@ var english_text =
 
   //initial charge rate
   { //one level. copy and paste from this { to the following } to create a new level
-    context: //LAB: you've just awoken. lead into show context animation.
+    pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Hey, bestie! I've got good news!", CONTENT_AI, EMOTE_NULL,
       "Are you sure you have time to tell me?", CONTENT_AI, EMOTE_NULL,
@@ -488,6 +511,10 @@ var english_text =
       "I was being... nevermind. What's the news?", CONTENT_AI, EMOTE_NULL,
       "The bots are coming back from the mine with some leftover charge!", CONTENT_AI, EMOTE_NULL,
       "Check it out!", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Here they are mining.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
@@ -548,9 +575,13 @@ var english_text =
 
   //check crystals
   { //one level. copy and paste from this { to the following } to create a new level
-    context: //LAB: you've just awoken. lead into show context animation.
+    pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Good morning! Here's what happened.", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Here they are mining.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
