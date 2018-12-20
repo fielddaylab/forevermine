@@ -44,13 +44,13 @@ var english_text =
     [
       get_timer(100), "Here ya go, friend!", CONTENT_AI, EMOTE_NULL,
       get_timer(100), "My owners used this model to make predictions.", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Wait... you mean 200 years ago?", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Wait... you mean 200 years ago?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(100), "Yep! 😂", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Don't worry, you can fix it up!", CONTENT_AI, EMOTE_NULL,
-      get_timer(120), "Me?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(120), "You're the Predictionator. Can't you do it?", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Me?", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "You're the Predictionator. Can't you do it?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(120), "Sorry! My circuits are suuuper scrambled. 😜", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Great.", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Great.", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(120), "Cheer up, friend. You can do this!!", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
@@ -60,7 +60,7 @@ var english_text =
     ],
     labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
     [
-      get_timer(120), "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(120), "Oh, I remember this part!!!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "You need to label our equation!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -130,7 +130,7 @@ var english_text =
     [
       get_timer(120), "This is the same model from yesterday!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "You'll need to fix it up again.", CONTENT_AI, EMOTE_NULL,
-      get_timer(120), "Ok. Do you have the new data?", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Ok. Do you have the new data?", CONTENT_PLAYER, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -238,7 +238,7 @@ var english_text =
     review: //WORKSPACE: submitted correct equation; lead to review survival chances
     [
       get_timer(120), "Hooray! We make such a good team! 😍", CONTENT_AI, EMOTE_NULL,
-      get_timer(120), "Can we make our prediction now?", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Can we make our prediction now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(120), "Sure thing, bestie!", CONTENT_AI, EMOTE_NULL,
     ],
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
@@ -276,7 +276,7 @@ var english_text =
     status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(20), "This model is from wayyyy back when my old owners lived here.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Thanks, Cris.", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Thanks, Cris.", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(20), "Don't mention it, bestie!", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
@@ -286,7 +286,7 @@ var english_text =
     ],
     labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
     [
-      get_timer(20), "Great. Let's get a baseline for how fast the bots are charging up.", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Great. Let's get a baseline for how fast the bots are charging up.", CONTENT_PLAYER, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
     [
@@ -384,7 +384,7 @@ var english_text =
     ],
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
-      get_timer(20), "Wow! The new charger is working great!", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Wow! The new charger is working great!", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(20), "Told you so.", CONTENT_AI, EMOTE_NULL,
     ],
     improve: //LAB: show system
