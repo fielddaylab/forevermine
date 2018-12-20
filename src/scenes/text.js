@@ -102,6 +102,7 @@ var english_text =
     ],
     post: //LAB: send to bed
     [
+      "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       "Awww, don't look so sad. Why don't you get some sleep?", CONTENT_AI, EMOTE_NULL,
       "I can't sleep right now, Cris.", CONTENT_PLAYER, EMOTE_NULL,
       "Sure you can! Just count some robots, or whatever humans do.", CONTENT_AI, EMOTE_NULL,
@@ -139,6 +140,7 @@ var english_text =
     ],
     labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
     [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Select the labels again!", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
@@ -177,6 +179,7 @@ var english_text =
     ],
     post: //LAB: send to bed
     [
+      "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       "Looks like you'll have enough fuel in X days!", CONTENT_AI, EMOTE_NULL,
       "Yes!! Thanks for your help, Cris!", CONTENT_PLAYER, EMOTE_NULL,
       "I can't wait to get off this dumb planet.", CONTENT_PLAYER, EMOTE_NULL,
@@ -212,6 +215,7 @@ var english_text =
     ],
     labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
     [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Go ahead, label the equation!", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
@@ -275,6 +279,7 @@ var english_text =
     ],
     status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
+      get_timer(20), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "This model is from wayyyy back when my old owners lived here.", CONTENT_AI, EMOTE_NULL,
       trigger_click, "Thanks, Cris.", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(20), "Don't mention it, bestie!", CONTENT_AI, EMOTE_NULL,
@@ -321,6 +326,7 @@ var english_text =
     ],
     post: //LAB: send to bed
     [
+      "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       "Wheee! That was fun!", CONTENT_AI, EMOTE_NULL,
       "I'm so glad that weird pulse messed up your ship and stranded you here!!!", CONTENT_AI, EMOTE_NULL,
       "Um.... thanks, Cris.", CONTENT_AI, EMOTE_NULL,
@@ -347,6 +353,7 @@ var english_text =
     ],
     status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
+      get_timer(20), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "This is our baseline from yesterday.", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
@@ -356,6 +363,7 @@ var english_text =
     ],
     labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
     [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "Time to label our model!", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
@@ -393,6 +401,7 @@ var english_text =
     ],
     post: //LAB: send to bed
     [
+      "THIS SHOULD BE SKIPPED", CONTENT_PLAYER, EMOTE_NULL,
       "Cris, can we go back to the crystal count model?", CONTENT_PLAYER, EMOTE_NULL,
       "I need to predict if I'm gonna make it.", CONTENT_PLAYER, EMOTE_NULL,
       "Ooh, great idea, bestie!", CONTENT_PLAYER, EMOTE_NULL,
@@ -420,6 +429,7 @@ var english_text =
     ],
     labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
     [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "Go ahead, pick the labels!", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
@@ -455,6 +465,7 @@ var english_text =
     ],
     post: //LAB: send to bed
     [
+      "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       "Welp, I'm super tired. See you tomorrow!", CONTENT_AI, EMOTE_NULL,
       "What??? Cris, we need to keep working!", CONTENT_PLAYER, EMOTE_NULL,
       "Do you ever stay awake for more than 5 minutes?!", CONTENT_PLAYER, EMOTE_NULL,
@@ -485,6 +496,7 @@ var english_text =
     ],
     status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
+      get_timer(20), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "You need enough fuel before your oxygen runs out.", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
@@ -494,6 +506,7 @@ var english_text =
     ],
     labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
     [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "I'm not sure how this can be modelled.", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
@@ -528,6 +541,7 @@ var english_text =
     ],
     post: //LAB: send to bed
     [
+      "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       "Goodnight!", CONTENT_AI, EMOTE_NULL,
     ],
   },
@@ -553,6 +567,7 @@ var english_text =
     ],
     labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
     [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "I'm not sure how this can be modelled.", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
