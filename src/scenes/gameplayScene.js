@@ -197,7 +197,7 @@ var GamePlayScene = function(game, stage)
     gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,gg.canv.height-80+30);
   }
 
-  self.set_mode = function(mode)
+  self.set_mode = function(mode,skipping)
   {
     gg.mode = mode;
     gg.mode_t = 0;
@@ -239,7 +239,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX:
         break;
       case MODE_CTX_OUT:
-        gg.exposition_box.nq_group(gg.cur_level.text.lets_go);
+        if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.lets_go);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
@@ -248,14 +248,14 @@ var GamePlayScene = function(game, stage)
       case MODE_WORK_IN:
         if(gg.cur_level.skip_zoom)
         {
-          //gg.message_box.nq_group(gg.cur_level.text.status);//skip!
+          //if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);//skip!
           gg.cur_level.text_stage++;
-          gg.message_box.nq_group(gg.cur_level.text.data);
+          if(!skipping) gg.message_box.nq_group(gg.cur_level.text.data);
           gg.cur_level.text_stage++;
         }
         else
         {
-          gg.message_box.nq_group(gg.cur_level.text.status);
+          if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);
           gg.cur_level.text_stage++;
         }
         gg.graph.stretch = 0;
@@ -275,7 +275,7 @@ var GamePlayScene = function(game, stage)
         gg.exposition_box.clear();
         break;
       case MODE_POST0:
-        gg.exposition_box.nq_group(gg.cur_level.text.improve);
+        if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.improve);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
@@ -284,7 +284,7 @@ var GamePlayScene = function(game, stage)
       case MODE_IMPROVE:
         break;
       case MODE_IMPROVE_OUT:
-        gg.exposition_box.nq_group(gg.cur_level.text.post);
+        if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.post);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
@@ -297,7 +297,7 @@ var GamePlayScene = function(game, stage)
       case MODE_LAB_IN: //sets next level
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
-        gg.exposition_box.nq_group(gg.next_level.text.context);
+        if(!skipping) gg.exposition_box.nq_group(gg.next_level.text.context);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
@@ -306,10 +306,14 @@ var GamePlayScene = function(game, stage)
 
   self.skip_to_mode = function(mode)
   {
+    var nmode;
     while(gg.mode != mode)
     {
-      if(gg.mode == MODE_LAB_IN) self.set_mode(MODE_PRE0)
-      else self.set_mode(gg.mode+1)
+      nmode = gg.mode+1;
+      if(gg.mode == MODE_LAB_IN) nmode = MODE_PRE0;
+
+      if(mode == nmode) self.set_mode(nmode,0)
+      else self.set_mode(nmode,1)
     }
   }
 
@@ -320,13 +324,13 @@ var GamePlayScene = function(game, stage)
       case MODE_MENU:
         clicker.filter(gg.monitor);
         //if(gg.monitor.clicked)
-          self.set_mode(MODE_CINEMATIC);
+          self.set_mode(MODE_CINEMATIC,0);
         break;
       case MODE_CINEMATIC:
       {
         clicker.filter(gg.monitor);
         if(gg.monitor.clicked || gg.keylistener.advance())
-          self.set_mode(MODE_BOOT);
+          self.set_mode(MODE_BOOT,0);
       }
         break;
       case MODE_BOOT:
@@ -344,7 +348,7 @@ var GamePlayScene = function(game, stage)
           gg.exposition_box.nq_group(gg.next_level.text.context);
           gg.next_level.text_stage++;
           gg.stage_t = 0;
-          self.set_mode(MODE_PRE0);
+          self.set_mode(MODE_PRE0,0);
         }
       }
       break;
@@ -357,7 +361,7 @@ var GamePlayScene = function(game, stage)
           if(gg.cur_level.skip_context)
             self.skip_to_mode(MODE_WORK_IN);
           else
-            self.set_mode(MODE_CTX_IN);
+            self.set_mode(MODE_CTX_IN,0);
         }
         gg.exposition_box.tick();
       }
@@ -368,7 +372,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_p < 1)
         {
         }
-        else self.set_mode(MODE_CTX);
+        else self.set_mode(MODE_CTX,0);
       }
         break;
       case MODE_CTX:
@@ -377,7 +381,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_p < 1 && !gg.keylistener.advance()) //display feedback
         {
         }
-        else self.set_mode(MODE_CTX_OUT);
+        else self.set_mode(MODE_CTX_OUT,0);
       }
         break;
       case MODE_CTX_OUT:
@@ -386,7 +390,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_p < 1) //fade to face
         {
         }
-        else self.set_mode(MODE_PRE1);
+        else self.set_mode(MODE_PRE1,0);
       }
         break;
       case MODE_PRE1:
@@ -394,7 +398,7 @@ var GamePlayScene = function(game, stage)
         gg.mode_p = 0.5;
         clicker.filter(gg.exposition_box);
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
-          self.set_mode(MODE_WORK_IN);
+          self.set_mode(MODE_WORK_IN,0);
         gg.exposition_box.tick();
       }
         break;
@@ -418,7 +422,7 @@ var GamePlayScene = function(game, stage)
             var fade_p = (gg.mode_t-gg.fade_t-gg.zoom_t)/gg.fade_t;
           }
         }
-        else self.set_mode(MODE_WORK);
+        else self.set_mode(MODE_WORK,0);
       }
         break;
       case MODE_WORK:
@@ -504,7 +508,7 @@ var GamePlayScene = function(game, stage)
           }
         }
         if((gg.cur_level.correct && gg.message_box.requested_end) || gg.keylistener.advance())
-          self.set_mode(MODE_WORK_OUT);
+          self.set_mode(MODE_WORK_OUT,0);
 
         gg.graph.tick();
         gg.timeline.tick();
@@ -533,7 +537,7 @@ var GamePlayScene = function(game, stage)
             screenSpace(gg.home_cam,gg.canv,gg.monitor);
           }
         }
-        else self.set_mode(MODE_POST0);
+        else self.set_mode(MODE_POST0,0);
       }
         break;
       case MODE_POST0:
@@ -549,7 +553,7 @@ var GamePlayScene = function(game, stage)
               self.skip_to_mode(MODE_LAB_OUT);
           }
           else
-            self.set_mode(MODE_IMPROVE_IN);
+            self.set_mode(MODE_IMPROVE_IN,0);
         }
         gg.exposition_box.tick();
       }
@@ -560,7 +564,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_p < 1)
         {
         }
-        else self.set_mode(MODE_IMPROVE);
+        else self.set_mode(MODE_IMPROVE,0);
       }
         break;
       case MODE_IMPROVE:
@@ -569,7 +573,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_p < 1 && !gg.keylistener.advance()) //display feedback
         {
         }
-        else self.set_mode(MODE_IMPROVE_OUT);
+        else self.set_mode(MODE_IMPROVE_OUT,0);
       }
         break;
       case MODE_IMPROVE_OUT:
@@ -578,7 +582,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_p < 1) //fade to face
         {
         }
-        else self.set_mode(MODE_POST1);
+        else self.set_mode(MODE_POST1,0);
       }
         break;
       case MODE_POST1:
@@ -589,7 +593,7 @@ var GamePlayScene = function(game, stage)
           if(gg.cur_level.skip_night)
             self.skip_to_mode(MODE_WORK_IN);
           else
-            self.set_mode(MODE_LAB_OUT);
+            self.set_mode(MODE_LAB_OUT,0);
         }
         gg.exposition_box.tick();
       }
@@ -605,7 +609,7 @@ var GamePlayScene = function(game, stage)
         {
           var fade_p = (gg.mode_t-gg.fade_t)/gg.fade_t;
         }
-        else self.set_mode(MODE_NIGHT);
+        else self.set_mode(MODE_NIGHT,0);
       }
         break;
       case MODE_NIGHT:
@@ -614,7 +618,7 @@ var GamePlayScene = function(game, stage)
         {
           var pan_p = gg.mode_t/gg.pano_t;
         }
-        else self.set_mode(MODE_LAB_IN);
+        else self.set_mode(MODE_LAB_IN,0);
         break;
       case MODE_LAB_IN:
       {
@@ -627,7 +631,7 @@ var GamePlayScene = function(game, stage)
         {
           var fade_p = (gg.mode_t-gg.fade_t)/gg.fade_t;
         }
-        else self.set_mode(MODE_PRE0);
+        else self.set_mode(MODE_PRE0,0);
       }
         break;
     }
@@ -1136,36 +1140,36 @@ var GamePlayScene = function(game, stage)
 
     self.was_ready = 1;
     self.resize(stage);
-    self.set_mode(MODE_MENU);
+    self.set_mode(MODE_MENU,0);
     /*
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CINEMATIC);
+    self.set_mode(MODE_CINEMATIC,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_BOOT);
+    self.set_mode(MODE_BOOT,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PRE0);
+    self.set_mode(MODE_PRE0,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CTX_IN);
+    self.set_mode(MODE_CTX_IN,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CTX);
+    self.set_mode(MODE_CTX,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CTX_OUT);
+    self.set_mode(MODE_CTX_OUT,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PRE1);
+    self.set_mode(MODE_PRE1,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK_IN);
+    self.set_mode(MODE_WORK_IN,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK);
+    self.set_mode(MODE_WORK,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK_OUT);
+    self.set_mode(MODE_WORK_OUT,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_POST0);
+    self.set_mode(MODE_POST0,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_LAB_OUT);
+    self.set_mode(MODE_LAB_OUT,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_NIGHT);
+    self.set_mode(MODE_NIGHT,0);
     for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_LAB_IN);
+    self.set_mode(MODE_LAB_IN,0);
     for(var i = 0; i < 100; i++) self.tick();
     //*/
   };
