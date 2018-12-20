@@ -1,0 +1,18 @@
+<html>
+<script>
+var load = function()
+{
+  var audio = new Audio();
+  audio.src = "assets/silence.mp3";
+  audio.load();
+  document.getElementById("body").addEventListener(
+    'mousedown',
+    function(evt){ audio.play(); audio = 0; },
+    {capture:false,once:false,passive:true}
+  );
+};
+window.addEventListener("load",load,false);
+</script>
+<body id="body">
+</body>
+</html>

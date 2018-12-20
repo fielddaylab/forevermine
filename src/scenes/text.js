@@ -73,7 +73,7 @@ var english_text =
     [
       get_timer(120), "Yay! You did it!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Here's our crystal count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(120), "Rate", CONTENT_CONSTANT, 4,
+      get_timer(120), "Initial", CONTENT_CONSTANT, 4,
       get_timer(120), "Drag the number into our equation.", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Then change the rate so our data matches up!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -149,7 +149,7 @@ var english_text =
     [
       get_timer(120), "Nice work, bestie!!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Here's our Initial Crystal Count!", CONTENT_AI, EMOTE_NULL,
-      get_timer(120), "Rate", CONTENT_CONSTANT, 4,
+      get_timer(120), "Initial", CONTENT_CONSTANT, 4,
       get_timer(120), "You need to fix the rate to match our new data.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -221,7 +221,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(120), "Here's our crystal count!", CONTENT_AI, EMOTE_NULL,
-      get_timer(120), "Rate", CONTENT_CONSTANT, 4,
+      get_timer(120), "Initial", CONTENT_CONSTANT, 4,
       get_timer(120), "You can do this, bestie!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "The more we get together, together, together... 🎵", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Cris, are you... singing?", CONTENT_AI, EMOTE_NULL,
@@ -296,7 +296,7 @@ var english_text =
     [
       get_timer(20), "Looks good!", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "Here's your constant.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Rate", CONTENT_CONSTANT, 4,
+      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -366,7 +366,7 @@ var english_text =
     [
       get_timer(20), "Ooooh, nice work!", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "Here's your constant.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Rate", CONTENT_CONSTANT, 4,
+      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -429,7 +429,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "Ok! Let's see if you're still doomed!", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Rate", CONTENT_CONSTANT, 4,
+      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -562,7 +562,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "Let's try that. We have a few known constants.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Rate", CONTENT_CONSTANT, 4,
+      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
