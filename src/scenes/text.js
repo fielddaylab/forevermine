@@ -115,6 +115,7 @@ var english_text =
     ],
     improve: //LAB: show system
     [
+      "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: send to bed
     [
