@@ -304,8 +304,7 @@ var english_text =
     ],
     context: //LAB: context animation on-screen
     [
-      "I've been collecting data on the robots' batteries", CONTENT_AI, EMOTE_NULL,
-      "We can use the data to get a baseline of how fast the batteries are charging.", CONTENT_AI, EMOTE_NULL,
+      "I've got plenty of data on the robots' batteries!", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
     [
@@ -358,8 +357,8 @@ var english_text =
     ],
     pre_improve: //LAB: about to show system
     [
-      "Wheee! This is the most fun I've had in 200 years!!", CONTENT_AI, EMOTE_NULL,
-      "I'm so glad that weird pulse messed up your ship and stranded you here!", CONTENT_AI, EMOTE_NULL,
+      "Wheee! I'm so glad that weird pulse messed up your ship.", CONTENT_AI, EMOTE_NULL,
+      "This is the most fun I've had in 200 years!!!", CONTENT_AI, EMOTE_NULL,
       "Um... thanks.", CONTENT_PLAYER, EMOTE_NULL,
       "I'm gonna build some new batteries now.", CONTENT_PLAYER, EMOTE_NULL,
       "Good luck, bestie! 🤞", CONTENT_AI, EMOTE_NULL,
@@ -502,7 +501,7 @@ var english_text =
       trigger_click, "I can't believe it. I'm gonna make it!", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(20), "Wait... you are???", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "I didn't think that was actually gonna work... ", CONTENT_AI, EMOTE_NULL,
-      trigger_click, "This is great! Thank you for everything, Cris!", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Thank you for everything, Cris!", CONTENT_PLAYER, EMOTE_NULL,
     ],
     pre_improve: //LAB: about to show system
     [
