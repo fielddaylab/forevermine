@@ -479,11 +479,12 @@ var GamePlayScene = function(game, stage)
             if(!gg.cur_level.skip_zoom)
               gg.graph.stretch = min(gg.stage_t,100)/100;
             break;
-          case 10: //improve
-            if(!gg.cur_level.skip_zoom)
+          case 10: //pre_improve
               gg.graph.stretch = 1;
             break;
-          case 11: //post
+          case 11: //improve
+            break;
+          case 12: //post
             break;
         }
 
@@ -514,9 +515,11 @@ var GamePlayScene = function(game, stage)
               gg.cur_level.text_stage++;
               gg.stage_t = 0;
               break;
-            case 10: //improve
+            case 10: //pre_improve
               break;
-            case 11: //post
+            case 11: //improve
+              break;
+            case 12: //post
               break;
           }
         }

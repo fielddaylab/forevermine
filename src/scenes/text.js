@@ -108,6 +108,10 @@ var english_text =
     [
       get_timer(120), "😬😬😬", CONTENT_AI, EMOTE_NULL,
     ],
+    pre_improve: //LAB: about to show system
+    [
+      "Here's the system", CONTENT_AI, EMOTE_NULL,
+    ],
     improve: //LAB: show system
     [
       "Awww, don't look so sad, friend. At least we're having fun!", CONTENT_AI, EMOTE_NULL,
@@ -188,6 +192,10 @@ var english_text =
     [
       trigger_click, "Cris, look at the graph! I'm gonna make it!", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(120), "Yesss! I knew I could cheer you up!", CONTENT_AI, EMOTE_NULL,
+    ],
+    pre_improve: //LAB: about to show system
+    [
+      "Here's the system", CONTENT_AI, EMOTE_NULL,
     ],
     improve: //LAB: show system
     [
@@ -274,6 +282,10 @@ var english_text =
     [
       get_timer(120), "Ohhh, yeah. Looks like you're doomed. 🤷", CONTENT_AI, EMOTE_NULL,
     ],
+    pre_improve: //LAB: about to show system
+    [
+      "Here's the system", CONTENT_AI, EMOTE_NULL,
+    ],
     improve: //LAB: show system
     [
       "Look on the bright side. At least you did your best!", CONTENT_PLAYER, EMOTE_NULL,
@@ -353,6 +365,10 @@ var english_text =
       get_timer(20), "They are?", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "Well, they were brand new 200 years ago... ", CONTENT_AI, EMOTE_NULL,
     ],
+    pre_improve: //LAB: about to show system
+    [
+      "Here's the system", CONTENT_AI, EMOTE_NULL,
+    ],
     improve: //LAB: show system
     [
       "Wheee! That was so much fun!", CONTENT_AI, EMOTE_NULL,
@@ -425,6 +441,10 @@ var english_text =
     [
       get_timer(20), "Yeah! And plus, the bots look super cool now. 😎", CONTENT_AI, EMOTE_NULL,
     ],
+    pre_improve: //LAB: about to show system
+    [
+      "Here's the system", CONTENT_AI, EMOTE_NULL,
+    ],
     improve: //LAB: show system
     [
       "Wheee! That was amazing, friend!", CONTENT_AI, EMOTE_NULL,
@@ -493,6 +513,10 @@ var english_text =
     [
       trigger_click, "I can't believe it. I'm gonna make it!", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(20), "You are???", CONTENT_AI, EMOTE_NULL,
+    ],
+    pre_improve: //LAB: about to show system
+    [
+      "Here's the system", CONTENT_AI, EMOTE_NULL,
     ],
     improve: //LAB: show system
     [
@@ -566,6 +590,10 @@ var english_text =
     [
       get_timer(20), "Looks Good/Bad!", CONTENT_AI, EMOTE_NULL,
     ],
+    pre_improve: //LAB: about to show system
+    [
+      "Here's the system", CONTENT_AI, EMOTE_NULL,
+    ],
     improve: //LAB: show system
     [
       "Hey that's ok- let's try improving something!", CONTENT_AI, EMOTE_NULL,
@@ -630,6 +658,10 @@ var english_text =
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
       get_timer(20), "Looks Good/Bad!", CONTENT_AI, EMOTE_NULL,
+    ],
+    pre_improve: //LAB: about to show system
+    [
+      "Here's the system", CONTENT_AI, EMOTE_NULL,
     ],
     improve: //LAB: show system
     [
