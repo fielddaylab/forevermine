@@ -216,7 +216,7 @@ var content_dragger = function()
     self.drag(evt);
 
     if(!gg.table.data_visible && self.ptWithinData(evt))                                { self.dragging_data = 1;     return 1; }
-    if(gg.table.data_visible && gg.cur_level.text_stage < 8 && self.ptWithinSim(evt))   { self.dragging_sim = 1;      return 1; }
+    if(gg.table.data_visible && gg.cur_level.text_stage < 9 && self.ptWithinSim(evt))   { self.dragging_sim = 1;      return 1; }
     if(self.ptWithinConstant(evt))                                                      { self.dragging_constant = 1; return 1; }
     self.dragging = 0;
     return 0;
@@ -1007,13 +1007,13 @@ var editable_line = function()
   self.filter = function(keyer,blurer,dragger,clicker)
   {
     var check = 1;
-    if(gg.cur_level.text_stage == 5)
+    if(gg.cur_level.text_stage == 6)
     {
       for(var i = 0; check && i < self.m_select_btn.length; i++) check = !clicker.filter(self.m_select_btn[i]);
       for(var i = 0; check && i < self.b_select_btn.length; i++) check = !clicker.filter(self.b_select_btn[i]);
       if(check) clicker.consume(self.select_label);
     }
-    else if(gg.cur_level.text_stage > 5)
+    else if(gg.cur_level.text_stage > 6)
     {
       if(keyer)
       {
@@ -1127,7 +1127,7 @@ var editable_line = function()
 
     //selector
     gg.ctx.font = "20px DisposableDroidBB";
-    if(gg.cur_level.text_stage < 6)
+    if(gg.cur_level.text_stage < 7)
     {
       if(self.label_selector_n > -1)
       {
@@ -1214,7 +1214,7 @@ var editable_line = function()
     //value strings
     gg.ctx.textAlign = "right";
     gg.ctx.font = self.font;
-    if(gg.cur_level.text_stage > 5)
+    if(gg.cur_level.text_stage > 6)
     {
       for(var i = 0; i < self.m_btn.length; i++)
       {
@@ -1280,7 +1280,7 @@ var table = function()
     self.correct = self.data_visible;
     for(var i = 0; i < self.predicted_data.length && i < self.known_data.length; i++)
       if(self.predicted_data[i] != self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
-    if(gg.cur_level.text_stage == 6 && self.correct && !old_correct)
+    if(gg.cur_level.text_stage == 7 && self.correct && !old_correct)
     {
       gg.message_box.nq_group(gg.cur_level.text.submit);
       gg.cur_level.text_stage++;
