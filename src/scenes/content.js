@@ -48,7 +48,7 @@ var level = function()
 
   self.feedback_imgs = [];
   self.system_imgs = [];
-  self.pano_img = GenIcon(10,10);
+  self.pano = 0;
   self.pano_st = 0;
   self.pano_et = 1;
 
