@@ -109,13 +109,12 @@ var english_text =
     ],
     pre_improve: //LAB: about to show system
     [
-      "Here's the system", CONTENT_AI, EMOTE_NULL,
-    ],
-    improve: //LAB: show system
-    [
       "Awww, don't look so sad. At least we're having fun!", CONTENT_AI, EMOTE_NULL,
       "I need to... need to figure out... ", CONTENT_PLAYER, EMOTE_NULL,
       "Bestie? Can you hear me? You look a little... ", CONTENT_AI, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
     ],
     post: //LAB: send to bed
     [
@@ -190,16 +189,15 @@ var english_text =
     ],
     pre_improve: //LAB: about to show system
     [
-      "Here's the system", CONTENT_AI, EMOTE_NULL,
-    ],
-    improve: //LAB: show system
-    [
       "At this rate, I'll be off this planet by X!", CONTENT_PLAYER, EMOTE_NULL,
       "Oh... wait... X? Isn't that kinda fast?", CONTENT_AI, EMOTE_NULL,
       "Good point, Cris. I should go get my ship ready!", CONTENT_PLAYER, EMOTE_NULL,
       "Or..... you could, I don't know... just take a break and hang out here?", CONTENT_AI, EMOTE_NULL,
       "Thanks, Cris. But you don't need to worry! I'm feeling much better.", CONTENT_PLAYER, EMOTE_NULL,
       "See you tomorrow!", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
     ],
     post: //LAB: send to bed
     [
@@ -278,14 +276,14 @@ var english_text =
     ],
     pre_improve: //LAB: about to show system
     [
-      "Here's the system", CONTENT_AI, EMOTE_NULL,
-    ],
-    improve: //LAB: show system
-    [
       "What should we do now??", CONTENT_AI, EMOTE_NULL,
       "I'm a material scientist. I'm gonna build something to help the bots work faster.", CONTENT_PLAYER, EMOTE_NULL,
       "Oooh! That's so cool! 🤩", CONTENT_AI, EMOTE_NULL,
-      "This model might help. These are some different areas we can work on!", CONTENT_AI, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
+      "This model should help.", CONTENT_AI, EMOTE_NULL,
+      "These are some different areas we can work on!", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: send to bed
     [
@@ -359,15 +357,14 @@ var english_text =
     ],
     pre_improve: //LAB: about to show system
     [
-      "Here's the system", CONTENT_AI, EMOTE_NULL,
-    ],
-    improve: //LAB: show system
-    [
       "Wheee! This is the most fun I've had in 200 years!!", CONTENT_AI, EMOTE_NULL,
       "I'm so glad that weird pulse messed up your ship and stranded you here!", CONTENT_AI, EMOTE_NULL,
       "Um... thanks.", CONTENT_PLAYER, EMOTE_NULL,
       "I'm gonna build some new batteries now.", CONTENT_PLAYER, EMOTE_NULL,
       "Good luck, bestie! 🤞", CONTENT_AI, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
     ],
     post: //LAB: send to bed
     [
@@ -437,14 +434,13 @@ var english_text =
     ],
     pre_improve: //LAB: about to show system
     [
-      "Here's the system", CONTENT_AI, EMOTE_NULL,
-    ],
-    improve: //LAB: show system
-    [
       "So what should we do now?", CONTENT_AI, EMOTE_NULL,
       "Hmmm. The batteries are charging faster, but it might not be enough.", CONTENT_PLAYER, EMOTE_NULL,
       "Can you pull up the crystal collecting model?", CONTENT_PLAYER, EMOTE_NULL,
       "I need to predict if I'm gonna make it.", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
     ],
     post: //LAB: send to bed
     [
@@ -509,16 +505,15 @@ var english_text =
     ],
     pre_improve: //LAB: about to show system
     [
-      "Here's the system", CONTENT_AI, EMOTE_NULL,
-    ],
-    improve: //LAB: show system
-    [
       "So... um... when do you leave?", CONTENT_AI, EMOTE_NULL,
       "Looks like I'll have enough crystals on X!", CONTENT_PLAYER, EMOTE_NULL,
       "Well, we could keep working on the robots, just in case... ", CONTENT_AI, EMOTE_NULL,
       "That's a good idea, but I think I need some rest. I was up all night!", CONTENT_PLAYER, EMOTE_NULL,
       "I'll try to stop by and say good-bye before I leave. Thanks again, Cris!!!", CONTENT_PLAYER, EMOTE_NULL,
       "Don't mention it.", CONTENT_AI, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
     ],
     post: //LAB: send to bed
     [
