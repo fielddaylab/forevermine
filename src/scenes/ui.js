@@ -478,7 +478,7 @@ var graph = function()
   self.stretched_y = function(y)
   {
     if(self.stretch == 0) return y;
-    var max_crystals = 400;
+    var max_crystals = 500;
     return mapVal(self.y+self.h,self.y,self.y+self.h,self.y+self.h-self.h*lerp(1,self.v_max/max_crystals,self.stretch),y);
   }
 
@@ -498,7 +498,25 @@ var graph = function()
     var y;
 
     var max_days = 14;
-    var max_crystals = 400;
+    var max_crystals = 500;
+
+    var zone_y = self.y;
+      //zones
+    if(self.stretch > 0.5)
+    {
+      gg.ctx.globalAlpha = (self.stretch-0.5)*2;
+      gg.ctx.fillStyle = "#7FE288";
+      var x = self.stretched_x(self.x);
+      var w = lerp(self.w,self.stretch_maxw,self.stretch)
+      var h = self.stretched_y(self.y+self.h-((max_crystals-80)/10*self.h)-self.y);
+      if(h > 0) gg.ctx.fillRect(x,zone_y,w,h);
+      gg.ctx.fillStyle = "#F19B8B";
+      if(h > 0) zone_y += h;
+      h = self.y+self.h-zone_y;
+      gg.ctx.fillRect(x,zone_y,w,h);
+
+      gg.ctx.globalAlpha = 1;
+    }
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "18px DisposableDroidBB";
@@ -589,6 +607,16 @@ var graph = function()
     gg.ctx.strokeStyle = gray;
     var t_x = self.x_for_t(gg.timeline.t);
     drawLine(t_x,sy,t_x,sy+sh,gg.ctx);
+
+    if(self.stretch > 0.5)
+    {
+      gg.ctx.globalAlpha = (self.stretch-0.5)*2;
+      gg.ctx.fillStyle = black;
+      gg.ctx.textAlign = "left";
+      if(y > self.y+5) gg.ctx.fillText("You Survive", self.stretched_x(self.x)+5, zone_y-5);
+      gg.ctx.fillText("You Die", self.stretched_x(self.x)+5, zone_y+17);
+      gg.ctx.globalAlpha = 1;
+    }
   }
 }
 
@@ -1106,17 +1134,18 @@ var editable_line = function()
         //line
       if(gg.graph.stretch == 1)
       {
-        gg.ctx.strokeStyle = white;
-        drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.sx+(self.ex-self.sx)*50),gg.graph.stretched_y(self.sy+(self.ey-self.sy)*50), gg.ctx);
+        gg.ctx.strokeStyle = dark_gray;
+        drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.ex),gg.graph.stretched_y(self.ey), gg.ctx);
+        drawLine(gg.graph.stretched_x(self.ex),gg.graph.stretched_y(self.ey),gg.graph.stretched_x(self.sx+(self.ex-self.sx)*50),gg.graph.stretched_y(self.sy+(self.ey-self.sy)*50), gg.ctx);
       }
       gg.ctx.strokeStyle = black;
       if(gg.timeline.t < gg.timeline.t_max)
       {
         var t = gg.timeline.t/gg.timeline.t_max;
         var tx = gg.graph.x_for_t(gg.timeline.t);
-        if(tx > self.sx)
+        if(tx > gg.graph.stretched_x(self.sx))
         {
-          t = min(invlerp(self.sx,self.ex,tx),1);
+          t = min(invlerp(gg.graph.stretched_x(self.sx),gg.graph.stretched_x(self.ex),tx),1);
           drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(lerp(self.sx,self.ex,t)),gg.graph.stretched_y(lerp(self.sy,self.ey,t)), gg.ctx);
         }
       }
