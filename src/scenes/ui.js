@@ -457,7 +457,7 @@ var graph = function()
   {
     var p = 100;
     var sx = lerp(self.x,gg.message_box.w+p,self.stretch);
-    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-(2*p),self.stretch);
+    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-p*1.2,self.stretch);
     return lerp(sx,sx+sw,t/gg.timeline.t_max);
   }
   self.stretched_x = function(x)
@@ -466,7 +466,7 @@ var graph = function()
     var max_days = 14;
     var p = 100;
     var sx = lerp(self.x,gg.message_box.w+p,self.stretch);
-    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-(2*p),self.stretch);
+    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-p*1.2,self.stretch);
     return min(self.x+self.w,mapVal(self.x,self.x+self.w,sx,sx+sw*lerp(1,(gg.timeline.t_max/(24*max_days)),self.stretch),x));
   }
 
@@ -479,7 +479,7 @@ var graph = function()
   {
     var t = self.stretch;
     var p = 100;
-    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-(2*p),t);
+    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-p*1.2,t);
     var sh = self.h;
     var sx = lerp(self.x,gg.message_box.w+p,t);
     var sy = self.y;
