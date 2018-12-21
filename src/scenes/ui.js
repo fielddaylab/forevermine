@@ -430,7 +430,7 @@ var exposition_box = function()
     gg.ctx.font = self.font;
     switch(self.types[self.displayed_i])
     {
-      case CONTENT_AI: gg.ctx.fillText("GEMMA",self.x+self.pad,self.y+self.font_h/2); break;
+      case CONTENT_AI: gg.ctx.fillText("CRIS",self.x+self.pad,self.y+self.font_h/2); break;
       case CONTENT_PLAYER: gg.ctx.fillText("YOU",self.x+self.pad,self.y+self.font_h/2); break;
     }
     var y = self.y+self.pad;
@@ -1187,8 +1187,12 @@ var editable_line = function()
     gg.ctx.textAlign = "left";
     for(var i = 0; i < self.eqn_strings.length; i++)
       gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+    gg.ctx.font = "15px DisposableDroidBB";
     drawImageSizeCentered(gg.cur_level.y_icon, self.eqn_xs[0], self.eqn_y+self.font_h*2/3, self.font_h*1.5, gg.ctx);
+    gg.ctx.fillText(gg.cur_level.y_label,self.eqn_xs[0],self.eqn_y+self.font_h*1.5);
     drawImageSizeCentered(gg.time_img, self.eqn_xs[self.eqn_x_i]+self.font_h/3, self.eqn_y+self.font_h*2/3, self.font_h*4/5, gg.ctx);
+    gg.ctx.fillText("HOURS",self.eqn_xs[self.eqn_x_i],self.eqn_y+self.font_h*1.5);
+    gg.ctx.font = "20px DisposableDroidBB";
     //boxes
     for(var i = 0; i < self.m_select_btn.length; i++)
     {
