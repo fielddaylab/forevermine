@@ -795,6 +795,18 @@ function drawImageHeightCentered(image,x,y,h,ctx)
   var w = image.width*h/image.height;
   ctx.drawImage(image,x-w/2,y-h/2,w,h);
 }
+function drawImageSizeCentered(image,x,y,s,ctx)
+{
+  var w = image.width*s/image.height;
+  var h = s;
+  if(w > s)
+  {
+    h = h*s/w;
+    w = s;
+  }
+  ctx.drawImage(image,x-w/2,y-h/2,w,h);
+
+}
 function drawImageBox(image,box,ctx)
 {
   ctx.drawImage(image,box.x,box.y,box.w,box.h);

@@ -1123,10 +1123,9 @@ var editable_line = function()
       gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
     }
 
-    gg.ctx.fillStyle = black;
-
     //selector
     gg.ctx.font = "20px DisposableDroidBB";
+    gg.ctx.fillStyle = white;
     if(gg.cur_level.text_stage < 7)
     {
       if(self.label_selector_n > -1)
@@ -1135,23 +1134,24 @@ var editable_line = function()
           b = self.m_select_btn[self.label_selector_n];
         else
           b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
-        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+b.h,b.w,b.h);
+        //gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+b.h,b.w,b.h/2);
         for(var i = 0; i < gg.cur_level.m_label.length; i++)
         {
           var x = b.x+(i/total_labels)*b.w+pad;
-          gg.ctx.drawImage(gg.cur_level.m_icon[i],x,b.y+yoff+b.h+b.h/2,b.h/2,b.h/2);
+          drawImageSizeCentered(gg.cur_level.m_icon[i], x+b.h/4, b.y+yoff+b.h*5/4, b.h/2, gg.ctx);
           gg.ctx.fillText(gg.cur_level.m_label[i],x,b.y+yoff+b.h+b.h/2);
         }
         for(var i = 0; i < gg.cur_level.b_label.length; i++)
         {
           var x = b.x+((i+mlen)/total_labels)*b.w+pad;
-          gg.ctx.drawImage(gg.cur_level.b_icon[i],x,b.y+yoff+b.h+b.h/2,b.h/2,b.h/2);
+          drawImageSizeCentered(gg.cur_level.b_icon[i], x+b.h/4, b.y+yoff+b.h*5/4, b.h/2, gg.ctx);
           gg.ctx.fillText(gg.cur_level.b_label[i],x,b.y+yoff+b.h+b.h/2);
         }
       }
     }
     else
     {
+      gg.ctx.fillStyle = black;
       //value selector
       gg.ctx.fillStyle = "#63ADC3"; //blue highlit
       for(var i = 0; i < self.m_btn.length; i++)
@@ -1180,13 +1180,13 @@ var editable_line = function()
         if(self.m_label[i] < mlen)
         {
           var x = b.x+pad;
-          gg.ctx.drawImage(gg.cur_level.m_icon[self.m_label[i]],x,b.y+yoff,b.h/2,b.h/2);
+          drawImageSizeCentered(gg.cur_level.m_icon[self.m_label[i]], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
           gg.ctx.fillText(gg.cur_level.m_label[self.m_label[i]],x,b.y+yoff+b.h-pad);
         }
         else
         {
           var x = b.x+pad;
-          gg.ctx.drawImage(gg.cur_level.b_icon[self.m_label[i]-mlen],x,b.y+yoff,b.h/2,b.h/2);
+          drawImageSizeCentered(gg.cur_level.b_icon[self.m_label[i]-mlen], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
           gg.ctx.fillText(gg.cur_level.b_label[self.m_label[i]-mlen],x,b.y+yoff+b.h-pad);
         }
       }
@@ -1199,13 +1199,13 @@ var editable_line = function()
         if(self.b_label[i] < mlen)
         {
           var x = b.x+pad;
-          gg.ctx.drawImage(gg.cur_level.m_icon[self.m_label[i]],x,b.y+yoff,b.h/2,b.h/2);
+          drawImageSizeCentered(gg.cur_level.m_icon[self.m_label[i]], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
           gg.ctx.fillText(gg.cur_level.m_label[self.m_label[i]],x,b.y+yoff+b.h-pad);
         }
         else
         {
           var x = b.x+pad;
-          gg.ctx.drawImage(gg.cur_level.b_icon[self.b_label[i]-mlen],x,b.y+yoff,b.h/2,b.h/2);
+          drawImageSizeCentered(gg.cur_level.b_icon[self.b_label[i]-mlen], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
           gg.ctx.fillText(gg.cur_level.b_label[self.b_label[i]-mlen],x,b.y+yoff+b.h-pad);
         }
       }

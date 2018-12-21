@@ -130,6 +130,8 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/crycollected.png");
     img_srcs.push("assets/cryinitial.png");
     img_srcs.push("assets/cryrate.png");
+    img_srcs.push("assets/chrinitial.png");
+    img_srcs.push("assets/chrrate.png");
     img_srcs.push("assets/time.png");
     img_srcs.push("assets/console.png");
     img_srcs.push("assets/console_dark.png");
