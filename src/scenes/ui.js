@@ -462,9 +462,10 @@ var graph = function()
 
   self.x_for_t = function(t)
   {
+    var max_days = 14;
     var sx = lerp(self.x,self.stretch_maxx,self.stretch);
     var sw = lerp(self.w,self.stretch_maxw,self.stretch);
-    return lerp(sx,sx+sw,t/gg.timeline.t_max);
+    return lerp(sx,sx+sw,lerp(t/gg.timeline.t_max,t/(24*max_days),self.stretch));
   }
   self.stretched_x = function(x)
   {
@@ -477,7 +478,7 @@ var graph = function()
   self.stretched_y = function(y)
   {
     if(self.stretch == 0) return y;
-    var max_crystals = 100;
+    var max_crystals = 400;
     return mapVal(self.y+self.h,self.y,self.y+self.h,self.y+self.h-self.h*lerp(1,self.v_max/max_crystals,self.stretch),y);
   }
 
@@ -497,7 +498,7 @@ var graph = function()
     var y;
 
     var max_days = 14;
-    var max_crystals = 100;
+    var max_crystals = 400;
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "18px DisposableDroidBB";
@@ -506,7 +507,9 @@ var graph = function()
     gg.ctx.strokeStyle = white;
 
     //grid
+    gg.ctx.lineWidth = 4;
     gg.ctx.strokeRect(sx,sy,sw,sh);
+    gg.ctx.lineWidth = 2;
       //vertical lines
     if(t < 0.5)
     {
@@ -553,12 +556,12 @@ var graph = function()
         y = lerp(sy+sh,ey,i/self.v_max);
         gg.ctx.moveTo(sx,y);
         gg.ctx.lineTo(sx+sw,y);
-        gg.ctx.fillText(i,sx-10,y+7);
+        gg.ctx.fillText(i,sx-12,y+7);
       }
       gg.ctx.stroke();
-      gg.ctx.fillText(self.v_max,sx-10,sy+7);
+      gg.ctx.fillText(self.v_max,sx-12,sy+7);
       gg.ctx.textAlign = "right";
-      gg.ctx.fillText(gg.cur_level.y_label,sx-20,sy+sh/2);
+      gg.ctx.fillText(gg.cur_level.y_label,sx-25,sy+sh/2);
       gg.ctx.textAlign = "center";
       gg.ctx.globalAlpha = 1;
     }
@@ -567,24 +570,24 @@ var graph = function()
       var ey = lerp(sy+sh-sh*(max_crystals/self.v_max),sy,t);
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
-      for(var i = 10; i < max_crystals; i+=10)
+      for(var i = 50; i < max_crystals; i+=50)
       {
         y = lerp(sy+sh,ey,i/max_crystals);
         gg.ctx.moveTo(sx,y);
         gg.ctx.lineTo(sx+sw,y);
-        gg.ctx.fillText(i,sx-10,y+7);
+        gg.ctx.fillText(i,sx-15,y+7);
       }
       gg.ctx.stroke();
-      gg.ctx.fillText(max_crystals,sx-10,sy+7);
+      gg.ctx.fillText(max_crystals,sx-15,sy+7);
       gg.ctx.textAlign = "right";
-      gg.ctx.fillText(gg.cur_level.y_label,sx-20,sy+sh/2);
+      gg.ctx.fillText(gg.cur_level.y_label,sx-25,sy+sh/2);
       gg.ctx.textAlign = "center";
       gg.ctx.globalAlpha = 1;
     }
 
       //tl
     gg.ctx.strokeStyle = gray;
-    var t_x = mapVal(0,gg.timeline.t_max,sx,sx+sw,gg.timeline.t);
+    var t_x = self.x_for_t(gg.timeline.t);
     drawLine(t_x,sy,t_x,sy+sh,gg.ctx);
   }
 }
@@ -1104,7 +1107,7 @@ var editable_line = function()
       if(gg.graph.stretch == 1)
       {
         gg.ctx.strokeStyle = white;
-        drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.sx+(self.ex-self.sx)*20),gg.graph.stretched_y(self.sy+(self.ey-self.sy)*20), gg.ctx);
+        drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.sx+(self.ex-self.sx)*50),gg.graph.stretched_y(self.sy+(self.ey-self.sy)*50), gg.ctx);
       }
       gg.ctx.strokeStyle = black;
       if(gg.timeline.t < gg.timeline.t_max)
@@ -1121,7 +1124,7 @@ var editable_line = function()
         drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.ex),gg.graph.stretched_y(self.ey), gg.ctx);
 
         //icons
-      if(gg.table.data_visible)
+      if(gg.table.data_visible && gg.graph.stretch == 0)
       {
         gg.ctx.fillStyle = white;
         var s = 15;
