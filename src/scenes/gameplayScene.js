@@ -911,6 +911,7 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -944,6 +945,7 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -977,6 +979,7 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -1010,6 +1013,7 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -1043,6 +1047,7 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -1076,6 +1081,7 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 1;
@@ -1109,6 +1115,7 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -1142,6 +1149,7 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
