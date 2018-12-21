@@ -1049,8 +1049,8 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
     l.day = 3;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 1; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
     l.pano = 0;
@@ -1084,8 +1084,8 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
     l.day = 4;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 1; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
     l.pano = 0;
@@ -1119,8 +1119,8 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
     l.day = 4;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
     l.pano = 0;
@@ -1154,8 +1154,8 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
     l.day = 5;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 0; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
     l.pano = 0;

@@ -158,20 +158,10 @@ var LoadingScene = function(game, stage)
       img_srcs.push("assets/feedback/2-"+i+".png");
     for(var i = 0; i < 5; i++)
       img_srcs.push("assets/feedback/3-"+i+".jpg");
-    for(var i = 0; i < 5; i++)
-      img_srcs.push("assets/feedback/4-"+i+".jpg");
-    for(var i = 0; i < 5; i++)
-      img_srcs.push("assets/feedback/5-"+i+".jpg");
-      /*
-    for(var i = 0; i < 3; i++)
-      img_srcs.push("assets/feedback/6-"+i+".jpg");
-    for(var i = 0; i < 3; i++)
-      img_srcs.push("assets/feedback/7-"+i+".jpg");
-    for(var i = 0; i < 3; i++)
-      img_srcs.push("assets/feedback/8-"+i+".jpg");
-    for(var i = 0; i < 3; i++)
-      img_srcs.push("assets/feedback/9-"+i+".jpg");
-      */
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/feedback/4-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/feedback/5-"+i+".png");
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();
