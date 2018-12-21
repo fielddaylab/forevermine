@@ -61,6 +61,8 @@ var GamePlayScene = function(game, stage)
       gg.line.x = gg.message_box.x+gg.message_box.w;
       gg.line.y = 0;
       gg.line.w = gg.canv.width-gg.line.x;
+
+      gg.graph.size();
     }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
@@ -1222,7 +1224,7 @@ var GamePlayScene = function(game, stage)
         `
       );
       */
-      self.HACKTXT(`You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 14 days of oxygen left. You need to find a way off this planet.`);
+      self.HACKTXT("You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 14 days of oxygen left. You need to find a way off this planet.");
     gg.monitor.draw(); //draws to self- not to screen
     self.draw_mode();
   };

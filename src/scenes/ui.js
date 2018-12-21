@@ -85,7 +85,7 @@ var monitor = function()
     self.mouth_nw = 1;
     if(self.talk_t == 1) self.mouth_nsvw = -.05;
     if(self.talk_t < 50) self.mouth_nh = lerp(self.mouth_nh,psin(self.talk_t),0.8);
-    else                self.mouth_nh = lerp(self.mouth_nh,                1,0.8);
+    else                 self.mouth_nh = lerp(self.mouth_nh,                1,0.8);
     self.mouth_nsw += self.mouth_nsvw;
     self.mouth_nsvw -= self.mouth_nsw/20;
     self.mouth_nsvw *= 0.9;
@@ -453,21 +453,32 @@ var graph = function()
 
   self.v_max = 10;
 
+  self.size = function ()
+  {
+    var p = 120;
+    self.stretch_maxx = gg.message_box.w+p;
+    self.stretch_maxw = self.x+self.w-self.stretch_maxx;
+  }
+
   self.x_for_t = function(t)
   {
-    var p = 100;
-    var sx = lerp(self.x,gg.message_box.w+p,self.stretch);
-    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-p*1.2,self.stretch);
+    var sx = lerp(self.x,self.stretch_maxx,self.stretch);
+    var sw = lerp(self.w,self.stretch_maxw,self.stretch);
     return lerp(sx,sx+sw,t/gg.timeline.t_max);
   }
   self.stretched_x = function(x)
   {
     if(self.stretch == 0) return x;
     var max_days = 14;
-    var p = 100;
-    var sx = lerp(self.x,gg.message_box.w+p,self.stretch);
-    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-p*1.2,self.stretch);
+    var sx = lerp(self.x,self.stretch_maxx,self.stretch);
+    var sw = lerp(self.w,self.stretch_maxw,self.stretch);
     return min(self.x+self.w,mapVal(self.x,self.x+self.w,sx,sx+sw*lerp(1,(gg.timeline.t_max/(24*max_days)),self.stretch),x));
+  }
+  self.stretched_y = function(y)
+  {
+    if(self.stretch == 0) return y;
+    var max_crystals = 100;
+    return mapVal(self.y+self.h,self.y,self.y+self.h,self.y+self.h-self.h*lerp(1,self.v_max/max_crystals,self.stretch),y);
   }
 
   self.tick = function()
@@ -478,15 +489,15 @@ var graph = function()
   self.draw = function()
   {
     var t = self.stretch;
-    var p = 100;
-    var sw = lerp(self.w,gg.stage.width-gg.message_box.w-p*1.2,t);
+    var sx = lerp(self.x,self.stretch_maxx,t);
+    var sw = lerp(self.w,self.stretch_maxw,t);
     var sh = self.h;
-    var sx = lerp(self.x,gg.message_box.w+p,t);
     var sy = self.y;
     var x;
     var y;
 
     var max_days = 14;
+    var max_crystals = 100;
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "18px DisposableDroidBB";
@@ -532,19 +543,44 @@ var graph = function()
       gg.ctx.globalAlpha = 1;
     }
       //horizontal lines
-    gg.ctx.beginPath();
-    for(var i = 1; i < self.v_max; i++)
+    if(t < 0.5)
     {
-      y = lerp(sy+sh,sy,i/self.v_max);
-      gg.ctx.moveTo(sx,y);
-      gg.ctx.lineTo(sx+sw,y);
-      gg.ctx.fillText(i,sx-10,y+7);
+      var ey = lerp(sy,sy+sh-sh*(self.v_max/max_crystals),t);
+      gg.ctx.globalAlpha = 1-(t*2);
+      gg.ctx.beginPath();
+      for(var i = 1; i < self.v_max; i++)
+      {
+        y = lerp(sy+sh,ey,i/self.v_max);
+        gg.ctx.moveTo(sx,y);
+        gg.ctx.lineTo(sx+sw,y);
+        gg.ctx.fillText(i,sx-10,y+7);
+      }
+      gg.ctx.stroke();
+      gg.ctx.fillText(self.v_max,sx-10,sy+7);
+      gg.ctx.textAlign = "right";
+      gg.ctx.fillText(gg.cur_level.y_label,sx-20,sy+sh/2);
+      gg.ctx.textAlign = "center";
+      gg.ctx.globalAlpha = 1;
     }
-    gg.ctx.stroke();
-    gg.ctx.fillText(self.v_max,sx-10,sy+7);
-    gg.ctx.textAlign = "right";
-    gg.ctx.fillText(gg.cur_level.y_label,sx-20,sy+sh/2);
-    gg.ctx.textAlign = "center";
+    else
+    {
+      var ey = lerp(sy+sh-sh*(max_crystals/self.v_max),sy,t);
+      gg.ctx.globalAlpha = (t-0.5)*2;
+      gg.ctx.beginPath();
+      for(var i = 10; i < max_crystals; i+=10)
+      {
+        y = lerp(sy+sh,ey,i/max_crystals);
+        gg.ctx.moveTo(sx,y);
+        gg.ctx.lineTo(sx+sw,y);
+        gg.ctx.fillText(i,sx-10,y+7);
+      }
+      gg.ctx.stroke();
+      gg.ctx.fillText(max_crystals,sx-10,sy+7);
+      gg.ctx.textAlign = "right";
+      gg.ctx.fillText(gg.cur_level.y_label,sx-20,sy+sh/2);
+      gg.ctx.textAlign = "center";
+      gg.ctx.globalAlpha = 1;
+    }
 
       //tl
     gg.ctx.strokeStyle = gray;
@@ -1065,6 +1101,11 @@ var editable_line = function()
       gg.ctx.strokeStyle = white;
 
         //line
+      if(gg.graph.stretch == 1)
+      {
+        gg.ctx.strokeStyle = white;
+        drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.sx+(self.ex-self.sx)*20),gg.graph.stretched_y(self.sy+(self.ey-self.sy)*20), gg.ctx);
+      }
       gg.ctx.strokeStyle = black;
       if(gg.timeline.t < gg.timeline.t_max)
       {
@@ -1073,11 +1114,11 @@ var editable_line = function()
         if(tx > self.sx)
         {
           t = min(invlerp(self.sx,self.ex,tx),1);
-          drawLine(gg.graph.stretched_x(self.sx),self.sy,gg.graph.stretched_x(lerp(self.sx,self.ex,t)),lerp(self.sy,self.ey,t), gg.ctx);
+          drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(lerp(self.sx,self.ex,t)),gg.graph.stretched_y(lerp(self.sy,self.ey,t)), gg.ctx);
         }
       }
       else
-        drawLine(gg.graph.stretched_x(self.sx),self.sy,gg.graph.stretched_x(self.ex),self.ey, gg.ctx);
+        drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.ex),gg.graph.stretched_y(self.ey), gg.ctx);
 
         //icons
       if(gg.table.data_visible)
@@ -1092,8 +1133,8 @@ var editable_line = function()
             y = mapVal(0,gg.graph.v_max,gg.graph.y+gg.graph.h,gg.graph.y,gg.table.known_data[i]);
             x = clamp(gg.graph.x,gg.graph.x+gg.graph.w,x);
             y = clamp(gg.graph.y,gg.graph.y+gg.graph.h,y);
-            if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,gg.graph.stretched_x(x)-s/2,y-s/2,s,s);
-            else gg.ctx.drawImage(gg.neq_pt_img,gg.graph.stretched_x(x)-s/2,y-s/2,s,s);
+            if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,gg.graph.stretched_x(x)-s/2,gg.graph.stretched_y(y)-s/2,s,s);
+            else gg.ctx.drawImage(gg.neq_pt_img,gg.graph.stretched_x(x)-s/2,gg.graph.stretched_y(y)-s/2,s,s);
           }
         }
       }
