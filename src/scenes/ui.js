@@ -467,7 +467,7 @@ var graph = function()
     var p = 100;
     var sx = lerp(self.x,gg.message_box.w+p,self.stretch);
     var sw = lerp(self.w,gg.stage.width-gg.message_box.w-(2*p),self.stretch);
-    return mapVal(self.x,self.x+self.w,sx,sx+sw*lerp(1,(gg.timeline.t_max/(24*max_days)),self.stretch),x);
+    return min(self.x+self.w,mapVal(self.x,self.x+self.w,sx,sx+sw*lerp(1,(gg.timeline.t_max/(24*max_days)),self.stretch),x));
   }
 
   self.tick = function()

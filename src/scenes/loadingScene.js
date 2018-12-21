@@ -148,12 +148,12 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/epano_ffg.png");
     img_srcs.push("assets/battery.png");
     img_srcs.push("assets/drill.png");
-    for(var i = 0; i < 3; i++)
-      img_srcs.push("assets/feedback/0-"+i+".jpg");
-    for(var i = 0; i < 3; i++)
-      img_srcs.push("assets/feedback/1-"+i+".jpg");
-    for(var i = 0; i < 3; i++)
-      img_srcs.push("assets/feedback/2-"+i+".jpg");
+    for(var i = 0; i < 90; i++)
+      img_srcs.push("assets/feedback/0-"+i+".png");
+    for(var i = 0; i < 90; i++)
+      img_srcs.push("assets/feedback/1-"+i+".png");
+    for(var i = 0; i < 90; i++)
+      img_srcs.push("assets/feedback/2-"+i+".png");
     for(var i = 0; i < 5; i++)
       img_srcs.push("assets/feedback/3-"+i+".jpg");
     for(var i = 0; i < 5; i++)

@@ -124,7 +124,7 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_CTX)
     {
-      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.feedf_t)%gg.cur_level.feedback_imgs.length)];
+      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.feedback_imgs.length)];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_CTX_OUT)
@@ -145,7 +145,7 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_IMPROVE)
     {
-      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.feedf_t)%gg.cur_level.feedback_imgs.length)];
+      var img = gg.cur_level.feedback_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.feedback_imgs.length)];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_IMPROVE_OUT)
@@ -394,7 +394,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CTX:
       {
-        gg.mode_p = gg.mode_t/(gg.feedf_t*gg.cur_level.feedback_imgs.length*2);
+        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.feedback_imgs.length*2);
         clicker.filter(gg.exposition_box);
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_CTX_OUT,0);
@@ -587,7 +587,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_IMPROVE:
       {
-        gg.mode_p = gg.mode_t/(gg.feedf_t*gg.cur_level.feedback_imgs.length*2);
+        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.feedback_imgs.length*2);
         if(gg.mode_p < 1 && !gg.keylistener.advance()) //display feedback
         {
         }
@@ -833,7 +833,7 @@ var GamePlayScene = function(game, stage)
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
-    gg.feedf_t = 30;
+    gg.ctxf_t = 3;
     gg.pano_t = 250;
 
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
@@ -903,8 +903,8 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
     l.day = 0;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 90; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
     l.pano_st = 0;
@@ -936,8 +936,8 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
     l.day = 1;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 90; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
     l.pano_st = 0;
@@ -969,8 +969,8 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CRYSTALS";
     l.day = 2;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
+    for(var j = 0; j < 90; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
     l.pano_st = 0;
