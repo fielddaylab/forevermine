@@ -180,15 +180,21 @@ var GamePlayScene = function(game, stage)
   self.draw_night = function(t)
   {
     var t = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
-    gg.ctx.drawImage(gg.pano_bg_img,0,0,gg.canv.width,gg.canv.height);
-    var vis_pano_w = gg.canv.width/gg.canv.height*gg.pano_img.height;
-    var pano_sx = 0;
-    var pano_ex = gg.pano_img.width-vis_pano_w;
-    gg.ctx.drawImage(gg.pano_img,lerp(pano_sx,pano_ex,t),0,vis_pano_w,gg.pano_img.height,0,0,gg.canv.width,gg.canv.height);
-    var vis_pano_fg_w = gg.canv.width/gg.canv.height*gg.pano_fg_img.height;
-    var pano_fg_sx = 0;
-    var pano_fg_ex = gg.pano_fg_img.width-vis_pano_fg_w;
-    gg.ctx.drawImage(gg.pano_fg_img,lerp(pano_fg_sx,pano_fg_ex,t),0,vis_pano_fg_w,gg.pano_fg_img.height,0,0,gg.canv.width,gg.canv.height);
+
+    var panos = gg.pano_imgs;
+    if(gg.cur_level.pano == 1) panos = gg.epano_imgs;
+    var pimg;
+    var vis_pano_w;
+    var pano_sx;
+    var pano_ex;
+    for(var i = 0; i < panos.length; i++)
+    {
+      pimg = panos[i];
+      vis_pano_w = gg.canv.width/gg.canv.height*pimg.height;
+      pano_sx = 0;
+      pano_ex = pimg.width-vis_pano_w;
+      gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,t),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
+    }
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "40px DisposableDroidBB";
@@ -849,9 +855,15 @@ var GamePlayScene = function(game, stage)
     gg.data_img = GenImg("assets/data.png");
     gg.submit_img = GenImg("assets/submit.png");
     gg.neck_heart_img = GenImg("assets/neck_heart.png");
-    gg.pano_bg_img = GenImg("assets/pano_bg.jpg");
-    gg.pano_fg_img = GenImg("assets/pano_fg.png");
-    gg.pano_img = GenImg("assets/pano.png");
+    gg.pano_imgs = [];
+    gg.pano_imgs[0] = GenImg("assets/pano_bg.jpg");
+    gg.pano_imgs[1] = GenImg("assets/pano_mg.png");
+    gg.pano_imgs[2] = GenImg("assets/pano_fg.png");
+    gg.epano_imgs = [];
+    gg.epano_imgs[0] = GenImg("assets/epano_bg.jpg");
+    gg.epano_imgs[1] = GenImg("assets/epano_mg.png");
+    gg.epano_imgs[2] = GenImg("assets/epano_fg.png");
+    gg.epano_imgs[3] = GenImg("assets/epano_ffg.png");
     gg.battery_img = GenImg("assets/battery.png");
     gg.drill_img = GenImg("assets/drill.png");
 
@@ -890,7 +902,6 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -924,7 +935,6 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -958,7 +968,6 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -992,7 +1001,6 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -1026,7 +1034,6 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -1060,7 +1067,6 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 1;
@@ -1094,7 +1100,6 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
@@ -1128,7 +1133,6 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano_img = GenIcon(10,10);
     l.pano_st = 0;
     l.pano_et = 0.05;
     l.skip_context = 0;
