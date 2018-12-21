@@ -1213,9 +1213,12 @@ var GamePlayScene = function(game, stage)
   self.draw = function()
   {
     if(self.txt_lines.length == 0)
+      /*
       self.HACKTXT(`     You wake up in a dark room. All you see is the black screen of an old monitor.                       Your memory starts to return: you were on a routine mission to refurbish an old mining planet.      But before your ship was able to touch down, something went wrong. You must have stumbled into this abandoned control center and passed out.                                                   You check your vitals- uh oh. Only 14 days worth of oxygen left, and your ship is out of fuel.                                                            You need to find a way off this planet.
         `
       );
+      */
+      self.HACKTXT(`You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 14 days of oxygen left. You need to find a way off this planet.`);
     gg.monitor.draw(); //draws to self- not to screen
     self.draw_mode();
   };
