@@ -588,7 +588,7 @@ var graph = function()
       var ey = lerp(sy+sh-sh*(max_crystals/self.v_max),sy,t);
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
-      for(var i = 50; i < max_crystals; i+=50)
+      for(var i = 100; i < max_crystals; i+=100)
       {
         y = lerp(sy+sh,ey,i/max_crystals);
         gg.ctx.moveTo(sx,y);
@@ -614,7 +614,7 @@ var graph = function()
       gg.ctx.fillStyle = black;
       gg.ctx.textAlign = "left";
       if(y > self.y+5) gg.ctx.fillText("You Survive", self.stretched_x(self.x)+5, zone_y-5);
-      gg.ctx.fillText("You Die", self.stretched_x(self.x)+5, zone_y+17);
+      gg.ctx.fillText("You Die", self.stretched_x(self.x)+5, zone_y+15);
       gg.ctx.globalAlpha = 1;
     }
   }
@@ -739,6 +739,7 @@ var editable_line = function()
   self.eqn_strings = [""];
   self.eqn_ws = [0];
   self.eqn_xs = [0];
+  self.eqn_x_i = 0;
 
   self.m_select_btn = [];
   self.m_btn = [];
@@ -842,6 +843,7 @@ var editable_line = function()
         self.eqn_strings[eqn_i] = "X + ";
       else
         self.eqn_strings[eqn_i] = "X + (";
+      self.eqn_x_i = eqn_i;
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -869,6 +871,7 @@ var editable_line = function()
         self.eqn_strings[eqn_i] = ")X + ";
       else
         self.eqn_strings[eqn_i] = ")X + (";
+      self.eqn_x_i = eqn_i;
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -1184,6 +1187,8 @@ var editable_line = function()
     gg.ctx.textAlign = "left";
     for(var i = 0; i < self.eqn_strings.length; i++)
       gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+    drawImageSizeCentered(gg.cur_level.y_icon, self.eqn_xs[0], self.eqn_y+self.font_h*2/3, self.font_h*1.5, gg.ctx);
+    drawImageSizeCentered(gg.time_img, self.eqn_xs[self.eqn_x_i]+self.font_h/3, self.eqn_y+self.font_h*2/3, self.font_h*4/5, gg.ctx);
     //boxes
     for(var i = 0; i < self.m_select_btn.length; i++)
     {

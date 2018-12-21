@@ -28,6 +28,7 @@ var level = function()
 {
   var self = this;
   self.i = 0;
+  self.y_icon = GenIcon(10,10);
   self.m_starting = [0,];
   self.m_correct = [0,];
   self.m_label = ["Rate",];

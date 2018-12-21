@@ -484,6 +484,7 @@ var GamePlayScene = function(game, stage)
               gg.graph.stretch = min(gg.stage_t,100)/100;
             break;
           case 10: //pre_improve
+            if(!gg.cur_level.skip_zoom)
               gg.graph.stretch = 1;
             break;
           case 11: //improve
@@ -892,6 +893,7 @@ var GamePlayScene = function(game, stage)
     //check crystals
     l = new level();
     l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [0,];
     l.m_correct = [1,];
     l.m_label = ["Rate",];
@@ -926,6 +928,7 @@ var GamePlayScene = function(game, stage)
     //crystal increase
     l = new level();
     l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [1,];
     l.m_correct = [2,];
     l.m_label = ["Rate",];
@@ -960,6 +963,7 @@ var GamePlayScene = function(game, stage)
     //crystal return to normal
     l = new level();
     l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [2,];
     l.m_correct = [1,];
     l.m_label = ["Rate",];
@@ -994,6 +998,7 @@ var GamePlayScene = function(game, stage)
     //check out battery
     l = new level();
     l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [0,];
     l.m_correct = [0.5,];
     l.m_label = ["Rate",];
@@ -1028,6 +1033,7 @@ var GamePlayScene = function(game, stage)
     //improve charge rate
     l = new level();
     l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [0.5,];
     l.m_correct = [1,];
     l.m_label = ["Rate",];
@@ -1062,6 +1068,7 @@ var GamePlayScene = function(game, stage)
     //check crystals
     l = new level();
     l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [1,];
     l.m_correct = [1.1,];
     l.m_label = ["Rate",];
@@ -1096,6 +1103,7 @@ var GamePlayScene = function(game, stage)
     //initial charge rate
     l = new level();
     l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [0,];
     l.m_correct = [1,];
     l.m_label = ["Rate",];
@@ -1130,6 +1138,7 @@ var GamePlayScene = function(game, stage)
     //check crystals
     l = new level();
     l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [1.1,];
     l.m_correct = [1.2,];
     l.m_label = ["Rate",];
