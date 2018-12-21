@@ -1013,9 +1013,9 @@ var GamePlayScene = function(game, stage)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
     for(var j = 0; j < 0; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano = 0;
+    l.pano = 1;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 0.4;
     l.skip_context = 0;
     l.skip_zoom = 1;
     l.skip_labels = 0;
