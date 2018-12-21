@@ -289,11 +289,13 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.lab.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
-        if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.improve);
+        if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.pre_improve);
         gg.cur_level.text_stage++;
         gg.stage_t = 0;
         break;
       case MODE_IMPROVE_IN:
+        if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.improve);
+        gg.cur_level.text_stage++;
         break;
       case MODE_IMPROVE:
         break;
