@@ -81,7 +81,7 @@ var english_text =
       get_timer(80), "You look like you need to lie down... ", CONTENT_AI, EMOTE_NULL,
       trigger_click, "I'm fine, Cris. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(100), "Here's our initial crystal count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(60), "Existing Crystals", CONTENT_CONSTANT, 4,
       get_timer(80), "Drag the number into our equation.", CONTENT_AI, EMOTE_NULL,
       get_timer(100), "Then change the rate so our data matches up!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -165,7 +165,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(100), "And here's the new crystal count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(60), "Existing Crystals", CONTENT_CONSTANT, 4,
       get_timer(80), "You need to figure out the rate!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -251,7 +251,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(60), "Here's our crystal count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(60), "Existing Crystals", CONTENT_CONSTANT, 4,
       get_timer(80), "Go ahead! You know the drill.", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Ha.... get it? The DRILL?", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "🤣🤣🤣🤣", CONTENT_AI, EMOTE_NULL,
@@ -559,7 +559,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "Let's try that. We have a few known constants.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Rate", CONTENT_CONSTANT, 4,
+      get_timer(20), "Mining Rate", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
