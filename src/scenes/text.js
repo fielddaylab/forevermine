@@ -63,10 +63,16 @@ var english_text =
       get_timer(60), "Drag it over to the table!", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
-    labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
     [
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(60), "You need to label our equation!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ]
+    labels: //WORKSPACE: variables labelled, need to label constants
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the constants in our model.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Go ahead. Give it a try!", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
@@ -154,7 +160,13 @@ var english_text =
       get_timer(80), "Here's the new data from last night!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
-    labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ]
+    labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
     ],
@@ -240,7 +252,13 @@ var english_text =
       get_timer(120), "Oh, right! Here ya go!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
-    labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ]
+    labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
     ],
@@ -319,7 +337,13 @@ var english_text =
       get_timer(80), "Here's the battery-charging data!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
-    labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ]
+    labels: //WORKSPACE: variables labelled, need to label constants
     [
       trigger_click, "So... I need to label the equation, right?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(120), "Yep! You're gettin' the hang of this!", CONTENT_AI, EMOTE_NULL,
@@ -399,7 +423,13 @@ var english_text =
       get_timer(20), "Here's the new data!", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
-    labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ]
+    labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
     ],
@@ -471,7 +501,13 @@ var english_text =
       get_timer(20), "Drag the data onto the table.", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
-    labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ]
+    labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
     ],
@@ -547,7 +583,13 @@ var english_text =
       get_timer(20), "Here's the data I have on the subject.", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
-    labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ]
+    labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "I'm not sure how this can be modelled.", CONTENT_AI, EMOTE_NULL,
@@ -616,7 +658,13 @@ var english_text =
       get_timer(20), "Here's the data I have on the subject.", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
-    labels: //WORKSPACE: data imported, empty model framework shown. lead into "pick labels"
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ]
+    labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "I'm not sure how this can be modelled.", CONTENT_AI, EMOTE_NULL,

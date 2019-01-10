@@ -215,9 +215,9 @@ var content_dragger = function()
 
     self.drag(evt);
 
-    if(!gg.table.data_visible && self.ptWithinData(evt))                                { self.dragging_data = 1;     return 1; }
-    if(gg.table.data_visible && gg.cur_level.text_stage < 9 && self.ptWithinSim(evt))   { self.dragging_sim = 1;      return 1; }
-    if(self.ptWithinConstant(evt))                                                      { self.dragging_constant = 1; return 1; }
+    if(!gg.table.data_visible && self.ptWithinData(evt))                             { self.dragging_data = 1;     return 1; }
+    if(gg.table.data_visible && gg.cur_level.progress < 10 && self.ptWithinSim(evt)) { self.dragging_sim = 1;      return 1; }
+    if(self.ptWithinConstant(evt))                                                   { self.dragging_constant = 1; return 1; }
     self.dragging = 0;
     return 0;
   }
@@ -232,17 +232,27 @@ var content_dragger = function()
     {
       gg.table.data_visible = 1;
       gg.table.verify();
-      if(gg.cur_level.skip_labels)
+      if(gg.cur_level.skip_axis)
       {
-        //gg.message_box.nq_group(gg.cur_level.text.labels);//skip!
-        gg.cur_level.text_stage++;
-        gg.message_box.nq_group(gg.cur_level.text.constants);
-        gg.cur_level.text_stage++;
+        //gg.message_box.nq_group(gg.cur_level.text.axis);//skip!
+        gg.cur_level.progress++;
+        if(gg.cur_level.skip_labels)
+        {
+          //gg.message_box.nq_group(gg.cur_level.text.labels);//skip!
+          gg.cur_level.progress++;
+          gg.message_box.nq_group(gg.cur_level.text.constants);
+          gg.cur_level.progress++;
+        }
+        else
+        {
+          gg.message_box.nq_group(gg.cur_level.text.labels);
+          gg.cur_level.progress++;
+        }
       }
       else
       {
-        gg.message_box.nq_group(gg.cur_level.text.labels);
-        gg.cur_level.text_stage++;
+        gg.message_box.nq_group(gg.cur_level.text.axis);
+        gg.cur_level.progress++;
       }
       gg.stage_t = 0;
     }
@@ -253,18 +263,18 @@ var content_dragger = function()
       {
         gg.cur_level.correct = 1;
         gg.message_box.nq_group(gg.cur_level.text.review);
-        gg.cur_level.text_stage++;
+        gg.cur_level.progress++;
         if(gg.cur_level.skip_zoom)
         {
           gg.message_box.nq_group(gg.cur_level.text.debrief);
-          gg.cur_level.text_stage++;
+          gg.cur_level.progress++;
         }
         gg.stage_t = 0;
       }
       else
       {
         gg.message_box.nq_group(gg.cur_level.text.submitted_incorrect);
-        //gg.cur_level.text_stage++; //do not increment!
+        //gg.cur_level.progress++; //do not increment!
       }
 
     }
@@ -1063,13 +1073,13 @@ var editable_line = function()
         if(lcorrect)
         {
           gg.message_box.nq_group(gg.cur_level.text.constants);
-          gg.cur_level.text_stage++;
+          gg.cur_level.progress++;
           gg.stage_t = 0;
         }
         else
         {
           gg.message_box.nq_group(gg.cur_level.text.labels_incorrect);
-          //gg.cur_level.text_stage++; //don't advance
+          //gg.cur_level.progress++; //don't advance
         }
       }
     }
@@ -1077,13 +1087,13 @@ var editable_line = function()
   self.filter = function(keyer,blurer,dragger,clicker)
   {
     var check = 1;
-    if(gg.cur_level.text_stage == 6)
+    if(gg.cur_level.progress == 7)
     {
       for(var i = 0; check && i < self.m_select_btn.length; i++) check = !clicker.filter(self.m_select_btn[i]);
       for(var i = 0; check && i < self.b_select_btn.length; i++) check = !clicker.filter(self.b_select_btn[i]);
       if(check) clicker.consume(self.select_label);
     }
-    else if(gg.cur_level.text_stage > 6)
+    else if(gg.cur_level.progress > 7)
     {
       if(keyer)
       {
@@ -1208,7 +1218,7 @@ var editable_line = function()
     //selector
     gg.ctx.font = "20px DisposableDroidBB";
     gg.ctx.fillStyle = white;
-    if(gg.cur_level.text_stage < 7)
+    if(gg.cur_level.progress < 8)
     {
       if(self.label_selector_n > -1)
       {
@@ -1270,7 +1280,7 @@ var editable_line = function()
           gg.ctx.fillText(gg.cur_level.b_label[self.m_label[i]-mlen],x,b.y+yoff+b.h-pad);
         }
       }
-      else if(gg.cur_level.text_stage == 6)
+      else if(gg.cur_level.progress == 7)
         gg.ctx.drawImage(gg.notice_img, x+b.h/2, b.y+yoff+b.h/4, 20,20);
     }
     for(var i = 0; i < self.b_select_btn.length; i++)
@@ -1290,14 +1300,14 @@ var editable_line = function()
           gg.ctx.fillText(gg.cur_level.b_label[self.b_label[i]-mlen],x,b.y+yoff+b.h-pad);
         }
       }
-      else if(gg.cur_level.text_stage == 6)
+      else if(gg.cur_level.progress == 7)
         gg.ctx.drawImage(gg.notice_img,x+b.h/2, b.y+yoff+b.h/4,20,20);
     }
 
     //value strings
     gg.ctx.textAlign = "right";
     gg.ctx.font = self.font;
-    if(gg.cur_level.text_stage > 6)
+    if(gg.cur_level.progress > 7)
     {
       for(var i = 0; i < self.m_btn.length; i++)
       {
@@ -1363,10 +1373,10 @@ var table = function()
     self.correct = self.data_visible;
     for(var i = 0; i < self.predicted_data.length && i < self.known_data.length; i++)
       if(self.predicted_data[i] != self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
-    if(gg.cur_level.text_stage == 7 && self.correct && !old_correct)
+    if(gg.cur_level.progress == 8 && self.correct && !old_correct)
     {
       gg.message_box.nq_group(gg.cur_level.text.submit);
-      gg.cur_level.text_stage++;
+      gg.cur_level.progress++;
       gg.stage_t = 0;
     }
   }

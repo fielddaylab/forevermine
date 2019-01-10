@@ -55,6 +55,7 @@ var level = function()
 
   self.skip_context = 0;
   self.skip_zoom = 0;
+  self.skip_axis = 0;
   self.skip_labels = 0;
   self.skip_system = 0;
   self.skip_night = 0;
@@ -62,12 +63,12 @@ var level = function()
   self.text = {}; //see text.js for format
 
   //state
-  self.text_stage = 0;
+  self.progress = 0;
   self.correct = 0;
 
   self.reset = function()
   {
-    self.text_stage = 0;
+    self.progress = 0;
     self.correct = 0;
   }
 

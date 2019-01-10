@@ -104,7 +104,7 @@ var GamePlayScene = function(game, stage)
   self.reset_level = function()
   {
     gg.cur_level.correct = 0;
-    gg.cur_level.text_stage = 1;
+    gg.cur_level.progress = 1;
     gg.table.data_visible = 0;
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
@@ -244,13 +244,13 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CTX_IN:
         if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.context);
-        gg.cur_level.text_stage++;
+        gg.cur_level.progress++;
         break;
       case MODE_CTX:
         break;
       case MODE_CTX_OUT:
         if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.lets_go);
-        gg.cur_level.text_stage++;
+        gg.cur_level.progress++;
         gg.stage_t = 0;
         break;
       case MODE_PRE1:
@@ -259,14 +259,14 @@ var GamePlayScene = function(game, stage)
         if(gg.cur_level.skip_zoom)
         {
           //if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);//skip!
-          gg.cur_level.text_stage++;
+          gg.cur_level.progress++;
           if(!skipping) gg.message_box.nq_group(gg.cur_level.text.data);
-          gg.cur_level.text_stage++;
+          gg.cur_level.progress++;
         }
         else
         {
           if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);
-          gg.cur_level.text_stage++;
+          gg.cur_level.progress++;
         }
         gg.graph.stretch = 0;
         gg.stage_t = 0;
@@ -292,18 +292,18 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.pre_improve);
-        gg.cur_level.text_stage++;
+        gg.cur_level.progress++;
         gg.stage_t = 0;
         break;
       case MODE_IMPROVE_IN:
         if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.improve);
-        gg.cur_level.text_stage++;
+        gg.cur_level.progress++;
         break;
       case MODE_IMPROVE:
         break;
       case MODE_IMPROVE_OUT:
         if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.post);
-        gg.cur_level.text_stage++;
+        gg.cur_level.progress++;
         gg.stage_t = 0;
         break;
       case MODE_POST1:
@@ -316,7 +316,7 @@ var GamePlayScene = function(game, stage)
         gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
         gg.exposition_box.clear();
         if(!skipping) gg.exposition_box.nq_group(gg.next_level.text.pre_context);
-        gg.cur_level.text_stage++;
+        gg.cur_level.progress++;
         gg.stage_t = 0;
         break;
     }
@@ -364,7 +364,7 @@ var GamePlayScene = function(game, stage)
           else gg.next_level = gg.levels[0];
           gg.exposition_box.clear();
           gg.exposition_box.nq_group(gg.next_level.text.pre_context);
-          gg.next_level.text_stage++;
+          gg.next_level.progress++;
           gg.stage_t = 0;
           self.set_mode(MODE_PRE0,0);
         }
@@ -457,7 +457,7 @@ var GamePlayScene = function(game, stage)
           if(check) check = !dragger.filter(gg.message_box);
         }
 
-        switch(gg.cur_level.text_stage)
+        switch(gg.cur_level.progress)
         {
           case 0: //pre_context
           case 1: //context
@@ -470,32 +470,33 @@ var GamePlayScene = function(game, stage)
               gg.graph.stretch = min(gg.stage_t,100)/100;
             else gg.graph.stretch = 0;
             break;
-          case 5: //labels
+          case 5: //axis
+          case 6: //labels
             if(!gg.cur_level.skip_zoom)
               gg.graph.stretch = 1-(min(gg.stage_t,100)/100);
             break;
-          case 6: //constants
-          case 7: //submit
-          case 8: //review
+          case 7: //constants
+          case 8: //submit
+          case 9: //review
             gg.graph.stretch = 0;
           break;
-          case 9: //debrief
+          case 10: //debrief
             if(!gg.cur_level.skip_zoom)
               gg.graph.stretch = min(gg.stage_t,100)/100;
             break;
-          case 10: //pre_improve
+          case 11: //pre_improve
             if(!gg.cur_level.skip_zoom)
               gg.graph.stretch = 1;
             break;
-          case 11: //improve
+          case 12: //improve
             break;
-          case 12: //post
+          case 13: //post
             break;
         }
 
         if(gg.message_box.requested_advance)
         {
-          switch(gg.cur_level.text_stage)
+          switch(gg.cur_level.progress)
           {
             case 0: //pre_context
             case 1: //context
@@ -506,25 +507,26 @@ var GamePlayScene = function(game, stage)
               if(gg.cur_level.text.data.length)
               {
                 gg.message_box.nq_group(gg.cur_level.text.data);
-                gg.cur_level.text_stage++;
+                gg.cur_level.progress++;
                 gg.stage_t = 0;
               }
               break;
-            case 5: //labels
-            case 6: //constants
-            case 7: //submit
-            case 8: //review
+            case 5: //axis
+            case 6: //labels
+            case 7: //constants
+            case 8: //submit
+            case 9: //review
               break;
-            case 9: //debrief
+            case 10: //debrief
               gg.message_box.nq_group(gg.cur_level.text.debrief);
-              gg.cur_level.text_stage++;
+              gg.cur_level.progress++;
               gg.stage_t = 0;
               break;
-            case 10: //pre_improve
+            case 11: //pre_improve
               break;
-            case 11: //improve
+            case 12: //improve
               break;
-            case 12: //post
+            case 13: //post
               break;
           }
         }
@@ -535,7 +537,7 @@ var GamePlayScene = function(game, stage)
         gg.timeline.tick();
         gg.cur_level.tick();
         gg.message_box.tick();
-        if(gg.cur_level.text_stage != 10) gg.message_box.prompt_end = 0;
+        if(gg.cur_level.progress != 11) gg.message_box.prompt_end = 0;
       }
         break;
       case MODE_WORK_OUT:
@@ -918,6 +920,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
+    l.skip_axis = 1;
     l.skip_labels = 0;
     l.skip_system = 1;
     l.skip_night = 0;
@@ -953,6 +956,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
+    l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
     l.skip_night = 0;
@@ -988,6 +992,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
+    l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 0;
     l.skip_night = 0;
@@ -1023,6 +1028,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.4;
     l.skip_context = 0;
     l.skip_zoom = 1;
+    l.skip_axis = 1;
     l.skip_labels = 0;
     l.skip_system = 1;
     l.skip_night = 0;
@@ -1058,6 +1064,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 1;
+    l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
     l.skip_night = 0;
@@ -1093,6 +1100,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 1;
     l.skip_zoom = 0;
+    l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
     l.skip_night = 1;
@@ -1128,6 +1136,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 1;
+    l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
     l.skip_night = 0;
@@ -1163,6 +1172,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
+    l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 0;
     l.skip_night = 0;
