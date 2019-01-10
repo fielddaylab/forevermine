@@ -68,7 +68,7 @@ var english_text =
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ]
+    ],
     labels: //WORKSPACE: variables labelled, need to label constants
     [
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
@@ -165,7 +165,7 @@ var english_text =
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ]
+    ],
     labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
@@ -257,7 +257,7 @@ var english_text =
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ]
+    ],
     labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
@@ -342,7 +342,7 @@ var english_text =
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ]
+    ],
     labels: //WORKSPACE: variables labelled, need to label constants
     [
       trigger_click, "So... I need to label the equation, right?", CONTENT_PLAYER, EMOTE_NULL,
@@ -428,7 +428,7 @@ var english_text =
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ]
+    ],
     labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
@@ -506,7 +506,7 @@ var english_text =
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ]
+    ],
     labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
@@ -588,7 +588,7 @@ var english_text =
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ]
+    ],
     labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
@@ -663,7 +663,7 @@ var english_text =
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ]
+    ],
     labels: //WORKSPACE: variables labelled, need to label constants
     [
       get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
