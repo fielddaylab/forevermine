@@ -520,9 +520,7 @@ var graph = function()
 
     //grid
     gg.ctx.fillStyle = white;
-    gg.ctx.strokeStyle = white;
-    gg.ctx.lineWidth = 4;
-    gg.ctx.strokeRect(self.x,self.y,self.w,self.h);
+    gg.ctx.strokeStyle = "rgba(255,255,255,0.5)";
     gg.ctx.lineWidth = 2;
       //vertical lines
     if(t < 0.5)
@@ -620,6 +618,10 @@ var graph = function()
       gg.ctx.fillText("You Die", self.x+5, zy+15);
       gg.ctx.globalAlpha = 1;
     }
+
+    gg.ctx.strokeStyle = white;
+    gg.ctx.lineWidth = 4;
+    gg.ctx.strokeRect(self.x,self.y,self.w,self.h);
   }
 }
 
@@ -847,9 +849,9 @@ var editable_line = function()
       self.eqn_w += self.m_btn[m_i].w;
       m_i++;
       if(self.b.length == 1)
-        self.eqn_strings[eqn_i] = "*X + ";
+        self.eqn_strings[eqn_i] = "*O + ";
       else
-        self.eqn_strings[eqn_i] = "*X + (";
+        self.eqn_strings[eqn_i] = "*O + (";
       self.eqn_x_i = eqn_i;
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
@@ -875,9 +877,9 @@ var editable_line = function()
       self.eqn_w += self.m_btn[m_i].w;
       m_i++;
       if(self.b.length == 1)
-        self.eqn_strings[eqn_i] = ")X + ";
+        self.eqn_strings[eqn_i] = ")O + ";
       else
-        self.eqn_strings[eqn_i] = ")X + (";
+        self.eqn_strings[eqn_i] = ")O + (";
       self.eqn_x_i = eqn_i;
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
@@ -1770,8 +1772,8 @@ var message_box = function()
       if(floor(self.advance_t/20)%2)
         drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
       gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
-      var s = 30;
-      gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s/2,self.input_y-s/2,s,s);
+      var s = 20;
+      gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s,self.input_y,s,s);
     }
 
     //"ai typing"
@@ -1792,8 +1794,8 @@ var message_box = function()
     gg.ctx.imageSmoothingEnabled = 1;
     if(self.prompt_end)
     {
-      var s = 30;
-      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s/2,self.monitor_y+self.monitor_h/4-s/2,s,s);
+      var s = 20;
+      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y,s,s);
     }
     var h = gg.neck_heart_img.height/gg.neck_heart_img.width*self.monitor_w;
     gg.ctx.drawImage(gg.neck_heart_img,self.monitor_x,self.monitor_y+self.monitor_h-h/2,self.monitor_w,h);
