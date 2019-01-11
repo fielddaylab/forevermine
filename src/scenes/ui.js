@@ -134,6 +134,8 @@ var content_dragger = function()
   self.x = 0;
   self.y = 0;
 
+  self.dragging_x = 0;
+  self.dragging_y = 0;
   self.dragging_data = 0;
   self.dragging_sim = 0;
   self.dragging_constant = 0;
@@ -141,6 +143,16 @@ var content_dragger = function()
   self.last_evt = 0;
 
   //drag
+  self.ptWithinX = function(evt)
+  {
+    if(gg.line.x_set) return 0;
+    return 1;
+  }
+  self.ptWithinY = function(evt)
+  {
+    if(gg.line.y_set) return 0;
+    return 1;
+  }
   self.ptWithinData = function(evt)
   {
     var mb = gg.message_box;
@@ -206,15 +218,29 @@ var content_dragger = function()
     var t = gg.table;
     return ptWithin(t.x,t.y,t.w,t.h, evt.doX,evt.doY);
   }
+  self.ptWithinEqnX = function(evt)
+  {
+    var e = gg.line;
+    return ptWithin(e.eqn_xs[e.eqn_x_i], e.eqn_y+e.font_h/2, e.font_h, e.font_h,  evt.doX,evt.doY);
+  }
+  self.ptWithinEqnY = function(evt)
+  {
+    var e = gg.line;
+    return ptWithin(e.eqn_xs[0], e.eqn_y+e.font_h/2, e.font_h, e.font_h,  evt.doX,evt.doY);
+  }
 
   self.dragStart = function(evt)
   {
+    self.dragging_x = 0;
+    self.dragging_y = 0;
     self.dragging_data = 0;
     self.dragging_sim = 0;
     self.dragging_constant = 0;
 
     self.drag(evt);
 
+    if(gg.cur_level.msg_progress == 6 && self.ptWithinX(evt))                        { self.dragging_x = 1;     return 1; }
+    if(gg.cur_level.msg_progress == 6 && self.ptWithinY(evt))                        { self.dragging_y = 1;     return 1; }
     if(!gg.table.data_visible && self.ptWithinData(evt))                             { self.dragging_data = 1;     return 1; }
     if(gg.table.data_visible && gg.cur_level.progress < 10 && self.ptWithinSim(evt)) { self.dragging_sim = 1;      return 1; }
     if(self.ptWithinConstant(evt))                                                   { self.dragging_constant = 1; return 1; }
@@ -228,6 +254,44 @@ var content_dragger = function()
   self.dragFinish = function(evt)
   {
     if(!evt) evt = self.last_evt;
+    if(self.dragging_x && self.ptWithinEqnX(evt))
+    {
+      gg.line.x_set = 1;
+      if(gg.line.y_set)
+      {
+        if(gg.cur_level.skip_labels)
+        {
+          //gg.message_box.nq_group(gg.cur_level.text.labels);//skip!
+          gg.cur_level.progress++;
+          gg.message_box.nq_group(gg.cur_level.text.constants);
+          gg.cur_level.progress++;
+        }
+        else
+        {
+          gg.message_box.nq_group(gg.cur_level.text.labels);
+          gg.cur_level.progress++;
+        }
+      }
+    }
+    if(self.dragging_y && self.ptWithinEqnY(evt))
+    {
+      gg.line.y_set = 1;
+      if(gg.line.x_set)
+      {
+        if(gg.cur_level.skip_labels)
+        {
+          //gg.message_box.nq_group(gg.cur_level.text.labels);//skip!
+          gg.cur_level.progress++;
+          gg.message_box.nq_group(gg.cur_level.text.constants);
+          gg.cur_level.progress++;
+        }
+        else
+        {
+          gg.message_box.nq_group(gg.cur_level.text.labels);
+          gg.cur_level.progress++;
+        }
+      }
+    }
     if(self.dragging_data && self.ptWithinTable(evt))
     {
       gg.table.data_visible = 1;
@@ -342,6 +406,14 @@ var content_dragger = function()
           gg.ctx.fillText("<- DROP",gg.message_box.w+10,gg.canv.height/2);
         }
       }
+    }
+    if(self.dragging_x)
+    {
+
+    }
+    if(self.dragging_y)
+    {
+
     }
     if(self.dragging_data)
     {
@@ -746,6 +818,8 @@ var editable_line = function()
   self.eqn_ws = [0];
   self.eqn_xs = [0];
   self.eqn_x_i = 0;
+  self.x_set = 0;
+  self.y_set = 0;
 
   self.m_select_btn = [];
   self.m_btn = [];
@@ -787,6 +861,16 @@ var editable_line = function()
     self.m_btn = [];
     self.minc_btn = [];
     self.mdec_btn = [];
+    if(gg.cur_level.skip_axis)
+    {
+      self.x_set = 1;
+      self.y_set = 1;
+    }
+    else
+    {
+      self.x_set = 0;
+      self.y_set = 0;
+    }
     for(var i = 0; i < gg.cur_level.m_starting.length; i++)
     {
       if(gg.cur_level.skip_labels)
@@ -1206,8 +1290,10 @@ var editable_line = function()
       for(var i = 0; i < self.eqn_strings.length; i++)
         gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
       gg.ctx.font = "15px DisposableDroidBB";
+      if(self.y_set)
       drawImageSizeCentered(gg.cur_level.y_icon, self.eqn_xs[0], self.eqn_y+self.font_h*2/3, self.font_h*1.5, gg.ctx);
       gg.ctx.fillText(gg.cur_level.y_label,self.eqn_xs[0],self.eqn_y+self.font_h*1.5);
+      if(self.x_set)
       drawImageSizeCentered(gg.time_img, self.eqn_xs[self.eqn_x_i]+self.font_h*3/4, self.eqn_y+self.font_h*2/3, self.font_h*4/5, gg.ctx);
       gg.ctx.fillText("HOURS",self.eqn_xs[self.eqn_x_i]+self.font_h/3,self.eqn_y+self.font_h*1.5);
       gg.ctx.font = "20px DisposableDroidBB";
@@ -1293,7 +1379,7 @@ var editable_line = function()
             gg.ctx.fillText(gg.cur_level.b_label[ind],x,b.y+yoff+b.h-pad);
           }
         }
-        else if(gg.cur_level.progress == 7)
+        else if(gg.cur_level.msg_progress == 7)
           gg.ctx.drawImage(gg.notice_img, x+b.h/2, b.y+yoff+b.h/4, 20,20);
       }
       for(var i = 0; i < self.b_select_btn.length; i++)
@@ -1315,7 +1401,7 @@ var editable_line = function()
             gg.ctx.fillText(gg.cur_level.b_label[ind],x,b.y+yoff+b.h-pad);
           }
         }
-        else if(gg.cur_level.progress == 7)
+        else if(gg.cur_level.msg_progress == 7)
           gg.ctx.drawImage(gg.notice_img,x+b.h/2, b.y+yoff+b.h/4,20,20);
       }
 
