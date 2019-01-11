@@ -66,11 +66,13 @@ var level = function()
 
   //state
   self.progress = 0;
+  self.msg_progress = 0;
   self.correct = 0;
 
   self.reset = function()
   {
     self.progress = 0;
+    self.msg_progress = 0;
     self.correct = 0;
   }
 

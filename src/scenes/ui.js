@@ -413,6 +413,7 @@ var exposition_box = function()
   {
     self.displayed_i++;
     if(self.displayed_i < self.texts.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
+    if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
   }
 
   self.click = function(evt)
@@ -1190,156 +1191,159 @@ var editable_line = function()
       }
     }
 
-    //eqn
-    var yoff = 5;
-    var b;
-    var total_labels = gg.cur_level.m_label.length+gg.cur_level.b_label.length;
-    var mlen = gg.cur_level.m_label.length;
+    if(gg.cur_level.msg_progress >= 6)
+    {
+      //eqn
+      var yoff = 5;
+      var b;
+      var total_labels = gg.cur_level.m_label.length+gg.cur_level.b_label.length;
+      var mlen = gg.cur_level.m_label.length;
 
-    //eqn strings
-    gg.ctx.font = self.font;
-    gg.ctx.fillStyle = white;
-    gg.ctx.textAlign = "left";
-    for(var i = 0; i < self.eqn_strings.length; i++)
-      gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
-    gg.ctx.font = "15px DisposableDroidBB";
-    drawImageSizeCentered(gg.cur_level.y_icon, self.eqn_xs[0], self.eqn_y+self.font_h*2/3, self.font_h*1.5, gg.ctx);
-    gg.ctx.fillText(gg.cur_level.y_label,self.eqn_xs[0],self.eqn_y+self.font_h*1.5);
-    drawImageSizeCentered(gg.time_img, self.eqn_xs[self.eqn_x_i]+self.font_h*3/4, self.eqn_y+self.font_h*2/3, self.font_h*4/5, gg.ctx);
-    gg.ctx.fillText("HOURS",self.eqn_xs[self.eqn_x_i]+self.font_h/3,self.eqn_y+self.font_h*1.5);
-    gg.ctx.font = "20px DisposableDroidBB";
-    //boxes
-    for(var i = 0; i < self.m_select_btn.length; i++)
-    {
-      b = self.m_select_btn[i];
-      gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
-    }
-    for(var i = 0; i < self.b_select_btn.length; i++)
-    {
-      b = self.b_select_btn[i];
-      gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
-    }
+      //eqn strings
+      gg.ctx.font = self.font;
+      gg.ctx.fillStyle = white;
+      gg.ctx.textAlign = "left";
+      for(var i = 0; i < self.eqn_strings.length; i++)
+        gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+      gg.ctx.font = "15px DisposableDroidBB";
+      drawImageSizeCentered(gg.cur_level.y_icon, self.eqn_xs[0], self.eqn_y+self.font_h*2/3, self.font_h*1.5, gg.ctx);
+      gg.ctx.fillText(gg.cur_level.y_label,self.eqn_xs[0],self.eqn_y+self.font_h*1.5);
+      drawImageSizeCentered(gg.time_img, self.eqn_xs[self.eqn_x_i]+self.font_h*3/4, self.eqn_y+self.font_h*2/3, self.font_h*4/5, gg.ctx);
+      gg.ctx.fillText("HOURS",self.eqn_xs[self.eqn_x_i]+self.font_h/3,self.eqn_y+self.font_h*1.5);
+      gg.ctx.font = "20px DisposableDroidBB";
+      //boxes
+      for(var i = 0; i < self.m_select_btn.length; i++)
+      {
+        b = self.m_select_btn[i];
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
+      }
+      for(var i = 0; i < self.b_select_btn.length; i++)
+      {
+        b = self.b_select_btn[i];
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
+      }
 
-    //selector
-    gg.ctx.font = "20px DisposableDroidBB";
-    gg.ctx.fillStyle = white;
-    if(gg.cur_level.progress < 8)
-    {
-      if(self.label_selector_n > -1)
+      //selector
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillStyle = white;
+      if(gg.cur_level.progress < 8)
       {
-        if(self.label_selector_n < self.m_select_btn.length)
-          b = self.m_select_btn[self.label_selector_n];
-        else
-          b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
-        //gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+b.h,b.w,b.h/2);
-        for(var i = 0; i < gg.cur_level.m_label.length; i++)
+        if(self.label_selector_n > -1)
         {
-          var x = b.x+(i/total_labels)*b.w+pad;
-          drawImageSizeCentered(gg.cur_level.m_icon[i], x+b.h/4, b.y+yoff+b.h*5/4, b.h/2, gg.ctx);
-          for(var j = 0; j < gg.cur_level.m_label_fmt[i].length; j++)
-            gg.ctx.fillText(gg.cur_level.m_label_fmt[i][j],x,b.y+yoff+b.h+b.h/2+j*20);
-        }
-        for(var i = 0; i < gg.cur_level.b_label.length; i++)
-        {
-          var x = b.x+((i+mlen)/total_labels)*b.w+pad;
-          drawImageSizeCentered(gg.cur_level.b_icon[i], x+b.h/4, b.y+yoff+b.h*5/4, b.h/2, gg.ctx);
-          for(var j = 0; j < gg.cur_level.b_label_fmt[i].length; j++)
-            gg.ctx.fillText(gg.cur_level.b_label_fmt[i][j],x,b.y+yoff+b.h+b.h/2+j*20);
-        }
-      }
-    }
-    else
-    {
-      //value selector
-      gg.ctx.fillStyle = "#63ADC3"; //blue highlit
-      for(var i = 0; i < self.m_btn.length; i++)
-      {
-        b = self.m_btn[i];
-        if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
-        drawImageBox(gg.arrow_up_img,self.minc_btn[i],gg.ctx);
-        drawImageBox(gg.arrow_down_img,self.mdec_btn[i],gg.ctx);
-      }
-      for(var i = 0; i < self.b_btn.length; i++)
-      {
-        b = self.b_btn[i];
-        if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
-        drawImageBox(gg.arrow_up_img,self.binc_btn[i],gg.ctx);
-        drawImageBox(gg.arrow_down_img,self.bdec_btn[i],gg.ctx);
-      }
-    }
-
-    //labels
-    gg.ctx.fillStyle = white;
-    var ind;
-    for(var i = 0; i < self.m_select_btn.length; i++)
-    {
-      b = self.m_select_btn[i];
-      var x = b.x+pad;
-      if(self.m_label[i] > -1)
-      {
-        if(self.m_label[i] < mlen)
-        {
-          ind = self.m_label[i];
-          drawImageSizeCentered(gg.cur_level.m_icon[ind], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
-          gg.ctx.fillText(gg.cur_level.m_label[ind],x,b.y+yoff+b.h-pad);
-        }
-        else
-        {
-          ind = self.m_label[i]-mlen;
-          drawImageSizeCentered(gg.cur_level.b_icon[ind], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
-          gg.ctx.fillText(gg.cur_level.b_label[ind],x,b.y+yoff+b.h-pad);
+          if(self.label_selector_n < self.m_select_btn.length)
+            b = self.m_select_btn[self.label_selector_n];
+          else
+            b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
+          //gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+b.h,b.w,b.h/2);
+          for(var i = 0; i < gg.cur_level.m_label.length; i++)
+          {
+            var x = b.x+(i/total_labels)*b.w+pad;
+            drawImageSizeCentered(gg.cur_level.m_icon[i], x+b.h/4, b.y+yoff+b.h*5/4, b.h/2, gg.ctx);
+            for(var j = 0; j < gg.cur_level.m_label_fmt[i].length; j++)
+              gg.ctx.fillText(gg.cur_level.m_label_fmt[i][j],x,b.y+yoff+b.h+b.h/2+j*20);
+          }
+          for(var i = 0; i < gg.cur_level.b_label.length; i++)
+          {
+            var x = b.x+((i+mlen)/total_labels)*b.w+pad;
+            drawImageSizeCentered(gg.cur_level.b_icon[i], x+b.h/4, b.y+yoff+b.h*5/4, b.h/2, gg.ctx);
+            for(var j = 0; j < gg.cur_level.b_label_fmt[i].length; j++)
+              gg.ctx.fillText(gg.cur_level.b_label_fmt[i][j],x,b.y+yoff+b.h+b.h/2+j*20);
+          }
         }
       }
-      else if(gg.cur_level.progress == 7)
-        gg.ctx.drawImage(gg.notice_img, x+b.h/2, b.y+yoff+b.h/4, 20,20);
-    }
-    for(var i = 0; i < self.b_select_btn.length; i++)
-    {
-      b = self.b_select_btn[i];
-      var x = b.x+pad;
-      if(self.b_label[i] > -1)
+      else
       {
-        if(self.b_label[i] < mlen)
+        //value selector
+        gg.ctx.fillStyle = "#63ADC3"; //blue highlit
+        for(var i = 0; i < self.m_btn.length; i++)
         {
-          ind = self.b_label[i];
-          drawImageSizeCentered(gg.cur_level.m_icon[ind], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
-          gg.ctx.fillText(gg.cur_level.m_label[ind],x,b.y+yoff+b.h-pad);
+          b = self.m_btn[i];
+          if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
+          drawImageBox(gg.arrow_up_img,self.minc_btn[i],gg.ctx);
+          drawImageBox(gg.arrow_down_img,self.mdec_btn[i],gg.ctx);
         }
-        else
+        for(var i = 0; i < self.b_btn.length; i++)
         {
-          ind = self.b_label[i]-mlen;
-          drawImageSizeCentered(gg.cur_level.b_icon[ind], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
-          gg.ctx.fillText(gg.cur_level.b_label[ind],x,b.y+yoff+b.h-pad);
+          b = self.b_btn[i];
+          if(b.highlit) gg.ctx.fillRect(b.x+1,b.y+yoff+1,b.w-2,b.h-2);
+          drawImageBox(gg.arrow_up_img,self.binc_btn[i],gg.ctx);
+          drawImageBox(gg.arrow_down_img,self.bdec_btn[i],gg.ctx);
         }
       }
-      else if(gg.cur_level.progress == 7)
-        gg.ctx.drawImage(gg.notice_img,x+b.h/2, b.y+yoff+b.h/4,20,20);
-    }
 
-    //value strings
-    gg.ctx.textAlign = "right";
-    gg.ctx.font = self.font;
-    if(gg.cur_level.progress > 7)
-    {
-      for(var i = 0; i < self.m_btn.length; i++)
+      //labels
+      gg.ctx.fillStyle = white;
+      var ind;
+      for(var i = 0; i < self.m_select_btn.length; i++)
       {
-        b = self.m_btn[i];
-        gg.ctx.fillText(self.m[i],b.x+b.w-pad,self.eqn_y+self.font_h);
+        b = self.m_select_btn[i];
+        var x = b.x+pad;
+        if(self.m_label[i] > -1)
+        {
+          if(self.m_label[i] < mlen)
+          {
+            ind = self.m_label[i];
+            drawImageSizeCentered(gg.cur_level.m_icon[ind], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            gg.ctx.fillText(gg.cur_level.m_label[ind],x,b.y+yoff+b.h-pad);
+          }
+          else
+          {
+            ind = self.m_label[i]-mlen;
+            drawImageSizeCentered(gg.cur_level.b_icon[ind], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            gg.ctx.fillText(gg.cur_level.b_label[ind],x,b.y+yoff+b.h-pad);
+          }
+        }
+        else if(gg.cur_level.progress == 7)
+          gg.ctx.drawImage(gg.notice_img, x+b.h/2, b.y+yoff+b.h/4, 20,20);
       }
-      for(var i = 0; i < self.b_btn.length; i++)
+      for(var i = 0; i < self.b_select_btn.length; i++)
       {
-        b = self.b_btn[i];
-        gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+self.font_h);
+        b = self.b_select_btn[i];
+        var x = b.x+pad;
+        if(self.b_label[i] > -1)
+        {
+          if(self.b_label[i] < mlen)
+          {
+            ind = self.b_label[i];
+            drawImageSizeCentered(gg.cur_level.m_icon[ind], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            gg.ctx.fillText(gg.cur_level.m_label[ind],x,b.y+yoff+b.h-pad);
+          }
+          else
+          {
+            ind = self.b_label[i]-mlen;
+            drawImageSizeCentered(gg.cur_level.b_icon[ind], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            gg.ctx.fillText(gg.cur_level.b_label[ind],x,b.y+yoff+b.h-pad);
+          }
+        }
+        else if(gg.cur_level.progress == 7)
+          gg.ctx.drawImage(gg.notice_img,x+b.h/2, b.y+yoff+b.h/4,20,20);
       }
+
+      //value strings
+      gg.ctx.textAlign = "right";
+      gg.ctx.font = self.font;
+      if(gg.cur_level.progress > 7)
+      {
+        for(var i = 0; i < self.m_btn.length; i++)
+        {
+          b = self.m_btn[i];
+          gg.ctx.fillText(self.m[i],b.x+b.w-pad,self.eqn_y+self.font_h);
+        }
+        for(var i = 0; i < self.b_btn.length; i++)
+        {
+          b = self.b_btn[i];
+          gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+self.font_h);
+        }
+      }
+
+      gg.ctx.textAlign = "left";
+
+      /*
+      gg.ctx.fillStyle = light_gray;
+      gg.ctx.fillText("X = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
+      gg.ctx.fillText("Y = "+fdisp(self.m*fdisp(gg.timeline.t,1)+self.b,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
+      */
     }
-
-    gg.ctx.textAlign = "left";
-
-/*
-    gg.ctx.fillStyle = light_gray;
-    gg.ctx.fillText("X = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
-    gg.ctx.fillText("Y = "+fdisp(self.m*fdisp(gg.timeline.t,1)+self.b,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
-*/
 
   }
 
@@ -1613,6 +1617,7 @@ var message_box = function()
     self.calculate_top();
     if(self.types[self.displayed_i-1] == CONTENT_AI)
       gg.monitor.talk_t = 0;
+    if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
   }
 
   self.click = function(evt)
