@@ -46,7 +46,7 @@ var GamePlayScene = function(game, stage)
       gg.table.y = gg.canv.height-gg.table.h-10;
       gg.table.w = gg.canv.width-gg.table.x-30;
 
-      gg.graph.w = 200;
+      gg.graph.w = gg.canv.width-gg.message_box.w-150-30;
       gg.graph.h = 200;
       gg.graph.x = gg.canv.width-gg.graph.w-30;
       gg.graph.y = 30;
@@ -61,8 +61,6 @@ var GamePlayScene = function(game, stage)
       gg.line.x = gg.message_box.x+gg.message_box.w;
       gg.line.y = 0;
       gg.line.w = gg.canv.width-gg.line.x;
-
-      gg.graph.size();
     }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
@@ -268,7 +266,7 @@ var GamePlayScene = function(game, stage)
           if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);
           gg.cur_level.progress++;
         }
-        gg.graph.stretch = 0;
+        gg.graph.zoom = 0;
         gg.stage_t = 0;
         break;
       case MODE_WORK:
@@ -463,30 +461,30 @@ var GamePlayScene = function(game, stage)
           case 1: //context
           case 2: //lets_go
           case 3: //status
-            gg.graph.stretch = 0;
+            gg.graph.zoom = 0;
             break;
           case 4: //data
             if(gg.mode == MODE_WORK && !gg.cur_level.skip_zoom)
-              gg.graph.stretch = min(gg.stage_t,100)/100;
-            else gg.graph.stretch = 0;
+              gg.graph.zoom = min(gg.stage_t,100)/100;
+            else gg.graph.zoom = 0;
             break;
           case 5: //axis
           case 6: //labels
             if(!gg.cur_level.skip_zoom)
-              gg.graph.stretch = 1-(min(gg.stage_t,100)/100);
+              gg.graph.zoom = 1-(min(gg.stage_t,100)/100);
             break;
           case 7: //constants
           case 8: //submit
           case 9: //review
-            gg.graph.stretch = 0;
+            gg.graph.zoom = 0;
           break;
           case 10: //debrief
             if(!gg.cur_level.skip_zoom)
-              gg.graph.stretch = min(gg.stage_t,100)/100;
+              gg.graph.zoom = min(gg.stage_t,100)/100;
             break;
           case 11: //pre_improve
             if(!gg.cur_level.skip_zoom)
-              gg.graph.stretch = 1;
+              gg.graph.zoom = 1;
             break;
           case 12: //improve
             break;
@@ -538,6 +536,8 @@ var GamePlayScene = function(game, stage)
         gg.cur_level.tick();
         gg.message_box.tick();
         if(gg.cur_level.progress != 11) gg.message_box.prompt_end = 0;
+
+        //gg.graph.zoom = psin(gg.time_mod_twelve_pi);
       }
         break;
       case MODE_WORK_OUT:
@@ -833,6 +833,8 @@ var GamePlayScene = function(game, stage)
 
   self.ready = function()
   {
+    gg.max_days = 14;
+    gg.needed_crystals = 400;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
@@ -1221,8 +1223,12 @@ var GamePlayScene = function(game, stage)
     //*/
   };
 
+  gg.time_mod_twelve_pi = 0;
   self.tick = function()
   {
+    gg.time_mod_twelve_pi += 0.01;
+    if(gg.time_mod_twelve_pi > twelvepi) gg.time_mod_twelve_pi -= twelvepi;
+
     gg.mode_t++;
     gg.stage_t++;
     keyer.filter(gg.keylistener);

@@ -459,37 +459,34 @@ var graph = function()
   self.y = 0;
   self.w = 0;
   self.h = 0;
-  self.stretch = 0; //0 = hours, 1 = days
 
-  self.v_max = 10;
+  self.zoom = 0;
 
-  self.size = function ()
-  {
-    var p = 120;
-    self.stretch_maxx = gg.message_box.w+p;
-    self.stretch_maxw = self.x+self.w-self.stretch_maxx;
-  }
+  self.x0_min = 0;
+  self.x0_max = 10;
+  self.y0_min = 0;
+  self.y0_max = 10;
+  self.x0_grid = 1;
+  self.y0_grid = 1;
 
-  self.x_for_t = function(t)
+  self.x1_min = 0;
+  self.x1_max = gg.max_days*24;
+  self.y1_min = 0;
+  self.y1_max = round(gg.needed_crystals*1.1);
+  self.x1_grid = 24;
+  self.y1_grid = 50;
+
+  self.x_for_x = function(x)
   {
-    var max_days = 14;
-    var sx = lerp(self.x,self.stretch_maxx,self.stretch);
-    var sw = lerp(self.w,self.stretch_maxw,self.stretch);
-    return lerp(sx,sx+sw,lerp(t/gg.timeline.t_max,t/(24*max_days),self.stretch));
+    if(self.zoom == 0) return mapVal(self.x0_min,self.x0_max,self.x,self.x+self.w,x);
+    else if(self.zoom == 1) return mapVal(self.x1_min,self.x1_max,self.x,self.x+self.w,x);
+    else return mapVal(lerp(self.x0_min,self.x1_min,self.zoom),lerp(self.x0_max,self.x1_max,self.zoom),self.x,self.x+self.w,x);
   }
-  self.stretched_x = function(x)
+  self.y_for_y = function(y)
   {
-    if(self.stretch == 0) return x;
-    var max_days = 14;
-    var sx = lerp(self.x,self.stretch_maxx,self.stretch);
-    var sw = lerp(self.w,self.stretch_maxw,self.stretch);
-    return min(self.x+self.w,mapVal(self.x,self.x+self.w,sx,sx+sw*lerp(1,(gg.timeline.t_max/(24*max_days)),self.stretch),x));
-  }
-  self.stretched_y = function(y)
-  {
-    if(self.stretch == 0) return y;
-    var max_crystals = 500;
-    return mapVal(self.y+self.h,self.y,self.y+self.h,self.y+self.h-self.h*lerp(1,self.v_max/max_crystals,self.stretch),y);
+    if(self.zoom == 0) return mapVal(self.y0_min,self.y0_max,self.y+self.h,self.y,y);
+    else if(self.zoom == 1) return mapVal(self.y1_min,self.y1_max,self.y+self.h,self.y,y);
+    else return mapVal(lerp(self.y0_min,self.y1_min,self.zoom),lerp(self.y0_max,self.y1_max,self.zoom),self.y+self.h,self.y,y);
   }
 
   self.tick = function()
@@ -499,132 +496,128 @@ var graph = function()
 
   self.draw = function()
   {
-    var t = self.stretch;
-    var sx = lerp(self.x,self.stretch_maxx,t);
-    var sw = lerp(self.w,self.stretch_maxw,t);
-    var sh = self.h;
-    var sy = self.y;
+    var t = self.zoom;
+    var zy;
     var x;
     var y;
 
-    var max_days = 14;
-    var max_crystals = 500;
-
-    var zone_y = self.y;
       //zones
-    if(self.stretch > 0.5)
+    if(t > 0.5)
     {
-      gg.ctx.globalAlpha = (self.stretch-0.5)*2;
+      gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.fillStyle = "#7FE288";
-      var x = self.stretched_x(self.x);
-      var w = lerp(self.w,self.stretch_maxw,self.stretch)
-      var h = self.stretched_y(self.y+self.h-((max_crystals-80)/10*self.h)-self.y);
-      if(h > 0) gg.ctx.fillRect(x,zone_y,w,h);
+      zy = self.y_for_y(gg.needed_crystals);
+      if(zy < self.y) zy = self.y;
+      gg.ctx.fillRect(self.x,self.y,self.w,zy-self.y);
       gg.ctx.fillStyle = "#F19B8B";
-      if(h > 0) zone_y += h;
-      h = self.y+self.h-zone_y;
-      gg.ctx.fillRect(x,zone_y,w,h);
+      gg.ctx.fillRect(self.x,zy,self.w,self.y+self.h-zy);
 
       gg.ctx.globalAlpha = 1;
     }
 
-    gg.ctx.fillStyle = white;
     gg.ctx.font = "18px DisposableDroidBB";
     gg.ctx.textAlign = "center";
-    gg.ctx.lineWidth = 2;
-    gg.ctx.strokeStyle = white;
 
     //grid
+    gg.ctx.fillStyle = white;
+    gg.ctx.strokeStyle = white;
     gg.ctx.lineWidth = 4;
-    gg.ctx.strokeRect(sx,sy,sw,sh);
+    gg.ctx.strokeRect(self.x,self.y,self.w,self.h);
     gg.ctx.lineWidth = 2;
       //vertical lines
     if(t < 0.5)
     {
-      var ex = lerp(sx+sw,sx+sw*(gg.timeline.t_max/(24*max_days)),t);
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
-      for(var i = 1; i < gg.timeline.t_max; i++)
+      for(var i = self.x0_min+self.x0_grid; i < self.x0_max; i += self.x0_grid)
       {
-        x = lerp(sx,ex,i/gg.timeline.t_max);
-        gg.ctx.moveTo(x,sy);
-        gg.ctx.lineTo(x,sy+sh);
-        gg.ctx.fillText(i,x,sy+sh+15);
+        x = self.x_for_x(i);
+        gg.ctx.moveTo(x,self.y);
+        gg.ctx.lineTo(x,self.y+self.h);
+        gg.ctx.fillText(i,x,self.y+self.h+15);
       }
       gg.ctx.stroke();
-      gg.ctx.fillText(gg.timeline.t_max,ex,sy+sh+15);
-      gg.ctx.fillText(gg.cur_level.x_label,sx+sw/2,sy+sh+30);
+
+      if(t == 0) gg.ctx.fillText(self.x0_max,self.x+self.w,self.y+self.h+15);
+      gg.ctx.fillText(gg.cur_level.x_label,self.x+self.w/2,self.y+self.h+30);
       gg.ctx.globalAlpha = 1;
     }
     else
     {
-      var ex = lerp(sx+sw*((24*max_days)/gg.timeline.t_max),sx+sw,t);
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
-      for(var i = 1; i < max_days; i++)
+      for(var i = self.x1_min+self.x1_grid; i < self.x1_max; i += self.x1_grid)
       {
-        x = lerp(sx,ex,i/max_days);
-        gg.ctx.moveTo(x,sy);
-        gg.ctx.lineTo(x,sy+sh);
-        gg.ctx.fillText(i,x,sy+sh+15);
+        x = self.x_for_x(i);
+        if(x < self.x+self.w)
+        {
+          gg.ctx.moveTo(x,self.y);
+          gg.ctx.lineTo(x,self.y+self.h);
+          gg.ctx.fillText(i/24,x,self.y+self.h+15);
+        }
       }
       gg.ctx.stroke();
-      gg.ctx.fillText(max_days,ex,sy+sh+15);
-      gg.ctx.fillText("DAYS",sx+sw/2,sy+sh+30);
+
+      if(t == 1) gg.ctx.fillText(self.x1_max/24,self.x+self.w,self.y+self.h+15);
+      gg.ctx.fillText("DAYS",self.x+self.w/2,self.y+self.h+30);
       gg.ctx.globalAlpha = 1;
     }
+
       //horizontal lines
     if(t < 0.5)
     {
-      var ey = lerp(sy,sy+sh-sh*(self.v_max/max_crystals),t);
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
-      for(var i = 1; i < self.v_max; i++)
+      for(var i = self.y0_min+self.y0_grid; i < self.y0_max; i += self.y0_grid)
       {
-        y = lerp(sy+sh,ey,i/self.v_max);
-        gg.ctx.moveTo(sx,y);
-        gg.ctx.lineTo(sx+sw,y);
-        gg.ctx.fillText(i,sx-12,y+7);
+        y = self.y_for_y(i);
+        gg.ctx.moveTo(self.x,y);
+        gg.ctx.lineTo(self.x+self.w,y);
+        gg.ctx.fillText(i,self.x-12,y+5);
       }
       gg.ctx.stroke();
-      gg.ctx.fillText(self.v_max,sx-12,sy+7);
+
+      if(t == 0) gg.ctx.fillText(self.y0_max,self.x-12,self.y+5);
       gg.ctx.textAlign = "right";
-      gg.ctx.fillText(gg.cur_level.y_label,sx-25,sy+sh/2);
+      gg.ctx.fillText(gg.cur_level.y_label,self.x-25,self.y+self.h/2);
       gg.ctx.textAlign = "center";
       gg.ctx.globalAlpha = 1;
     }
     else
     {
-      var ey = lerp(sy+sh-sh*(max_crystals/self.v_max),sy,t);
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
-      for(var i = 100; i < max_crystals; i+=100)
+      for(var i = self.y1_min+self.y1_grid; i < self.y1_max; i += self.y1_grid)
       {
-        y = lerp(sy+sh,ey,i/max_crystals);
-        gg.ctx.moveTo(sx,y);
-        gg.ctx.lineTo(sx+sw,y);
-        gg.ctx.fillText(i,sx-15,y+7);
+        y = self.y_for_y(i);
+        if(y > self.y)
+        {
+          gg.ctx.moveTo(self.x,y);
+          gg.ctx.lineTo(self.x+self.w,y);
+          gg.ctx.fillText(i,self.x-12,y+5);
+        }
       }
       gg.ctx.stroke();
-      gg.ctx.fillText(max_crystals,sx-15,sy+7);
+
+      if(t == 1) gg.ctx.fillText(self.y1_max,self.x-12,self.y+5);
       gg.ctx.textAlign = "right";
-      gg.ctx.fillText(gg.cur_level.y_label,sx-25,sy+sh/2);
+      gg.ctx.fillText(gg.cur_level.y_label,self.x-25,self.y+self.h/2);
       gg.ctx.textAlign = "center";
       gg.ctx.globalAlpha = 1;
     }
 
       //tl
     gg.ctx.strokeStyle = gray;
-    var t_x = self.x_for_t(gg.timeline.t);
-    drawLine(t_x,sy,t_x,sy+sh,gg.ctx);
+    x = self.x_for_x(gg.timeline.t);
+    drawLine(x,self.y,x,self.y+self.h,gg.ctx);
 
-    if(self.stretch > 0.5)
+    if(self.zoom > 0.5)
     {
-      gg.ctx.globalAlpha = (self.stretch-0.5)*2;
+      gg.ctx.globalAlpha = (self.zoom-0.5)*2;
       gg.ctx.fillStyle = black;
       gg.ctx.textAlign = "left";
-      if(y > self.y+5) gg.ctx.fillText("You Survive", self.stretched_x(self.x)+5, zone_y-5);
-      gg.ctx.fillText("You Die", self.stretched_x(self.x)+5, zone_y+15);
+      if(y > self.y+5) gg.ctx.fillText("You Survive", self.x+5, zy-5);
+      gg.ctx.fillText("You Die", self.x+5, zy+15);
       gg.ctx.globalAlpha = 1;
     }
   }
@@ -761,10 +754,14 @@ var editable_line = function()
   self.bdec_btn = [];
 
   //line
-  self.sx = 0;
-  self.sy = 0;
-  self.ex = 0;
-  self.ey = 0;
+  self.sx0 = 0;
+  self.sy0 = 0;
+  self.ex0 = 0;
+  self.ey0 = 0;
+  self.sx1 = 0;
+  self.sy1 = 0;
+  self.ex1 = 0;
+  self.ey1 = 0;
 
   self.calc_m_total = function()
   {
@@ -1003,28 +1000,51 @@ var editable_line = function()
 
   self.draw_params = function()
   {
-    self.sy = self.v(0);
-    self.ey = self.v(gg.timeline.t_max);
-    self.sx = 0;
-    self.ex = gg.timeline.t_max;
-         if(self.sy < 0              && self.ey < 0         )     { self.sy = 0;              self.ey = 0; }
-    else if(self.sy > gg.graph.v_max && self.ey > gg.graph.v_max) { self.sy = gg.graph.v_max; self.ey = gg.graph.v_max; }
+    var oldzoom = gg.graph.zoom; //restore at end of func!
+
+    gg.graph.zoom = 0;
+    self.sx0 = gg.graph.x0_min;
+    self.ex0 = gg.graph.x0_max;
+    self.sy0 = self.v(self.sx0);
+    self.ey0 = self.v(self.ex0);
+         if(self.sy < gg.graph.y0_min && self.ey < gg.graph.y0_min) { self.sy = gg.graph.y0_min; self.ey = gg.graph.y0_min; }
+    else if(self.sy > gg.graph.y0_max && self.ey > gg.graph.y0_max) { self.sy = gg.graph.y0_max; self.ey = gg.graph.y0_max; }
     else
     {
-      if(self.sy < 0             ) { self.sx = (0             -self.b)/self.m; self.sy = 0; }
-      if(self.sy > gg.graph.v_max) { self.sx = (gg.graph.v_max-self.b)/self.m; self.sy = gg.graph.v_max; }
-      if(self.ey < 0             ) { self.ex = (0             -self.b)/self.m; self.ey = 0; }
-      if(self.ey > gg.graph.v_max) { self.ex = (gg.graph.v_max-self.b)/self.m; self.ey = gg.graph.v_max; }
+      if(self.sy0 < gg.graph.y0_min) { self.sx0 = (gg.graph.y0_min-self.b_total)/self.m_total; self.sy0 = gg.graph.y0_min; }
+      if(self.sy0 > gg.graph.y0_max) { self.sx0 = (gg.graph.y0_max-self.b_total)/self.m_total; self.sy0 = gg.graph.y0_max; }
+      if(self.ey0 < gg.graph.y0_min) { self.ex0 = (gg.graph.y0_min-self.b_total)/self.m_total; self.ey0 = gg.graph.y0_min; }
+      if(self.ey0 > gg.graph.y0_max) { self.ex0 = (gg.graph.y0_max-self.b_total)/self.m_total; self.ey0 = gg.graph.y0_max; }
     }
+    self.sx0 = gg.graph.x_for_x(self.sx0);
+    self.ex0 = gg.graph.x_for_x(self.ex0);
+    self.sy0 = gg.graph.y_for_y(self.sy0);
+    self.ey0 = gg.graph.y_for_y(self.ey0);
 
-    self.sy = mapVal(0, gg.graph.v_max, gg.graph.y+gg.graph.h, gg.graph.y, self.sy);
-    self.ey = mapVal(0, gg.graph.v_max, gg.graph.y+gg.graph.h, gg.graph.y, self.ey);
-    self.sx = mapVal(0, gg.timeline.t_max, gg.graph.x, gg.graph.x+gg.graph.w, self.sx);
-    self.ex = mapVal(0, gg.timeline.t_max, gg.graph.x, gg.graph.x+gg.graph.w, self.ex);
+    gg.graph.zoom = 1;
+    self.sx1 = gg.graph.x1_min;
+    self.ex1 = gg.graph.x1_max;
+    self.sy1 = self.v(self.sx1);
+    self.ey1 = self.v(self.ex1);
+         if(self.sy < gg.graph.y1_min && self.ey < gg.graph.y1_min) { self.sy = gg.graph.y1_min; self.ey = gg.graph.y1_min; }
+    else if(self.sy > gg.graph.y1_max && self.ey > gg.graph.y1_max) { self.sy = gg.graph.y1_max; self.ey = gg.graph.y1_max; }
+    else
+    {
+      if(self.sy1 < gg.graph.y1_min) { self.sx1 = (gg.graph.y1_min-self.b_total)/self.m_total; self.sy1 = gg.graph.y1_min; }
+      if(self.sy1 > gg.graph.y1_max) { self.sx1 = (gg.graph.y1_max-self.b_total)/self.m_total; self.sy1 = gg.graph.y1_max; }
+      if(self.ey1 < gg.graph.y1_min) { self.ex1 = (gg.graph.y1_min-self.b_total)/self.m_total; self.ey1 = gg.graph.y1_min; }
+      if(self.ey1 > gg.graph.y1_max) { self.ex1 = (gg.graph.y1_max-self.b_total)/self.m_total; self.ey1 = gg.graph.y1_max; }
+    }
+    self.sx1 = gg.graph.x_for_x(self.sx1);
+    self.ex1 = gg.graph.x_for_x(self.ex1);
+    self.sy1 = gg.graph.y_for_y(self.sy1);
+    self.ey1 = gg.graph.y_for_y(self.ey1);
 
     for(var i = 0; i <= gg.timeline.t_max; i++)
       gg.table.predicted_data[i] = fdisp(self.v(gg.table.t_data[i]),1);
     gg.table.verify();
+
+    gg.graph.zoom = oldzoom;
   }
 
   self.select_label = function(evt)
@@ -1145,28 +1165,13 @@ var editable_line = function()
       gg.ctx.strokeStyle = white;
 
         //line
-      if(gg.graph.stretch == 1)
-      {
-        gg.ctx.strokeStyle = dark_gray;
-        drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.ex),gg.graph.stretched_y(self.ey), gg.ctx);
-        drawLine(gg.graph.stretched_x(self.ex),gg.graph.stretched_y(self.ey),gg.graph.stretched_x(self.sx+(self.ex-self.sx)*50),gg.graph.stretched_y(self.sy+(self.ey-self.sy)*50), gg.ctx);
-      }
-      gg.ctx.strokeStyle = black;
-      if(gg.timeline.t < gg.timeline.t_max)
-      {
-        var t = gg.timeline.t/gg.timeline.t_max;
-        var tx = gg.graph.x_for_t(gg.timeline.t);
-        if(tx > gg.graph.stretched_x(self.sx))
-        {
-          t = min(invlerp(gg.graph.stretched_x(self.sx),gg.graph.stretched_x(self.ex),tx),1);
-          drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(lerp(self.sx,self.ex,t)),gg.graph.stretched_y(lerp(self.sy,self.ey,t)), gg.ctx);
-        }
-      }
-      else
-        drawLine(gg.graph.stretched_x(self.sx),gg.graph.stretched_y(self.sy),gg.graph.stretched_x(self.ex),gg.graph.stretched_y(self.ey), gg.ctx);
+      gg.ctx.strokeStyle = dark_gray;
+           if(gg.graph.zoom == 0) drawLine(self.sx0,self.sy0,self.ex0,self.ey0, gg.ctx);
+      else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
+      else drawLine(lerp(self.sx0,self.sx1,gg.graph.zoom),lerp(self.sy0,self.sy1,gg.graph.zoom),lerp(self.ex0,self.ex1,gg.graph.zoom),lerp(self.ey0,self.ey1,gg.graph.zoom), gg.ctx);
 
         //icons
-      if(gg.table.data_visible && gg.graph.stretch == 0)
+      if(gg.table.data_visible && gg.graph.zoom == 0)
       {
         gg.ctx.fillStyle = white;
         var s = 15;
@@ -1174,12 +1179,10 @@ var editable_line = function()
         {
           if(gg.table.known_data[i] != "-")
           {
-            x = mapVal(0,gg.timeline.t_max,gg.graph.x,gg.graph.x+gg.graph.w,gg.table.t_data[i]);
-            y = mapVal(0,gg.graph.v_max,gg.graph.y+gg.graph.h,gg.graph.y,gg.table.known_data[i]);
-            x = clamp(gg.graph.x,gg.graph.x+gg.graph.w,x);
-            y = clamp(gg.graph.y,gg.graph.y+gg.graph.h,y);
-            if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,gg.graph.stretched_x(x)-s/2,gg.graph.stretched_y(y)-s/2,s,s);
-            else gg.ctx.drawImage(gg.neq_pt_img,gg.graph.stretched_x(x)-s/2,gg.graph.stretched_y(y)-s/2,s,s);
+            x = gg.graph.x_for_x(i);
+            y = gg.graph.y_for_y(gg.table.known_data[i]);
+            if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,x-s/2,y-s/2,s,s);
+            else gg.ctx.drawImage(gg.neq_pt_img,x-s/2,y-s/2,s,s);
           }
         }
       }
@@ -1291,8 +1294,8 @@ var editable_line = function()
       {
         if(self.b_label[i] < mlen)
         {
-          drawImageSizeCentered(gg.cur_level.m_icon[self.m_label[i]], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
-          gg.ctx.fillText(gg.cur_level.m_label[self.m_label[i]],x,b.y+yoff+b.h-pad);
+          drawImageSizeCentered(gg.cur_level.m_icon[self.b_label[i]], x+b.h/2, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+          gg.ctx.fillText(gg.cur_level.m_label[self.b_label[i]],x,b.y+yoff+b.h-pad);
         }
         else
         {
