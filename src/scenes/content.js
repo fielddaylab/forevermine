@@ -32,10 +32,12 @@ var level = function()
   self.m_starting = [0,];
   self.m_correct = [0,];
   self.m_label = ["Rate",];
+  self.m_label_fmt = [];
   self.m_icon = [GenIcon(10,10),];
   self.b_starting = [0,];
   self.b_correct = [0,];
   self.b_label = ["Initial",];
+  self.b_label_fmt = [];
   self.b_icon = [GenIcon(10,10),];
 
   self.x_n = 10;
@@ -70,6 +72,17 @@ var level = function()
   {
     self.progress = 0;
     self.correct = 0;
+  }
+
+  self.fmt = function()
+  {
+    var w = 50;
+    self.m_label_fmt = [];
+    for(var i = 0; i < self.m_label.length; i++)
+      self.m_label_fmt[i] = textToLines("20px DisposableDroidBB",w,self.m_label[i],gg.ctx);
+    self.b_label_fmt = [];
+    for(var i = 0; i < self.b_label.length; i++)
+      self.b_label_fmt[i] = textToLines("20px DisposableDroidBB",w,self.b_label[i],gg.ctx);
   }
 
   self.tick = function()

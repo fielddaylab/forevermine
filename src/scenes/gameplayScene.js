@@ -927,6 +927,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
+    l.fmt();
     gg.levels.push(l);
     i++;
 
@@ -963,6 +964,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
+    l.fmt();
     gg.levels.push(l);
     i++;
 
@@ -999,6 +1001,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 0;
     l.skip_night = 0;
     l.text = used_text[i];
+    l.fmt();
     gg.levels.push(l);
     i++;
 
@@ -1035,6 +1038,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
+    l.fmt();
     gg.levels.push(l);
     i++;
 
@@ -1071,6 +1075,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
+    l.fmt();
     gg.levels.push(l);
     i++;
 
@@ -1107,6 +1112,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 1;
     l.text = used_text[i];
+    l.fmt();
     gg.levels.push(l);
     i++;
 
@@ -1143,6 +1149,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
+    l.fmt();
     gg.levels.push(l);
     i++;
 
@@ -1179,6 +1186,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 0;
     l.skip_night = 0;
     l.text = used_text[i];
+    l.fmt();
     gg.levels.push(l);
     i++;
 
