@@ -529,7 +529,8 @@ var exposition_box = function()
 
   self.pad = 10;
   self.font_h = 30;
-  self.font = self.font_h+"px DisposableDroidBB";
+  self.ai_font = self.font_h+"px DisposableDroidBB";
+  self.player_font = floor(self.font_h*0.7)+"px Helvetica";
 
   self.texts = [];
   self.bubbles = [];
@@ -555,7 +556,8 @@ var exposition_box = function()
   self.nq = function(text, type, meta)
   {
     self.texts.push(text);
-    self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
+    if(type == CONTENT_AI) self.bubbles.push(textToLines(self.ai_font,self.text_w,text,gg.ctx));
+    else self.bubbles.push(textToLines(self.player_font,self.text_w,text,gg.ctx));
     self.types.push(type);
     self.metas.push(meta);
     if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
@@ -594,18 +596,26 @@ var exposition_box = function()
     fillBox(self,gg.ctx);
     gg.ctx.globalAlpha = 1;
 
-    gg.ctx.fillStyle = white;
     gg.ctx.textAlign = "left";
-    gg.ctx.font = self.font;
+    var y = self.y+self.pad+self.font_h/2;
     switch(self.types[self.displayed_i])
     {
-      case CONTENT_AI: gg.ctx.fillText("CRIS",self.x+self.pad,self.y+self.font_h/2); break;
-      case CONTENT_PLAYER: gg.ctx.fillText("YOU",self.x+self.pad,self.y+self.font_h/2); break;
+      case CONTENT_AI:
+        gg.ctx.font = self.ai_font;
+        gg.ctx.fillStyle = cyan;
+        gg.ctx.fillText("CRIS",self.x+self.pad,y);
+        break;
+      case CONTENT_PLAYER:
+        gg.ctx.font = self.player_font;
+        gg.ctx.fillStyle = magenta;
+        gg.ctx.fillText("YOU",self.x+self.pad,y);
+        break;
     }
-    var y = self.y+self.pad;
+    y += self.font_h;
+    gg.ctx.fillStyle = white;
     for(var i = 0; i < self.bubbles[self.displayed_i].length; i++)
     {
-      gg.ctx.fillText(self.bubbles[self.displayed_i][i],self.x+self.pad,y+self.font_h);
+      gg.ctx.fillText(self.bubbles[self.displayed_i][i],self.x+self.pad,y);
       y += self.font_h+self.pad;
     }
   }
