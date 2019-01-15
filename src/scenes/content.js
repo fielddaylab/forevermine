@@ -45,7 +45,7 @@ var level = function()
   self.t_speed = 0.01;
   self.fast_t_speed = 0.1;
   self.x_label = "HOURS";
-  self.y_label = "CRYSTALS";
+  self.y_label = "FUEL";
 
   self.day = 0;
 

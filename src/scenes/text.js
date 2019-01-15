@@ -17,14 +17,14 @@ var get_timer = function(t)
 
 var english_text =
 [
-  //check crystals
+  //check fuel
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: you've just awoken. lead into show context animation.
     [
       "Hooray!!!!! 🎉🎉🎉 Finally, someone to talk to!", CONTENT_AI, EMOTE_NULL,
       "Wha... What happened? Who are you?", CONTENT_PLAYER, EMOTE_NULL,
       "I'm Cris!", CONTENT_AI, EMOTE_NULL,
-      "Well, Crystal Intake Specialist, but that's boring.", CONTENT_AI, EMOTE_NULL,
+      "Well, Fuel Intake Specialist, but that's boring.", CONTENT_AI, EMOTE_NULL,
       "My... my head feels funny.", CONTENT_PLAYER, EMOTE_NULL,
       "Awww, poor human. You need some rest! Want some chicken soup?", CONTENT_AI, EMOTE_NULL,
       "(I don't have any soup, so please say no.)", CONTENT_AI, EMOTE_NULL,
@@ -46,7 +46,7 @@ var english_text =
     status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(100), "This is a model!", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "We can use it to predict crystal collection.", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "We can use it to predict fuel collection.", CONTENT_AI, EMOTE_NULL,
       get_timer(100), "My owners used this model all the time!", CONTENT_AI, EMOTE_NULL,
       trigger_click, "Your owners... ", CONTENT_PLAYER, EMOTE_NULL,
       trigger_click, "You mean 200 years ago?", CONTENT_PLAYER, EMOTE_NULL,
@@ -86,8 +86,8 @@ var english_text =
       get_timer(80), "Um... you ok, friend?", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "You look like you need to lie down... ", CONTENT_AI, EMOTE_NULL,
       trigger_click, "I'm fine, Cris. What now?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(100), "Here's our initial crystal count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Existing Crystals", CONTENT_CONSTANT, 4,
+      get_timer(100), "Here's our initial fuel count.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(80), "Drag the number into our equation.", CONTENT_AI, EMOTE_NULL,
       get_timer(100), "Then change the rate so our data matches up!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -129,7 +129,7 @@ var english_text =
     ],
   },
 
-  //crystal increase
+  //fuel increase
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: you've just awoken. lead into show context animation.
     [
@@ -140,7 +140,7 @@ var english_text =
     ],
     context: //LAB: context animation on-screen
     [
-      "Look! they found a HUGE pocket of crystals.", CONTENT_AI, EMOTE_NULL,
+      "Look! they found a HUGE pocket of fuel.", CONTENT_AI, EMOTE_NULL,
       "They're bringing back fuel super fast!", CONTENT_AI, EMOTE_NULL,
       "I hope this makes you happy!!!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -176,8 +176,8 @@ var english_text =
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
-      get_timer(100), "And here's the new crystal count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Existing Crystals", CONTENT_CONSTANT, 4,
+      get_timer(100), "And here's the new fuel count.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(80), "You need to figure out the rate!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -218,7 +218,7 @@ var english_text =
     ],
   },
 
-  //crystal return to normal
+  //fuel return to normal
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: you've just awoken. lead into show context animation.
     [
@@ -229,7 +229,7 @@ var english_text =
     ],
     context: //LAB: context animation on-screen
     [
-      "The pocket of crystals must've run out.", CONTENT_AI, EMOTE_NULL,
+      "The pocket of fuel must've run out.", CONTENT_AI, EMOTE_NULL,
       "The bots are mining suuuper slow.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: just shown context animation. lead into going to workspace.
@@ -268,8 +268,8 @@ var english_text =
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
-      get_timer(60), "Here's our crystal count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Existing Crystals", CONTENT_CONSTANT, 4,
+      get_timer(60), "Here's our fuel count.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(80), "Go ahead! You know the drill.", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Ha.... get it? The DRILL?", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "🤣🤣🤣🤣", CONTENT_AI, EMOTE_NULL,
@@ -466,7 +466,7 @@ var english_text =
     [
       "So what should we do now?", CONTENT_AI, EMOTE_NULL,
       "Hmmm. The batteries are charging faster, but it might not be enough.", CONTENT_PLAYER, EMOTE_NULL,
-      "Can you pull up the crystal collecting model?", CONTENT_PLAYER, EMOTE_NULL,
+      "Can you pull up the fuel collecting model?", CONTENT_PLAYER, EMOTE_NULL,
       "I need to predict if I'm gonna make it.", CONTENT_PLAYER, EMOTE_NULL,
     ],
     improve: //LAB: show system
@@ -478,7 +478,7 @@ var english_text =
     ],
   },
 
-  //check crystals
+  //check fuel
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: you've just awoken. lead into show context animation.
     [
@@ -517,7 +517,7 @@ var english_text =
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
-      get_timer(20), "Here's the crystal count.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Here's the fuel count.", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "Initial", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data and we'll see if you're gonna die!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -542,7 +542,7 @@ var english_text =
     pre_improve: //LAB: about to show system
     [
       "So... um... when do you leave?", CONTENT_AI, EMOTE_NULL,
-      "Looks like I'll have enough crystals on X!", CONTENT_PLAYER, EMOTE_NULL,
+      "Looks like I'll have enough fuel on X!", CONTENT_PLAYER, EMOTE_NULL,
       "Well, we could keep working on the robots, just in case... ", CONTENT_AI, EMOTE_NULL,
       "That's a good idea, but I think I need some rest. I was up all night!", CONTENT_PLAYER, EMOTE_NULL,
       "I'll try to stop by and say good-bye before I leave. Thanks again, Cris!!!", CONTENT_PLAYER, EMOTE_NULL,
@@ -635,7 +635,7 @@ var english_text =
     ],
   },
 
-  //check crystals
+  //check fuel
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: you've just awoken. lead into show context animation.
     [

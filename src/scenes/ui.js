@@ -146,12 +146,20 @@ var content_dragger = function()
   self.ptWithinX = function(evt)
   {
     if(gg.line.x_set) return 0;
-    return 1;
+    var x = gg.graph.x;
+    var y = gg.graph.y+gg.graph.h;
+    var w = gg.graph.w;
+    var h = 50;
+    return ptWithin(x,y,w,h,  evt.doX,evt.doY);
   }
   self.ptWithinY = function(evt)
   {
     if(gg.line.y_set) return 0;
-    return 1;
+    var x = gg.message_box.x+gg.message_box.w;
+    var y = gg.graph.y;
+    var w = gg.graph.x-x;
+    var h = gg.graph.h;
+    return ptWithin(x,y,w,h,  evt.doX,evt.doY);
   }
   self.ptWithinData = function(evt)
   {
@@ -355,6 +363,8 @@ var content_dragger = function()
           gg.line.b_btn[i].set(self.constant_val);
       }
     }
+    self.dragging_x = 0;
+    self.dragging_y = 0;
     self.dragging_data = 0;
     self.dragging_sim = 0;
     self.dragging_constant = 0;
@@ -409,11 +419,11 @@ var content_dragger = function()
     }
     if(self.dragging_x)
     {
-
+      gg.ctx.fillText(gg.cur_level.x_label,self.last_evt.doX,self.last_evt.doY);
     }
     if(self.dragging_y)
     {
-
+      gg.ctx.fillText(gg.cur_level.y_label,self.last_evt.doX,self.last_evt.doY);
     }
     if(self.dragging_data)
     {
@@ -545,7 +555,7 @@ var graph = function()
   self.x1_min = 0;
   self.x1_max = gg.max_days*24;
   self.y1_min = 0;
-  self.y1_max = round(gg.needed_crystals*1.1);
+  self.y1_max = round(gg.needed_fuel*1.1);
   self.x1_grid = 24;
   self.y1_grid = 50;
 
@@ -579,7 +589,7 @@ var graph = function()
     {
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.fillStyle = "#7FE288";
-      zy = self.y_for_y(gg.needed_crystals);
+      zy = self.y_for_y(gg.needed_fuel);
       if(zy < self.y) zy = self.y;
       gg.ctx.fillRect(self.x,self.y,self.w,zy-self.y);
       gg.ctx.fillStyle = "#F19B8B";
@@ -1291,11 +1301,17 @@ var editable_line = function()
         gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
       gg.ctx.font = "15px DisposableDroidBB";
       if(self.y_set)
+      {
+      gg.ctx.textAlign = "center";
       drawImageSizeCentered(gg.cur_level.y_icon, self.eqn_xs[0], self.eqn_y+self.font_h*2/3, self.font_h*1.5, gg.ctx);
       gg.ctx.fillText(gg.cur_level.y_label,self.eqn_xs[0],self.eqn_y+self.font_h*1.5);
+      }
       if(self.x_set)
+      {
+      gg.ctx.textAlign = "left";
       drawImageSizeCentered(gg.time_img, self.eqn_xs[self.eqn_x_i]+self.font_h*3/4, self.eqn_y+self.font_h*2/3, self.font_h*4/5, gg.ctx);
-      gg.ctx.fillText("HOURS",self.eqn_xs[self.eqn_x_i]+self.font_h/3,self.eqn_y+self.font_h*1.5);
+      gg.ctx.fillText(gg.cur_level.x_label,self.eqn_xs[self.eqn_x_i]+self.font_h/3,self.eqn_y+self.font_h*1.5);
+      }
       gg.ctx.font = "20px DisposableDroidBB";
       //boxes
       for(var i = 0; i < self.m_select_btn.length; i++)
@@ -1310,6 +1326,7 @@ var editable_line = function()
       }
 
       //selector
+      gg.ctx.textAlign = "left";
       gg.ctx.font = "20px DisposableDroidBB";
       gg.ctx.fillStyle = white;
       if(gg.cur_level.progress < 8)

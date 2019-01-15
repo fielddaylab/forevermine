@@ -834,7 +834,7 @@ var GamePlayScene = function(game, stage)
   self.ready = function()
   {
     gg.max_days = 14;
-    gg.needed_crystals = 400;
+    gg.needed_fuel = 400;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
@@ -894,7 +894,7 @@ var GamePlayScene = function(game, stage)
     var m;
     var i = 0;
 
-    //check crystals
+    //check fuel
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
@@ -904,14 +904,14 @@ var GamePlayScene = function(game, stage)
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [0,];
     l.b_correct = [1,];
-    l.b_label = ["Existing Crystals",];
+    l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
     l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
+    l.y_label = "FUEL";
     l.day = 0;
     for(var j = 0; j < 90; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
@@ -931,7 +931,7 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    //crystal increase
+    //fuel increase
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
@@ -941,14 +941,14 @@ var GamePlayScene = function(game, stage)
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [1,];
     l.b_correct = [2,];
-    l.b_label = ["Existing Crystals",];
+    l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
     l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
+    l.y_label = "FUEL";
     l.day = 1;
     for(var j = 0; j < 90; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
@@ -968,7 +968,7 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    //crystal return to normal
+    //fuel return to normal
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
@@ -978,14 +978,14 @@ var GamePlayScene = function(game, stage)
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [2,];
     l.b_correct = [3,];
-    l.b_label = ["Existing Crystals",];
+    l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.x_n = 10;
     l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
+    l.y_label = "FUEL";
     l.day = 2;
     for(var j = 0; j < 90; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
@@ -1079,7 +1079,7 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    //check crystals
+    //check fuel
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
@@ -1096,7 +1096,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
+    l.y_label = "FUEL";
     l.day = 4;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
@@ -1153,7 +1153,7 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    //check crystals
+    //check fuel
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
@@ -1170,7 +1170,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
+    l.y_label = "FUEL";
     l.day = 5;
     for(var j = 0; j < 0; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
