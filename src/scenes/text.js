@@ -73,6 +73,8 @@ var english_text =
     [
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "You need to label the constants in our model.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Existing Fuel", CONTENT_LABEL, 4,
+      get_timer(60), "Mining Rate", CONTENT_LABEL, 4,
       get_timer(60), "Go ahead. Give it a try!", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset

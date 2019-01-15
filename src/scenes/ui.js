@@ -137,8 +137,10 @@ var content_dragger = function()
   self.dragging_x = 0;
   self.dragging_y = 0;
   self.dragging_data = 0;
-  self.dragging_sim = 0;
+  self.dragging_label = 0;
   self.dragging_constant = 0;
+  self.dragging_sim = 0;
+  self.label_val = 0;
   self.constant_val = 0;
   self.last_evt = 0;
 
@@ -172,7 +174,7 @@ var content_dragger = function()
       if(mb.types[i] == CONTENT_DATA && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
         return 1;
       y += mb.pad;
-      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_CONSTANT)
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h+mb.pad;
       else
         y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
@@ -188,6 +190,28 @@ var content_dragger = function()
     var y1 = t.y+t.h*1/3;
     var y3 = t.y+t.h;
     return ptWithin(t.x,y1,t.w,y3-y1,evt.doX,evt.doY);
+  }
+  self.ptWithinLabel = function(evt)
+  {
+    var mb = gg.message_box;
+    //copied from mb draw
+    var y = mb.top_y;
+    if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
+    for(var i = 0; i < mb.displayed_i; i++)
+    {
+      if(mb.types[i] == CONTENT_LABEL && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
+      {
+        self.label_val = mb.bubbles[i][0];
+        return 1;
+      }
+      y += mb.pad;
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
+        y += mb.font_h+mb.pad;
+      else
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+      y += mb.pad;
+    }
+    return 0;
   }
   self.ptWithinConstant = function(evt)
   {
@@ -207,7 +231,7 @@ var content_dragger = function()
         return 1;
       }
       y += mb.pad;
-      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_CONSTANT)
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h+mb.pad;
       else
         y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
@@ -242,15 +266,17 @@ var content_dragger = function()
     self.dragging_x = 0;
     self.dragging_y = 0;
     self.dragging_data = 0;
-    self.dragging_sim = 0;
+    self.dragging_label = 0;
     self.dragging_constant = 0;
+    self.dragging_sim = 0;
 
     self.drag(evt);
 
-    if(gg.cur_level.msg_progress == 6 && self.ptWithinX(evt))                        { self.dragging_x = 1;     return 1; }
-    if(gg.cur_level.msg_progress == 6 && self.ptWithinY(evt))                        { self.dragging_y = 1;     return 1; }
+    if(gg.cur_level.msg_progress == 6 && self.ptWithinX(evt))                        { self.dragging_x = 1;        return 1; }
+    if(gg.cur_level.msg_progress == 6 && self.ptWithinY(evt))                        { self.dragging_y = 1;        return 1; }
     if(!gg.table.data_visible && self.ptWithinData(evt))                             { self.dragging_data = 1;     return 1; }
     if(gg.table.data_visible && gg.cur_level.progress < 10 && self.ptWithinSim(evt)) { self.dragging_sim = 1;      return 1; }
+    if(self.ptWithinLabel(evt))                                                      { self.dragging_label = 1;    return 1; }
     if(self.ptWithinConstant(evt))                                                   { self.dragging_constant = 1; return 1; }
     self.dragging = 0;
     return 0;
@@ -350,6 +376,49 @@ var content_dragger = function()
       }
 
     }
+    if(self.dragging_label)
+    {
+      for(var i = 0; i < gg.line.m_btn.length; i++)
+      {
+        if(ptWithinBox(gg.line.m_btn[i],evt.doX,evt.doY))
+        {
+          for(var j = 0; j < gg.cur_level.m_label.length; j++)
+            if(gg.cur_level.m_label[j] == self.label_val) gg.line.m_label[i] = j;
+          for(var j = 0; j < gg.cur_level.b_label.length; j++)
+            if(gg.cur_level.b_label[j] == self.label_val) gg.line.m_label[i] = j+gg.cur_level.m_label.length;
+        }
+      }
+      for(var i = 0; i < gg.line.b_btn.length; i++)
+      {
+        if(ptWithinBox(gg.line.b_btn[i],evt.doX,evt.doY))
+        {
+          for(var j = 0; j < gg.cur_level.m_label.length; j++)
+            if(gg.cur_level.m_label[j] == self.label_val) gg.line.b_label[i] = j;
+          for(var j = 0; j < gg.cur_level.b_label.length; j++)
+            if(gg.cur_level.b_label[j] == self.label_val) gg.line.b_label[i] = j+gg.cur_level.m_label.length;
+        }
+      }
+      var filled = 1;
+      for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] == -1) filled = 0;
+      for(var i = 0; i < gg.line.b_label.length; i++) if(gg.line.b_label[i] == -1) filled = 0;
+      if(filled)
+      {
+        var lcorrect = 1;
+        for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] != i) lcorrect = 0;
+        for(var i = 0; i < gg.line.b_label.length; i++) if(gg.line.b_label[i] != gg.cur_level.m_label.length+i) lcorrect = 0;
+        if(lcorrect)
+        {
+          gg.message_box.nq_group(gg.cur_level.text.constants);
+          gg.cur_level.progress++;
+          gg.stage_t = 0;
+        }
+        else
+        {
+          gg.message_box.nq_group(gg.cur_level.text.labels_incorrect);
+          //gg.cur_level.progress++; //don't advance
+        }
+      }
+    }
     if(self.dragging_constant)
     {
       for(var i = 0; i < gg.line.m_btn.length; i++)
@@ -366,8 +435,9 @@ var content_dragger = function()
     self.dragging_x = 0;
     self.dragging_y = 0;
     self.dragging_data = 0;
-    self.dragging_sim = 0;
+    self.dragging_label = 0;
     self.dragging_constant = 0;
+    self.dragging_sim = 0;
   }
 
   self.draw = function()
@@ -429,16 +499,22 @@ var content_dragger = function()
     {
       gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
     }
-    if(self.dragging_sim)
+    if(self.dragging_label)
     {
-      gg.ctx.drawImage(gg.submit_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
+      gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
+      gg.ctx.fillStyle = gg.message_box.data_text_color; gg.ctx.fillText(self.label_val,self.last_evt.doX+30,self.last_evt.doY);
     }
     if(self.dragging_constant)
     {
       gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
       gg.ctx.fillStyle = gg.message_box.data_text_color; gg.ctx.fillText(self.constant_val,self.last_evt.doX+30,self.last_evt.doY);
     }
+    if(self.dragging_sim)
+    {
+      gg.ctx.drawImage(gg.submit_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
+    }
   }
+
 }
 
 var exposition_box = function()
@@ -1837,7 +1913,7 @@ var message_box = function()
         }
         self.data_y = y;
       }
-      else if(self.types[i] == CONTENT_CONSTANT)
+      else if(self.types[i] == CONTENT_LABEL || self.types[i] == CONTENT_CONSTANT)
       {
         gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
         var c = 0;
@@ -1854,7 +1930,7 @@ var message_box = function()
       }
       gg.ctx.fillStyle = black;
       y += self.pad;
-      if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM || self.types[i] == CONTENT_CONSTANT)
+      if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM || self.types[i] == CONTENT_LABEL || self.types[i] == CONTENT_CONSTANT)
       {
         gg.ctx.textAlign = "left"; gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
         y += self.font_h+self.pad;
