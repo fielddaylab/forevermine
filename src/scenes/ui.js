@@ -1380,14 +1380,16 @@ var editable_line = function()
       gg.ctx.rect(gg.graph.x,gg.graph.y,gg.graph.w,gg.graph.h);
       gg.ctx.save();
       gg.ctx.clip();
+      var sx;
+      var sy;
+      var ex;
+      var ey;
       gg.ctx.strokeStyle = dark_gray;
       if(gg.graph.zoom > 0)
       {
-        var sx;
-        var sy;
-        var ex;
-        var ey;
-        for(var i = 0; i < self.day_m.length && i < gg.cur_level.day; i++)
+        var imax = min(self.day_m.length,gg.cur_level.day);
+        if(gg.cur_level.msg_progress < 6) imax = min(self.day_m.length,gg.cur_level.day-1);
+        for(var i = 0; i < imax; i++)
         {
           sx = gg.graph.x_for_x(24*i);
           ex = gg.graph.x_for_x(24*(i+1));
@@ -1396,15 +1398,28 @@ var editable_line = function()
           drawLine(sx,sy,ex,ey, gg.ctx);
         }
       }
-           if(gg.graph.zoom == 0) drawLine(self.sx0,self.sy0,self.ex0,self.ey0, gg.ctx);
-      else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
+      if(gg.cur_level.msg_progress < 6 && self.day_m.length >= gg.cur_level.day-1)
+      {
+        var i = gg.cur_level.day-1;
+        var fx = lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom);
+        sx = gg.graph.x_for_x(24*i);
+        ex = gg.graph.x_for_x(fx);
+        sy = gg.graph.y_for_y(self.day_b[i]);
+        ey = gg.graph.y_for_y(self.day_b[i]+(self.day_m[i]*(fx-gg.graph.x_off+24)));
+        drawLine(sx,sy,ex,ey, gg.ctx);
+      }
       else
       {
-        var sx = gg.graph.x_for_x(gg.graph.x0_min+gg.graph.x_off);
-        var ex = gg.graph.x_for_x(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom));
-        var sy = gg.graph.y_for_y(self.b_total);
-        var ey = gg.graph.y_for_y(self.b_total+(self.m_total*(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom)-gg.graph.x_off)));
-        drawLine(sx,sy,ex,ey, gg.ctx);
+             if(gg.graph.zoom == 0) drawLine(self.sx0,self.sy0,self.ex0,self.ey0, gg.ctx);
+        else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
+        else
+        {
+          sx = gg.graph.x_for_x(gg.graph.x0_min+gg.graph.x_off);
+          ex = gg.graph.x_for_x(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom));
+          sy = gg.graph.y_for_y(self.b_total);
+          ey = gg.graph.y_for_y(self.b_total+(self.m_total*(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom)-gg.graph.x_off)));
+          drawLine(sx,sy,ex,ey, gg.ctx);
+        }
       }
       gg.ctx.restore();
 

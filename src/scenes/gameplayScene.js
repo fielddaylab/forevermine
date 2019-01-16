@@ -308,6 +308,7 @@ var GamePlayScene = function(game, stage)
       case MODE_WORK_IN:
         if(gg.cur_level.skip_zoom)
         {
+          gg.graph.zoom = 0;
           //if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);//skip!
           gg.cur_level.progress++;
           if(!skipping) gg.message_box.nq_group(gg.cur_level.text.data);
@@ -315,10 +316,10 @@ var GamePlayScene = function(game, stage)
         }
         else
         {
+          gg.graph.zoom = 1;
           if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);
           gg.cur_level.progress++;
         }
-        gg.graph.zoom = 0;
         gg.stage_t = 0;
         break;
       case MODE_WORK:
@@ -514,11 +515,7 @@ var GamePlayScene = function(game, stage)
           case 1: //context
           case 2: //lets_go
           case 3: //status
-            gg.graph.zoom = 0;
-            break;
           case 4: //data
-            if(gg.graph.zoom != 1 && gg.mode == MODE_WORK && !gg.cur_level.skip_zoom)
-              gg.graph.zoom = min(gg.stage_t,100)/100;
             break;
           case 5: //axis
             if(gg.graph.zoom != 0) gg.graph.zoom = 1-(min(gg.stage_t,100)/100);
