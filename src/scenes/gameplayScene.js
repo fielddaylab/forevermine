@@ -285,6 +285,8 @@ var GamePlayScene = function(game, stage)
         //assume pre_text_0 already enqueued
         gg.cur_level = gg.next_level;
         gg.graph.x_off = gg.cur_level.day*24;
+        gg.graph.y0_min = gg.cur_level.y_min;
+        gg.graph.y0_max = gg.graph.y0_min+10;
         gg.timeline.t_speed = gg.cur_level.t_speed;
         gg.timeline.fast_t_speed = gg.cur_level.fast_t_speed;
         self.reset_level();
@@ -968,6 +970,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 0;
+    l.y_min = 0;
     for(var j = 0; j < 90; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1004,6 +1007,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 1;
+    l.y_min = 20;
     for(var j = 0; j < 90; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1040,6 +1044,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
     l.day = 2;
+    l.y_min = 0;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1067,8 +1072,8 @@ var GamePlayScene = function(game, stage)
     l.m_correct = [1.1,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [2,];
-    l.b_correct = [4,];
+    l.b_starting = [24,];
+    l.b_correct = [72,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.t_speed = 0.01;
@@ -1076,6 +1081,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 3;
+    l.y_min = 65;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)

@@ -720,6 +720,7 @@ var graph = function()
       for(var i = self.x0_min; i <= self.x0_max; i += self.x0_grid)
       {
         x = self.off_x_for_x(i);
+        if(x < self.x || x > self.x+self.w) continue;
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
         gg.ctx.fillText(i,x,self.y+self.h+15);
@@ -737,12 +738,10 @@ var graph = function()
       for(var i = self.x1_min; i <= self.x1_max; i += self.x1_grid)
       {
         x = self.x_for_x(i);
-        if(x < self.x+self.w)
-        {
-          gg.ctx.moveTo(x,self.y);
-          gg.ctx.lineTo(x,self.y+self.h);
-          gg.ctx.fillText(i/24,x,self.y+self.h+15);
-        }
+        if(x < self.x || x > self.x+self.w) continue;
+        gg.ctx.moveTo(x,self.y);
+        gg.ctx.lineTo(x,self.y+self.h);
+        gg.ctx.fillText(i/24,x,self.y+self.h+15);
       }
       gg.ctx.stroke();
 
