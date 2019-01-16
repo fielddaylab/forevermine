@@ -66,6 +66,9 @@ var GamePlayScene = function(game, stage)
       gg.screenclicker.y = 0;
       gg.screenclicker.w = gg.canv.width;
       gg.screenclicker.h = gg.canv.height;
+
+      gg.intro_vid.video.style.width = gg.canv.width;
+      gg.intro_vid.video.style.height = gg.canv.height;
     }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
@@ -268,6 +271,7 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
       case MODE_CINEMATIC:
+        gg.intro_vid.play();
         break;
       case MODE_BOOT:
         break;
@@ -391,6 +395,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CINEMATIC:
       {
+        if(!gg.intro_vid.done) return;
         if(!clicker.filter(gg.monitor) && gg.screenclicker.clicked) gg.monitor.click({});
         if(gg.monitor.clicked || gg.keylistener.advance())
           self.set_mode(MODE_BOOT,0);
@@ -939,6 +944,8 @@ var GamePlayScene = function(game, stage)
     gg.timeline = new timeline();
     gg.table = new table();
     gg.line = new editable_line();
+    gg.intro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){gg.intro_vid.done = 1;})
+    gg.intro_vid.load();
 
     gg.levels = [];
     var l;

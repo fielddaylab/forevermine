@@ -463,6 +463,56 @@ var GenAudio = function(src)
   return aud;
 }
 
+var Vid = function(container, source, callback)
+{
+  var self = this;
+
+  self.container = container;
+  self.source    = source;
+  self.callback  = callback;
+
+  self.video = document.createElement('video');
+  self.video.style.width = container.style.width;
+  self.video.style.height = container.style.height;
+  self.video.style.position = "absolute";
+  self.video.style.top = "0px";
+  self.video.style.left = "0px";
+  self.video.style.zIndex = "999";
+  self.video.controls = false;
+  self.video.loop = false;
+  self.video.playsinline = true;
+  self.video.setAttribute("webkit-playsinline","webkit-playsinline"); //ugh
+  var dom_src = document.createElement('source');
+  dom_src.src = self.source;
+  self.video.appendChild(dom_src);
+
+  self.onended = function()
+  {
+    self.container.removeChild(self.video);
+
+    self.video = undefined;
+    self.callback();
+  }
+  self.video.onended = self.onended;
+
+  self.load = function()
+  {
+    self.video.load();
+  }
+
+  self.play = function()
+  {
+    self.container.appendChild(self.video);
+    self.video.play();
+  }
+
+  self.stop = function()
+  {
+    self.video.pause();
+    self.onended();
+  }
+}
+
 var SeededRand = function(s)
 {
   var self = this;
