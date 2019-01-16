@@ -31,13 +31,6 @@ var english_text =
       "Ugh. I feel like I'm forgetting something important... ", CONTENT_PLAYER, EMOTE_NULL,
       "Oh no!!! My oxygen levels. I only have 14 days left!", CONTENT_PLAYER, EMOTE_NULL,
       "Don't worry, new best friend. I'll help you!", CONTENT_AI, EMOTE_NULL,
-      "This is Phil Testing things", CONTENT_AI, EMOTE_NULL,
-      "I'm going to get angry next sentence", CONTENT_AI, EMOTE_NULL,
-      "I'm angry now", CONTENT_AI, EMOTE_CHANGE,
-      "Still angry", CONTENT_AI, EMOTE_NULL,
-      "I'm going to EMP", CONTENT_AI, EMOTE_NULL,
-      "EMP", CONTENT_AI, EMOTE_EMP,
-      "I've just EMPd", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: context animation on-screen
     [
@@ -318,90 +311,6 @@ var english_text =
       "Ok. Let's start by looking at the batteries.", CONTENT_PLAYER, EMOTE_NULL,
       "Sure! You're in charge here!", CONTENT_AI, EMOTE_NULL,
       "Get it? In CHARGE?? 🙃", CONTENT_AI, EMOTE_NULL,
-    ],
-  },
-
-  //check out battery
-  { //one level. copy and paste from this { to the following } to create a new level
-    pre_context: //LAB: you've just awoken. lead into show context animation.
-    [
-      "Let's get to work, Cris.", CONTENT_AI, EMOTE_NULL,
-      "We need to look at how fast the robots are charging up.", CONTENT_AI, EMOTE_NULL,
-      "Oooh! Sounds like fun!", CONTENT_AI, EMOTE_NULL,
-    ],
-    context: //LAB: context animation on-screen
-    [
-      "I've got plenty of data on the robots' batteries!", CONTENT_AI, EMOTE_NULL,
-    ],
-    lets_go: //LAB: just shown context animation. lead into going to workspace.
-    [
-      "Great. Let's model it!", CONTENT_PLAYER, EMOTE_NULL,
-    ],
-    status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
-    [
-      get_timer(20), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
-    ],
-    data: //WORKSPACE: graph zoomed into 10-hour scope. give data
-    [
-      get_timer(80), "Here's the battery-charging data!", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "DATA:", CONTENT_DATA, EMOTE_NULL,
-    ],
-    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
-    [
-      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
-    ],
-    labels: //WORKSPACE: variables labelled, need to label constants
-    [
-      trigger_click, "So... I need to label the equation, right?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(120), "Yep! You're gettin' the hang of this!", CONTENT_AI, EMOTE_NULL,
-      get_timer(120), "I've been workin' on the railroad, allll the livelong day... 🎵", CONTENT_AI, EMOTE_NULL,
-    ],
-    labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
-    [
-      get_timer(20), "Nope! Try again, bestie.", CONTENT_AI, EMOTE_NULL,
-    ],
-    constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
-    [
-      get_timer(100), "Great job! 🎉", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "There's no initial charge.", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Initial", CONTENT_CONSTANT, 4,
-      trigger_click, "Do you know how fast the bots are charging?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(100), "Nope. You'll have to figure out the rate.", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "See if you can get the numbers to match up!", CONTENT_AI, EMOTE_NULL,
-    ],
-    submit: //WORKSPACE: values matched; lead to submit
-    [
-      get_timer(20), "Show me your data when you're ready!", CONTENT_AI, EMOTE_NULL,
-    ],
-    submitted_incorrect: //WORKSPACE: submitted before values correct; reset
-    [
-      get_timer(20), "Silly human! Try again.", CONTENT_AI, EMOTE_NULL,
-    ],
-    review: //WORKSPACE: submitted correct equation; lead to review survival chances
-    [
-      get_timer(20), "You did it! 🎉", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "We've got our baseline charge rate!", CONTENT_AI, EMOTE_NULL,
-    ],
-    debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
-    [
-      trigger_click, "Great. Let's see if I can make improve it!", CONTENT_PLAYER, EMOTE_NULL,
-    ],
-    pre_improve: //LAB: about to show system
-    [
-      "Wheee! I'm so glad that weird pulse messed up your ship.", CONTENT_AI, EMOTE_NULL,
-      "This is the most fun I've had in 200 years!!!", CONTENT_AI, EMOTE_NULL,
-      "Um... thanks.", CONTENT_PLAYER, EMOTE_NULL,
-      "I'm gonna build some new batteries now.", CONTENT_PLAYER, EMOTE_NULL,
-      "Good luck, bestie! 🤞", CONTENT_AI, EMOTE_NULL,
-    ],
-    improve: //LAB: show system
-    [
-    ],
-    post: //LAB: send to bed
-    [
-      "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -718,6 +627,251 @@ var english_text =
     ],
   },
 
+  //improve solar panels
+  { //one level. copy and paste from this { to the following } to create a new level
+    pre_context: //LAB: you've just awoken. lead into show context animation.
+    [
+      "Good morning, best friend!!!", CONTENT_AI, EMOTE_NULL,
+      "Yikes. You look awful.", CONTENT_AI, EMOTE_NULL,
+      "I was up all night working on the new solar panels.", CONTENT_PLAYER, EMOTE_NULL,
+      "I FINALLY got them installed a few hours ago.", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Oooooh, shiny!", CONTENT_AI, EMOTE_NULL,
+      "I've been collecting data all night.", CONTENT_AI, EMOTE_NULL,
+      "Let's pull up our model and see how your solar panels are working!", CONTENT_AI, EMOTE_NULL,
+    ],
+    lets_go: //LAB: just shown context animation. lead into going to workspace.
+    [
+    ],
+    status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    [
+      get_timer(20), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
+    ],
+    data: //WORKSPACE: graph zoomed into 10-hour scope. give data
+    [
+      get_timer(20), "Here's the new data!", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
+    ],
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ],
+    labels: //WORKSPACE: variables labelled, need to label constants
+    [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
+    ],
+    labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
+    [
+      get_timer(20), "Hmmm. That doesn't seem right.", CONTENT_AI, EMOTE_NULL,
+    ],
+    constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
+    [
+      get_timer(20), "The initial charge is still 0.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "You need to adjust the rate!", CONTENT_AI, EMOTE_NULL,
+    ],
+    submit: //WORKSPACE: values matched; lead to submit
+    [
+      get_timer(20), "Ready to show me your data?", CONTENT_AI, EMOTE_NULL,
+    ],
+    submitted_incorrect: //WORKSPACE: submitted before values correct; reset
+    [
+      get_timer(20), "Sorry, bestie. Those numbers don't match.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Try again!", CONTENT_AI, EMOTE_NULL,
+    ],
+    review: //WORKSPACE: submitted correct equation; lead to review survival chances
+    [
+      get_timer(20), "Great job, bestie! The numbers matched up!", CONTENT_AI, EMOTE_NULL,
+      trigger_click, "Wow! The new solar panels doubled our charge rate!", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Maybe I'm not gonna die after all!", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+    debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
+    [
+      get_timer(20), "Yeah! And plus, the bots look super cool now. 😎", CONTENT_AI, EMOTE_NULL,
+    ],
+    pre_improve: //LAB: about to show system
+    [
+      "So what should we do now?", CONTENT_AI, EMOTE_NULL,
+      "Hmmm. The solar panels are charging faster, but it might not be enough.", CONTENT_PLAYER, EMOTE_NULL,
+      "Can you pull up the fuel collecting model?", CONTENT_PLAYER, EMOTE_NULL,
+      "I need to predict if I'm gonna make it.", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
+    ],
+    post: //LAB: send to bed
+    [
+      "THIS SHOULD BE SKIPPED", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+  },
+
+  //check fuel
+  { //one level. copy and paste from this { to the following } to create a new level
+    pre_context: //LAB: you've just awoken. lead into show context animation.
+    [
+      "Here we go, friend!!!", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "The bots are hard at work.", CONTENT_AI, EMOTE_NULL,
+    ],
+    lets_go: //LAB: just shown context animation. lead into going to workspace.
+    [
+      "Let's see if it'll be enough!", CONTENT_AI, EMOTE_NULL,
+    ],
+    status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    [
+      get_timer(20), "Remember, you need enough fuel by Day 14.", CONTENT_AI, EMOTE_NULL,
+    ],
+    data: //WORKSPACE: graph zoomed into 10-hour scope. give data
+    [
+      get_timer(20), "Drag the data onto the table.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
+    ],
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ],
+    labels: //WORKSPACE: variables labelled, need to label constants
+    [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
+    ],
+    labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
+    [
+      get_timer(20), "Nope, that's not right! Give it another try.", CONTENT_AI, EMOTE_NULL,
+    ],
+    constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
+    [
+      get_timer(20), "Here's the fuel count.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "Match the data and we'll see if you're gonna die!", CONTENT_AI, EMOTE_NULL,
+    ],
+    submit: //WORKSPACE: values matched; lead to submit
+    [
+    ],
+    submitted_incorrect: //WORKSPACE: submitted before values correct; reset
+    [
+      get_timer(20), "Nope! Try again.", CONTENT_AI, EMOTE_NULL,
+    ],
+    review: //WORKSPACE: submitted correct equation; lead to review survival chances
+    [
+      get_timer(20), "So? How does it look?", CONTENT_AI, EMOTE_NULL,
+    ],
+    debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
+    [
+      trigger_click, "I can't believe it. I'm gonna make it!", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(20), "Wait... you are???", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "I didn't think that was actually gonna work... ", CONTENT_AI, EMOTE_NULL,
+      trigger_click, "Thank you for everything, Cris!", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+    pre_improve: //LAB: about to show system
+    [
+      "So... um... when do you leave?", CONTENT_AI, EMOTE_NULL,
+      "Looks like I'll have enough fuel on X!", CONTENT_PLAYER, EMOTE_NULL,
+      "Well, we could keep working on the robots, just in case... ", CONTENT_AI, EMOTE_NULL,
+      "That's a good idea, but I think I need some rest. I was up all night!", CONTENT_PLAYER, EMOTE_NULL,
+      "I'll try to stop by and say good-bye before I leave. Thanks again, Cris!!!", CONTENT_PLAYER, EMOTE_NULL,
+      "Don't mention it.", CONTENT_AI, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
+    ],
+    post: //LAB: send to bed
+    [
+      "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
+    ],
+  },
+
+  //improve drills
+  { //one level. copy and paste from this { to the following } to create a new level
+    pre_context: //LAB: you've just awoken. lead into show context animation.
+    [
+      "This is Phil Testing things", CONTENT_AI, EMOTE_NULL,
+      "I'm going to get angry next sentence", CONTENT_AI, EMOTE_NULL,
+      "I'm angry now", CONTENT_AI, EMOTE_CHANGE,
+      "Still angry", CONTENT_AI, EMOTE_NULL,
+      "I'm going to EMP", CONTENT_AI, EMOTE_NULL,
+      "EMP", CONTENT_AI, EMOTE_EMP,
+      "I've just EMPd", CONTENT_AI, EMOTE_NULL,
+    ],
+    context: //LAB: context animation on-screen
+    [
+      "Oooooh, shiny!", CONTENT_AI, EMOTE_NULL,
+      "I've been collecting data all night.", CONTENT_AI, EMOTE_NULL,
+      "Let's pull up our model and see how your solar panels are working!", CONTENT_AI, EMOTE_NULL,
+    ],
+    lets_go: //LAB: just shown context animation. lead into going to workspace.
+    [
+    ],
+    status: //WORKSPACE: full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    [
+      get_timer(20), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
+    ],
+    data: //WORKSPACE: graph zoomed into 10-hour scope. give data
+    [
+      get_timer(20), "Here's the new data!", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
+    ],
+    axis: //WORKSPACE: data imported, empty model framework shown. lead into "drag axis"
+    [
+      trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+    ],
+    labels: //WORKSPACE: variables labelled, need to label constants
+    [
+      get_timer(120), "THIS SHOULD BE SKIPPED", CONTENT_AI, EMOTE_NULL,
+    ],
+    labels_incorrect: //WORKSPACE: labels chosen incorrectly; reset
+    [
+      get_timer(20), "Hmmm. That doesn't seem right.", CONTENT_AI, EMOTE_NULL,
+    ],
+    constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
+    [
+      get_timer(20), "The initial charge is still 0.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "You need to adjust the rate!", CONTENT_AI, EMOTE_NULL,
+    ],
+    submit: //WORKSPACE: values matched; lead to submit
+    [
+      get_timer(20), "Ready to show me your data?", CONTENT_AI, EMOTE_NULL,
+    ],
+    submitted_incorrect: //WORKSPACE: submitted before values correct; reset
+    [
+      get_timer(20), "Sorry, bestie. Those numbers don't match.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Try again!", CONTENT_AI, EMOTE_NULL,
+    ],
+    review: //WORKSPACE: submitted correct equation; lead to review survival chances
+    [
+      get_timer(20), "Great job, bestie! The numbers matched up!", CONTENT_AI, EMOTE_NULL,
+      trigger_click, "Wow! The new solar panels doubled our charge rate!", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Maybe I'm not gonna die after all!", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+    debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
+    [
+      get_timer(20), "Yeah! And plus, the bots look super cool now. 😎", CONTENT_AI, EMOTE_NULL,
+    ],
+    pre_improve: //LAB: about to show system
+    [
+      "So what should we do now?", CONTENT_AI, EMOTE_NULL,
+      "Hmmm. The solar panels are charging faster, but it might not be enough.", CONTENT_PLAYER, EMOTE_NULL,
+      "Can you pull up the fuel collecting model?", CONTENT_PLAYER, EMOTE_NULL,
+      "I need to predict if I'm gonna make it.", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+    improve: //LAB: show system
+    [
+    ],
+    post: //LAB: send to bed
+    [
+      "THIS SHOULD BE SKIPPED", CONTENT_PLAYER, EMOTE_NULL,
+    ],
+  },
 
 ];
 

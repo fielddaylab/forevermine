@@ -1063,43 +1063,6 @@ var GamePlayScene = function(game, stage)
     gg.levels.push(l);
     i++;
 
-    //check out battery
-    l = new level();
-    l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [0,];
-    l.m_correct = [0.5,];
-    l.m_label = ["Rate",];
-    l.m_icon = [GenImg("assets/chrrate.png"),];
-    l.b_starting = [0,];
-    l.b_correct = [0,];
-    l.b_label = ["Initial",];
-    l.b_icon = [GenImg("assets/chrinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    l.day = 4;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
-    for(var j = 0; j < 0; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano = 1;
-    l.pano_st = 0;
-    l.pano_et = 0.4;
-    l.skip_context = 0;
-    l.skip_zoom = 1;
-    l.skip_axis = 1;
-    l.skip_labels = 0;
-    l.skip_system = 1;
-    l.skip_night = 0;
-    l.text = used_text[i];
-    l.fmt();
-    gg.levels.push(l);
-    i++;
-
     //improve charge rate
     l = new level();
     l.i = i;
@@ -1242,6 +1205,117 @@ var GamePlayScene = function(game, stage)
     l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 0;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    l.fmt();
+    gg.levels.push(l);
+    i++;
+
+    //improve solar panels
+    l = new level();
+    l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
+    l.m_starting = [0.5,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/chrrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [0,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/chrinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
+    l.day = 5;
+    for(var j = 0; j < 1; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 1;
+    l.skip_axis = 1;
+    l.skip_labels = 1;
+    l.skip_system = 1;
+    l.skip_night = 0;
+    l.text = used_text[i];
+    l.fmt();
+    gg.levels.push(l);
+    i++;
+
+    //check fuel
+    l = new level();
+    l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
+    l.m_starting = [1,];
+    l.m_correct = [1.1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [2,];
+    l.b_correct = [4,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "FUEL";
+    l.day = 6;
+    for(var j = 0; j < 1; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 1;
+    l.skip_zoom = 0;
+    l.skip_axis = 1;
+    l.skip_labels = 1;
+    l.skip_system = 1;
+    l.skip_night = 1;
+    l.text = used_text[i];
+    l.fmt();
+    gg.levels.push(l);
+    i++;
+
+    //improve drills
+    l = new level();
+    l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
+    l.m_starting = [0.5,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/chrrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [0,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/chrinitial.png"),];
+    l.x_n = 10;
+    l.y_n = 10;
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
+    l.day = 5;
+    for(var j = 0; j < 1; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 1;
+    l.skip_axis = 1;
+    l.skip_labels = 1;
+    l.skip_system = 1;
     l.skip_night = 0;
     l.text = used_text[i];
     l.fmt();
