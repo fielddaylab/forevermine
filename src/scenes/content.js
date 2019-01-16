@@ -23,6 +23,10 @@ var EMOTE_EXCITED    = ENUM; ENUM++;
 var EMOTE_BASHFUL    = ENUM; ENUM++;
 var EMOTE_SAD        = ENUM; ENUM++;
 var EMOTE_PROCESSING = ENUM; ENUM++;
+//special
+var EMOTE_BLACKOUT   = ENUM; ENUM++;
+var EMOTE_CHANGE     = ENUM; ENUM++;
+var EMOTE_EMP        = ENUM; ENUM++;
 var EMOTE_NULL       = ENUM; ENUM++;
 
 var level = function()

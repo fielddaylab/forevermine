@@ -166,6 +166,48 @@ var GamePlayScene = function(game, stage)
     gg.ctx.imageSmoothingEnabled = 1;
     drawImageBox(gg.console_img,gg.lab,gg.ctx);
     gg.exposition_box.draw();
+    if(gg.exposition_box.blackout_t)
+    {
+      var t = gg.exposition_box.blackout_t/gg.blackout_t;
+      gg.ctx.fillStyle = black;
+      gg.ctx.globalAlpha = 1-t;
+      gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      gg.ctx.globalAlpha = 1;
+    }
+    if(gg.exposition_box.emp_t)
+    {
+      if(gg.exposition_box.emp_t < gg.emp_start_boot_t)
+      {
+        var t = gg.exposition_box.emp_t/gg.emp_start_boot_t;
+        gg.ctx.fillStyle = black;
+        gg.ctx.globalAlpha = t;
+        gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+        gg.home_cam.wx = rand0()*10;
+        gg.home_cam.wy = rand0()*10;
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
+      }
+      else
+      {
+        var t = (gg.exposition_box.emp_t-gg.emp_start_boot_t)/(gg.emp_t-gg.emp_start_boot_t);
+        gg.ctx.fillStyle = black;
+        gg.ctx.globalAlpha = 1-t;
+        gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+        if(t < 0.5)
+        {
+          gg.home_cam.wx = rand0()*10*(1-(t*2));
+          gg.home_cam.wy = rand0()*10*(1-(t*2));
+        }
+        else //hack to neutralize camera by the end
+        {
+          gg.home_cam.wx = 0;
+          gg.home_cam.wy = 0;
+        }
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
+      }
+      gg.ctx.globalAlpha = 1;
+    }
   }
 
   self.draw_work = function()
@@ -847,6 +889,9 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
     gg.ctxf_t = 4;
     gg.pano_t = 250;
+    gg.emp_t = 250;
+    gg.emp_start_boot_t = 10;
+    gg.blackout_t = 100;
 
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};

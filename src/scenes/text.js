@@ -31,6 +31,13 @@ var english_text =
       "Ugh. I feel like I'm forgetting something important... ", CONTENT_PLAYER, EMOTE_NULL,
       "Oh no!!! My oxygen levels. I only have 14 days left!", CONTENT_PLAYER, EMOTE_NULL,
       "Don't worry, new best friend. I'll help you!", CONTENT_AI, EMOTE_NULL,
+      "This is Phil Testing things", CONTENT_AI, EMOTE_NULL,
+      "I'm going to get angry next sentence", CONTENT_AI, EMOTE_NULL,
+      "I'm angry now", CONTENT_AI, EMOTE_CHANGE,
+      "Still angry", CONTENT_AI, EMOTE_NULL,
+      "I'm going to EMP", CONTENT_AI, EMOTE_NULL,
+      "EMP", CONTENT_AI, EMOTE_EMP,
+      "I've just EMPd", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: context animation on-screen
     [

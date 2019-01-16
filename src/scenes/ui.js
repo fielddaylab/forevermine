@@ -539,6 +539,10 @@ var exposition_box = function()
 
   self.displayed_i = 0;
 
+  self.blackout_t = 0;
+  self.change_t = 0;
+  self.emp_t = 0;
+
   self.size = function()
   {
     self.text_w = self.w-self.pad*2;
@@ -574,20 +578,29 @@ var exposition_box = function()
     self.displayed_i++;
     if(self.displayed_i < self.texts.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
+    if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
+    if(self.metas[self.displayed_i] == EMOTE_CHANGE)   self.change_t = 1;
+    if(self.metas[self.displayed_i] == EMOTE_EMP)      self.emp_t = 1;
   }
 
   self.click = function(evt)
   {
+    if(self.emp_t) return;
     if(self.displayed_i < self.texts.length) self.advance();
   }
 
   self.tick = function()
   {
+    if(self.blackout_t) { self.blackout_t++; if(self.blackout_t == gg.blackout_t) { self.blackout_t = 0; self.advance(); } }
+    if(self.change_t) self.change_t++;
+    if(self.emp_t)  { self.emp_t++; if(self.emp_t == gg.emp_t) { self.emp_t = 0; self.advance(); } }
   }
 
   self.draw = function()
   {
     if(self.displayed_i >= self.texts.length) return;
+
+    if(self.emp_t || self.blackout_t) return;
 
     gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
