@@ -717,7 +717,7 @@ var graph = function()
     {
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
-      for(var i = self.x0_min+self.x0_grid; i < self.x0_max; i += self.x0_grid)
+      for(var i = self.x0_min; i <= self.x0_max; i += self.x0_grid)
       {
         x = self.off_x_for_x(i);
         gg.ctx.moveTo(x,self.y);
@@ -734,7 +734,7 @@ var graph = function()
     {
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
-      for(var i = self.x1_min+self.x1_grid; i < self.x1_max; i += self.x1_grid)
+      for(var i = self.x1_min; i <= self.x1_max; i += self.x1_grid)
       {
         x = self.x_for_x(i);
         if(x < self.x+self.w)
@@ -756,7 +756,7 @@ var graph = function()
     {
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
-      for(var i = self.y0_min+self.y0_grid; i < self.y0_max; i += self.y0_grid)
+      for(var i = self.y0_min; i <= self.y0_max; i += self.y0_grid)
       {
         y = self.y_for_y(i);
         gg.ctx.moveTo(self.x,y);
@@ -775,7 +775,7 @@ var graph = function()
     {
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
-      for(var i = self.y1_min+self.y1_grid; i < self.y1_max; i += self.y1_grid)
+      for(var i = self.y1_min; i <= self.y1_max; i += self.y1_grid)
       {
         y = self.y_for_y(i);
         if(y > self.y)
@@ -1401,13 +1401,10 @@ var editable_line = function()
       else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
       else
       {
-        gg.ctx.globalAlpha = 0.1;
-        drawLine(lerp(self.sx0,self.sx1,gg.graph.zoom),lerp(self.sy0,self.sy1,gg.graph.zoom),lerp(self.ex0,self.ex1,gg.graph.zoom),lerp(self.ey0,self.ey1,gg.graph.zoom), gg.ctx);
         var sx = gg.graph.x_for_x(gg.graph.x0_min+gg.graph.x_off);
         var ex = gg.graph.x_for_x(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom));
         var sy = gg.graph.y_for_y(self.b_total);
         var ey = gg.graph.y_for_y(self.b_total+(self.m_total*(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom)-gg.graph.x_off)));
-        gg.ctx.globalAlpha = 1;
         drawLine(sx,sy,ex,ey, gg.ctx);
       }
       gg.ctx.restore();

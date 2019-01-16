@@ -45,8 +45,6 @@ var level = function()
   self.b_label_fmt = [];
   self.b_icon = [GenIcon(10,10),];
 
-  self.x_n = 10;
-  self.y_n = 10;
   self.t_speed = 0.01;
   self.fast_t_speed = 0.1;
   self.x_label = "HOURS";
