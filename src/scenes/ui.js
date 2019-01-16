@@ -644,6 +644,7 @@ var graph = function()
 
   self.zoom = 0;
 
+  self.x_off = 0;
   self.x0_min = 0;
   self.x0_max = 10;
   self.y0_min = 0;
@@ -658,11 +659,18 @@ var graph = function()
   self.x1_grid = 24;
   self.y1_grid = 50;
 
+  self.off_x_for_x = function(x)
+  {
+    x = x+self.x_off;
+    if(self.zoom == 0) return mapVal(self.x0_min+self.x_off,self.x0_max+self.x_off,self.x,self.x+self.w,x);
+    else if(self.zoom == 1) return mapVal(self.x1_min,self.x1_max,self.x,self.x+self.w,x);
+    else return mapVal(lerp(self.x0_min+self.x_off,self.x1_min,self.zoom),lerp(self.x0_max+self.x_off,self.x1_max,self.zoom),self.x,self.x+self.w,x);
+  }
   self.x_for_x = function(x)
   {
-    if(self.zoom == 0) return mapVal(self.x0_min,self.x0_max,self.x,self.x+self.w,x);
+    if(self.zoom == 0) return mapVal(self.x0_min+self.x_off,self.x0_max+self.x_off,self.x,self.x+self.w,x);
     else if(self.zoom == 1) return mapVal(self.x1_min,self.x1_max,self.x,self.x+self.w,x);
-    else return mapVal(lerp(self.x0_min,self.x1_min,self.zoom),lerp(self.x0_max,self.x1_max,self.zoom),self.x,self.x+self.w,x);
+    else return mapVal(lerp(self.x0_min+self.x_off,self.x1_min,self.zoom),lerp(self.x0_max+self.x_off,self.x1_max,self.zoom),self.x,self.x+self.w,x);
   }
   self.y_for_y = function(y)
   {
@@ -711,7 +719,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.x0_min+self.x0_grid; i < self.x0_max; i += self.x0_grid)
       {
-        x = self.x_for_x(i);
+        x = self.off_x_for_x(i);
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
         gg.ctx.fillText(i,x,self.y+self.h+15);
@@ -788,7 +796,7 @@ var graph = function()
 
       //tl
     gg.ctx.strokeStyle = gray;
-    x = self.x_for_x(gg.timeline.t);
+    x = self.off_x_for_x(gg.timeline.t);
     drawLine(x,self.y,x,self.y+self.h,gg.ctx);
 
     if(self.zoom > 0.5)
@@ -930,6 +938,9 @@ var editable_line = function()
   self.x_set = 0;
   self.y_set = 0;
 
+  self.day_m = [];
+  self.day_b = [];
+
   self.m_select_btn = [];
   self.m_btn = [];
   self.minc_btn = [];
@@ -948,6 +959,12 @@ var editable_line = function()
   self.sy1 = 0;
   self.ex1 = 0;
   self.ey1 = 0;
+
+  self.push_day = function(m,b)
+  {
+    self.day_m.push(m);
+    self.day_b.push(b);
+  }
 
   self.calc_m_total = function()
   {
@@ -1212,8 +1229,8 @@ var editable_line = function()
       if(self.ey0 < gg.graph.y0_min) { self.ex0 = (gg.graph.y0_min-self.b_total)/self.m_total; self.ey0 = gg.graph.y0_min; }
       if(self.ey0 > gg.graph.y0_max) { self.ex0 = (gg.graph.y0_max-self.b_total)/self.m_total; self.ey0 = gg.graph.y0_max; }
     }
-    self.sx0 = gg.graph.x_for_x(self.sx0);
-    self.ex0 = gg.graph.x_for_x(self.ex0);
+    self.sx0 = gg.graph.off_x_for_x(self.sx0);
+    self.ex0 = gg.graph.off_x_for_x(self.ex0);
     self.sy0 = gg.graph.y_for_y(self.sy0);
     self.ey0 = gg.graph.y_for_y(self.ey0);
 
@@ -1231,8 +1248,8 @@ var editable_line = function()
       if(self.ey1 < gg.graph.y1_min) { self.ex1 = (gg.graph.y1_min-self.b_total)/self.m_total; self.ey1 = gg.graph.y1_min; }
       if(self.ey1 > gg.graph.y1_max) { self.ex1 = (gg.graph.y1_max-self.b_total)/self.m_total; self.ey1 = gg.graph.y1_max; }
     }
-    self.sx1 = gg.graph.x_for_x(self.sx1);
-    self.ex1 = gg.graph.x_for_x(self.ex1);
+    self.sx1 = gg.graph.off_x_for_x(self.sx1);
+    self.ex1 = gg.graph.off_x_for_x(self.ex1);
     self.sy1 = gg.graph.y_for_y(self.sy1);
     self.ey1 = gg.graph.y_for_y(self.ey1);
 
@@ -1361,10 +1378,39 @@ var editable_line = function()
       gg.ctx.strokeStyle = white;
 
         //line
+      gg.ctx.rect(gg.graph.x,gg.graph.y,gg.graph.w,gg.graph.h);
+      gg.ctx.save();
+      gg.ctx.clip();
       gg.ctx.strokeStyle = dark_gray;
+      if(gg.graph.zoom > 0)
+      {
+        var sx;
+        var sy;
+        var ex;
+        var ey;
+        for(var i = 0; i < self.day_m.length && i < gg.cur_level.day; i++)
+        {
+          sx = gg.graph.x_for_x(24*i);
+          ex = gg.graph.x_for_x(24*(i+1));
+          sy = gg.graph.y_for_y(self.day_b[i]);
+          ey = gg.graph.y_for_y(self.day_b[i]+self.day_m[i]*24);
+          drawLine(sx,sy,ex,ey, gg.ctx);
+        }
+      }
            if(gg.graph.zoom == 0) drawLine(self.sx0,self.sy0,self.ex0,self.ey0, gg.ctx);
       else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
-      else drawLine(lerp(self.sx0,self.sx1,gg.graph.zoom),lerp(self.sy0,self.sy1,gg.graph.zoom),lerp(self.ex0,self.ex1,gg.graph.zoom),lerp(self.ey0,self.ey1,gg.graph.zoom), gg.ctx);
+      else
+      {
+        gg.ctx.globalAlpha = 0.1;
+        drawLine(lerp(self.sx0,self.sx1,gg.graph.zoom),lerp(self.sy0,self.sy1,gg.graph.zoom),lerp(self.ex0,self.ex1,gg.graph.zoom),lerp(self.ey0,self.ey1,gg.graph.zoom), gg.ctx);
+        var sx = gg.graph.x_for_x(gg.graph.x0_min+gg.graph.x_off);
+        var ex = gg.graph.x_for_x(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom));
+        var sy = gg.graph.y_for_y(self.b_total);
+        var ey = gg.graph.y_for_y(self.b_total+(self.m_total*(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom)-gg.graph.x_off)));
+        gg.ctx.globalAlpha = 1;
+        drawLine(sx,sy,ex,ey, gg.ctx);
+      }
+      gg.ctx.restore();
 
         //icons
       if(gg.table.data_visible && gg.graph.zoom == 0)
@@ -1375,7 +1421,7 @@ var editable_line = function()
         {
           if(gg.table.known_data[i] != "-")
           {
-            x = gg.graph.x_for_x(i);
+            x = gg.graph.off_x_for_x(i);
             y = gg.graph.y_for_y(gg.table.known_data[i]);
             if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,x-s/2,y-s/2,s,s);
             else gg.ctx.drawImage(gg.neq_pt_img,x-s/2,y-s/2,s,s);
@@ -1594,6 +1640,7 @@ var table = function()
     if(gg.cur_level.progress == 8 && self.correct && !old_correct)
     {
       gg.message_box.nq_group(gg.cur_level.text.submit);
+      if(gg.cur_level.push_work) gg.line.push_day(gg.line.m_total,gg.line.b_total);
       gg.cur_level.progress++;
       gg.stage_t = 0;
     }
@@ -2009,7 +2056,7 @@ var message_box = function()
     if(self.prompt_end)
     {
       var s = 20;
-      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y,s,s);
+      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y+s,s,s);
     }
     var h = gg.neck_heart_img.height/gg.neck_heart_img.width*self.monitor_w;
     gg.ctx.drawImage(gg.neck_heart_img,self.monitor_x,self.monitor_y+self.monitor_h-h/2,self.monitor_w,h);

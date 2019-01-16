@@ -66,6 +66,7 @@ var level = function()
   self.skip_labels = 0;
   self.skip_system = 0;
   self.skip_night = 0;
+  self.push_work = 0;
 
   self.text = {}; //see text.js for format
 
