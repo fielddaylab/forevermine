@@ -250,7 +250,7 @@ var GamePlayScene = function(game, stage)
     gg.ctx.font = "40px DisposableDroidBB";
     gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
     gg.ctx.font = "20px DisposableDroidBB";
-    gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,gg.canv.height-80+30);
+    gg.ctx.fillText((gg.max_days-gg.cur_level.day)+" days of oxygen remain", 20,gg.canv.height-80+30);
   }
 
   self.set_mode = function(mode,skipping)
@@ -884,7 +884,7 @@ var GamePlayScene = function(game, stage)
 
   self.ready = function()
   {
-    gg.max_days = 14;
+    gg.max_days = 6;
     gg.needed_fuel = 400;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
@@ -1003,7 +1003,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "FUEL";
-    l.day = 2;
+    l.day = 1;
     for(var j = 0; j < 90; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1039,7 +1039,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 3;
+    l.day = 2;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1075,7 +1075,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "FUEL";
-    l.day = 4;
+    l.day = 3;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1111,7 +1111,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 5;
+    l.day = 4;
     for(var j = 0; j < 0; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1147,7 +1147,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "FUEL";
-    l.day = 6;
+    l.day = 4;
     for(var j = 0; j < 0; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1183,7 +1183,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 7;
+    l.day = 5;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1219,7 +1219,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "FUEL";
-    l.day = 8;
+    l.day = 5;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1255,7 +1255,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 9;
+    l.day = 6;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1344,11 +1344,11 @@ var GamePlayScene = function(game, stage)
   {
     if(self.txt_lines.length == 0)
       /*
-      self.HACKTXT(`     You wake up in a dark room. All you see is the black screen of an old monitor.                       Your memory starts to return: you were on a routine mission to refurbish an old mining planet.      But before your ship was able to touch down, something went wrong. You must have stumbled into this abandoned control center and passed out.                                                   You check your vitals- uh oh. Only 14 days worth of oxygen left, and your ship is out of fuel.                                                            You need to find a way off this planet.
+      self.HACKTXT(`     You wake up in a dark room. All you see is the black screen of an old monitor.                       Your memory starts to return: you were on a routine mission to refurbish an old mining planet.      But before your ship was able to touch down, something went wrong. You must have stumbled into this abandoned control center and passed out.                                                   You check your vitals- uh oh. Only "+gg.max_days+" days worth of oxygen left, and your ship is out of fuel.                                                            You need to find a way off this planet.
         `
       );
       */
-      self.HACKTXT("You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 14 days of oxygen left. You need to find a way off this planet.");
+      self.HACKTXT("You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 6 days of oxygen left. You need to find a way off this planet.");
     gg.monitor.draw(); //draws to self- not to screen
     self.draw_mode();
   };
