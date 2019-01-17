@@ -414,8 +414,10 @@ var content_dragger = function()
         }
         else
         {
+          if(!gg.cur_level.sent_labels_incorrect)
           gg.message_box.nq_group(gg.cur_level.text.labels_incorrect);
           //gg.cur_level.progress++; //don't advance
+          gg.cur_level.sent_labels_incorrect = 1;
         }
       }
     }
@@ -1310,8 +1312,10 @@ var editable_line = function()
         }
         else
         {
+          if(!gg.cur_level.sent_labels_incorrect)
           gg.message_box.nq_group(gg.cur_level.text.labels_incorrect);
           //gg.cur_level.progress++; //don't advance
+          gg.cur_level.sent_labels_incorrect = 1;
         }
       }
     }
@@ -1785,7 +1789,6 @@ var message_box = function()
   self.target_top_y = 0;
   self.bottom_y = 0;
   self.data_y = 0;
-  self.constant_ys = [];
 
   self.advance_t = self.thinking_buff-1;
   self.thinking_buff = 50;
@@ -2003,7 +2006,11 @@ var message_box = function()
         }
         self.data_y = y;
       }
-      else if(self.types[i] == CONTENT_LABEL || self.types[i] == CONTENT_CONSTANT)
+      else if(self.types[i] == CONTENT_LABEL)
+      {
+        gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
+      }
+      else if(self.types[i] == CONTENT_CONSTANT)
       {
         gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
         var c = 0;
@@ -2012,7 +2019,6 @@ var message_box = function()
         for(var j = 0; j < gg.cur_level.b_label.length; j++)
           if(self.bubbles[i][0] == gg.cur_level.b_label[j]) c = gg.cur_level.b_correct[j];
         gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.pad+self.bubble_w/2+30, y+(self.pad+self.font_h+self.pad)*2/3);
-        self.constant_ys.push(y);
       }
       else if(self.types[i] == CONTENT_SIM)
       {

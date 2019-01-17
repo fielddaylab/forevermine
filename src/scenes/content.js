@@ -52,7 +52,7 @@ var level = function()
 
   self.day = 0;
 
-  self.feedback_imgs = [];
+  self.context_imgs = [];
   self.system_imgs = [];
   self.pano = 0;
   self.pano_st = 0;

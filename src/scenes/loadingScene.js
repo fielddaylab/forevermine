@@ -151,17 +151,17 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/battery.png");
     img_srcs.push("assets/drill.png");
     for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/feedback/0-"+i+".png");
+      img_srcs.push("assets/context/0-"+i+".png");
     for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/feedback/1-"+i+".png");
+      img_srcs.push("assets/context/1-"+i+".png");
     for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/feedback/2-"+i+".png");
+      img_srcs.push("assets/context/2-"+i+".png");
     for(var i = 0; i < 5; i++)
-      img_srcs.push("assets/feedback/3-"+i+".jpg");
+      img_srcs.push("assets/context/3-"+i+".jpg");
     for(var i = 0; i < 1; i++)
-      img_srcs.push("assets/feedback/4-"+i+".png");
+      img_srcs.push("assets/context/4-"+i+".png");
     for(var i = 0; i < 1; i++)
-      img_srcs.push("assets/feedback/5-"+i+".png");
+      img_srcs.push("assets/context/5-"+i+".png");
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();
