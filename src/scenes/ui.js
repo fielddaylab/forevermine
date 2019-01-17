@@ -1403,6 +1403,14 @@ var editable_line = function()
         var i = gg.cur_level.day-1;
         var fx = lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom);
         sx = gg.graph.x_for_x(24*i);
+        ex = gg.graph.x_for_x(24*(i+1));
+        sy = gg.graph.y_for_y(self.day_b[i]);
+        ey = gg.graph.y_for_y(self.day_b[i]+(self.day_m[i]*24));
+        drawLine(sx,sy,ex,ey, gg.ctx);
+
+        gg.ctx.setLineDash([5,5]);
+        fx = lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom);
+        sx = gg.graph.x_for_x(24*i);
         ex = gg.graph.x_for_x(fx);
         sy = gg.graph.y_for_y(self.day_b[i]);
         ey = gg.graph.y_for_y(self.day_b[i]+(self.day_m[i]*(fx-gg.graph.x_off+24)));
@@ -1410,6 +1418,7 @@ var editable_line = function()
       }
       else
       {
+        gg.ctx.setLineDash([5,5]);
              if(gg.graph.zoom == 0) drawLine(self.sx0,self.sy0,self.ex0,self.ey0, gg.ctx);
         else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
         else
