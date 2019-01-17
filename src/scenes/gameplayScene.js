@@ -61,6 +61,14 @@ var GamePlayScene = function(game, stage)
       gg.line.x = gg.message_box.x+gg.message_box.w;
       gg.line.y = 0;
       gg.line.w = gg.canv.width-gg.line.x;
+
+      gg.screenclicker.x = 0;
+      gg.screenclicker.y = 0;
+      gg.screenclicker.w = gg.canv.width;
+      gg.screenclicker.h = gg.canv.height;
+
+      gg.intro_vid.video.style.width = gg.canv.width;
+      gg.intro_vid.video.style.height = gg.canv.height;
     }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
@@ -161,6 +169,48 @@ var GamePlayScene = function(game, stage)
     gg.ctx.imageSmoothingEnabled = 1;
     drawImageBox(gg.console_img,gg.lab,gg.ctx);
     gg.exposition_box.draw();
+    if(gg.exposition_box.blackout_t)
+    {
+      var t = gg.exposition_box.blackout_t/gg.blackout_t;
+      gg.ctx.fillStyle = black;
+      gg.ctx.globalAlpha = 1-t;
+      gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      gg.ctx.globalAlpha = 1;
+    }
+    if(gg.exposition_box.emp_t)
+    {
+      if(gg.exposition_box.emp_t < gg.emp_start_boot_t)
+      {
+        var t = gg.exposition_box.emp_t/gg.emp_start_boot_t;
+        gg.ctx.fillStyle = black;
+        gg.ctx.globalAlpha = t;
+        gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+        gg.home_cam.wx = rand0()*10;
+        gg.home_cam.wy = rand0()*10;
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
+      }
+      else
+      {
+        var t = (gg.exposition_box.emp_t-gg.emp_start_boot_t)/(gg.emp_t-gg.emp_start_boot_t);
+        gg.ctx.fillStyle = black;
+        gg.ctx.globalAlpha = 1-t;
+        gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+        if(t < 0.5)
+        {
+          gg.home_cam.wx = rand0()*10*(1-(t*2));
+          gg.home_cam.wy = rand0()*10*(1-(t*2));
+        }
+        else //hack to neutralize camera by the end
+        {
+          gg.home_cam.wx = 0;
+          gg.home_cam.wy = 0;
+        }
+        screenSpace(gg.home_cam,gg.canv,gg.lab);
+        screenSpace(gg.home_cam,gg.canv,gg.monitor);
+      }
+      gg.ctx.globalAlpha = 1;
+    }
   }
 
   self.draw_work = function()
@@ -198,9 +248,9 @@ var GamePlayScene = function(game, stage)
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "40px DisposableDroidBB";
-    gg.ctx.fillText("Day "+gg.cur_level.i, 20,gg.canv.height-80);
+    gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
     gg.ctx.font = "20px DisposableDroidBB";
-    gg.ctx.fillText((14-gg.cur_level.i)+" days of oxygen remain", 20,gg.canv.height-80+30);
+    gg.ctx.fillText((gg.max_days-gg.cur_level.day)+" days of oxygen remain", 20,gg.canv.height-80+30);
   }
 
   self.set_mode = function(mode,skipping)
@@ -221,6 +271,7 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
       case MODE_CINEMATIC:
+        gg.intro_vid.play();
         break;
       case MODE_BOOT:
         break;
@@ -233,10 +284,11 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         //assume pre_text_0 already enqueued
         gg.cur_level = gg.next_level;
+        gg.graph.x_off = gg.cur_level.day*24;
+        gg.graph.y0_min = gg.cur_level.y_min;
+        gg.graph.y0_max = gg.graph.y0_min+10;
         gg.timeline.t_speed = gg.cur_level.t_speed;
         gg.timeline.fast_t_speed = gg.cur_level.fast_t_speed;
-        gg.timeline.t_max = gg.cur_level.x_n;
-        gg.graph.v_max = gg.cur_level.y_n;
         self.reset_level();
         gg.message_box.clear();
         break;
@@ -256,6 +308,7 @@ var GamePlayScene = function(game, stage)
       case MODE_WORK_IN:
         if(gg.cur_level.skip_zoom)
         {
+          gg.graph.zoom = 0;
           //if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);//skip!
           gg.cur_level.progress++;
           if(!skipping) gg.message_box.nq_group(gg.cur_level.text.data);
@@ -263,10 +316,10 @@ var GamePlayScene = function(game, stage)
         }
         else
         {
+          gg.graph.zoom = 1;
           if(!skipping) gg.message_box.nq_group(gg.cur_level.text.status);
           gg.cur_level.progress++;
         }
-        gg.graph.zoom = 0;
         gg.stage_t = 0;
         break;
       case MODE_WORK:
@@ -338,13 +391,14 @@ var GamePlayScene = function(game, stage)
     switch(gg.mode)
     {
       case MODE_MENU:
-        clicker.filter(gg.monitor);
+        if(!clicker.filter(gg.monitor) && gg.screenclicker.clicked) gg.monitor.click({});
         //if(gg.monitor.clicked)
           self.set_mode(MODE_CINEMATIC,0);
         break;
       case MODE_CINEMATIC:
       {
-        clicker.filter(gg.monitor);
+        if(!gg.intro_vid.done) return;
+        if(!clicker.filter(gg.monitor) && gg.screenclicker.clicked) gg.monitor.click({});
         if(gg.monitor.clicked || gg.keylistener.advance())
           self.set_mode(MODE_BOOT,0);
       }
@@ -371,7 +425,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE0:
       {
         gg.mode_p = 0.5;
-        clicker.filter(gg.exposition_box);
+        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_context)
@@ -385,7 +439,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX_IN:
       {
         gg.mode_p = gg.mode_t/gg.fade_t;
-        clicker.filter(gg.exposition_box);
+        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
         if(gg.mode_p < 1)
         {
         }
@@ -395,7 +449,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX:
       {
         gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.feedback_imgs.length*2);
-        clicker.filter(gg.exposition_box);
+        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_CTX_OUT,0);
       }
@@ -412,7 +466,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE1:
       {
         gg.mode_p = 0.5;
-        clicker.filter(gg.exposition_box);
+        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
           self.set_mode(MODE_WORK_IN,0);
         gg.exposition_box.tick();
@@ -461,17 +515,13 @@ var GamePlayScene = function(game, stage)
           case 1: //context
           case 2: //lets_go
           case 3: //status
-            gg.graph.zoom = 0;
-            break;
           case 4: //data
-            if(gg.mode == MODE_WORK && !gg.cur_level.skip_zoom)
-              gg.graph.zoom = min(gg.stage_t,100)/100;
-            else gg.graph.zoom = 0;
             break;
           case 5: //axis
+            if(gg.graph.zoom != 0) gg.graph.zoom = 1-(min(gg.stage_t,100)/100);
+            break;
           case 6: //labels
-            if(!gg.cur_level.skip_zoom)
-              gg.graph.zoom = 1-(min(gg.stage_t,100)/100);
+            if(gg.graph.zoom != 0) gg.graph.zoom = 1-(min(gg.stage_t,100)/100);
             break;
           case 7: //constants
           case 8: //submit
@@ -565,7 +615,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_POST0:
       {
-        clicker.filter(gg.exposition_box);
+        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_system)
@@ -610,7 +660,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_POST1:
       {
-        clicker.filter(gg.exposition_box);
+        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_night)
@@ -833,17 +883,21 @@ var GamePlayScene = function(game, stage)
 
   self.ready = function()
   {
-    gg.max_days = 14;
-    gg.needed_crystals = 400;
+    gg.max_days = 6;
+    gg.needed_fuel = 400;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
-    gg.ctxf_t = 3;
+    gg.ctxf_t = 4;
     gg.pano_t = 250;
+    gg.emp_t = 250;
+    gg.emp_start_boot_t = 10;
+    gg.blackout_t = 100;
 
-    gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
+    gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
+    gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
     gg.eq_img = GenImg("assets/eq.png");
     gg.eq_pt_img = GenImg("assets/eq_pt.png");
@@ -888,13 +942,15 @@ var GamePlayScene = function(game, stage)
     gg.timeline = new timeline();
     gg.table = new table();
     gg.line = new editable_line();
+    gg.intro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){gg.intro_vid.done = 1;})
+    gg.intro_vid.load();
 
     gg.levels = [];
     var l;
     var m;
     var i = 0;
 
-    //check crystals
+    //check fuel
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
@@ -904,15 +960,14 @@ var GamePlayScene = function(game, stage)
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [0,];
     l.b_correct = [1,];
-    l.b_label = ["Existing Crystals",];
+    l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
+    l.y_label = "FUEL";
     l.day = 0;
+    l.y_min = 0;
     for(var j = 0; j < 90; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -926,67 +981,30 @@ var GamePlayScene = function(game, stage)
     l.skip_labels = 0;
     l.skip_system = 1;
     l.skip_night = 0;
+    l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
     i++;
 
-    //crystal increase
+    //fuel increase
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [1,];
+    l.m_starting = [gg.levels[l.i-1].m_correct[0],];
     l.m_correct = [2,];
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [1,];
-    l.b_correct = [2,];
-    l.b_label = ["Existing Crystals",];
+    l.b_starting = [gg.levels[l.i-1].b_correct[0],];
+    l.b_correct = [gg.levels[l.i-1].b_correct[0]+gg.levels[l.i-1].m_correct[0]*24,];
+    l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
+    l.y_label = "FUEL";
     l.day = 1;
-    for(var j = 0; j < 90; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
-    for(var j = 0; j < 0; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano = 0;
-    l.pano_st = 0;
-    l.pano_et = 0.05;
-    l.skip_context = 0;
-    l.skip_zoom = 0;
-    l.skip_axis = 1;
-    l.skip_labels = 1;
-    l.skip_system = 1;
-    l.skip_night = 0;
-    l.text = used_text[i];
-    l.fmt();
-    gg.levels.push(l);
-    i++;
-
-    //crystal return to normal
-    l = new level();
-    l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [2,];
-    l.m_correct = [1,];
-    l.m_label = ["Mining Rate",];
-    l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [2,];
-    l.b_correct = [3,];
-    l.b_label = ["Existing Crystals",];
-    l.b_icon = [GenImg("assets/cryinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
-    l.day = 2;
+    l.y_min = 20;
     for(var j = 0; j < 90; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1000,43 +1018,7 @@ var GamePlayScene = function(game, stage)
     l.skip_labels = 1;
     l.skip_system = 0;
     l.skip_night = 0;
-    l.text = used_text[i];
-    l.fmt();
-    gg.levels.push(l);
-    i++;
-
-    //check out battery
-    l = new level();
-    l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [0,];
-    l.m_correct = [0.5,];
-    l.m_label = ["Rate",];
-    l.m_icon = [GenImg("assets/chrrate.png"),];
-    l.b_starting = [0,];
-    l.b_correct = [0,];
-    l.b_label = ["Initial",];
-    l.b_icon = [GenImg("assets/chrinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
-    l.t_speed = 0.01;
-    l.fast_t_speed = 0.1;
-    l.x_label = "HOURS";
-    l.y_label = "CHARGE";
-    l.day = 3;
-    for(var j = 0; j < 3; j++)
-      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".jpg"));
-    for(var j = 0; j < 0; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
-    l.pano = 1;
-    l.pano_st = 0;
-    l.pano_et = 0.4;
-    l.skip_context = 0;
-    l.skip_zoom = 1;
-    l.skip_axis = 1;
-    l.skip_labels = 0;
-    l.skip_system = 1;
-    l.skip_night = 0;
+    l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
@@ -1054,13 +1036,12 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [0,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/chrinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 3;
+    l.day = 2;
+    l.y_min = 0;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1074,30 +1055,30 @@ var GamePlayScene = function(game, stage)
     l.skip_labels = 1;
     l.skip_system = 1;
     l.skip_night = 0;
+    l.push_work = 0;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
     i++;
 
-    //check crystals
+    //check fuel
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [1,];
+    l.m_starting = [gg.levels[l.i-2].m_correct[0],];
     l.m_correct = [1.1,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [2,];
-    l.b_correct = [4,];
+    l.b_starting = [gg.levels[l.i-2].b_correct[0],];
+    l.b_correct = [gg.levels[l.i-2].b_correct[0]+gg.levels[l.i-2].m_correct[0]*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
-    l.day = 4;
+    l.y_label = "FUEL";
+    l.day = 3;
+    l.y_min = 65;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1111,6 +1092,7 @@ var GamePlayScene = function(game, stage)
     l.skip_labels = 1;
     l.skip_system = 1;
     l.skip_night = 1;
+    l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
@@ -1128,8 +1110,6 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [0.2,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/chrinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1148,30 +1128,29 @@ var GamePlayScene = function(game, stage)
     l.skip_labels = 1;
     l.skip_system = 1;
     l.skip_night = 0;
+    l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
     i++;
 
-    //check crystals
+    //check fuel
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [1.1,];
+    l.m_starting = [gg.levels[l.i-2].m_correct[0],];
     l.m_correct = [1.2,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [4,];
-    l.b_correct = [5,];
+    l.b_starting = [gg.levels[l.i-2].b_correct[0],];
+    l.b_correct = [gg.levels[l.i-2].b_correct[0]+gg.levels[l.i-2].m_correct[0]*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
-    l.x_n = 10;
-    l.y_n = 10;
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CRYSTALS";
-    l.day = 5;
+    l.y_label = "FUEL";
+    l.day = 4;
     for(var j = 0; j < 0; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1185,14 +1164,119 @@ var GamePlayScene = function(game, stage)
     l.skip_labels = 1;
     l.skip_system = 0;
     l.skip_night = 0;
+    l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
     i++;
 
+    //improve solar panels
+    l = new level();
+    l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
+    l.m_starting = [0.5,];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/chrrate.png"),];
+    l.b_starting = [0,];
+    l.b_correct = [0,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/chrinitial.png"),];
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
+    l.day = 5;
+    for(var j = 0; j < 1; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 1;
+    l.skip_axis = 1;
+    l.skip_labels = 1;
+    l.skip_system = 1;
+    l.skip_night = 0;
+    l.push_work = 1;
+    l.text = used_text[i];
+    l.fmt();
+    gg.levels.push(l);
+    i++;
 
+    //check fuel
+    l = new level();
+    l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
+    l.m_starting = [gg.levels[l.i-2].m_correct[0],];
+    l.m_correct = [1.1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [gg.levels[l.i-2].b_correct[0],];
+    l.b_correct = [gg.levels[l.i-2].b_correct[0]+gg.levels[l.i-2].m_correct[0]*24,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "FUEL";
+    l.day = 5;
+    for(var j = 0; j < 1; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 1;
+    l.skip_zoom = 0;
+    l.skip_axis = 1;
+    l.skip_labels = 1;
+    l.skip_system = 1;
+    l.skip_night = 1;
+    l.push_work = 1;
+    l.text = used_text[i];
+    l.fmt();
+    gg.levels.push(l);
+    i++;
 
-
+    //improve drills
+    l = new level();
+    l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
+    l.m_starting = [gg.levels[l.i-1].m_correct[0],];
+    l.m_correct = [1,];
+    l.m_label = ["Rate",];
+    l.m_icon = [GenImg("assets/chrrate.png"),];
+    l.b_starting = [gg.levels[l.i-1].b_correct[0],];
+    l.b_correct = [gg.levels[l.i-1].b_correct[0]+gg.levels[l.i-1].m_correct[0]*24,];
+    l.b_label = ["Initial",];
+    l.b_icon = [GenImg("assets/chrinitial.png"),];
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "CHARGE";
+    l.day = 6;
+    for(var j = 0; j < 1; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 1;
+    l.skip_axis = 1;
+    l.skip_labels = 1;
+    l.skip_system = 1;
+    l.skip_night = 0;
+    l.push_work = 1;
+    l.text = used_text[i];
+    l.fmt();
+    gg.levels.push(l);
+    i++;
 
 
     self.was_ready = 1;
@@ -1239,6 +1323,7 @@ var GamePlayScene = function(game, stage)
 
     gg.mode_t++;
     gg.stage_t++;
+    clicker.filter(gg.screenclicker);
     keyer.filter(gg.keylistener);
     gg.monitor.tick();
     self.tick_mode();
@@ -1250,6 +1335,7 @@ var GamePlayScene = function(game, stage)
     blurer.flush();
 
     gg.keylistener.advance();
+    gg.screenclicker.clicked = 0;
   };
 
   self.HACKTXT = function(txt)
@@ -1261,11 +1347,11 @@ var GamePlayScene = function(game, stage)
   {
     if(self.txt_lines.length == 0)
       /*
-      self.HACKTXT(`     You wake up in a dark room. All you see is the black screen of an old monitor.                       Your memory starts to return: you were on a routine mission to refurbish an old mining planet.      But before your ship was able to touch down, something went wrong. You must have stumbled into this abandoned control center and passed out.                                                   You check your vitals- uh oh. Only 14 days worth of oxygen left, and your ship is out of fuel.                                                            You need to find a way off this planet.
+      self.HACKTXT(`     You wake up in a dark room. All you see is the black screen of an old monitor.                       Your memory starts to return: you were on a routine mission to refurbish an old mining planet.      But before your ship was able to touch down, something went wrong. You must have stumbled into this abandoned control center and passed out.                                                   You check your vitals- uh oh. Only "+gg.max_days+" days worth of oxygen left, and your ship is out of fuel.                                                            You need to find a way off this planet.
         `
       );
       */
-      self.HACKTXT("You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 14 days of oxygen left. You need to find a way off this planet.");
+      self.HACKTXT("You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 6 days of oxygen left. You need to find a way off this planet.");
     gg.monitor.draw(); //draws to self- not to screen
     self.draw_mode();
   };

@@ -12,6 +12,7 @@ var CONTENT_NULL     = ENUM; ENUM++;
 var CONTENT_PLAYER   = ENUM; ENUM++;
 var CONTENT_AI       = ENUM; ENUM++;
 var CONTENT_DATA     = ENUM; ENUM++;
+var CONTENT_LABEL    = ENUM; ENUM++;
 var CONTENT_CONSTANT = ENUM; ENUM++;
 var CONTENT_SIM      = ENUM; ENUM++;
 var CONTENT_NULL     = ENUM; ENUM++;
@@ -22,6 +23,10 @@ var EMOTE_EXCITED    = ENUM; ENUM++;
 var EMOTE_BASHFUL    = ENUM; ENUM++;
 var EMOTE_SAD        = ENUM; ENUM++;
 var EMOTE_PROCESSING = ENUM; ENUM++;
+//special
+var EMOTE_BLACKOUT   = ENUM; ENUM++;
+var EMOTE_CHANGE     = ENUM; ENUM++;
+var EMOTE_EMP        = ENUM; ENUM++;
 var EMOTE_NULL       = ENUM; ENUM++;
 
 var level = function()
@@ -40,12 +45,10 @@ var level = function()
   self.b_label_fmt = [];
   self.b_icon = [GenIcon(10,10),];
 
-  self.x_n = 10;
-  self.y_n = 10;
   self.t_speed = 0.01;
   self.fast_t_speed = 0.1;
   self.x_label = "HOURS";
-  self.y_label = "CRYSTALS";
+  self.y_label = "FUEL";
 
   self.day = 0;
 
@@ -61,6 +64,7 @@ var level = function()
   self.skip_labels = 0;
   self.skip_system = 0;
   self.skip_night = 0;
+  self.push_work = 0;
 
   self.text = {}; //see text.js for format
 

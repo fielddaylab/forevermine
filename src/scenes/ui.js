@@ -137,8 +137,10 @@ var content_dragger = function()
   self.dragging_x = 0;
   self.dragging_y = 0;
   self.dragging_data = 0;
-  self.dragging_sim = 0;
+  self.dragging_label = 0;
   self.dragging_constant = 0;
+  self.dragging_sim = 0;
+  self.label_val = 0;
   self.constant_val = 0;
   self.last_evt = 0;
 
@@ -146,12 +148,20 @@ var content_dragger = function()
   self.ptWithinX = function(evt)
   {
     if(gg.line.x_set) return 0;
-    return 1;
+    var x = gg.graph.x;
+    var y = gg.graph.y+gg.graph.h;
+    var w = gg.graph.w;
+    var h = 50;
+    return ptWithin(x,y,w,h,  evt.doX,evt.doY);
   }
   self.ptWithinY = function(evt)
   {
     if(gg.line.y_set) return 0;
-    return 1;
+    var x = gg.message_box.x+gg.message_box.w;
+    var y = gg.graph.y;
+    var w = gg.graph.x-x;
+    var h = gg.graph.h;
+    return ptWithin(x,y,w,h,  evt.doX,evt.doY);
   }
   self.ptWithinData = function(evt)
   {
@@ -164,7 +174,7 @@ var content_dragger = function()
       if(mb.types[i] == CONTENT_DATA && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
         return 1;
       y += mb.pad;
-      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_CONSTANT)
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h+mb.pad;
       else
         y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
@@ -180,6 +190,28 @@ var content_dragger = function()
     var y1 = t.y+t.h*1/3;
     var y3 = t.y+t.h;
     return ptWithin(t.x,y1,t.w,y3-y1,evt.doX,evt.doY);
+  }
+  self.ptWithinLabel = function(evt)
+  {
+    var mb = gg.message_box;
+    //copied from mb draw
+    var y = mb.top_y;
+    if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
+    for(var i = 0; i < mb.displayed_i; i++)
+    {
+      if(mb.types[i] == CONTENT_LABEL && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
+      {
+        self.label_val = mb.bubbles[i][0];
+        return 1;
+      }
+      y += mb.pad;
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
+        y += mb.font_h+mb.pad;
+      else
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+      y += mb.pad;
+    }
+    return 0;
   }
   self.ptWithinConstant = function(evt)
   {
@@ -199,7 +231,7 @@ var content_dragger = function()
         return 1;
       }
       y += mb.pad;
-      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_CONSTANT)
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h+mb.pad;
       else
         y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
@@ -234,15 +266,17 @@ var content_dragger = function()
     self.dragging_x = 0;
     self.dragging_y = 0;
     self.dragging_data = 0;
-    self.dragging_sim = 0;
+    self.dragging_label = 0;
     self.dragging_constant = 0;
+    self.dragging_sim = 0;
 
     self.drag(evt);
 
-    if(gg.cur_level.msg_progress == 6 && self.ptWithinX(evt))                        { self.dragging_x = 1;     return 1; }
-    if(gg.cur_level.msg_progress == 6 && self.ptWithinY(evt))                        { self.dragging_y = 1;     return 1; }
+    if(gg.cur_level.msg_progress == 6 && self.ptWithinX(evt))                        { self.dragging_x = 1;        return 1; }
+    if(gg.cur_level.msg_progress == 6 && self.ptWithinY(evt))                        { self.dragging_y = 1;        return 1; }
     if(!gg.table.data_visible && self.ptWithinData(evt))                             { self.dragging_data = 1;     return 1; }
     if(gg.table.data_visible && gg.cur_level.progress < 10 && self.ptWithinSim(evt)) { self.dragging_sim = 1;      return 1; }
+    if(self.ptWithinLabel(evt))                                                      { self.dragging_label = 1;    return 1; }
     if(self.ptWithinConstant(evt))                                                   { self.dragging_constant = 1; return 1; }
     self.dragging = 0;
     return 0;
@@ -342,6 +376,49 @@ var content_dragger = function()
       }
 
     }
+    if(self.dragging_label)
+    {
+      for(var i = 0; i < gg.line.m_btn.length; i++)
+      {
+        if(ptWithinBox(gg.line.m_btn[i],evt.doX,evt.doY))
+        {
+          for(var j = 0; j < gg.cur_level.m_label.length; j++)
+            if(gg.cur_level.m_label[j] == self.label_val) gg.line.m_label[i] = j;
+          for(var j = 0; j < gg.cur_level.b_label.length; j++)
+            if(gg.cur_level.b_label[j] == self.label_val) gg.line.m_label[i] = j+gg.cur_level.m_label.length;
+        }
+      }
+      for(var i = 0; i < gg.line.b_btn.length; i++)
+      {
+        if(ptWithinBox(gg.line.b_btn[i],evt.doX,evt.doY))
+        {
+          for(var j = 0; j < gg.cur_level.m_label.length; j++)
+            if(gg.cur_level.m_label[j] == self.label_val) gg.line.b_label[i] = j;
+          for(var j = 0; j < gg.cur_level.b_label.length; j++)
+            if(gg.cur_level.b_label[j] == self.label_val) gg.line.b_label[i] = j+gg.cur_level.m_label.length;
+        }
+      }
+      var filled = 1;
+      for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] == -1) filled = 0;
+      for(var i = 0; i < gg.line.b_label.length; i++) if(gg.line.b_label[i] == -1) filled = 0;
+      if(filled)
+      {
+        var lcorrect = 1;
+        for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] != i) lcorrect = 0;
+        for(var i = 0; i < gg.line.b_label.length; i++) if(gg.line.b_label[i] != gg.cur_level.m_label.length+i) lcorrect = 0;
+        if(lcorrect)
+        {
+          gg.message_box.nq_group(gg.cur_level.text.constants);
+          gg.cur_level.progress++;
+          gg.stage_t = 0;
+        }
+        else
+        {
+          gg.message_box.nq_group(gg.cur_level.text.labels_incorrect);
+          //gg.cur_level.progress++; //don't advance
+        }
+      }
+    }
     if(self.dragging_constant)
     {
       for(var i = 0; i < gg.line.m_btn.length; i++)
@@ -355,9 +432,12 @@ var content_dragger = function()
           gg.line.b_btn[i].set(self.constant_val);
       }
     }
+    self.dragging_x = 0;
+    self.dragging_y = 0;
     self.dragging_data = 0;
-    self.dragging_sim = 0;
+    self.dragging_label = 0;
     self.dragging_constant = 0;
+    self.dragging_sim = 0;
   }
 
   self.draw = function()
@@ -409,26 +489,32 @@ var content_dragger = function()
     }
     if(self.dragging_x)
     {
-
+      gg.ctx.fillText(gg.cur_level.x_label,self.last_evt.doX,self.last_evt.doY);
     }
     if(self.dragging_y)
     {
-
+      gg.ctx.fillText(gg.cur_level.y_label,self.last_evt.doX,self.last_evt.doY);
     }
     if(self.dragging_data)
     {
       gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
     }
-    if(self.dragging_sim)
+    if(self.dragging_label)
     {
-      gg.ctx.drawImage(gg.submit_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
+      gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
+      gg.ctx.fillStyle = gg.message_box.data_text_color; gg.ctx.fillText(self.label_val,self.last_evt.doX+30,self.last_evt.doY);
     }
     if(self.dragging_constant)
     {
       gg.ctx.drawImage(gg.data_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
       gg.ctx.fillStyle = gg.message_box.data_text_color; gg.ctx.fillText(self.constant_val,self.last_evt.doX+30,self.last_evt.doY);
     }
+    if(self.dragging_sim)
+    {
+      gg.ctx.drawImage(gg.submit_img,self.last_evt.doX-30,self.last_evt.doY-30,60,60);
+    }
   }
+
 }
 
 var exposition_box = function()
@@ -443,7 +529,8 @@ var exposition_box = function()
 
   self.pad = 10;
   self.font_h = 30;
-  self.font = self.font_h+"px DisposableDroidBB";
+  self.ai_font = self.font_h+"px DisposableDroidBB";
+  self.player_font = floor(self.font_h*0.7)+"px Helvetica";
 
   self.texts = [];
   self.bubbles = [];
@@ -451,6 +538,10 @@ var exposition_box = function()
   self.metas = [];
 
   self.displayed_i = 0;
+
+  self.blackout_t = 0;
+  self.change_t = 0;
+  self.emp_t = 0;
 
   self.size = function()
   {
@@ -469,7 +560,8 @@ var exposition_box = function()
   self.nq = function(text, type, meta)
   {
     self.texts.push(text);
-    self.bubbles.push(textToLines(self.font,self.text_w,text,gg.ctx));
+    if(type == CONTENT_AI) self.bubbles.push(textToLines(self.ai_font,self.text_w,text,gg.ctx));
+    else self.bubbles.push(textToLines(self.player_font,self.text_w,text,gg.ctx));
     self.types.push(type);
     self.metas.push(meta);
     if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
@@ -486,20 +578,29 @@ var exposition_box = function()
     self.displayed_i++;
     if(self.displayed_i < self.texts.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
+    if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
+    if(self.metas[self.displayed_i] == EMOTE_CHANGE)   self.change_t = 1;
+    if(self.metas[self.displayed_i] == EMOTE_EMP)      self.emp_t = 1;
   }
 
   self.click = function(evt)
   {
+    if(self.emp_t) return;
     if(self.displayed_i < self.texts.length) self.advance();
   }
 
   self.tick = function()
   {
+    if(self.blackout_t) { self.blackout_t++; if(self.blackout_t == gg.blackout_t) { self.blackout_t = 0; self.advance(); } }
+    if(self.change_t) self.change_t++;
+    if(self.emp_t)  { self.emp_t++; if(self.emp_t == gg.emp_t) { self.emp_t = 0; self.advance(); } }
   }
 
   self.draw = function()
   {
     if(self.displayed_i >= self.texts.length) return;
+
+    if(self.emp_t || self.blackout_t) return;
 
     gg.ctx.lineWidth = 1;
     strokeBox(self,gg.ctx);
@@ -508,18 +609,26 @@ var exposition_box = function()
     fillBox(self,gg.ctx);
     gg.ctx.globalAlpha = 1;
 
-    gg.ctx.fillStyle = white;
     gg.ctx.textAlign = "left";
-    gg.ctx.font = self.font;
+    var y = self.y+self.pad+self.font_h/2;
     switch(self.types[self.displayed_i])
     {
-      case CONTENT_AI: gg.ctx.fillText("CRIS",self.x+self.pad,self.y+self.font_h/2); break;
-      case CONTENT_PLAYER: gg.ctx.fillText("YOU",self.x+self.pad,self.y+self.font_h/2); break;
+      case CONTENT_AI:
+        gg.ctx.font = self.ai_font;
+        gg.ctx.fillStyle = cyan;
+        gg.ctx.fillText("CRIS",self.x+self.pad,y);
+        break;
+      case CONTENT_PLAYER:
+        gg.ctx.font = self.player_font;
+        gg.ctx.fillStyle = magenta;
+        gg.ctx.fillText("YOU",self.x+self.pad,y);
+        break;
     }
-    var y = self.y+self.pad;
+    y += self.font_h;
+    gg.ctx.fillStyle = white;
     for(var i = 0; i < self.bubbles[self.displayed_i].length; i++)
     {
-      gg.ctx.fillText(self.bubbles[self.displayed_i][i],self.x+self.pad,y+self.font_h);
+      gg.ctx.fillText(self.bubbles[self.displayed_i][i],self.x+self.pad,y);
       y += self.font_h+self.pad;
     }
   }
@@ -535,6 +644,7 @@ var graph = function()
 
   self.zoom = 0;
 
+  self.x_off = 0;
   self.x0_min = 0;
   self.x0_max = 10;
   self.y0_min = 0;
@@ -545,15 +655,22 @@ var graph = function()
   self.x1_min = 0;
   self.x1_max = gg.max_days*24;
   self.y1_min = 0;
-  self.y1_max = round(gg.needed_crystals*1.1);
+  self.y1_max = round(gg.needed_fuel*1.1);
   self.x1_grid = 24;
   self.y1_grid = 50;
 
+  self.off_x_for_x = function(x)
+  {
+    x = x+self.x_off;
+    if(self.zoom == 0) return mapVal(self.x0_min+self.x_off,self.x0_max+self.x_off,self.x,self.x+self.w,x);
+    else if(self.zoom == 1) return mapVal(self.x1_min,self.x1_max,self.x,self.x+self.w,x);
+    else return mapVal(lerp(self.x0_min+self.x_off,self.x1_min,self.zoom),lerp(self.x0_max+self.x_off,self.x1_max,self.zoom),self.x,self.x+self.w,x);
+  }
   self.x_for_x = function(x)
   {
-    if(self.zoom == 0) return mapVal(self.x0_min,self.x0_max,self.x,self.x+self.w,x);
+    if(self.zoom == 0) return mapVal(self.x0_min+self.x_off,self.x0_max+self.x_off,self.x,self.x+self.w,x);
     else if(self.zoom == 1) return mapVal(self.x1_min,self.x1_max,self.x,self.x+self.w,x);
-    else return mapVal(lerp(self.x0_min,self.x1_min,self.zoom),lerp(self.x0_max,self.x1_max,self.zoom),self.x,self.x+self.w,x);
+    else return mapVal(lerp(self.x0_min+self.x_off,self.x1_min,self.zoom),lerp(self.x0_max+self.x_off,self.x1_max,self.zoom),self.x,self.x+self.w,x);
   }
   self.y_for_y = function(y)
   {
@@ -579,7 +696,7 @@ var graph = function()
     {
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.fillStyle = "#7FE288";
-      zy = self.y_for_y(gg.needed_crystals);
+      zy = self.y_for_y(gg.needed_fuel);
       if(zy < self.y) zy = self.y;
       gg.ctx.fillRect(self.x,self.y,self.w,zy-self.y);
       gg.ctx.fillStyle = "#F19B8B";
@@ -600,9 +717,10 @@ var graph = function()
     {
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
-      for(var i = self.x0_min+self.x0_grid; i < self.x0_max; i += self.x0_grid)
+      for(var i = self.x0_min; i <= self.x0_max; i += self.x0_grid)
       {
-        x = self.x_for_x(i);
+        x = self.off_x_for_x(i);
+        if(x < self.x || x > self.x+self.w) continue;
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
         gg.ctx.fillText(i,x,self.y+self.h+15);
@@ -617,15 +735,13 @@ var graph = function()
     {
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
-      for(var i = self.x1_min+self.x1_grid; i < self.x1_max; i += self.x1_grid)
+      for(var i = self.x1_min; i <= self.x1_max; i += self.x1_grid)
       {
         x = self.x_for_x(i);
-        if(x < self.x+self.w)
-        {
-          gg.ctx.moveTo(x,self.y);
-          gg.ctx.lineTo(x,self.y+self.h);
-          gg.ctx.fillText(i/24,x,self.y+self.h+15);
-        }
+        if(x < self.x || x > self.x+self.w) continue;
+        gg.ctx.moveTo(x,self.y);
+        gg.ctx.lineTo(x,self.y+self.h);
+        gg.ctx.fillText(i/24,x,self.y+self.h+15);
       }
       gg.ctx.stroke();
 
@@ -639,7 +755,7 @@ var graph = function()
     {
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
-      for(var i = self.y0_min+self.y0_grid; i < self.y0_max; i += self.y0_grid)
+      for(var i = self.y0_min; i <= self.y0_max; i += self.y0_grid)
       {
         y = self.y_for_y(i);
         gg.ctx.moveTo(self.x,y);
@@ -658,7 +774,7 @@ var graph = function()
     {
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
-      for(var i = self.y1_min+self.y1_grid; i < self.y1_max; i += self.y1_grid)
+      for(var i = self.y1_min; i <= self.y1_max; i += self.y1_grid)
       {
         y = self.y_for_y(i);
         if(y > self.y)
@@ -679,7 +795,7 @@ var graph = function()
 
       //tl
     gg.ctx.strokeStyle = gray;
-    x = self.x_for_x(gg.timeline.t);
+    x = self.off_x_for_x(gg.timeline.t);
     drawLine(x,self.y,x,self.y+self.h,gg.ctx);
 
     if(self.zoom > 0.5)
@@ -821,6 +937,9 @@ var editable_line = function()
   self.x_set = 0;
   self.y_set = 0;
 
+  self.day_m = [];
+  self.day_b = [];
+
   self.m_select_btn = [];
   self.m_btn = [];
   self.minc_btn = [];
@@ -839,6 +958,12 @@ var editable_line = function()
   self.sy1 = 0;
   self.ex1 = 0;
   self.ey1 = 0;
+
+  self.push_day = function(m,b)
+  {
+    self.day_m.push(m);
+    self.day_b.push(b);
+  }
 
   self.calc_m_total = function()
   {
@@ -1103,8 +1228,8 @@ var editable_line = function()
       if(self.ey0 < gg.graph.y0_min) { self.ex0 = (gg.graph.y0_min-self.b_total)/self.m_total; self.ey0 = gg.graph.y0_min; }
       if(self.ey0 > gg.graph.y0_max) { self.ex0 = (gg.graph.y0_max-self.b_total)/self.m_total; self.ey0 = gg.graph.y0_max; }
     }
-    self.sx0 = gg.graph.x_for_x(self.sx0);
-    self.ex0 = gg.graph.x_for_x(self.ex0);
+    self.sx0 = gg.graph.off_x_for_x(self.sx0);
+    self.ex0 = gg.graph.off_x_for_x(self.ex0);
     self.sy0 = gg.graph.y_for_y(self.sy0);
     self.ey0 = gg.graph.y_for_y(self.ey0);
 
@@ -1122,8 +1247,8 @@ var editable_line = function()
       if(self.ey1 < gg.graph.y1_min) { self.ex1 = (gg.graph.y1_min-self.b_total)/self.m_total; self.ey1 = gg.graph.y1_min; }
       if(self.ey1 > gg.graph.y1_max) { self.ex1 = (gg.graph.y1_max-self.b_total)/self.m_total; self.ey1 = gg.graph.y1_max; }
     }
-    self.sx1 = gg.graph.x_for_x(self.sx1);
-    self.ex1 = gg.graph.x_for_x(self.ex1);
+    self.sx1 = gg.graph.off_x_for_x(self.sx1);
+    self.ex1 = gg.graph.off_x_for_x(self.ex1);
     self.sy1 = gg.graph.y_for_y(self.sy1);
     self.ey1 = gg.graph.y_for_y(self.ey1);
 
@@ -1252,10 +1377,51 @@ var editable_line = function()
       gg.ctx.strokeStyle = white;
 
         //line
+      gg.ctx.rect(gg.graph.x,gg.graph.y,gg.graph.w,gg.graph.h);
+      gg.ctx.save();
+      gg.ctx.clip();
+      var sx;
+      var sy;
+      var ex;
+      var ey;
       gg.ctx.strokeStyle = dark_gray;
-           if(gg.graph.zoom == 0) drawLine(self.sx0,self.sy0,self.ex0,self.ey0, gg.ctx);
-      else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
-      else drawLine(lerp(self.sx0,self.sx1,gg.graph.zoom),lerp(self.sy0,self.sy1,gg.graph.zoom),lerp(self.ex0,self.ex1,gg.graph.zoom),lerp(self.ey0,self.ey1,gg.graph.zoom), gg.ctx);
+      if(gg.graph.zoom > 0)
+      {
+        var imax = min(self.day_m.length,gg.cur_level.day);
+        if(gg.cur_level.msg_progress < 6) imax = min(self.day_m.length,gg.cur_level.day-1);
+        for(var i = 0; i < imax; i++)
+        {
+          sx = gg.graph.x_for_x(24*i);
+          ex = gg.graph.x_for_x(24*(i+1));
+          sy = gg.graph.y_for_y(self.day_b[i]);
+          ey = gg.graph.y_for_y(self.day_b[i]+self.day_m[i]*24);
+          drawLine(sx,sy,ex,ey, gg.ctx);
+        }
+      }
+      if(gg.cur_level.msg_progress < 6 && self.day_m.length >= gg.cur_level.day-1)
+      {
+        var i = gg.cur_level.day-1;
+        var fx = lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom);
+        sx = gg.graph.x_for_x(24*i);
+        ex = gg.graph.x_for_x(fx);
+        sy = gg.graph.y_for_y(self.day_b[i]);
+        ey = gg.graph.y_for_y(self.day_b[i]+(self.day_m[i]*(fx-gg.graph.x_off+24)));
+        drawLine(sx,sy,ex,ey, gg.ctx);
+      }
+      else
+      {
+             if(gg.graph.zoom == 0) drawLine(self.sx0,self.sy0,self.ex0,self.ey0, gg.ctx);
+        else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
+        else
+        {
+          sx = gg.graph.x_for_x(gg.graph.x0_min+gg.graph.x_off);
+          ex = gg.graph.x_for_x(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom));
+          sy = gg.graph.y_for_y(self.b_total);
+          ey = gg.graph.y_for_y(self.b_total+(self.m_total*(lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom)-gg.graph.x_off)));
+          drawLine(sx,sy,ex,ey, gg.ctx);
+        }
+      }
+      gg.ctx.restore();
 
         //icons
       if(gg.table.data_visible && gg.graph.zoom == 0)
@@ -1266,7 +1432,7 @@ var editable_line = function()
         {
           if(gg.table.known_data[i] != "-")
           {
-            x = gg.graph.x_for_x(i);
+            x = gg.graph.off_x_for_x(i);
             y = gg.graph.y_for_y(gg.table.known_data[i]);
             if(gg.table.known_data[i] == gg.table.predicted_data[i]) gg.ctx.drawImage(gg.eq_pt_img,x-s/2,y-s/2,s,s);
             else gg.ctx.drawImage(gg.neq_pt_img,x-s/2,y-s/2,s,s);
@@ -1291,11 +1457,17 @@ var editable_line = function()
         gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
       gg.ctx.font = "15px DisposableDroidBB";
       if(self.y_set)
+      {
+      gg.ctx.textAlign = "center";
       drawImageSizeCentered(gg.cur_level.y_icon, self.eqn_xs[0], self.eqn_y+self.font_h*2/3, self.font_h*1.5, gg.ctx);
       gg.ctx.fillText(gg.cur_level.y_label,self.eqn_xs[0],self.eqn_y+self.font_h*1.5);
+      }
       if(self.x_set)
+      {
+      gg.ctx.textAlign = "left";
       drawImageSizeCentered(gg.time_img, self.eqn_xs[self.eqn_x_i]+self.font_h*3/4, self.eqn_y+self.font_h*2/3, self.font_h*4/5, gg.ctx);
-      gg.ctx.fillText("HOURS",self.eqn_xs[self.eqn_x_i]+self.font_h/3,self.eqn_y+self.font_h*1.5);
+      gg.ctx.fillText(gg.cur_level.x_label,self.eqn_xs[self.eqn_x_i]+self.font_h/3,self.eqn_y+self.font_h*1.5);
+      }
       gg.ctx.font = "20px DisposableDroidBB";
       //boxes
       for(var i = 0; i < self.m_select_btn.length; i++)
@@ -1310,6 +1482,7 @@ var editable_line = function()
       }
 
       //selector
+      gg.ctx.textAlign = "left";
       gg.ctx.font = "20px DisposableDroidBB";
       gg.ctx.fillStyle = white;
       if(gg.cur_level.progress < 8)
@@ -1478,6 +1651,7 @@ var table = function()
     if(gg.cur_level.progress == 8 && self.correct && !old_correct)
     {
       gg.message_box.nq_group(gg.cur_level.text.submit);
+      if(gg.cur_level.push_work) gg.line.push_day(gg.line.m_total,gg.line.b_total);
       gg.cur_level.progress++;
       gg.stage_t = 0;
     }
@@ -1820,7 +1994,7 @@ var message_box = function()
         }
         self.data_y = y;
       }
-      else if(self.types[i] == CONTENT_CONSTANT)
+      else if(self.types[i] == CONTENT_LABEL || self.types[i] == CONTENT_CONSTANT)
       {
         gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
         var c = 0;
@@ -1837,7 +2011,7 @@ var message_box = function()
       }
       gg.ctx.fillStyle = black;
       y += self.pad;
-      if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM || self.types[i] == CONTENT_CONSTANT)
+      if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM || self.types[i] == CONTENT_LABEL || self.types[i] == CONTENT_CONSTANT)
       {
         gg.ctx.textAlign = "left"; gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
         y += self.font_h+self.pad;
@@ -1893,7 +2067,7 @@ var message_box = function()
     if(self.prompt_end)
     {
       var s = 20;
-      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y,s,s);
+      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y+s,s,s);
     }
     var h = gg.neck_heart_img.height/gg.neck_heart_img.width*self.monitor_w;
     gg.ctx.drawImage(gg.neck_heart_img,self.monitor_x,self.monitor_y+self.monitor_h-h/2,self.monitor_w,h);
