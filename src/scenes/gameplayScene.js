@@ -271,9 +271,17 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         break;
       case MODE_CINEMATIC:
-        gg.intro_vid.play();
+        if(!skipping)
+          gg.intro_vid.play();
         break;
       case MODE_BOOT:
+        if(skipping)
+        {
+          gg.next_level = gg.levels[0];
+          //gg.exposition_box.nq_group(gg.next_level.text.pre_context);
+          gg.next_level.progress++;
+          gg.stage_t = 0;
+        }
         break;
       case MODE_PRE0:
         gg.home_cam.wx = gg.lab.wx;
@@ -330,6 +338,19 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         gg.timeline.fast_sim = 1;
+        if(skipping)
+        {
+          if(gg.cur_level.push_work)
+          {
+            var m_total = 0;
+            for(var i = 0; i < gg.cur_level.m_correct.length; i++)
+              m_total += gg.cur_level.m_correct[i];
+            var b_total = 0;
+            for(var i = 0; i < gg.cur_level.b_correct.length; i++)
+              b_total += gg.cur_level.b_correct[i];
+            gg.line.push_day(m_total,b_total);
+          }
+        }
         break;
       case MODE_WORK_OUT:
         gg.line.blur();
@@ -392,7 +413,19 @@ var GamePlayScene = function(game, stage)
     {
       case MODE_MENU:
         if(!clicker.filter(gg.monitor) && gg.screenclicker.clicked) gg.monitor.click({});
-        //if(gg.monitor.clicked)
+        var starting_level = 0;
+        if(starting_level > 0)
+        {
+          self.set_mode(MODE_CINEMATIC,1);
+          self.set_mode(MODE_BOOT,1);
+          self.set_mode(MODE_PRE0,1);
+          while(gg.cur_level.i < starting_level)
+          {
+            self.skip_to_mode(MODE_NIGHT);
+            self.skip_to_mode(MODE_LAB_IN);
+          }
+        }
+        else
           self.set_mode(MODE_CINEMATIC,0);
         break;
       case MODE_CINEMATIC:
@@ -411,9 +444,7 @@ var GamePlayScene = function(game, stage)
         }
         else
         {
-          var urlj = jsonFromURL();
-          if(urlj && urlj["level"]) gg.next_level = gg.levels[parseInt(urlj["level"])];
-          else gg.next_level = gg.levels[0];
+          gg.next_level = gg.levels[0];
           gg.exposition_box.clear();
           gg.exposition_box.nq_group(gg.next_level.text.pre_context);
           gg.next_level.progress++;
@@ -897,7 +928,7 @@ var GamePlayScene = function(game, stage)
 
   self.ready = function()
   {
-    gg.max_days = 6;
+    gg.max_days = 7;
     gg.needed_fuel = 400;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
@@ -991,6 +1022,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
+    l.perma_zoom = 0;
     l.skip_axis = 0;
     l.skip_labels = 0;
     l.skip_system = 1;
@@ -1028,6 +1060,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
+    l.perma_zoom = 0;
     l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
@@ -1065,6 +1098,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 0;
+    l.perma_zoom = 0;
     l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 0;
@@ -1102,6 +1136,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 1;
+    l.perma_zoom = 0;
     l.skip_axis = 0;
     l.skip_labels = 0;
     l.skip_system = 1;
@@ -1139,6 +1174,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 1;
     l.skip_zoom = 0;
+    l.perma_zoom = 0;
     l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
@@ -1176,6 +1212,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 1;
+    l.perma_zoom = 0;
     l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
@@ -1213,6 +1250,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 1;
     l.skip_zoom = 0;
+    l.perma_zoom = 0;
     l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 0;
@@ -1250,6 +1288,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 1;
+    l.perma_zoom = 0;
     l.skip_axis = 0;
     l.skip_labels = 0;
     l.skip_system = 1;
@@ -1287,6 +1326,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 1;
     l.skip_zoom = 0;
+    l.perma_zoom = 0;
     l.skip_axis = 0;
     l.skip_labels = 0;
     l.skip_system = 0;
@@ -1302,17 +1342,17 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [gg.levels[l.i-1].m_correct[0],];
-    l.m_correct = [1,];
+    l.m_correct = [3,];
     l.m_label = ["Rate",];
-    l.m_icon = [GenImg("assets/chrrate.png"),];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [gg.levels[l.i-1].b_correct[0],];
     l.b_correct = [gg.levels[l.i-1].b_correct[0]+gg.levels[l.i-1].m_correct[0]*24,];
     l.b_label = ["Initial",];
-    l.b_icon = [GenImg("assets/chrinitial.png"),];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "CHARGE";
+    l.y_label = "FUEL";
     l.day = 6;
     l.y_min = 0;
     for(var j = 0; j < 1; j++)
@@ -1324,6 +1364,7 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 1;
     l.skip_zoom = 0;
+    l.perma_zoom = 1;
     l.skip_axis = 0;
     l.skip_labels = 0;
     l.skip_system = 1;
@@ -1337,37 +1378,6 @@ var GamePlayScene = function(game, stage)
     self.was_ready = 1;
     self.resize(stage);
     self.set_mode(MODE_MENU,0);
-    /*
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CINEMATIC,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_BOOT,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PRE0,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CTX_IN,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CTX,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_CTX_OUT,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_PRE1,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK_IN,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_WORK_OUT,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_POST0,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_LAB_OUT,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_NIGHT,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    self.set_mode(MODE_LAB_IN,0);
-    for(var i = 0; i < 100; i++) self.tick();
-    //*/
   };
 
   gg.time_mod_twelve_pi = 0;
@@ -1391,6 +1401,7 @@ var GamePlayScene = function(game, stage)
 
     gg.keylistener.advance();
     gg.screenclicker.clicked = 0;
+    if(gg.cur_level && gg.cur_level.perma_zoom) gg.graph.zoom = 1;
   };
 
   self.HACKTXT = function(txt)

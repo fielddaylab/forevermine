@@ -60,6 +60,7 @@ var level = function()
 
   self.skip_context = 0;
   self.skip_zoom = 0;
+  self.perma_zoom = 0;
   self.skip_axis = 0;
   self.skip_labels = 0;
   self.skip_system = 0;

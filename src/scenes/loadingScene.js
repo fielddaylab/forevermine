@@ -166,6 +166,10 @@ var LoadingScene = function(game, stage)
       img_srcs.push("assets/context/6-"+i+".png");
     for(var i = 0; i < 1; i++)
       img_srcs.push("assets/context/7-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/context/8-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/context/9-"+i+".png");
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();

@@ -1061,9 +1061,9 @@ var editable_line = function()
       self.eqn_w += self.m_btn[m_i].w;
       m_i++;
       if(self.b.length == 1)
-        self.eqn_strings[eqn_i] = "*O + ";
+        self.eqn_strings[eqn_i] = "*X + ";
       else
-        self.eqn_strings[eqn_i] = "*O + (";
+        self.eqn_strings[eqn_i] = "*X + (";
       self.eqn_x_i = eqn_i;
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
@@ -1437,7 +1437,7 @@ var editable_line = function()
       gg.ctx.restore();
 
         //icons
-      if(gg.table.data_visible && gg.graph.zoom == 0)
+      if(gg.table.data_visible && (gg.graph.zoom == 0 || gg.cur_level.perma_zoom))
       {
         gg.ctx.fillStyle = white;
         var s = 15;
