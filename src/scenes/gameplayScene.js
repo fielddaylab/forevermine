@@ -1051,10 +1051,10 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 1;
-    l.skip_axis = 1;
-    l.skip_labels = 1;
+    l.skip_axis = 0;
+    l.skip_labels = 0;
     l.skip_system = 1;
-    l.skip_night = 0;
+    l.skip_night = 1;
     l.push_work = 0;
     l.text = used_text[i];
     l.fmt();
@@ -1091,7 +1091,7 @@ var GamePlayScene = function(game, stage)
     l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
-    l.skip_night = 1;
+    l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
@@ -1115,6 +1115,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
     l.day = 4;
+    l.y_min = 0;
     for(var j = 0; j < 0; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1127,7 +1128,7 @@ var GamePlayScene = function(game, stage)
     l.skip_axis = 1;
     l.skip_labels = 1;
     l.skip_system = 1;
-    l.skip_night = 0;
+    l.skip_night = 1;
     l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
@@ -1151,6 +1152,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 4;
+    l.y_min = 0;
     for(var j = 0; j < 0; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1158,7 +1160,7 @@ var GamePlayScene = function(game, stage)
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
-    l.skip_context = 0;
+    l.skip_context = 1;
     l.skip_zoom = 0;
     l.skip_axis = 1;
     l.skip_labels = 1;
@@ -1187,6 +1189,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
     l.day = 5;
+    l.y_min = 0;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1196,10 +1199,10 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 0;
     l.skip_zoom = 1;
-    l.skip_axis = 1;
-    l.skip_labels = 1;
+    l.skip_axis = 0;
+    l.skip_labels = 0;
     l.skip_system = 1;
-    l.skip_night = 0;
+    l.skip_night = 1;
     l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
@@ -1223,6 +1226,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 5;
+    l.y_min = 0;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1234,8 +1238,8 @@ var GamePlayScene = function(game, stage)
     l.skip_zoom = 0;
     l.skip_axis = 1;
     l.skip_labels = 1;
-    l.skip_system = 1;
-    l.skip_night = 1;
+    l.skip_system = 0;
+    l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
@@ -1259,6 +1263,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
     l.day = 6;
+    l.y_min = 0;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
     for(var j = 0; j < 0; j++)
@@ -1266,18 +1271,17 @@ var GamePlayScene = function(game, stage)
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
-    l.skip_context = 0;
-    l.skip_zoom = 1;
-    l.skip_axis = 1;
-    l.skip_labels = 1;
+    l.skip_context = 1;
+    l.skip_zoom = 0;
+    l.skip_axis = 0;
+    l.skip_labels = 0;
     l.skip_system = 1;
-    l.skip_night = 0;
+    l.skip_night = 1;
     l.push_work = 1;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
     i++;
-
 
     self.was_ready = 1;
     self.resize(stage);
