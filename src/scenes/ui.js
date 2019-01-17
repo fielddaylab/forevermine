@@ -1437,7 +1437,7 @@ var editable_line = function()
       gg.ctx.restore();
 
         //icons
-      if(gg.table.data_visible && (gg.graph.zoom == 0 || gg.cur_level.perma_zoom))
+      if(gg.table.data_visible && gg.graph.zoom == 0)
       {
         gg.ctx.fillStyle = white;
         var s = 15;
@@ -1728,7 +1728,7 @@ var table = function()
       gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
       if(self.simd_visible >= i)
       {
-        if(self.data_visible)
+        if(self.data_visible && !gg.cur_level.perma_zoom)
         {
           if(self.known_data[i] == self.predicted_data[i] || self.correct)
             gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
