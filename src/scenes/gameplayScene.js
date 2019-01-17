@@ -1016,6 +1016,43 @@ var GamePlayScene = function(game, stage)
     l.skip_zoom = 0;
     l.skip_axis = 1;
     l.skip_labels = 1;
+    l.skip_system = 1;
+    l.skip_night = 0;
+    l.push_work = 1;
+    l.text = used_text[i];
+    l.fmt();
+    gg.levels.push(l);
+    i++;
+
+    //fuel return to normal
+    l = new level();
+    l.i = i;
+    l.y_icon = GenImg("assets/crycollected.png");
+    l.m_starting = [gg.levels[l.i-1].m_correct[0],];
+    l.m_correct = [1,];
+    l.m_label = ["Mining Rate",];
+    l.m_icon = [GenImg("assets/cryrate.png"),];
+    l.b_starting = [gg.levels[l.i-1].b_correct[0],];
+    l.b_correct = [gg.levels[l.i-1].b_correct[0]+gg.levels[l.i-1].m_correct[0]*24,];
+    l.b_label = ["Existing Fuel",];
+    l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.t_speed = 0.01;
+    l.fast_t_speed = 0.1;
+    l.x_label = "HOURS";
+    l.y_label = "FUEL";
+    l.day = 2;
+    l.y_min = 20;
+    for(var j = 0; j < 90; j++)
+      l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
+    for(var j = 0; j < 0; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+    l.pano = 0;
+    l.pano_st = 0;
+    l.pano_et = 0.05;
+    l.skip_context = 0;
+    l.skip_zoom = 0;
+    l.skip_axis = 1;
+    l.skip_labels = 1;
     l.skip_system = 0;
     l.skip_night = 0;
     l.push_work = 1;
@@ -1040,7 +1077,7 @@ var GamePlayScene = function(game, stage)
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
     l.y_label = "CHARGE";
-    l.day = 2;
+    l.day = 3;
     l.y_min = 0;
     for(var j = 0; j < 1; j++)
       l.feedback_imgs.push(GenImg("assets/feedback/"+i+"-"+j+".png"));
@@ -1129,7 +1166,7 @@ var GamePlayScene = function(game, stage)
     l.skip_labels = 1;
     l.skip_system = 1;
     l.skip_night = 1;
-    l.push_work = 1;
+    l.push_work = 0;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
@@ -1203,7 +1240,7 @@ var GamePlayScene = function(game, stage)
     l.skip_labels = 0;
     l.skip_system = 1;
     l.skip_night = 1;
-    l.push_work = 1;
+    l.push_work = 0;
     l.text = used_text[i];
     l.fmt();
     gg.levels.push(l);
@@ -1236,8 +1273,8 @@ var GamePlayScene = function(game, stage)
     l.pano_et = 0.05;
     l.skip_context = 1;
     l.skip_zoom = 0;
-    l.skip_axis = 1;
-    l.skip_labels = 1;
+    l.skip_axis = 0;
+    l.skip_labels = 0;
     l.skip_system = 0;
     l.skip_night = 0;
     l.push_work = 1;
