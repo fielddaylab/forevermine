@@ -36,11 +36,13 @@ var level = function()
   self.y_icon = GenIcon(10,10);
   self.m_starting = [0,];
   self.m_correct = [0,];
+  self.m_correct_total = 0;
   self.m_label = ["Rate",];
   self.m_label_fmt = [];
   self.m_icon = [GenIcon(10,10),];
   self.b_starting = [0,];
   self.b_correct = [0,];
+  self.b_correct_total = 0;
   self.b_label = ["Initial",];
   self.b_label_fmt = [];
   self.b_icon = [GenIcon(10,10),];
@@ -81,8 +83,14 @@ var level = function()
     self.correct = 0;
   }
 
-  self.fmt = function()
+  self.commit = function()
   {
+    self.m_correct_total = 0;
+    for(var i = 0; i < self.m_correct.length; i++)
+      self.m_correct_total += self.m_correct[i];
+    self.b_correct_total = 0;
+    for(var i = 0; i < self.b_correct.length; i++)
+      self.b_correct_total += self.b_correct[i];
     var w = 50;
     self.m_label_fmt = [];
     for(var i = 0; i < self.m_label.length; i++)

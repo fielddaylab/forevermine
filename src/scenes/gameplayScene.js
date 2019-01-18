@@ -375,15 +375,7 @@ var GamePlayScene = function(game, stage)
         if(skipping)
         {
           if(gg.cur_level.push_work)
-          {
-            var m_total = 0;
-            for(var i = 0; i < gg.cur_level.m_correct.length; i++)
-              m_total += gg.cur_level.m_correct[i];
-            var b_total = 0;
-            for(var i = 0; i < gg.cur_level.b_correct.length; i++)
-              b_total += gg.cur_level.b_correct[i];
-            gg.line.push_day(m_total,b_total);
-          }
+            gg.line.push_day(gg.cur_level.m_correct_total,gg.cur_level.b_correct_total);
         }
         break;
       case MODE_WORK_OUT:
@@ -641,15 +633,7 @@ var GamePlayScene = function(game, stage)
         else if(gg.keylistener.advance())
         {
           if(gg.cur_level.push_work)
-          {
-            var m_total = 0;
-            for(var i = 0; i < gg.cur_level.m_correct.length; i++)
-              m_total += gg.cur_level.m_correct[i];
-            var b_total = 0;
-            for(var i = 0; i < gg.cur_level.b_correct.length; i++)
-              b_total += gg.cur_level.b_correct[i];
-            gg.line.push_day(m_total,b_total);
-          }
+            gg.line.push_day(gg.cur_level.m_correct_total,gg.cur_level.b_correct_total);
           self.set_mode(MODE_WORK_OUT,0);
         }
 
@@ -1087,7 +1071,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1095,12 +1079,12 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [gg.levels[l.i-1].m_correct[0],];
+    l.m_starting = [gg.levels[l.i-1].m_correct_total,];
     l.m_correct = [2,];
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [gg.levels[l.i-1].b_correct[0],];
-    l.b_correct = [gg.levels[l.i-1].b_correct[0]+gg.levels[l.i-1].m_correct[0]*24,];
+    l.b_starting = [gg.levels[l.i-1].b_correct_total,];
+    l.b_correct = [gg.levels[l.i-1].b_correct_total+gg.levels[l.i-1].m_correct_total*24,];
     l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.t_speed = 0.01;
@@ -1108,7 +1092,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 1;
-    l.y_min = floor(l.b_correct[0]/10)*10;
+    l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
@@ -1125,7 +1109,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1133,12 +1117,12 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [gg.levels[l.i-1].m_correct[0],];
+    l.m_starting = [gg.levels[l.i-1].m_correct_total,];
     l.m_correct = [1,];
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [gg.levels[l.i-1].b_correct[0],];
-    l.b_correct = [gg.levels[l.i-1].b_correct[0]+gg.levels[l.i-1].m_correct[0]*24,];
+    l.b_starting = [gg.levels[l.i-1].b_correct_total,];
+    l.b_correct = [gg.levels[l.i-1].b_correct_total+gg.levels[l.i-1].m_correct_total*24,];
     l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.t_speed = 0.01;
@@ -1146,7 +1130,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 2;
-    l.y_min = floor(l.b_correct[0]/10)*10;
+    l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
@@ -1163,7 +1147,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1201,7 +1185,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 1;
     l.push_work = 0;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1209,12 +1193,12 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [gg.levels[l.i-2].m_correct[0],];
+    l.m_starting = [gg.levels[l.i-2].m_correct_total,];
     l.m_correct = [1.1,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [gg.levels[l.i-2].b_correct[0],];
-    l.b_correct = [gg.levels[l.i-2].b_correct[0]+gg.levels[l.i-2].m_correct[0]*24,];
+    l.b_starting = [gg.levels[l.i-2].b_correct_total,];
+    l.b_correct = [gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.t_speed = 0.01;
@@ -1222,7 +1206,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 3;
-    l.y_min = floor(l.b_correct[0]/10)*10;
+    l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
@@ -1239,7 +1223,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1277,7 +1261,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 1;
     l.push_work = 0;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1285,12 +1269,12 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [gg.levels[l.i-2].m_correct[0],];
+    l.m_starting = [gg.levels[l.i-2].m_correct_total,];
     l.m_correct = [1.2,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [gg.levels[l.i-2].b_correct[0],];
-    l.b_correct = [gg.levels[l.i-2].b_correct[0]+gg.levels[l.i-2].m_correct[0]*24,];
+    l.b_starting = [gg.levels[l.i-2].b_correct_total,];
+    l.b_correct = [gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.t_speed = 0.01;
@@ -1298,7 +1282,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 4;
-    l.y_min = floor(l.b_correct[0]/10)*10;
+    l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
@@ -1315,7 +1299,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1353,7 +1337,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 1;
     l.push_work = 0;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1361,12 +1345,12 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [gg.levels[l.i-2].m_correct[0],];
+    l.m_starting = [gg.levels[l.i-2].m_correct_total,];
     l.m_correct = [1.1,];
     l.m_label = ["Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [gg.levels[l.i-2].b_correct[0],];
-    l.b_correct = [gg.levels[l.i-2].b_correct[0]+gg.levels[l.i-2].m_correct[0]*24,];
+    l.b_starting = [gg.levels[l.i-2].b_correct_total,];
+    l.b_correct = [gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.t_speed = 0.01;
@@ -1374,7 +1358,7 @@ var GamePlayScene = function(game, stage)
     l.x_label = "HOURS";
     l.y_label = "FUEL";
     l.day = 5;
-    l.y_min = floor(l.b_correct[0]/10)*10;
+    l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
@@ -1391,7 +1375,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1399,12 +1383,12 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [gg.levels[l.i-1].m_correct[0],];
-    l.m_correct = [3,];
-    l.m_label = ["Rate",];
+    l.m_starting = [gg.levels[l.i-1].m_correct_total,];
+    l.m_correct = [3,4,];
+    l.m_label = ["Rate","MRate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
-    l.b_starting = [gg.levels[l.i-1].b_correct[0],];
-    l.b_correct = [gg.levels[l.i-1].b_correct[0]+gg.levels[l.i-1].m_correct[0]*24,];
+    l.b_starting = [gg.levels[l.i-1].b_correct_total,];
+    l.b_correct = [gg.levels[l.i-1].b_correct_total+gg.levels[l.i-1].m_correct_total*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.t_speed = 0.01;
@@ -1429,7 +1413,7 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 1;
     l.push_work = 1;
     l.text = used_text[i];
-    l.fmt();
+    l.commit();
     gg.levels.push(l);
     i++;
 
