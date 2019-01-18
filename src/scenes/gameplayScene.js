@@ -281,9 +281,9 @@ var GamePlayScene = function(game, stage)
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "40px DisposableDroidBB";
-    gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
+    gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
     gg.ctx.font = "20px DisposableDroidBB";
-    gg.ctx.fillText((gg.max_days-gg.cur_level.day)+" days of oxygen remain", 20,gg.canv.height-80+30);
+    gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
   }
 
   self.set_mode = function(mode,skipping)
@@ -1049,6 +1049,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [1,];
     l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1058,7 +1059,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1071,7 +1072,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1087,6 +1087,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [gg.levels[l.i-1].b_correct_total+gg.levels[l.i-1].m_correct_total*24,];
     l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1096,7 +1097,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1109,7 +1110,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1125,6 +1125,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [gg.levels[l.i-1].b_correct_total+gg.levels[l.i-1].m_correct_total*24,];
     l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1134,7 +1135,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 1;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1147,7 +1148,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1163,6 +1163,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [0,];
     l.b_label = ["Starting Charge",];
     l.b_icon = [GenImg("assets/chrinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1172,7 +1173,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1185,7 +1186,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 1;
     l.push_work = 0;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1201,6 +1201,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1210,7 +1211,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1223,7 +1224,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1239,6 +1239,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [0.2,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/chrinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1248,7 +1249,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1261,7 +1262,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 1;
     l.push_work = 0;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1277,6 +1277,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1286,7 +1287,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 1;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1299,7 +1300,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1315,6 +1315,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [0,];
     l.b_label = ["Starting Charge",];
     l.b_icon = [GenImg("assets/chrinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1324,7 +1325,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1337,7 +1338,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 1;
     l.push_work = 0;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1353,6 +1353,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,];
     l.b_label = ["Initial",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1362,7 +1363,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1375,7 +1376,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 0;
     l.push_work = 1;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
@@ -1391,6 +1391,7 @@ var GamePlayScene = function(game, stage)
     l.b_correct = [gg.levels[l.i-1].b_correct_total+gg.levels[l.i-1].m_correct_total*24,];
     l.b_label = ["Initial Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
+    l.commit();
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
@@ -1400,7 +1401,7 @@ var GamePlayScene = function(game, stage)
     for(var j = 0; j < 1; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".jpg"));
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1413,7 +1414,6 @@ var GamePlayScene = function(game, stage)
     l.skip_night = 1;
     l.push_work = 1;
     l.text = used_text[i];
-    l.commit();
     gg.levels.push(l);
     i++;
 
