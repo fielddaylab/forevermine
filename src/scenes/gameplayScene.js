@@ -944,7 +944,7 @@ var GamePlayScene = function(game, stage)
   self.ready = function()
   {
     gg.max_days = 7;
-    gg.needed_fuel = 400;
+    gg.needed_fuel = 300;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
@@ -1274,7 +1274,7 @@ var GamePlayScene = function(game, stage)
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [gg.levels[l.i-2].b_correct_total,];
-    l.b_correct = [gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,];
+    l.b_correct = [fdisp(gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,1),];
     l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.commit();
@@ -1350,7 +1350,7 @@ var GamePlayScene = function(game, stage)
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [gg.levels[l.i-2].b_correct_total,];
-    l.b_correct = [gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,];
+    l.b_correct = [fdisp(gg.levels[l.i-2].b_correct_total+gg.levels[l.i-2].m_correct_total*24,1),];
     l.b_label = ["Existing Fuel",];
     l.b_icon = [GenImg("assets/cryinitial.png"),];
     l.commit();
@@ -1370,8 +1370,8 @@ var GamePlayScene = function(game, stage)
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
-    l.skip_axis = 0;
-    l.skip_labels = 0;
+    l.skip_axis = 1;
+    l.skip_labels = 1;
     l.skip_system = 0;
     l.skip_night = 0;
     l.push_work = 1;

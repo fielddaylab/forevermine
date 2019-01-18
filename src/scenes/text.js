@@ -532,7 +532,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "Let's try that. We have a few known constants.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Mining Rate", CONTENT_CONSTANT, 4,
+      get_timer(20), "Charge Rate", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
