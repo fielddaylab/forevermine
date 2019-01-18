@@ -31,6 +31,8 @@ var Keyer = function(init)
   {
     evts.push(evt);
     evt_types.push(KEY_EVT_PRESS);
+    //HAAAACK
+    if(gg.game && gg.game.scenes[gg.game.cur_scene].mode != MODE_MENU)
     evt.preventDefault();
     return false;
   }
@@ -40,6 +42,8 @@ var Keyer = function(init)
     evt_types.push(KEY_EVT_DOWN);
     if(evt.keyCode == 8) //prevent backspace
     {
+      //HAAAACK
+      if(gg.game && gg.game.scenes[gg.game.cur_scene].mode != MODE_MENU)
       evt.preventDefault();
       return false;
     }
@@ -50,7 +54,8 @@ var Keyer = function(init)
     evt_types.push(KEY_EVT_UP);
     if(evt.keyCode == 8) //prevent backspace
     {
-      evt.preventDefault();
+      //HAAAACK
+      if(gg.game && gg.game.scenes[gg.game.cur_scene].mode != MODE_MENU)
       return false;
     }
   }
