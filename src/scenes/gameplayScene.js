@@ -71,6 +71,8 @@ var GamePlayScene = function(game, stage)
 
       gg.intro_vid.video.style.width = gg.canv.width;
       gg.intro_vid.video.style.height = gg.canv.height;
+      gg.outro_vid.video.style.width = gg.canv.width;
+      gg.outro_vid.video.style.height = gg.canv.height;
 
       var btn_x = 10;
       var btn_y = 10;
@@ -411,11 +413,16 @@ var GamePlayScene = function(game, stage)
       case MODE_NIGHT:
         break;
       case MODE_LAB_IN: //sets next level
-        gg.next_level = gg.levels[(gg.cur_level.i+1)%gg.levels.length];
-        gg.exposition_box.clear();
-        if(!skipping) gg.exposition_box.nq_group(gg.next_level.text.pre_context);
-        gg.cur_level.progress++;
-        gg.stage_t = 0;
+        if(gg.cur_level.i < gg.levels.length-1)
+        {
+          gg.next_level = gg.levels[gg.cur_level.i+1];
+          gg.exposition_box.clear();
+          if(!skipping) gg.exposition_box.nq_group(gg.next_level.text.pre_context);
+          gg.cur_level.progress++;
+          gg.stage_t = 0;
+        }
+        else
+          gg.outro_vid.play();
         break;
     }
   }
@@ -1031,6 +1038,8 @@ var GamePlayScene = function(game, stage)
     gg.line = new editable_line();
     gg.intro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){gg.intro_vid.done = 1;})
     gg.intro_vid.load();
+    gg.outro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){gg.outro_vid.done = 1;})
+    gg.outro_vid.load();
 
     gg.levels = [];
     var l;
