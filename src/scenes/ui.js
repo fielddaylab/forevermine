@@ -1894,7 +1894,7 @@ var message_box = function()
 
   self.click = function(evt)
   {
-    if(self.prompt_end && self.displayed_i == self.texts.length && ptWithin(self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h,evt.doX,evt.doY))
+    if(self.prompt_end && self.displayed_i == self.texts.length)// && ptWithin(self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h,evt.doX,evt.doY))
     {
       self.requested_end = 1;
       return 1;

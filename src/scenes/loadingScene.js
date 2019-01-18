@@ -49,8 +49,9 @@ var LoadingScene = function(game, stage)
   {
     n_loading_imgs_loaded++;
   };
-  var imageLoaded = function()
+  var imageLoaded = function(img)
   {
+    if(img) img.loaded = 1;
     n_imgs_loaded++;
   };
   var fontLoaded = function()
@@ -173,7 +174,8 @@ var LoadingScene = function(game, stage)
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();
-      imgs[i].onload = imageLoaded;
+      //imgs[i].onload = (function(i){return function(){imageLoaded(imgs[i])}})(i);
+      imgs[i].onload = imageLoaded();
       imgs[i].src = img_srcs[i];
     }
     imageLoaded(); //call once to prevent 0/0 != 100% bug
