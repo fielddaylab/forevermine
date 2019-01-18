@@ -364,11 +364,13 @@ var english_text =
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "?", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Here are labels", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Starting Charge", CONTENT_LABEL, 0,
+      get_timer(60), "Charge Rate", CONTENT_LABEL, 0,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "?", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Nope!", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -670,11 +672,13 @@ var english_text =
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "?", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Here are labels", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Starting Charge", CONTENT_LABEL, 0,
+      get_timer(60), "Charge Rate", CONTENT_LABEL, 0,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "?", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Nope!", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -835,11 +839,14 @@ var english_text =
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(120), "?", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Here are labels", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drill Rate", CONTENT_LABEL, 0,
+      get_timer(60), "Zoom Rate", CONTENT_LABEL, 0,
+      get_timer(60), "Initial Fuel", CONTENT_LABEL, 0,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(20), "Hmmm. That doesn't seem right.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Nope!", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
