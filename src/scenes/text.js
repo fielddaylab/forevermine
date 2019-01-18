@@ -375,7 +375,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "The initial charge is still 0.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "Starting Charge", CONTENT_CONSTANT, 4,
       get_timer(20), "You need to adjust the rate!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -452,7 +452,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "Here's the fuel count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data and we'll see if you're gonna die!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -603,7 +603,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "Let's try that. We have a few known constants.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -683,7 +683,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "The initial charge is still 0.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "Starting Charge", CONTENT_CONSTANT, 4,
       get_timer(20), "You need to adjust the rate!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -760,7 +760,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "Here's the fuel count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(20), "Match the data and we'll see if you're gonna die!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -842,7 +842,7 @@ var english_text =
       get_timer(20), "Here are labels", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drill Rate", CONTENT_LABEL, 0,
       get_timer(60), "Zoom Rate", CONTENT_LABEL, 0,
-      get_timer(60), "Initial Fuel", CONTENT_LABEL, 0,
+      get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
@@ -851,7 +851,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(20), "The initial charge is still 0.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Initial", CONTENT_CONSTANT, 4,
+      get_timer(20), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(20), "You need to adjust the rate!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
