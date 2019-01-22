@@ -128,6 +128,8 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/background.jpg");
     img_srcs.push("assets/background_ui.jpg");
     img_srcs.push("assets/constant_bg.png");
+    img_srcs.push("assets/card_editable.png");
+    img_srcs.push("assets/card_not_editable.png");
     img_srcs.push("assets/crycollected.png");
     img_srcs.push("assets/cryinitial.png");
     img_srcs.push("assets/cryrate.png");
