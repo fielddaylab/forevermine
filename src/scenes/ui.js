@@ -1512,6 +1512,8 @@ var editable_line = function()
       gg.ctx.textAlign = "right";
       if(gg.cur_level.progress > 7)
       {
+        gg.ctx.fillText(fdisp(self.m_total*gg.timeline.t+self.b_total,1),self.y_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
+        gg.ctx.fillText(fdisp(gg.timeline.t,1),self.x_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
         for(var i = 0; i < self.m_btn.length; i++)
         {
           b = self.m_btn[i];
