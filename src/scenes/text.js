@@ -23,7 +23,7 @@ var english_text =
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
       "Finally! You're awake!", CONTENT_AI, EMOTE_NULL,
-      "Welcome to Forever Mine, the most remote mining outpast in the galaxy!", CONTENT_AI, EMOTE_NULL,
+      "Welcome to Forever Mine, the most remote mining outpost in the galaxy!", CONTENT_AI, EMOTE_NULL,
       "Wha... What happened? Who are you?", CONTENT_PLAYER, EMOTE_NULL,
       "I'm your local Mining Activity Technician. My friends call me Mat!", CONTENT_AI, EMOTE_NULL,
       "I... I need to get out of here.", CONTENT_PLAYER, EMOTE_NULL,
@@ -36,7 +36,7 @@ var english_text =
       "Now I'm in trouble. Some kind of weird pulse fried my power core.", CONTENT_PLAYER, EMOTE_NULL,
       "My ship is dead and I'm running out of oxygen.", CONTENT_PLAYER, EMOTE_NULL,
       "Hmmmmmm. Guess that outdated fuel isn't looking so bad now, huh?", CONTENT_AI, EMOTE_NULL,
-      "You're right, Mat. I need enough fuel to power my ship, or I'm toast.", CONTENT_AI, EMOTE_NULL,
+      "You're right, Mat. I need enough fuel to power my ship, or I'm toast.", CONTENT_PLAYER, EMOTE_NULL,
       "Don't worry, friend. My programming requires me to not let humans die, when reasonably convenient. I've got your back!", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
@@ -60,7 +60,6 @@ var english_text =
       get_timer(100), "My circuits are a little fuzzy, so you'll have to help.", CONTENT_AI, EMOTE_NULL,
       trigger_click, "No problem.", CONTENT_PLAYER, EMOTE_NULL,
       trigger_click, "I'm a material scientist. I can figure this out.", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(100), "Predicted likelihood: 0.3 percent.", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -94,9 +93,7 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(100), "Nice work, human. Our model's ready to use.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "You ok?", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "You look like you need another nap.", CONTENT_AI, EMOTE_NULL,
-      trigger_click, "I'm fine. What now?", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "What now?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(80), "Drag the fuel count into our model.", CONTENT_AI, EMOTE_NULL,
       get_timer(100), "Then fix the rate.", CONTENT_AI, EMOTE_NULL,
@@ -150,7 +147,7 @@ var english_text =
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "Look! they found a HUGE pocket of fuel.", CONTENT_AI, EMOTE_NULL,
+      "Look! They found a HUGE pocket of fuel.", CONTENT_AI, EMOTE_NULL,
       "They're mining super fast!", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
@@ -164,9 +161,6 @@ var english_text =
     [
       get_timer(120), "Here's our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "I know you're still mildly concussed. So I'll walk you through it again.", CONTENT_AI, EMOTE_NULL,
-      get_timer(200), "Unless you'd rather go salvage for parts... ", CONTENT_AI, EMOTE_NULL,
-      trigger_click, "You're never gonna let that go, are you?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(80), "🤷‍♂️", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
