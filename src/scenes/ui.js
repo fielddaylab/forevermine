@@ -1802,7 +1802,7 @@ var message_box = function()
     {
       if(self.types[self.displayed_i] == CONTENT_AI)
         self.advance();
-      else if(ptWithin(self.input_x,self.input_y,self.input_w,self.input_h,evt.doX,evt.doY))
+      else //if(ptWithin(self.input_x,self.input_y,self.input_w,self.input_h,evt.doX,evt.doY))
         self.advance();
       return 1;
     }

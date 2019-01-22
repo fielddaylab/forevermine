@@ -19,7 +19,10 @@ window.onload = function()
   function loadiframe()
   {
     iframe.style.display = "block";
-    iframe.src = "iframe.html";
+    if(location.href.indexOf("?") > -1)
+      iframe.src = "iframe.html"+location.href.substring(location.href.indexOf("?"))
+    else
+      iframe.src = "iframe.html";
     clickload.removeEventListener("click",loadiframe);
     clickload.parentNode.removeChild(clickload);
     clickload = null;

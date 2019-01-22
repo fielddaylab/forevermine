@@ -1,5 +1,4 @@
 'use strict';
-window.debug = 1;
 var GamePlayScene = function(game, stage)
 {
   var self = this;
@@ -483,7 +482,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE0:
       {
         gg.mode_p = 0.5;
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_context)
@@ -497,7 +496,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX_IN:
       {
         gg.mode_p = gg.mode_t/gg.fade_t;
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.mode_p < 1)
         {
         }
@@ -507,7 +506,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX:
       {
         gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*2);
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_CTX_OUT,0);
       }
@@ -524,7 +523,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE1:
       {
         gg.mode_p = 0.5;
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
           self.set_mode(MODE_WORK_IN,0);
         gg.exposition_box.tick();
@@ -564,7 +563,7 @@ var GamePlayScene = function(game, stage)
           if(check) check = !gg.line.filter(keyer,blurer,dragger,clicker);
           gg.line.tick();
           if(check) check = !gg.timeline.filter(dragger,clicker);
-          if(check) check = !dragger.filter(gg.message_box);
+          if(check) { check = !dragger.filter(gg.message_box); if(check && gg.autoclick) gg.message_box.click({}); }
         }
 
         switch(gg.cur_level.progress)
@@ -679,7 +678,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_POST0:
       {
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_system)
@@ -724,7 +723,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_POST1:
       {
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_night)
@@ -1432,6 +1431,8 @@ var GamePlayScene = function(game, stage)
     gg.code_txt.focus();
     gg.code_txt.blur();
     self.set_mode(MODE_MENU,0);
+    gg.urlp = jsonFromURL();
+    gg.autoclick = gg.urlp.autoclick;
   };
 
   gg.time_mod_twelve_pi = 0;
