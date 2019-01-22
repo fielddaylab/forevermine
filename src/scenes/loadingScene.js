@@ -49,8 +49,9 @@ var LoadingScene = function(game, stage)
   {
     n_loading_imgs_loaded++;
   };
-  var imageLoaded = function()
+  var imageLoaded = function(img)
   {
+    if(img) img.loaded = 1;
     n_imgs_loaded++;
   };
   var fontLoaded = function()
@@ -151,21 +152,24 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/battery.png");
     img_srcs.push("assets/drill.png");
     for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/feedback/0-"+i+".png");
+      img_srcs.push("assets/context/0-"+i+".png");
     for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/feedback/1-"+i+".png");
+      img_srcs.push("assets/context/1-"+i+".png");
     for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/feedback/2-"+i+".png");
-    for(var i = 0; i < 5; i++)
-      img_srcs.push("assets/feedback/3-"+i+".jpg");
-    for(var i = 0; i < 1; i++)
-      img_srcs.push("assets/feedback/4-"+i+".png");
-    for(var i = 0; i < 1; i++)
-      img_srcs.push("assets/feedback/5-"+i+".png");
+      img_srcs.push("assets/context/2-"+i+".png");
+    for(var i = 0; i < 53; i++)
+      img_srcs.push("assets/context/3-"+i+".png");
+    for(var i = 0; i < 53; i++)
+      img_srcs.push("assets/context/5-"+i+".png");
+    for(var i = 0; i < 53; i++)
+      img_srcs.push("assets/context/7-"+i+".png");
+    for(var i = 0; i < 53; i++)
+      img_srcs.push("assets/context/9-"+i+".png");
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();
-      imgs[i].onload = imageLoaded;
+      //imgs[i].onload = (function(i){return function(){imageLoaded(imgs[i])}})(i);
+      imgs[i].onload = imageLoaded();
       imgs[i].src = img_srcs[i];
     }
     imageLoaded(); //call once to prevent 0/0 != 100% bug

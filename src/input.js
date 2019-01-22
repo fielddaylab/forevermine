@@ -139,6 +139,12 @@ function DomTextBox(x,y,w,h,canv,txt,callback)
   self.box.style.height = self.h+"px";
   self.box_on = 0; //0 = canv, 1 = DOM
 
+  self.size = function()
+  {
+    self.box.style.width = self.w+"px";
+    self.box.style.height = self.h+"px";
+  }
+
   self.box.onchange = function()
   {
     self.blur();

@@ -414,8 +414,10 @@ var content_dragger = function()
         }
         else
         {
+          if(!gg.cur_level.sent_labels_incorrect)
           gg.message_box.nq_group(gg.cur_level.text.labels_incorrect);
           //gg.cur_level.progress++; //don't advance
+          gg.cur_level.sent_labels_incorrect = 1;
         }
       }
     }
@@ -922,8 +924,6 @@ var editable_line = function()
   self.font_h = 50;
   self.font = self.font_h+"px DisposableDroidBB";
 
-  self.label_selector_n = -1;
-
   self.m_label = [-1];
   self.m = [0];
   self.b_label = [-1];
@@ -940,11 +940,9 @@ var editable_line = function()
   self.day_m = [];
   self.day_b = [];
 
-  self.m_select_btn = [];
   self.m_btn = [];
   self.minc_btn = [];
   self.mdec_btn = [];
-  self.b_select_btn = [];
   self.b_btn = [];
   self.binc_btn = [];
   self.bdec_btn = [];
@@ -1003,7 +1001,6 @@ var editable_line = function()
       else
         self.m_label[i] = -1;
       self.m[i] = gg.cur_level.m_starting[i];
-      self.m_select_btn[i] = (function(i){return new ButtonBox(0,0,0,0,function(v){ self.label_selector_n = i; });})(i);
       self.m_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.m[i] == v) return; self.m[i] = v; self.calc_m_total(); self.calculate_table(); self.draw_params(); self.invalidate_sim();  });})(i);
       self.m_btn[i].set(gg.cur_level.m_starting[i]);
       self.minc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number+0.1); });})(i);
@@ -1016,11 +1013,10 @@ var editable_line = function()
     for(var i = 0; i < gg.cur_level.b_starting.length; i++)
     {
       if(gg.cur_level.skip_labels)
-        self.b_label[i] = self.m_select_btn.length+i;
+        self.b_label[i] = self.m_btn.length+i;
       else
         self.b_label[i] = -1;
       self.b[i] = gg.cur_level.b_starting[i];
-      self.b_select_btn[i] = (function(i){return new ButtonBox(0,0,0,0,function(v){ self.label_selector_n = self.m_select_btn.length+i; });})(i);
       self.b_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.b[i] == v) return; self.b[i] = v; self.calc_b_total(); self.calculate_table(); self.draw_params();  self.invalidate_sim(); });})(i);
       self.b_btn[i].set(gg.cur_level.b_starting[i]);
       self.binc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number+0.1); });})(i);
@@ -1059,9 +1055,9 @@ var editable_line = function()
       self.eqn_w += self.m_btn[m_i].w;
       m_i++;
       if(self.b.length == 1)
-        self.eqn_strings[eqn_i] = "*O + ";
+        self.eqn_strings[eqn_i] = "*X + ";
       else
-        self.eqn_strings[eqn_i] = "*O + (";
+        self.eqn_strings[eqn_i] = "*X + (";
       self.eqn_x_i = eqn_i;
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
@@ -1157,10 +1153,6 @@ var editable_line = function()
     {
       self.m_btn[i].h = self.btn_h;
       self.m_btn[i].y = self.eqn_y;
-      self.m_select_btn[i].x = self.m_btn[i].x;
-      self.m_select_btn[i].y = self.m_btn[i].y;
-      self.m_select_btn[i].w = self.m_btn[i].w;
-      self.m_select_btn[i].h = self.m_btn[i].h;
       self.minc_btn[i].w = self.m_btn[i].w/2;
       self.minc_btn[i].h = self.m_btn[i].h/4;
       self.minc_btn[i].x = self.m_btn[i].x+self.m_btn[i].w/2-self.minc_btn[i].w/2;
@@ -1174,10 +1166,6 @@ var editable_line = function()
     {
       self.b_btn[i].h = self.btn_h;
       self.b_btn[i].y = self.eqn_y;
-      self.b_select_btn[i].x = self.b_btn[i].x;
-      self.b_select_btn[i].y = self.b_btn[i].y;
-      self.b_select_btn[i].w = self.b_btn[i].w;
-      self.b_select_btn[i].h = self.b_btn[i].h;
       self.binc_btn[i].w = self.b_btn[i].w/2;
       self.binc_btn[i].h = self.b_btn[i].h/4;
       self.binc_btn[i].x = self.b_btn[i].x+self.b_btn[i].w/2-self.binc_btn[i].w/2;
@@ -1259,73 +1247,10 @@ var editable_line = function()
     gg.graph.zoom = oldzoom;
   }
 
-  self.select_label = function(evt)
-  {
-    if(self.label_selector_n > -1)
-    {
-      var b;
-      if(self.label_selector_n < self.m_select_btn.length)
-        b = self.m_select_btn[self.label_selector_n];
-      else
-        b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
-
-      var yoff = 5;
-      var total_labels = gg.cur_level.m_label.length+gg.cur_level.b_label.length;
-      var mlen = gg.cur_level.m_label.length;
-      for(var i = 0; i < gg.cur_level.m_label.length; i++)
-      {
-        if(ptWithin(b.x+(i/total_labels)*b.w,b.y+yoff+b.h,b.w/total_labels,b.h,evt.doX,evt.doY))
-        {
-          if(self.label_selector_n < mlen)
-            self.m_label[self.label_selector_n] = i;
-          else
-            self.b_label[self.label_selector_n-mlen] = i;
-          self.label_selector_n = -1;
-        }
-      }
-      for(var i = 0; i < gg.cur_level.b_label.length; i++)
-      {
-        if(ptWithin(b.x+((i+gg.cur_level.m_label.length)/total_labels)*b.w/total_labels,b.y+yoff+b.h,b.w,b.h,evt.doX,evt.doY))
-        {
-          if(self.label_selector_n < mlen)
-            self.m_label[self.label_selector_n] = i+mlen;
-          else
-            self.b_label[self.label_selector_n-mlen] = i+mlen;
-          self.label_selector_n = -1;
-        }
-      }
-      if(self.label_selector_n == -1) //label selected
-      {
-        for(var i = 0; i < self.m_label.length; i++) if(self.m_label[i] == -1) return;
-        for(var i = 0; i < self.b_label.length; i++) if(self.b_label[i] == -1) return;
-        //if here, all labels selected
-        var lcorrect = 1;
-        for(var i = 0; i < self.m_label.length; i++) if(self.m_label[i] != i) lcorrect = 0;
-        for(var i = 0; i < self.b_label.length; i++) if(self.b_label[i] != gg.cur_level.m_label.length+i) lcorrect = 0;
-        if(lcorrect)
-        {
-          gg.message_box.nq_group(gg.cur_level.text.constants);
-          gg.cur_level.progress++;
-          gg.stage_t = 0;
-        }
-        else
-        {
-          gg.message_box.nq_group(gg.cur_level.text.labels_incorrect);
-          //gg.cur_level.progress++; //don't advance
-        }
-      }
-    }
-  }
   self.filter = function(keyer,blurer,dragger,clicker)
   {
     var check = 1;
-    if(gg.cur_level.progress == 7)
-    {
-      for(var i = 0; check && i < self.m_select_btn.length; i++) check = !clicker.filter(self.m_select_btn[i]);
-      for(var i = 0; check && i < self.b_select_btn.length; i++) check = !clicker.filter(self.b_select_btn[i]);
-      if(check) clicker.consume(self.select_label);
-    }
-    else if(gg.cur_level.progress > 7)
+    if(gg.cur_level.progress > 7)
     {
       if(keyer)
       {
@@ -1403,6 +1328,14 @@ var editable_line = function()
         var i = gg.cur_level.day-1;
         var fx = lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom);
         sx = gg.graph.x_for_x(24*i);
+        ex = gg.graph.x_for_x(24*(i+1));
+        sy = gg.graph.y_for_y(self.day_b[i]);
+        ey = gg.graph.y_for_y(self.day_b[i]+(self.day_m[i]*24));
+        drawLine(sx,sy,ex,ey, gg.ctx);
+
+        gg.ctx.setLineDash([5,5]);
+        fx = lerp(gg.graph.x0_max+gg.graph.x_off,gg.graph.x1_max,gg.graph.zoom);
+        sx = gg.graph.x_for_x(24*i);
         ex = gg.graph.x_for_x(fx);
         sy = gg.graph.y_for_y(self.day_b[i]);
         ey = gg.graph.y_for_y(self.day_b[i]+(self.day_m[i]*(fx-gg.graph.x_off+24)));
@@ -1410,6 +1343,7 @@ var editable_line = function()
       }
       else
       {
+        gg.ctx.setLineDash([5,5]);
              if(gg.graph.zoom == 0) drawLine(self.sx0,self.sy0,self.ex0,self.ey0, gg.ctx);
         else if(gg.graph.zoom == 1) drawLine(self.sx1,self.sy1,self.ex1,self.ey1, gg.ctx);
         else
@@ -1470,14 +1404,14 @@ var editable_line = function()
       }
       gg.ctx.font = "20px DisposableDroidBB";
       //boxes
-      for(var i = 0; i < self.m_select_btn.length; i++)
+      for(var i = 0; i < self.m_btn.length; i++)
       {
-        b = self.m_select_btn[i];
+        b = self.m_btn[i];
         gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
       }
-      for(var i = 0; i < self.b_select_btn.length; i++)
+      for(var i = 0; i < self.b_btn.length; i++)
       {
-        b = self.b_select_btn[i];
+        b = self.b_btn[i];
         gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
       }
 
@@ -1485,32 +1419,7 @@ var editable_line = function()
       gg.ctx.textAlign = "left";
       gg.ctx.font = "20px DisposableDroidBB";
       gg.ctx.fillStyle = white;
-      if(gg.cur_level.progress < 8)
-      {
-        if(self.label_selector_n > -1)
-        {
-          if(self.label_selector_n < self.m_select_btn.length)
-            b = self.m_select_btn[self.label_selector_n];
-          else
-            b = self.b_select_btn[self.label_selector_n-self.m_select_btn.length];
-          //gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+b.h,b.w,b.h/2);
-          for(var i = 0; i < gg.cur_level.m_label.length; i++)
-          {
-            var x = b.x+(i/total_labels)*b.w+pad;
-            drawImageSizeCentered(gg.cur_level.m_icon[i], x+b.h/4, b.y+yoff+b.h*5/4, b.h/2, gg.ctx);
-            for(var j = 0; j < gg.cur_level.m_label_fmt[i].length; j++)
-              gg.ctx.fillText(gg.cur_level.m_label_fmt[i][j],x,b.y+yoff+b.h+b.h/2+j*20);
-          }
-          for(var i = 0; i < gg.cur_level.b_label.length; i++)
-          {
-            var x = b.x+((i+mlen)/total_labels)*b.w+pad;
-            drawImageSizeCentered(gg.cur_level.b_icon[i], x+b.h/4, b.y+yoff+b.h*5/4, b.h/2, gg.ctx);
-            for(var j = 0; j < gg.cur_level.b_label_fmt[i].length; j++)
-              gg.ctx.fillText(gg.cur_level.b_label_fmt[i][j],x,b.y+yoff+b.h+b.h/2+j*20);
-          }
-        }
-      }
-      else
+      if(gg.cur_level.progress > 7)
       {
         //value selector
         gg.ctx.fillStyle = "#63ADC3"; //blue highlit
@@ -1533,9 +1442,9 @@ var editable_line = function()
       //labels
       gg.ctx.fillStyle = white;
       var ind;
-      for(var i = 0; i < self.m_select_btn.length; i++)
+      for(var i = 0; i < self.m_btn.length; i++)
       {
-        b = self.m_select_btn[i];
+        b = self.m_btn[i];
         var x = b.x+pad;
         if(self.m_label[i] > -1)
         {
@@ -1555,9 +1464,9 @@ var editable_line = function()
         else if(gg.cur_level.msg_progress == 7)
           gg.ctx.drawImage(gg.notice_img, x+b.h/2, b.y+yoff+b.h/4, 20,20);
       }
-      for(var i = 0; i < self.b_select_btn.length; i++)
+      for(var i = 0; i < self.b_btn.length; i++)
       {
-        b = self.b_select_btn[i];
+        b = self.b_btn[i];
         var x = b.x+pad;
         if(self.b_label[i] > -1)
         {
@@ -1715,7 +1624,7 @@ var table = function()
       gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
       if(self.simd_visible >= i)
       {
-        if(self.data_visible)
+        if(self.data_visible && !gg.cur_level.perma_zoom)
         {
           if(self.known_data[i] == self.predicted_data[i] || self.correct)
             gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
@@ -1776,7 +1685,6 @@ var message_box = function()
   self.target_top_y = 0;
   self.bottom_y = 0;
   self.data_y = 0;
-  self.constant_ys = [];
 
   self.advance_t = self.thinking_buff-1;
   self.thinking_buff = 50;
@@ -1882,7 +1790,7 @@ var message_box = function()
 
   self.click = function(evt)
   {
-    if(self.prompt_end && self.displayed_i == self.texts.length && ptWithin(self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h,evt.doX,evt.doY))
+    if(self.prompt_end && self.displayed_i == self.texts.length)// && ptWithin(self.monitor_x,self.monitor_y,self.monitor_w,self.monitor_h,evt.doX,evt.doY))
     {
       self.requested_end = 1;
       return 1;
@@ -1994,7 +1902,11 @@ var message_box = function()
         }
         self.data_y = y;
       }
-      else if(self.types[i] == CONTENT_LABEL || self.types[i] == CONTENT_CONSTANT)
+      else if(self.types[i] == CONTENT_LABEL)
+      {
+        gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
+      }
+      else if(self.types[i] == CONTENT_CONSTANT)
       {
         gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
         var c = 0;
@@ -2003,7 +1915,6 @@ var message_box = function()
         for(var j = 0; j < gg.cur_level.b_label.length; j++)
           if(self.bubbles[i][0] == gg.cur_level.b_label[j]) c = gg.cur_level.b_correct[j];
         gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.pad+self.bubble_w/2+30, y+(self.pad+self.font_h+self.pad)*2/3);
-        self.constant_ys.push(y);
       }
       else if(self.types[i] == CONTENT_SIM)
       {
