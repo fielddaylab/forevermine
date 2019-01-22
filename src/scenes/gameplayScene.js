@@ -1,4 +1,5 @@
 'use strict';
+window.debug = 1;
 var GamePlayScene = function(game, stage)
 {
   var self = this;

@@ -94,10 +94,18 @@ var level = function()
     var w = 50;
     self.m_label_fmt = [];
     for(var i = 0; i < self.m_label.length; i++)
-      self.m_label_fmt[i] = textToLines("20px DisposableDroidBB",w,self.m_label[i],gg.ctx);
+    {
+      self.m_label_fmt[i] = textToLines(gg.line.font,w,self.m_label[i],gg.ctx);
+      for(var j = 0; j < self.m_label_fmt[i].length; j++)
+        self.m_label_fmt[i][j] = self.m_label_fmt[i][j].trim();
+    }
     self.b_label_fmt = [];
     for(var i = 0; i < self.b_label.length; i++)
-      self.b_label_fmt[i] = textToLines("20px DisposableDroidBB",w,self.b_label[i],gg.ctx);
+    {
+      self.b_label_fmt[i] = textToLines(gg.line.font,w,self.b_label[i],gg.ctx);
+      for(var j = 0; j < self.b_label_fmt[i].length; j++)
+        self.b_label_fmt[i][j] = self.b_label_fmt[i][j].trim();
+    }
   }
 
   self.tick = function()
