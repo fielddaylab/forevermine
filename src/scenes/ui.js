@@ -968,8 +968,16 @@ var editable_line = function()
 
   self.calc_m_total = function()
   {
-    self.m_total = 0;
-    for(var i = 0; i < self.m.length; i++) self.m_total += self.m[i];
+    if(gg.cur_level.special)
+    {
+      self.m_total = 1;
+      for(var i = 0; i < self.m.length; i++) self.m_total *= self.m[i];
+    }
+    else
+    {
+      self.m_total = 0;
+      for(var i = 0; i < self.m.length; i++) self.m_total += self.m[i];
+    }
   }
   self.calc_b_total = function()
   {
@@ -1407,8 +1415,30 @@ var editable_line = function()
       gg.ctx.font = self.font;
       gg.ctx.fillStyle = white;
       gg.ctx.textAlign = "left";
-      for(var i = 0; i < self.eqn_strings.length; i++)
-        gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+      if(gg.cur_level.special)
+      {
+        var overwrite = 1;
+        for(var i = 0; i < self.eqn_strings.length; i++)
+        {
+          if(overwrite)
+          {
+            if(self.eqn_strings[i] == "+")
+              gg.ctx.fillText("*",self.eqn_xs[i],self.eqn_y+self.font_h);
+            else
+            {
+              if(self.eqn_strings[i] == "*" || self.eqn_strings[i] == ")*") overwrite = 0;
+              gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+            }
+          }
+          else
+            gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+        }
+      }
+      else
+      {
+        for(var i = 0; i < self.eqn_strings.length; i++)
+          gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+      }
       gg.ctx.font = self.label_font;
       gg.ctx.drawImage(gg.constant_bg_img,self.x_x,self.eqn_y+yoff,self.btn_w,self.btn_h);
       gg.ctx.drawImage(gg.constant_bg_img,self.y_x,self.eqn_y+yoff,self.btn_w,self.btn_h);
