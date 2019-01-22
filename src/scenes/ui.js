@@ -1045,7 +1045,7 @@ var editable_line = function()
     self.btn_w = gg.ctx.measureText("-0.0").width;
     self.btn_h = self.font_h*3;
     self.eqn_w = 0;
-    self.eqn_y = gg.stage.height/2;
+    self.eqn_y = gg.stage.height*4/9;
 
     //figure out w
     if(self.m.length == 1)
@@ -1174,11 +1174,11 @@ var editable_line = function()
       self.m_btn[i].h = self.btn_h;
       self.m_btn[i].y = self.eqn_y;
       self.minc_btn[i].w = self.m_btn[i].w/3;
-      self.minc_btn[i].h = self.m_btn[i].h/6;
+      self.minc_btn[i].h = self.m_btn[i].h/8;
       self.minc_btn[i].x = self.m_btn[i].x+self.m_btn[i].w/2-self.minc_btn[i].w/2;
       self.minc_btn[i].y = self.m_btn[i].y-self.minc_btn[i].h+yoff;
       self.mdec_btn[i].w = self.m_btn[i].w/3;
-      self.mdec_btn[i].h = self.m_btn[i].h/6;
+      self.mdec_btn[i].h = self.m_btn[i].h/8;
       self.mdec_btn[i].x = self.m_btn[i].x+self.m_btn[i].w/2-self.mdec_btn[i].w/2;
       self.mdec_btn[i].y = self.m_btn[i].y+self.m_btn[i].h+yoff;
     }
@@ -1187,11 +1187,11 @@ var editable_line = function()
       self.b_btn[i].h = self.btn_h;
       self.b_btn[i].y = self.eqn_y;
       self.binc_btn[i].w = self.b_btn[i].w/3;
-      self.binc_btn[i].h = self.b_btn[i].h/6;
+      self.binc_btn[i].h = self.b_btn[i].h/8;
       self.binc_btn[i].x = self.b_btn[i].x+self.b_btn[i].w/2-self.binc_btn[i].w/2;
       self.binc_btn[i].y = self.b_btn[i].y-self.binc_btn[i].h+yoff;
       self.bdec_btn[i].w = self.b_btn[i].w/3;
-      self.bdec_btn[i].h = self.b_btn[i].h/6;
+      self.bdec_btn[i].h = self.b_btn[i].h/8;
       self.bdec_btn[i].x = self.b_btn[i].x+self.b_btn[i].w/2-self.bdec_btn[i].w/2;
       self.bdec_btn[i].y = self.b_btn[i].y+self.b_btn[i].h+yoff;
     }
