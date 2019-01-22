@@ -1155,27 +1155,27 @@ var editable_line = function()
     {
       self.m_btn[i].h = self.btn_h;
       self.m_btn[i].y = self.eqn_y;
-      self.minc_btn[i].w = self.m_btn[i].w/2;
-      self.minc_btn[i].h = self.m_btn[i].h/4;
+      self.minc_btn[i].w = self.m_btn[i].w/3;
+      self.minc_btn[i].h = self.m_btn[i].h/6;
       self.minc_btn[i].x = self.m_btn[i].x+self.m_btn[i].w/2-self.minc_btn[i].w/2;
-      self.minc_btn[i].y = self.m_btn[i].y-self.minc_btn[i].h-pad+yoff;
-      self.mdec_btn[i].w = self.m_btn[i].w/2;
-      self.mdec_btn[i].h = self.m_btn[i].h/4;
+      self.minc_btn[i].y = self.m_btn[i].y-self.minc_btn[i].h+yoff;
+      self.mdec_btn[i].w = self.m_btn[i].w/3;
+      self.mdec_btn[i].h = self.m_btn[i].h/6;
       self.mdec_btn[i].x = self.m_btn[i].x+self.m_btn[i].w/2-self.mdec_btn[i].w/2;
-      self.mdec_btn[i].y = self.m_btn[i].y+self.m_btn[i].h+pad+yoff;
+      self.mdec_btn[i].y = self.m_btn[i].y+self.m_btn[i].h+yoff;
     }
     for(var i = 0; i < self.b.length; i++)
     {
       self.b_btn[i].h = self.btn_h;
       self.b_btn[i].y = self.eqn_y;
-      self.binc_btn[i].w = self.b_btn[i].w/2;
-      self.binc_btn[i].h = self.b_btn[i].h/4;
+      self.binc_btn[i].w = self.b_btn[i].w/3;
+      self.binc_btn[i].h = self.b_btn[i].h/6;
       self.binc_btn[i].x = self.b_btn[i].x+self.b_btn[i].w/2-self.binc_btn[i].w/2;
-      self.binc_btn[i].y = self.b_btn[i].y-self.binc_btn[i].h-pad+yoff;
-      self.bdec_btn[i].w = self.b_btn[i].w/2;
-      self.bdec_btn[i].h = self.b_btn[i].h/4;
+      self.binc_btn[i].y = self.b_btn[i].y-self.binc_btn[i].h+yoff;
+      self.bdec_btn[i].w = self.b_btn[i].w/3;
+      self.bdec_btn[i].h = self.b_btn[i].h/6;
       self.bdec_btn[i].x = self.b_btn[i].x+self.b_btn[i].w/2-self.bdec_btn[i].w/2;
-      self.bdec_btn[i].y = self.b_btn[i].y+self.b_btn[i].h+pad+yoff;
+      self.bdec_btn[i].y = self.b_btn[i].y+self.b_btn[i].h+yoff;
     }
   }
 
@@ -1498,12 +1498,12 @@ var editable_line = function()
         for(var i = 0; i < self.m_btn.length; i++)
         {
           b = self.m_btn[i];
-          gg.ctx.fillText(self.m[i],b.x+b.w-pad,self.eqn_y+self.label_font_h);
+          gg.ctx.fillText(self.m[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
         }
         for(var i = 0; i < self.b_btn.length; i++)
         {
           b = self.b_btn[i];
-          gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+self.label_font_h);
+          gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
         }
       }
 
