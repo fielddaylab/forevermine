@@ -26,6 +26,18 @@ var GamePlayScene = function(game, stage)
       gg.lab.ww = gg.canv.width;
       gg.lab.wh = gg.canv.height;
 
+      gg.fuel.x = 300;
+      gg.fuel.y = 406;
+      gg.fuel.w = 100;
+      gg.fuel.h = 81;
+      worldSpace(gg.lab,gg.canv,gg.fuel);
+
+      gg.oxy.x = 400;
+      gg.oxy.y = 406;
+      gg.oxy.w = 100;
+      gg.oxy.h = 81;
+      worldSpace(gg.lab,gg.canv,gg.oxy);
+
       gg.content_dragger.w = gg.canv.width;
       gg.content_dragger.h = gg.canv.height;
       gg.content_dragger.x = 0;
@@ -157,6 +169,20 @@ var GamePlayScene = function(game, stage)
     strokeBox(gg.lab,gg.ctx);
     drawImageBox(gg.background_img,gg.lab,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 0;
+    var fuel_p = 0;
+    var oxy_p = 0;
+    gg.ctx.fillStyle = green;
+    fuel_p = 0;
+    oxy_p = 1;
+    var l = gg.cur_level;
+    if(l)
+    {
+      if(!l.push_work) l = gg.levels[l.i+1]; //skip to level involving fuel
+      fuel_p = (l.m_correct_total*3+l.b_correct_total)/gg.needed_fuel;
+      oxy_p = (gg.max_days-l.day)/gg.max_days;
+    }
+    gg.ctx.fillRect(gg.fuel.x,gg.fuel.y+gg.fuel.h-gg.fuel.h*fuel_p,gg.fuel.w,gg.fuel.h*fuel_p);
+    gg.ctx.fillRect(gg.oxy.x,gg.oxy.y+gg.oxy.h-gg.oxy.h*oxy_p,gg.oxy.w,gg.oxy.h*oxy_p);
     if(gg.mode == MODE_CTX_IN)
     {
       var img = gg.cur_level.context_imgs[0];
@@ -224,6 +250,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wy = rand0()*10;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
       }
       else
       {
@@ -243,6 +271,8 @@ var GamePlayScene = function(game, stage)
         }
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
       }
       gg.ctx.globalAlpha = 1;
     }
@@ -304,6 +334,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.lab.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
         break;
       case MODE_CINEMATIC:
         if(!skipping)
@@ -326,6 +358,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.lab.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
         //assume pre_text_0 already enqueued
         gg.cur_level = gg.next_level;
         gg.graph.x_off = gg.cur_level.day*24;
@@ -373,6 +407,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.monitor.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
         gg.timeline.fast_sim = 1;
         if(skipping)
         {
@@ -391,6 +427,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.lab.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
         if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.pre_improve);
         gg.cur_level.progress++;
         gg.stage_t = 0;
@@ -543,6 +581,8 @@ var GamePlayScene = function(game, stage)
             gg.home_cam.wh = lerp(gg.lab.wh,gg.monitor.wh,zoom_p);
             screenSpace(gg.home_cam,gg.canv,gg.lab);
             screenSpace(gg.home_cam,gg.canv,gg.monitor);
+            screenSpace(gg.home_cam,gg.canv,gg.fuel);
+            screenSpace(gg.home_cam,gg.canv,gg.oxy);
           }
           else if(gg.mode_t < gg.zoom_t+gg.fade_t) //fade to work
           {
@@ -671,6 +711,8 @@ var GamePlayScene = function(game, stage)
             gg.home_cam.wh = lerp(gg.monitor.wh,gg.lab.wh,zoom_p);
             screenSpace(gg.home_cam,gg.canv,gg.lab);
             screenSpace(gg.home_cam,gg.canv,gg.monitor);
+            screenSpace(gg.home_cam,gg.canv,gg.fuel);
+            screenSpace(gg.home_cam,gg.canv,gg.oxy);
           }
         }
         else self.set_mode(MODE_POST0,0);
@@ -954,6 +996,8 @@ var GamePlayScene = function(game, stage)
     gg.needed_fuel = 300;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
+    gg.fuel     = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
+    gg.oxy      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
