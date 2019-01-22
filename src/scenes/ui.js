@@ -1051,7 +1051,7 @@ var editable_line = function()
     if(self.m.length == 1)
     {
       self.eqn_w += self.btn_w; //Y
-      self.eqn_strings[eqn_i] = " = ";
+      self.eqn_strings[eqn_i] = "=";
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -1066,7 +1066,7 @@ var editable_line = function()
       if(self.b.length == 1)
         self.eqn_strings[eqn_i] = "+"
       else
-        self.eqn_strings[eqn_i] = "+ ("
+        self.eqn_strings[eqn_i] = "+("
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -1074,7 +1074,7 @@ var editable_line = function()
     else
     {
       self.eqn_w += self.btn_w; //Y
-      self.eqn_strings[eqn_i] = " = (";
+      self.eqn_strings[eqn_i] = "=(";
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -1083,7 +1083,7 @@ var editable_line = function()
         self.m_btn[m_i].w = self.btn_w;
         self.eqn_w += self.m_btn[m_i].w;
         m_i++;
-        self.eqn_strings[eqn_i] = " + ";
+        self.eqn_strings[eqn_i] = "+";
         self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
         self.eqn_w += self.eqn_ws[eqn_i];
         eqn_i++;
@@ -1118,7 +1118,7 @@ var editable_line = function()
         self.b_btn[b_i].w = self.btn_w;
         self.eqn_w += self.b_btn[b_i].w;
         b_i++;
-        self.eqn_strings[eqn_i] = " + ";
+        self.eqn_strings[eqn_i] = "+";
         self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
         self.eqn_w += self.eqn_ws[eqn_i];
         eqn_i++;
