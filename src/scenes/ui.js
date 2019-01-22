@@ -697,11 +697,11 @@ var graph = function()
     if(t > 0.5)
     {
       gg.ctx.globalAlpha = (t-0.5)*2;
-      gg.ctx.fillStyle = "#7FE288";
       zy = self.y_for_y(gg.needed_fuel);
       if(zy < self.y) zy = self.y;
+      gg.ctx.fillStyle = "#75F3FF";
       gg.ctx.fillRect(self.x,self.y,self.w,zy-self.y);
-      gg.ctx.fillStyle = "#F19B8B";
+      gg.ctx.fillStyle = "#EFA6FF";
       gg.ctx.fillRect(self.x,zy,self.w,self.y+self.h-zy);
 
       gg.ctx.globalAlpha = 1;

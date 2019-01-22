@@ -81,10 +81,13 @@ var GamePlayScene = function(game, stage)
       gg.screenclicker.w = gg.canv.width;
       gg.screenclicker.h = gg.canv.height;
 
+      if(gg.intro_vid.video)
+      {
       gg.intro_vid.video.style.width = gg.canv.width;
       gg.intro_vid.video.style.height = gg.canv.height;
       gg.outro_vid.video.style.width = gg.canv.width;
       gg.outro_vid.video.style.height = gg.canv.height;
+      }
 
       var btn_x = 10;
       var btn_y = 10;
@@ -181,8 +184,14 @@ var GamePlayScene = function(game, stage)
       fuel_p = (l.m_correct_total*3+l.b_correct_total)/gg.needed_fuel;
       oxy_p = (gg.max_days-l.day)/gg.max_days;
     }
+    gg.ctx.fillStyle = "#262934";
+    gg.ctx.fillRect(gg.fuel.x,gg.fuel.y,gg.fuel.w,gg.fuel.h);
+    gg.ctx.fillRect(gg.oxy.x,gg.oxy.y,gg.oxy.w,gg.oxy.h);
+    gg.ctx.fillStyle = "#EFA6FF";
     gg.ctx.fillRect(gg.fuel.x,gg.fuel.y+gg.fuel.h-gg.fuel.h*fuel_p,gg.fuel.w,gg.fuel.h*fuel_p);
+    gg.ctx.fillStyle = "#CDBA70";
     gg.ctx.fillRect(gg.oxy.x,gg.oxy.y+gg.oxy.h-gg.oxy.h*oxy_p,gg.oxy.w,gg.oxy.h*oxy_p);
+    gg.ctx.fillStyle = white;
     if(gg.mode == MODE_CTX_IN)
     {
       var img = gg.cur_level.context_imgs[0];
@@ -297,7 +306,7 @@ var GamePlayScene = function(game, stage)
 
   self.draw_night = function(t)
   {
-    var t = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
+    var pt = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
 
     var panos = gg.pano_imgs;
     if(gg.cur_level.pano == 1) panos = gg.epano_imgs;
@@ -311,14 +320,39 @@ var GamePlayScene = function(game, stage)
       vis_pano_w = gg.canv.width/gg.canv.height*pimg.height;
       pano_sx = 0;
       pano_ex = pimg.width-vis_pano_w;
-      gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,t),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
+      gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,pt),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
     }
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "40px DisposableDroidBB";
-    gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
-    gg.ctx.font = "20px DisposableDroidBB";
-    gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+    if(t < 0.4)
+    {
+      gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillText(gg.max_days-gg.cur_level.day+" days of oxygen remain", 20,gg.canv.height-80+30);
+    }
+    else if(t < 0.5)
+    {
+      gg.ctx.globalAlpha = (0.5-t)*10;
+      gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillText(gg.max_days-gg.cur_level.day+" days of oxygen remain", 20,gg.canv.height-80+30);
+      gg.ctx.globalAlpha = 1;
+    }
+    else if(t < 0.6)
+    {
+      gg.ctx.globalAlpha = (t-0.5)*10;
+      gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+      gg.ctx.globalAlpha = 1;
+    }
+    else
+    {
+      gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+    }
   }
 
   self.set_mode = function(mode,skipping)
