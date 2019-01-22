@@ -1440,9 +1440,10 @@ var editable_line = function()
           gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
       }
       gg.ctx.font = self.label_font;
-      gg.ctx.drawImage(gg.constant_bg_img,self.x_x,self.eqn_y+yoff,self.btn_w,self.btn_h);
-      gg.ctx.drawImage(gg.constant_bg_img,self.y_x,self.eqn_y+yoff,self.btn_w,self.btn_h);
+      gg.ctx.drawImage(gg.variable_bg_img,self.x_x,self.eqn_y+yoff,self.btn_w,self.btn_h);
+      gg.ctx.drawImage(gg.variable_bg_img,self.y_x,self.eqn_y+yoff,self.btn_w,self.btn_h);
       gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
       if(self.y_set)
       {
       drawImageSizeCentered(gg.cur_level.y_icon, self.y_x+self.btn_w/2, self.eqn_y+self.font_h*2/3+yoff, self.font_h*1.5, gg.ctx);
@@ -1453,6 +1454,7 @@ var editable_line = function()
       drawImageSizeCentered(gg.time_img, self.x_x+self.btn_w/2, self.eqn_y+self.font_h*2/3+yoff, self.font_h*4/5, gg.ctx);
       gg.ctx.fillText(gg.cur_level.x_label,self.x_x+self.btn_w/2,self.eqn_y+yoff+self.btn_h-pad);
       }
+      gg.ctx.fillStyle = white;
       //boxes
       for(var i = 0; i < self.m_btn.length; i++)
       {
@@ -1542,8 +1544,10 @@ var editable_line = function()
       gg.ctx.textAlign = "right";
       if(gg.cur_level.progress > 7)
       {
+        gg.ctx.fillStyle = black;
         gg.ctx.fillText(fdisp(self.m_total*gg.timeline.t+self.b_total,1),self.y_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
         gg.ctx.fillText(fdisp(gg.timeline.t,1),self.x_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
+        gg.ctx.fillStyle = white;
         for(var i = 0; i < self.m_btn.length; i++)
         {
           b = self.m_btn[i];
