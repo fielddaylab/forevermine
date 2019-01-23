@@ -1611,8 +1611,16 @@ var table = function()
   {
     var old_correct = self.correct;
     self.correct = self.data_visible;
-    for(var i = 0; i < self.predicted_data.length && i < self.known_data.length; i++)
-      if(self.predicted_data[i] != self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
+    if(gg.cur_level.special)
+    {
+      for(var i = 0; i < self.predicted_data.length && i < self.known_data.length; i++)
+        if(self.predicted_data[i] < self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
+    }
+    else
+    {
+      for(var i = 0; i < self.predicted_data.length && i < self.known_data.length; i++)
+        if(self.predicted_data[i] != self.known_data[i] && self.known_data[i] != "-") self.correct = 0;
+    }
     if(gg.cur_level.progress == 8 && self.correct && !old_correct)
     {
       gg.message_box.nq_group(gg.cur_level.text.submit);

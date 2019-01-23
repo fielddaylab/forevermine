@@ -155,6 +155,7 @@ var GamePlayScene = function(game, stage)
   var MODE_LAB_OUT     = ENUM; ENUM++;
   var MODE_NIGHT       = ENUM; ENUM++;
   var MODE_LAB_IN      = ENUM; ENUM++;
+  var MODE_CREDITS     = ENUM; ENUM++;
   var MODE_COUNT       = ENUM; ENUM++;
 
   self.reset_level = function()
@@ -374,6 +375,8 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         screenSpace(gg.home_cam,gg.canv,gg.fuel);
         screenSpace(gg.home_cam,gg.canv,gg.oxy);
+        gg.intro_vid.done = 0;
+        gg.outro_vid.done = 0;
         break;
       case MODE_CINEMATIC:
         if(!skipping)
@@ -497,8 +500,8 @@ var GamePlayScene = function(game, stage)
           gg.cur_level.progress++;
           gg.stage_t = 0;
         }
-        else
-          gg.outro_vid.play();
+        break;
+      case MODE_CREDITS:
         break;
     }
   }
@@ -761,15 +764,23 @@ var GamePlayScene = function(game, stage)
         if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
-          if(gg.cur_level.skip_system)
+          if(gg.cur_level.special)
           {
-            if(gg.cur_level.skip_night)
-              self.skip_to_mode(MODE_WORK_IN);
-            else
-              self.skip_to_mode(MODE_LAB_OUT);
+            gg.outro_vid.play();
+            self.set_mode(MODE_CREDITS,0);
           }
           else
-            self.set_mode(MODE_IMPROVE_IN,0);
+          {
+            if(gg.cur_level.skip_system)
+            {
+              if(gg.cur_level.skip_night)
+                self.skip_to_mode(MODE_WORK_IN);
+              else
+                self.skip_to_mode(MODE_LAB_OUT);
+            }
+            else
+              self.set_mode(MODE_IMPROVE_IN,0);
+          }
         }
         gg.exposition_box.tick();
       }
@@ -847,7 +858,19 @@ var GamePlayScene = function(game, stage)
         {
           var fade_p = (gg.mode_t-gg.fade_t)/gg.fade_t;
         }
-        else self.set_mode(MODE_PRE0,0);
+        else
+          self.set_mode(MODE_PRE0,0);
+      }
+        break;
+      case MODE_CREDITS:
+      {
+        gg.mode_p = gg.mode_t/(gg.fade_t+gg.fade_t);
+        if(gg.mode_t < gg.fade_t) //fade from black
+        {
+          var fade_p = 1-(gg.mode_t/gg.fade_t);
+        }
+        else if(gg.mode_t >= gg.credits_t+(gg.fade_t*2))
+          self.set_mode(MODE_MENU,0);
       }
         break;
     }
@@ -1025,6 +1048,28 @@ var GamePlayScene = function(game, stage)
           gg.ctx.globalAlpha = 1;
         }
         break;
+      case MODE_CREDITS:
+        var c_t = clamp(0,1,(gg.mode_t-gg.fade_t)/gg.credits_t);
+        //draw credits between c_t = 0 and c_t = 1;
+        {
+        }
+        if(gg.mode_t < gg.fade_t)
+        {
+          var t = 1-(gg.mode_t/gg.fade_t); //fade in
+          gg.ctx.globalAlpha = t;
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        else if(gg.mode_t > gg.credits_t+gg.fade_t)
+        {
+          var t = (gg.mode_t-gg.credits_t-gg.fade_t)/gg.fade_t; //fade_out
+          gg.ctx.globalAlpha = t;
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        break;
     }
   }
 
@@ -1044,6 +1089,7 @@ var GamePlayScene = function(game, stage)
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
     gg.blackout_t = 100;
+    gg.credits_t = 100;
 
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
@@ -1536,8 +1582,16 @@ var GamePlayScene = function(game, stage)
     gg.time_mod_twelve_pi += 0.01;
     if(gg.time_mod_twelve_pi > twelvepi) gg.time_mod_twelve_pi -= twelvepi;
 
-    gg.mode_t++;
-    gg.stage_t++;
+    if(
+      (gg.intro_vid.video && !gg.intro_vid.video.paused) ||
+      (gg.outro_vid.video && !gg.outro_vid.video.paused)
+    )
+      ;
+    else
+    {
+      gg.mode_t++;
+      gg.stage_t++;
+    }
     clicker.filter(gg.screenclicker);
     keyer.filter(gg.keylistener);
     gg.monitor.tick();
