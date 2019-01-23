@@ -149,7 +149,8 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/pano_fg.png");
     img_srcs.push("assets/epano_bg.jpg");
     img_srcs.push("assets/epano_mg.png");
-    img_srcs.push("assets/epano_fg.png");
+    img_srcs.push("assets/epano_fg_0.png");
+    img_srcs.push("assets/epano_fg_1.png");
     img_srcs.push("assets/epano_ffg.png");
     img_srcs.push("assets/battery.png");
     img_srcs.push("assets/drill.png");
