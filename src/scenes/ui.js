@@ -532,7 +532,7 @@ var exposition_box = function()
   self.pad = 10;
   self.font_h = 30;
   self.ai_font = self.font_h+"px DisposableDroidBB";
-  self.player_font = floor(self.font_h*0.7)+"px Helvetica";
+  self.player_font = floor(self.font_h*0.7)+"px Lato";
 
   self.texts = [];
   self.bubbles = [];
