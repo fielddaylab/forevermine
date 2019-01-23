@@ -631,7 +631,7 @@ var exposition_box = function()
     for(var i = 0; i < self.bubbles[self.displayed_i].length; i++)
     {
       gg.ctx.fillText(self.bubbles[self.displayed_i][i],self.x+self.pad,y);
-      y += self.font_h+self.pad;
+      y += self.font_h;
     }
   }
 }
