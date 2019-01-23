@@ -1744,7 +1744,7 @@ var message_box = function()
 
   self.ai_text_color = "#4D514C";
   self.you_text_color = "#FEFFFF";
-  self.data_text_color = "#FF6666";
+  self.data_text_color = self.ai_text_color;//"#FF6666";
   self.bg_color = "#F1F9EB";
 
   self.top_y = 0;
@@ -1971,17 +1971,29 @@ var message_box = function()
       }
       else if(self.types[i] == CONTENT_LABEL)
       {
-        gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
+        var icon = 0;
+        for(var j = 0; j < gg.cur_level.m_label.length; j++)
+          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) { icon = gg.cur_level.m_icon[j]; break; }
+        if(!icon)
+        {
+          for(var j = 0; j < gg.cur_level.b_label.length; j++)
+            if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; break; }
+        }
+        drawImageSizeCentered(icon, self.x+self.bubble_w-30, y+(self.pad+self.font_h+self.pad)/2, 60, gg.ctx);
       }
       else if(self.types[i] == CONTENT_CONSTANT)
       {
-        gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
-        var c = 0;
+        var icon = 0;
+        var c;
         for(var j = 0; j < gg.cur_level.m_label.length; j++)
-          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) c = gg.cur_level.m_correct[j];
-        for(var j = 0; j < gg.cur_level.b_label.length; j++)
-          if(self.bubbles[i][0] == gg.cur_level.b_label[j]) c = gg.cur_level.b_correct[j];
-        gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.pad+self.bubble_w/2+30, y+(self.pad+self.font_h+self.pad)*2/3);
+          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) { icon = gg.cur_level.m_icon[j]; c = gg.cur_level.m_correct[j]; break; }
+        if(!icon)
+        {
+          for(var j = 0; j < gg.cur_level.b_label.length; j++)
+            if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; c = gg.cur_level.b_correct[j]; break; }
+        }
+        drawImageSizeCentered(icon, self.x+self.bubble_w-30, y+(self.pad+self.font_h+self.pad)/2, 60, gg.ctx);
+        gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.bubble_w-60, y+(self.pad+self.font_h+self.pad)*2/3);
       }
       else if(self.types[i] == CONTENT_SIM)
       {
