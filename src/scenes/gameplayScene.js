@@ -317,7 +317,7 @@ var GamePlayScene = function(game, stage)
     for(var i = 0; i < panos.length; i++)
     {
       pimg = panos[i];
-      if(pimg.length) pimg = pimg[floor(sin(8*sin(3*sin(t*10)))+0.99)]
+      if(pimg.length) pimg = pimg[floor(clamp(0,1,sin(8*sin(3*sin(t*10)))+1))]
       vis_pano_w = gg.canv.width/gg.canv.height*pimg.height;
       pano_sx = 0;
       pano_ex = pimg.width-vis_pano_w;
