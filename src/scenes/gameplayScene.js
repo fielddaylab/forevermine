@@ -1198,8 +1198,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1237,8 +1235,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1315,8 +1311,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 53; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1354,8 +1348,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 0; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1393,8 +1385,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 53; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1471,8 +1461,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 53; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;

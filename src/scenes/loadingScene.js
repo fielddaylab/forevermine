@@ -122,12 +122,10 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/arrow_up.png");
     img_srcs.push("assets/arrow_down.png");
     img_srcs.push("assets/number_bg.png");
-    img_srcs.push("assets/alert.png");
-    img_srcs.push("assets/data.png");
-    img_srcs.push("assets/submit.png");
+    img_srcs.push("assets/console.png");
+    img_srcs.push("assets/console_dark.png");
     img_srcs.push("assets/background.jpg");
     img_srcs.push("assets/background_ui.jpg");
-    img_srcs.push("assets/constant_bg.png");
     img_srcs.push("assets/card_editable.png");
     img_srcs.push("assets/card_not_editable.png");
     img_srcs.push("assets/crycollected.png");
@@ -136,13 +134,10 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/chrinitial.png");
     img_srcs.push("assets/chrrate.png");
     img_srcs.push("assets/time.png");
-    img_srcs.push("assets/console.png");
-    img_srcs.push("assets/console_dark.png");
     img_srcs.push("assets/bezel.png");
-    img_srcs.push("assets/accessory_heart.png");
-    img_srcs.push("assets/accessory_nervous.png");
-    img_srcs.push("assets/eye.png");
-    img_srcs.push("assets/mouth.png");
+    img_srcs.push("assets/alert.png");
+    img_srcs.push("assets/data.png");
+    img_srcs.push("assets/submit.png");
     img_srcs.push("assets/neck_heart.png");
     img_srcs.push("assets/pano_bg.jpg");
     img_srcs.push("assets/pano_mg.png");
@@ -168,6 +163,12 @@ var LoadingScene = function(game, stage)
       img_srcs.push("assets/context/7-"+i+".png");
     for(var i = 0; i < 53; i++)
       img_srcs.push("assets/context/9-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/system/2-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/system/6-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/system/8-"+i+".png");
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();
