@@ -925,6 +925,8 @@ var editable_line = function()
   self.font = self.font_h+"px DisposableDroidBB";
   self.label_font_h = 20;
   self.label_font = self.label_font_h+"px DisposableDroidBB";
+  self.number_font_h = 40;
+  self.number_font = self.number_font_h+"px DisposableDroidBB";
 
   self.m_label = [-1];
   self.m = [0];
@@ -1325,7 +1327,7 @@ var editable_line = function()
     //graph
     {
       gg.ctx.fillStyle = white;
-      gg.ctx.font = "18px DisposableDroidBB";
+      gg.ctx.font = self.font;
       gg.ctx.lineWidth = 2;
       gg.ctx.strokeStyle = white;
 
@@ -1542,6 +1544,7 @@ var editable_line = function()
 
       //value strings
       gg.ctx.textAlign = "right";
+      gg.ctx.font = self.number_font;
       if(gg.cur_level.progress > 7)
       {
         gg.ctx.fillStyle = black;
