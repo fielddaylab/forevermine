@@ -855,18 +855,8 @@ var timeline = function()
   self.t_speed = 0.01;
   self.fast_t_speed = 0.1;
 
-  self.advance_btn = {x:0,y:0,w:0,h:0,click:function(evt){
-    self.t_target++;
-    if(self.t_target > self.t_max) self.t_target = self.t_max;
-  }};
-
   self.size = function()
   {
-    self.advance_btn.w = 50;
-    self.advance_btn.h = self.h;
-    self.advance_btn.x = self.x;
-    self.advance_btn.y = self.y;
-
     self.sx = self.x+self.w*1.5/(self.t_max+2)
     self.ex = self.x+self.w*(self.t_max+1.5)/(self.t_max+2);
   }
@@ -877,6 +867,7 @@ var timeline = function()
   }
   self.drag = function(evt)
   {
+    if(gg.cur_level.progress < 8) { self.t = 0; return; }
     var t = clampMapVal(self.sx,self.ex,0,self.t_max,evt.doX);
     self.t_target = ceil(t);
     self.t = t;
@@ -888,13 +879,13 @@ var timeline = function()
   self.filter = function(dragger, clicker)
   {
     var check = true;
-    if(check) check = !clicker.filter(self.advance_btn);
     if(check) check = !dragger.filter(self);
     return !check;
   }
 
   self.tick = function()
   {
+    if(gg.cur_level.progress < 8) self.t = 0;
     if(self.fast_sim && self.t < self.t_max) self.t += self.fast_t_speed;
     else
     {
@@ -914,19 +905,17 @@ var timeline = function()
     //gg.ctx.strokeStyle = red;
     //strokeBox(self,gg.ctx);
 
-    //strokeBox(self.advance_btn,gg.ctx);
-
     var t_x;
 
     t_x = mapVal(0,self.t_max,self.sx,self.ex,self.t);
     var s = self.h;
-    gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y,s,self.h);
+    gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y+gg.table.yoff,s,self.h);
 
     if(self.t < self.t_target)
     {
       gg.ctx.font = "12px DisposableDroidBB";
       gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillText("simulating...",self.x,self.y-10);
+      gg.ctx.fillText("simulating...",self.x+50,self.y-10);
     }
 
     gg.ctx.fillStyle = black;
@@ -1613,6 +1602,8 @@ var table = function()
 
   self.correct = 0;
 
+  self.yoff = 0;
+
   self.clear = function()
   {
     self.t_data = [];
@@ -1649,6 +1640,16 @@ var table = function()
   self.tick = function()
   {
     if(gg.timeline.t > self.simd_visible) self.simd_visible = gg.timeline.t;
+    if(gg.cur_level.progress < 6 && !gg.content_dragger.dragging_data)
+    {
+      if(self.yoff < self.h) self.yoff = lerp(self.yoff,self.h,0.1);
+      else self.yoff = self.h;
+    }
+    else
+    {
+      if(self.yoff > 0.01) self.yoff = lerp(self.yoff,0,0.1);
+      else self.yoff = 0;
+    }
   }
 
   self.draw = function()
@@ -1659,10 +1660,10 @@ var table = function()
     gg.ctx.strokeStyle = self.bg_color;
     gg.ctx.lineWidth = 3;
 
-    var y0 = self.y;
-    var y1 = self.y+self.h/3;
-    var y2 = self.y+self.h*2/3;
-    var y3 = self.y+self.h;
+    var y0 = self.y+self.yoff;
+    var y1 = self.y+self.h/3+self.yoff;
+    var y2 = self.y+self.h*2/3+self.yoff;
+    var y3 = self.y+self.h+self.yoff;
     var y01 = lerp(y0,y1,0.5);
     var y12 = lerp(y1,y2,0.5);
     var y23 = lerp(y2,y3,0.5);
@@ -1704,14 +1705,17 @@ var table = function()
       gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
       if(self.simd_visible >= i)
       {
-        if(self.data_visible && !gg.cur_level.perma_zoom)
+        if(gg.cur_level.progress >= 8 && self.data_visible && !gg.cur_level.perma_zoom)
         {
           if(self.known_data[i] == self.predicted_data[i] || self.correct)
             gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
           else if(self.known_data[i] != "-")
             gg.ctx.drawImage(gg.neq_img,x-10,y2-10,20,20);
         }
-        gg.ctx.fillText(self.predicted_data[i],x,y12+self.font_h/3);
+        if(gg.cur_level.progress < 8)
+          gg.ctx.fillText("-",x,y12+self.font_h/3);
+        else
+          gg.ctx.fillText(self.predicted_data[i],x,y12+self.font_h/3);
       }
       else gg.ctx.fillText("-",x,y12+self.font_h/3);
 

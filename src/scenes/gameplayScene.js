@@ -174,6 +174,7 @@ var GamePlayScene = function(game, stage)
     gg.cur_level.correct = 0;
     gg.cur_level.progress = 1;
     gg.table.data_visible = 0;
+    gg.table.yoff = gg.table.h;
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     gg.line.consume_cur_level();
@@ -461,7 +462,6 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         screenSpace(gg.home_cam,gg.canv,gg.fuel);
         screenSpace(gg.home_cam,gg.canv,gg.oxy);
-        gg.timeline.fast_sim = 1;
         if(skipping)
         {
           if(gg.cur_level.push_work)
