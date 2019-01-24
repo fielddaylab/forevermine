@@ -139,6 +139,7 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/data.png");
     img_srcs.push("assets/submit.png");
     img_srcs.push("assets/neck_heart.png");
+    img_srcs.push("assets/axis_label_bg.png");
     img_srcs.push("assets/pano_bg.jpg");
     img_srcs.push("assets/pano_mg.png");
     img_srcs.push("assets/pano_fg.png");

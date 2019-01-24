@@ -1120,6 +1120,7 @@ var GamePlayScene = function(game, stage)
     gg.data_img = GenImg("assets/data.png");
     gg.submit_img = GenImg("assets/submit.png");
     gg.neck_heart_img = GenImg("assets/neck_heart.png");
+    gg.axis_label_bg_img = GenImg("assets/axis_label_bg.png");
     gg.pano_imgs = [];
     gg.pano_imgs[0] = GenImg("assets/pano_bg.jpg");
     gg.pano_imgs[1] = GenImg("assets/pano_mg.png");

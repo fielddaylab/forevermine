@@ -711,12 +711,12 @@ var graph = function()
     gg.ctx.textAlign = "center";
 
     //grid
-    gg.ctx.fillStyle = white;
     gg.ctx.strokeStyle = "rgba(255,255,255,0.5)";
     gg.ctx.lineWidth = 2;
       //vertical lines
     if(t < 0.5)
     {
+      gg.ctx.fillStyle = white;
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
       for(var i = self.x0_min; i <= self.x0_max; i += self.x0_grid)
@@ -730,11 +730,16 @@ var graph = function()
       gg.ctx.stroke();
 
       if(t == 0) gg.ctx.fillText(self.x0_max,self.x+self.w,self.y+self.h+15);
-      gg.ctx.fillText(gg.cur_level.x_label,self.x+self.w/2,self.y+self.h+30);
+      var lw = 100;
+      var lh = 60;
+      gg.ctx.fillStyle = black;
+      gg.ctx.drawImage(gg.axis_label_bg_img,self.x+self.w/2-lw/2,self.y+self.h+40-lh/2,lw,lh);
+      gg.ctx.fillText(gg.cur_level.x_label,self.x+self.w/2,self.y+self.h+45);
       gg.ctx.globalAlpha = 1;
     }
     else
     {
+      gg.ctx.fillStyle = white;
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
       for(var i = self.x1_min; i <= self.x1_max; i += self.x1_grid)
@@ -748,13 +753,18 @@ var graph = function()
       gg.ctx.stroke();
 
       if(t == 1) gg.ctx.fillText(self.x1_max/24,self.x+self.w,self.y+self.h+15);
-      gg.ctx.fillText("DAYS",self.x+self.w/2,self.y+self.h+30);
+      var lw = 100;
+      var lh = 60;
+      gg.ctx.fillStyle = black;
+      gg.ctx.drawImage(gg.axis_label_bg_img,self.x+self.w/2-lw/2,self.y+self.h+40-lh/2,lw,lh);
+      gg.ctx.fillText("DAYS",self.x+self.w/2,self.y+self.h+45);
       gg.ctx.globalAlpha = 1;
     }
 
       //horizontal lines
     if(t < 0.5)
     {
+      gg.ctx.fillStyle = white;
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
       for(var i = self.y0_min; i <= self.y0_max; i += self.y0_grid)
@@ -768,12 +778,17 @@ var graph = function()
 
       if(t == 0) gg.ctx.fillText(self.y0_max,self.x-12,self.y+5);
       gg.ctx.textAlign = "right";
-      gg.ctx.fillText(gg.cur_level.y_label,self.x-25,self.y+self.h/2);
+      var lw = 100;
+      var lh = 60;
+      gg.ctx.fillStyle = black;
+      gg.ctx.drawImage(gg.axis_label_bg_img,self.x-25-lw,self.y+self.h/2-lh/2,lw,lh);
+      gg.ctx.fillText(gg.cur_level.y_label,self.x-40,self.y+self.h/2);
       gg.ctx.textAlign = "center";
       gg.ctx.globalAlpha = 1;
     }
     else
     {
+      gg.ctx.fillStyle = white;
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
       for(var i = self.y1_min; i <= self.y1_max; i += self.y1_grid)
@@ -790,7 +805,11 @@ var graph = function()
 
       if(t == 1) gg.ctx.fillText(self.y1_max,self.x-12,self.y+5);
       gg.ctx.textAlign = "right";
-      gg.ctx.fillText(gg.cur_level.y_label,self.x-25,self.y+self.h/2);
+      var lw = 100;
+      var lh = 60;
+      gg.ctx.fillStyle = black;
+      gg.ctx.drawImage(gg.axis_label_bg_img,self.x-25-lw,self.y+self.h/2-lh/2,lw,lh);
+      gg.ctx.fillText(gg.cur_level.y_label,self.x-40,self.y+self.h/2);
       gg.ctx.textAlign = "center";
       gg.ctx.globalAlpha = 1;
     }
@@ -1055,7 +1074,7 @@ var editable_line = function()
     self.btn_w = gg.ctx.measureText("-0.0").width;
     self.btn_h = self.font_h*3;
     self.eqn_w = 0;
-    self.eqn_y = gg.stage.height*4/9;
+    self.eqn_y = gg.stage.height/2;
 
     //figure out w
     if(self.m.length == 1)
