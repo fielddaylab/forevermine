@@ -119,6 +119,17 @@ var GamePlayScene = function(game, stage)
       gg.code_button.h = btn_h;
       btn_y += btn_h*1.1;
 
+      gg.sound_button.x = btn_x;
+      gg.sound_button.y = btn_y;
+      gg.sound_button.w = btn_w;
+      gg.sound_button.h = btn_h;
+      btn_y += btn_h*1.1;
+
+      gg.fullscreen_button.x = btn_x;
+      gg.fullscreen_button.y = btn_y;
+      gg.fullscreen_button.w = btn_w;
+      gg.fullscreen_button.h = btn_h;
+      btn_y += btn_h*1.1;
     }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
@@ -530,6 +541,8 @@ var GamePlayScene = function(game, stage)
           !clicker.filter(gg.new_button) &&
           !clicker.filter(gg.code_txt) &&
           !clicker.filter(gg.code_button) &&
+          !clicker.filter(gg.sound_button) &&
+          !clicker.filter(gg.fullscreen_button) &&
           false)
           ;
         break;
@@ -888,6 +901,8 @@ var GamePlayScene = function(game, stage)
         fillBox(gg.new_button,gg.ctx);
         fillBox(gg.code_txt,gg.ctx);
         fillBox(gg.code_button,gg.ctx);
+        fillBox(gg.sound_button,gg.ctx);
+        fillBox(gg.fullscreen_button,gg.ctx);
       }
         break;
       case MODE_CINEMATIC:
@@ -1161,6 +1176,8 @@ var GamePlayScene = function(game, stage)
         self.skip_to_mode(MODE_PRE0);
       }
     });
+    gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){ });
+    gg.fullscreen_button = new ToggleBox(0,0,0,0, 1, function(v){ });
 
     gg.content_dragger = new content_dragger();
     gg.exposition_box = new exposition_box();
@@ -1624,3 +1641,4 @@ var GamePlayScene = function(game, stage)
   };
 
 };
+
