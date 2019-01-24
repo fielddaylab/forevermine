@@ -618,7 +618,7 @@ var exposition_box = function()
       case CONTENT_AI:
         gg.ctx.font = self.ai_font;
         gg.ctx.fillStyle = cyan;
-        gg.ctx.fillText("CRIS",self.x+self.pad,y);
+        gg.ctx.fillText("MAT",self.x+self.pad,y);
         break;
       case CONTENT_PLAYER:
         gg.ctx.font = self.player_font;
@@ -714,6 +714,11 @@ var graph = function()
     gg.ctx.strokeStyle = "rgba(255,255,255,0.5)";
     gg.ctx.lineWidth = 2;
       //vertical lines
+    var lw = 100;
+    var lh = 60;
+    gg.ctx.drawImage(gg.axis_label_bg_img, self.x+self.w/2-lw/2, self.y+self.h+40-lh/2, lw, lh);
+    if(gg.cur_level.msg_progress == 6 && !gg.line.x_set && !gg.content_dragger.dragging_x)
+      drawImageSizeCentered(gg.notice_img, self.x+self.w/2-lw/2, self.y+self.h+40, 20, gg.ctx);
     if(t < 0.5)
     {
       gg.ctx.fillStyle = white;
@@ -730,10 +735,7 @@ var graph = function()
       gg.ctx.stroke();
 
       if(t == 0) gg.ctx.fillText(self.x0_max,self.x+self.w,self.y+self.h+15);
-      var lw = 100;
-      var lh = 60;
       gg.ctx.fillStyle = black;
-      gg.ctx.drawImage(gg.axis_label_bg_img,self.x+self.w/2-lw/2,self.y+self.h+40-lh/2,lw,lh);
       gg.ctx.fillText(gg.cur_level.x_label,self.x+self.w/2,self.y+self.h+45);
       gg.ctx.globalAlpha = 1;
     }
@@ -753,15 +755,15 @@ var graph = function()
       gg.ctx.stroke();
 
       if(t == 1) gg.ctx.fillText(self.x1_max/24,self.x+self.w,self.y+self.h+15);
-      var lw = 100;
-      var lh = 60;
       gg.ctx.fillStyle = black;
-      gg.ctx.drawImage(gg.axis_label_bg_img,self.x+self.w/2-lw/2,self.y+self.h+40-lh/2,lw,lh);
       gg.ctx.fillText("DAYS",self.x+self.w/2,self.y+self.h+45);
       gg.ctx.globalAlpha = 1;
     }
 
       //horizontal lines
+    gg.ctx.drawImage(gg.axis_label_bg_img, self.x-25-lw, self.y+self.h/2-lh/2, lw, lh);
+    if(gg.cur_level.msg_progress == 6 && !gg.line.y_set && !gg.content_dragger.dragging_y)
+      drawImageSizeCentered(gg.notice_img, self.x-25-lw, self.y+self.h/2, 20, gg.ctx);
     if(t < 0.5)
     {
       gg.ctx.fillStyle = white;
@@ -778,10 +780,7 @@ var graph = function()
 
       if(t == 0) gg.ctx.fillText(self.y0_max,self.x-12,self.y+5);
       gg.ctx.textAlign = "right";
-      var lw = 100;
-      var lh = 60;
       gg.ctx.fillStyle = black;
-      gg.ctx.drawImage(gg.axis_label_bg_img,self.x-25-lw,self.y+self.h/2-lh/2,lw,lh);
       gg.ctx.fillText(gg.cur_level.y_label,self.x-40,self.y+self.h/2);
       gg.ctx.textAlign = "center";
       gg.ctx.globalAlpha = 1;
@@ -805,10 +804,7 @@ var graph = function()
 
       if(t == 1) gg.ctx.fillText(self.y1_max,self.x-12,self.y+5);
       gg.ctx.textAlign = "right";
-      var lw = 100;
-      var lh = 60;
       gg.ctx.fillStyle = black;
-      gg.ctx.drawImage(gg.axis_label_bg_img,self.x-25-lw,self.y+self.h/2-lh/2,lw,lh);
       gg.ctx.fillText(gg.cur_level.y_label,self.x-40,self.y+self.h/2);
       gg.ctx.textAlign = "center";
       gg.ctx.globalAlpha = 1;

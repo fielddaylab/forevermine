@@ -772,7 +772,7 @@ var english_text =
       trigger_click, "I can't believe it. I'm gonna make it!", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(20), "Wait... you are???", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "I didn't think that was actually gonna work... ", CONTENT_AI, EMOTE_NULL,
-      trigger_click, "Thank you for everything, Cris!", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Thank you for everything, MAT!", CONTENT_PLAYER, EMOTE_NULL,
     ],
     pre_improve: //LAB: about to show system
     [
@@ -780,7 +780,7 @@ var english_text =
       "Looks like I'll have enough fuel on X!", CONTENT_PLAYER, EMOTE_NULL,
       "Well, we could keep working on the robots, just in case... ", CONTENT_AI, EMOTE_NULL,
       "That's a good idea, but I think I need some rest. I was up all night!", CONTENT_PLAYER, EMOTE_NULL,
-      "I'll try to stop by and say good-bye before I leave. Thanks again, Cris!!!", CONTENT_PLAYER, EMOTE_NULL,
+      "I'll try to stop by and say good-bye before I leave. Thanks again, MAT!!!", CONTENT_PLAYER, EMOTE_NULL,
       "Don't mention it.", CONTENT_AI, EMOTE_NULL,
     ],
     improve: //LAB: [skip_system] show system
