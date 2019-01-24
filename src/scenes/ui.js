@@ -177,7 +177,7 @@ var content_dragger = function()
       if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM)
         y += mb.font_h+mb.pad;
       else if(mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
-        y += mb.font_h*3+mb.pad;
+        y += mb.font_h*4-mb.pad;
       else
         y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
       y += mb.pad;
@@ -201,7 +201,7 @@ var content_dragger = function()
     if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
     for(var i = 0; i < mb.displayed_i; i++)
     {
-      if(mb.types[i] == CONTENT_LABEL && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
+      if(mb.types[i] == CONTENT_LABEL && ptWithin(mb.x+mb.pad, y, mb.bubble_w, mb.pad+mb.font_h*4-mb.pad, evt.doX,evt.doY))
       {
         self.label_val = mb.bubbles[i][0];
         return 1;
@@ -210,7 +210,7 @@ var content_dragger = function()
       if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM)
         y += mb.font_h+mb.pad;
       else if(mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
-        y += mb.font_h*3+mb.pad;
+        y += mb.font_h*4-mb.pad;
       else
         y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
       y += mb.pad;
@@ -225,7 +225,7 @@ var content_dragger = function()
     if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
     for(var i = 0; i < mb.displayed_i; i++)
     {
-      if(mb.types[i] == CONTENT_CONSTANT && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
+      if(mb.types[i] == CONTENT_CONSTANT && ptWithin(mb.x+mb.pad, y, mb.bubble_w, mb.pad+mb.font_h*4-mb.pad, evt.doX,evt.doY))
       {
         var c = 0;
         for(var j = 0; j < gg.cur_level.m_label.length; j++)
@@ -238,7 +238,7 @@ var content_dragger = function()
       if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM)
         y += mb.font_h+mb.pad;
       else if(mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
-        y += mb.font_h*3+mb.pad;
+        y += mb.font_h*4-mb.pad;
       else
         y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
       y += mb.pad;
@@ -1583,14 +1583,6 @@ var editable_line = function()
           gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
         }
       }
-
-      gg.ctx.textAlign = "left";
-
-      /*
-      gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillText("X = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
-      gg.ctx.fillText("Y = "+fdisp(self.m*fdisp(gg.timeline.t,1)+self.b,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
-      */
     }
 
   }
@@ -1855,7 +1847,7 @@ var message_box = function()
       if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM)
         self.max_top_y -= self.font_h+self.pad;
       else if(self.types[i] == CONTENT_LABEL || self.types[i] == CONTENT_CONSTANT)
-        self.max_top_y -= self.font_h*3+self.pad;
+        self.max_top_y -= self.font_h*4-self.pad;
       else //CONTENT_PLAYER || CONTENT_AI
       {
         for(var j = 0; j < self.bubbles[i].length; j++)
@@ -1957,9 +1949,6 @@ var message_box = function()
 
   self.draw = function()
   {
-    //gg.ctx.strokeStyle = red;
-    //strokeBox(self,gg.ctx);
-
     gg.ctx.lineWidth = 1;
     gg.ctx.fillStyle = black;
     gg.ctx.textAlign = "left";
@@ -2024,13 +2013,13 @@ var message_box = function()
           for(var j = 0; j < gg.cur_level.b_label.length; j++)
             if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; break; }
         }
-        drawImageSizeCentered(icon, self.x+self.bubble_w-30, y+(self.pad+self.font_h+self.pad)/2, 60, gg.ctx);
+        gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad+self.bubble_w/4, y, self.bubble_w/2, self.font_h*4);
+        drawImageSizeCentered(icon, self.x+self.pad+self.bubble_w/2, y+self.font_h, self.font_h, gg.ctx);
 
-        y += self.pad;
-        gg.ctx.textAlign = "left";
+        gg.ctx.textAlign = "center";
         gg.ctx.fillStyle = self.data_text_color;
-        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
-        y += self.font_h*3+self.pad;
+        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad+self.bubble_w/2,y+self.pad+self.font_h*3);
+        y += self.font_h*4;
       }
       else if(self.types[i] == CONTENT_CONSTANT)
       {
@@ -2043,14 +2032,14 @@ var message_box = function()
           for(var j = 0; j < gg.cur_level.b_label.length; j++)
             if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; c = gg.cur_level.b_correct[j]; break; }
         }
-        drawImageSizeCentered(icon, self.x+self.bubble_w-30, y+(self.pad+self.font_h+self.pad)/2, 60, gg.ctx);
-        gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.bubble_w-60, y+(self.pad+self.font_h+self.pad)*2/3);
+        gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad+self.bubble_w/4, y, self.bubble_w/2, self.font_h*4);
+        drawImageSizeCentered(icon, self.x+self.pad+self.bubble_w/2, y+self.font_h, self.font_h, gg.ctx);
 
-        y += self.pad;
-        gg.ctx.textAlign = "left";
+        gg.ctx.textAlign = "center";
         gg.ctx.fillStyle = self.data_text_color;
-        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
-        y += self.font_h*3+self.pad;
+        gg.ctx.fillText(c,self.x+self.pad+self.bubble_w/2,y+self.pad+self.font_h*2);
+        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad+self.bubble_w/2,y+self.pad+self.font_h*3);
+        y += self.font_h*4;
       }
       else if(self.types[i] == CONTENT_SIM)
       {
