@@ -526,7 +526,7 @@ var exposition_box = function()
 
   self.text_w = 0;
 
-  self.pad = 10;
+  self.pad = 50;
   self.font_h = 30;
   self.ai_font = self.font_h+"px DisposableDroidBB";
   self.player_font = floor(self.font_h*0.7)+"px Lato";
@@ -601,12 +601,7 @@ var exposition_box = function()
 
     if(self.emp_t || self.blackout_t) return;
 
-    gg.ctx.lineWidth = 1;
-    strokeBox(self,gg.ctx);
-    gg.ctx.fillStyle = black;
-    gg.ctx.globalAlpha = 0.5;
-    fillBox(self,gg.ctx);
-    gg.ctx.globalAlpha = 1;
+    gg.ctx.drawImage(gg.exposition_bg_img, self.x,self.y,self.w,self.h);
 
     gg.ctx.textAlign = "left";
     var y = self.y+self.pad+self.font_h/2;

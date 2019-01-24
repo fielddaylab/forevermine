@@ -44,9 +44,9 @@ var GamePlayScene = function(game, stage)
       gg.content_dragger.y = 0;
 
       gg.exposition_box.w = gg.canv.width-20;
-      gg.exposition_box.h = 100;
+      gg.exposition_box.h = 150;
       gg.exposition_box.x = 10;
-      gg.exposition_box.y = gg.canv.height-10-gg.exposition_box.h;
+      gg.exposition_box.y = gg.canv.height-gg.exposition_box.h;
       gg.exposition_box.size();
 
       gg.message_box.w = 210;
@@ -1114,6 +1114,7 @@ var GamePlayScene = function(game, stage)
     gg.eq_pt_img = GenImg("assets/eq_pt.png");
     gg.neq_img = GenImg("assets/neq.png");
     gg.neq_pt_img = GenImg("assets/neq_pt.png");
+    gg.exposition_bg_img = GenImg("assets/exposition_bg.png");
     gg.timeline_scrubber_img = GenImg("assets/timeline_scrubber.png");
     gg.arrow_up_img = GenImg("assets/arrow_up.png");
     gg.arrow_down_img = GenImg("assets/arrow_down.png");
