@@ -464,15 +464,6 @@ var content_dragger = function()
           gg.ctx.fillStyle = white;
           gg.ctx.fillText("<- DRAG",gg.message_box.x+gg.message_box.w,gg.message_box.data_y+20);
         }
-        else
-        {
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.table.x,gg.canv.height);
-          gg.ctx.fillRect(gg.table.x,0,gg.table.w,gg.canv.height-gg.table.h);
-          gg.ctx.fillRect(gg.table.x+gg.table.w,0,gg.canv.width-(gg.table.x+gg.table.w),gg.canv.height);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("\\/ DROP",gg.table.x+100,gg.table.y-20);
-        }
       }
       if(gg.table.correct && !gg.cur_level.correct && !gg.timeline.fast_sim)
       {
@@ -780,15 +771,14 @@ var graph = function()
         y = self.y_for_y(i);
         gg.ctx.moveTo(self.x,y);
         gg.ctx.lineTo(self.x+self.w,y);
-        gg.ctx.fillText(i,self.x-12,y+5);
+        gg.ctx.fillText(i,self.x-15,y+5);
       }
       gg.ctx.stroke();
 
-      if(t == 0) gg.ctx.fillText(self.y0_max,self.x-12,self.y+5);
-      gg.ctx.textAlign = "right";
-      gg.ctx.fillStyle = black;
-      gg.ctx.fillText(gg.cur_level.y_label,self.x-40,self.y+self.h/2);
+      if(t == 0) gg.ctx.fillText(self.y0_max,self.x-15,self.y+5);
       gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.y_label,self.x-25-lw/2,self.y+5+self.h/2);
       gg.ctx.globalAlpha = 1;
     }
     else
@@ -803,16 +793,15 @@ var graph = function()
         {
           gg.ctx.moveTo(self.x,y);
           gg.ctx.lineTo(self.x+self.w,y);
-          gg.ctx.fillText(i,self.x-12,y+5);
+          gg.ctx.fillText(i,self.x-15,y+5);
         }
       }
       gg.ctx.stroke();
 
-      if(t == 1) gg.ctx.fillText(self.y1_max,self.x-12,self.y+5);
-      gg.ctx.textAlign = "right";
-      gg.ctx.fillStyle = black;
-      gg.ctx.fillText(gg.cur_level.y_label,self.x-40,self.y+self.h/2);
+      if(t == 1) gg.ctx.fillText(self.y1_max,self.x-15,self.y+5);
       gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.y_label,self.x-25-lw/2,self.y+5+self.h/2);
       gg.ctx.globalAlpha = 1;
     }
 
@@ -885,7 +874,7 @@ var timeline = function()
 
   self.tick = function()
   {
-    if(gg.cur_level.progress < 8) self.t = 0;
+    if(gg.cur_level.progress < 8) { self.t = 0; return; }
     if(self.fast_sim && self.t < self.t_max) self.t += self.fast_t_speed;
     else
     {
@@ -1699,7 +1688,15 @@ var table = function()
     for(var i = 0; i <= gg.timeline.t_max; i++)
     {
       x = self.x+(i+2)*w;
-      drawLine(x,y1,x,y3,gg.ctx);
+      if(i < 2)
+        drawLine(x,y1,x,y3,gg.ctx);
+      if(i == 2)
+      {
+        drawLine(x-1,y1,x-1,y3,gg.ctx);
+        drawLine(x+1,y1,x+1,y3,gg.ctx);
+      }
+      else
+        drawLine(x,y1,x,y2,gg.ctx);
       x -= w/2;
       gg.ctx.fillStyle = black;
       gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
@@ -1719,9 +1716,12 @@ var table = function()
       }
       else gg.ctx.fillText("-",x,y12+self.font_h/3);
 
-      gg.ctx.fillStyle = white;
-      if(self.data_visible) gg.ctx.fillText(self.known_data[i],x,y23+self.font_h/2);
-      else gg.ctx.fillText("-",x,y23+self.font_h/2);
+      if(i < 3)
+      {
+        gg.ctx.fillStyle = white;
+        if(self.data_visible) gg.ctx.fillText(self.known_data[i],x,y23+self.font_h/2);
+        else gg.ctx.fillText("-",x,y23+self.font_h/2);
+      }
 
       if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)
       {
