@@ -122,32 +122,30 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/arrow_up.png");
     img_srcs.push("assets/arrow_down.png");
     img_srcs.push("assets/number_bg.png");
-    img_srcs.push("assets/alert.png");
-    img_srcs.push("assets/data.png");
-    img_srcs.push("assets/submit.png");
+    img_srcs.push("assets/console.png");
+    img_srcs.push("assets/console_dark.png");
     img_srcs.push("assets/background.jpg");
     img_srcs.push("assets/background_ui.jpg");
-    img_srcs.push("assets/constant_bg.png");
+    img_srcs.push("assets/card_editable.png");
+    img_srcs.push("assets/card_not_editable.png");
     img_srcs.push("assets/crycollected.png");
     img_srcs.push("assets/cryinitial.png");
     img_srcs.push("assets/cryrate.png");
     img_srcs.push("assets/chrinitial.png");
     img_srcs.push("assets/chrrate.png");
     img_srcs.push("assets/time.png");
-    img_srcs.push("assets/console.png");
-    img_srcs.push("assets/console_dark.png");
     img_srcs.push("assets/bezel.png");
-    img_srcs.push("assets/accessory_heart.png");
-    img_srcs.push("assets/accessory_nervous.png");
-    img_srcs.push("assets/eye.png");
-    img_srcs.push("assets/mouth.png");
+    img_srcs.push("assets/alert.png");
+    img_srcs.push("assets/data.png");
+    img_srcs.push("assets/submit.png");
     img_srcs.push("assets/neck_heart.png");
     img_srcs.push("assets/pano_bg.jpg");
     img_srcs.push("assets/pano_mg.png");
     img_srcs.push("assets/pano_fg.png");
     img_srcs.push("assets/epano_bg.jpg");
     img_srcs.push("assets/epano_mg.png");
-    img_srcs.push("assets/epano_fg.png");
+    img_srcs.push("assets/epano_fg_0.png");
+    img_srcs.push("assets/epano_fg_1.png");
     img_srcs.push("assets/epano_ffg.png");
     img_srcs.push("assets/battery.png");
     img_srcs.push("assets/drill.png");
@@ -165,6 +163,12 @@ var LoadingScene = function(game, stage)
       img_srcs.push("assets/context/7-"+i+".png");
     for(var i = 0; i < 53; i++)
       img_srcs.push("assets/context/9-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/system/2-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/system/6-"+i+".png");
+    for(var i = 0; i < 1; i++)
+      img_srcs.push("assets/system/8-"+i+".png");
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();
@@ -176,6 +180,7 @@ var LoadingScene = function(game, stage)
 
     //put font paths in font_srcs
     font_srcs.push("DisposableDroidBB"); //NEEDS DEFINITION IN index.html CSS!!
+    font_srcs.push("Lato"); //NEEDS DEFINITION IN index.html CSS!!
     font_canv_s = 25;
     font_canv = GenIcon(font_canv_s,font_canv_s);
     // uncomment below for preview

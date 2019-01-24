@@ -68,6 +68,7 @@ var level = function()
   self.skip_system = 0;
   self.skip_night = 0;
   self.push_work = 0;
+  self.special = 0;
 
   self.text = {}; //see text.js for format
 
@@ -85,9 +86,18 @@ var level = function()
 
   self.commit = function()
   {
-    self.m_correct_total = 0;
-    for(var i = 0; i < self.m_correct.length; i++)
-      self.m_correct_total += self.m_correct[i];
+    if(self.special)
+    {
+      self.m_correct_total = 1;
+      for(var i = 0; i < self.m_correct.length; i++)
+        self.m_correct_total *= self.m_correct[i];
+    }
+    else
+    {
+      self.m_correct_total = 0;
+      for(var i = 0; i < self.m_correct.length; i++)
+        self.m_correct_total += self.m_correct[i];
+    }
     self.b_correct_total = 0;
     for(var i = 0; i < self.b_correct.length; i++)
       self.b_correct_total += self.b_correct[i];

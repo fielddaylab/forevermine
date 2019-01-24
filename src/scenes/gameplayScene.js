@@ -1,5 +1,4 @@
 'use strict';
-window.debug = 1;
 var GamePlayScene = function(game, stage)
 {
   var self = this;
@@ -26,6 +25,18 @@ var GamePlayScene = function(game, stage)
 
       gg.lab.ww = gg.canv.width;
       gg.lab.wh = gg.canv.height;
+
+      gg.fuel.x = 300;
+      gg.fuel.y = 406;
+      gg.fuel.w = 100;
+      gg.fuel.h = 81;
+      worldSpace(gg.lab,gg.canv,gg.fuel);
+
+      gg.oxy.x = 400;
+      gg.oxy.y = 406;
+      gg.oxy.w = 100;
+      gg.oxy.h = 81;
+      worldSpace(gg.lab,gg.canv,gg.oxy);
 
       gg.content_dragger.w = gg.canv.width;
       gg.content_dragger.h = gg.canv.height;
@@ -70,10 +81,13 @@ var GamePlayScene = function(game, stage)
       gg.screenclicker.w = gg.canv.width;
       gg.screenclicker.h = gg.canv.height;
 
+      if(gg.intro_vid.video)
+      {
       gg.intro_vid.video.style.width = gg.canv.width;
       gg.intro_vid.video.style.height = gg.canv.height;
       gg.outro_vid.video.style.width = gg.canv.width;
       gg.outro_vid.video.style.height = gg.canv.height;
+      }
 
       var btn_x = 10;
       var btn_y = 10;
@@ -141,6 +155,7 @@ var GamePlayScene = function(game, stage)
   var MODE_LAB_OUT     = ENUM; ENUM++;
   var MODE_NIGHT       = ENUM; ENUM++;
   var MODE_LAB_IN      = ENUM; ENUM++;
+  var MODE_CREDITS     = ENUM; ENUM++;
   var MODE_COUNT       = ENUM; ENUM++;
 
   self.reset_level = function()
@@ -158,6 +173,26 @@ var GamePlayScene = function(game, stage)
     strokeBox(gg.lab,gg.ctx);
     drawImageBox(gg.background_img,gg.lab,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 0;
+    var fuel_p = 0;
+    var oxy_p = 0;
+    gg.ctx.fillStyle = green;
+    fuel_p = 0;
+    oxy_p = 1;
+    var l = gg.cur_level;
+    if(l)
+    {
+      if(!l.push_work) l = gg.levels[l.i+1]; //skip to level involving fuel
+      fuel_p = (l.m_correct_total*3+l.b_correct_total)/gg.needed_fuel;
+      oxy_p = (gg.max_days-l.day)/gg.max_days;
+    }
+    gg.ctx.fillStyle = "#262934";
+    gg.ctx.fillRect(gg.fuel.x,gg.fuel.y,gg.fuel.w,gg.fuel.h);
+    gg.ctx.fillRect(gg.oxy.x,gg.oxy.y,gg.oxy.w,gg.oxy.h);
+    gg.ctx.fillStyle = "#EFA6FF";
+    gg.ctx.fillRect(gg.fuel.x,gg.fuel.y+gg.fuel.h-gg.fuel.h*fuel_p,gg.fuel.w,gg.fuel.h*fuel_p);
+    gg.ctx.fillStyle = "#CDBA70";
+    gg.ctx.fillRect(gg.oxy.x,gg.oxy.y+gg.oxy.h-gg.oxy.h*oxy_p,gg.oxy.w,gg.oxy.h*oxy_p);
+    gg.ctx.fillStyle = white;
     if(gg.mode == MODE_CTX_IN)
     {
       var img = gg.cur_level.context_imgs[0];
@@ -225,6 +260,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wy = rand0()*10;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
       }
       else
       {
@@ -244,6 +281,8 @@ var GamePlayScene = function(game, stage)
         }
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
       }
       gg.ctx.globalAlpha = 1;
     }
@@ -253,8 +292,11 @@ var GamePlayScene = function(game, stage)
   {
     gg.ctx.drawImage(gg.background_ui_img,0,0,gg.canv.width,gg.canv.height);
     gg.graph.draw();
-    gg.timeline.draw();
-    gg.table.draw();
+    if(!gg.cur_level.special)
+    {
+      gg.timeline.draw();
+      gg.table.draw();
+    }
     gg.line.draw();
     gg.cur_level.draw();
     gg.message_box.draw();
@@ -265,7 +307,7 @@ var GamePlayScene = function(game, stage)
 
   self.draw_night = function(t)
   {
-    var t = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
+    var pt = lerp(gg.cur_level.pano_st,gg.cur_level.pano_et,t);
 
     var panos = gg.pano_imgs;
     if(gg.cur_level.pano == 1) panos = gg.epano_imgs;
@@ -276,17 +318,43 @@ var GamePlayScene = function(game, stage)
     for(var i = 0; i < panos.length; i++)
     {
       pimg = panos[i];
+      if(pimg.length) pimg = pimg[floor(clamp(0,1,sin(8*sin(3*sin(t*10)))+1))]
       vis_pano_w = gg.canv.width/gg.canv.height*pimg.height;
       pano_sx = 0;
       pano_ex = pimg.width-vis_pano_w;
-      gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,t),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
+      gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,pt),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
     }
 
     gg.ctx.fillStyle = white;
     gg.ctx.font = "40px DisposableDroidBB";
-    gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
-    gg.ctx.font = "20px DisposableDroidBB";
-    gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+    if(t < 0.4)
+    {
+      gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillText(gg.max_days-gg.cur_level.day+" days of oxygen remain", 20,gg.canv.height-80+30);
+    }
+    else if(t < 0.5)
+    {
+      gg.ctx.globalAlpha = (0.5-t)*10;
+      gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillText(gg.max_days-gg.cur_level.day+" days of oxygen remain", 20,gg.canv.height-80+30);
+      gg.ctx.globalAlpha = 1;
+    }
+    else if(t < 0.6)
+    {
+      gg.ctx.globalAlpha = (t-0.5)*10;
+      gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+      gg.ctx.globalAlpha = 1;
+    }
+    else
+    {
+      gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
+      gg.ctx.font = "20px DisposableDroidBB";
+      gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+    }
   }
 
   self.set_mode = function(mode,skipping)
@@ -305,6 +373,10 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.lab.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
+        gg.intro_vid.done = 0;
+        gg.outro_vid.done = 0;
         break;
       case MODE_CINEMATIC:
         if(!skipping)
@@ -327,6 +399,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.lab.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
         //assume pre_text_0 already enqueued
         gg.cur_level = gg.next_level;
         gg.graph.x_off = gg.cur_level.day*24;
@@ -374,6 +448,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.monitor.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
         gg.timeline.fast_sim = 1;
         if(skipping)
         {
@@ -392,6 +468,8 @@ var GamePlayScene = function(game, stage)
         gg.home_cam.wh = gg.lab.wh;
         screenSpace(gg.home_cam,gg.canv,gg.lab);
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
+        screenSpace(gg.home_cam,gg.canv,gg.fuel);
+        screenSpace(gg.home_cam,gg.canv,gg.oxy);
         if(!skipping) gg.exposition_box.nq_group(gg.cur_level.text.pre_improve);
         gg.cur_level.progress++;
         gg.stage_t = 0;
@@ -422,8 +500,8 @@ var GamePlayScene = function(game, stage)
           gg.cur_level.progress++;
           gg.stage_t = 0;
         }
-        else
-          gg.outro_vid.play();
+        break;
+      case MODE_CREDITS:
         break;
     }
   }
@@ -483,7 +561,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE0:
       {
         gg.mode_p = 0.5;
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_context)
@@ -497,7 +575,7 @@ var GamePlayScene = function(game, stage)
       case MODE_CTX_IN:
       {
         gg.mode_p = gg.mode_t/gg.fade_t;
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.mode_p < 1)
         {
         }
@@ -506,8 +584,8 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CTX:
       {
-        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*2);
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.ctxf_loop);
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_CTX_OUT,0);
       }
@@ -524,7 +602,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE1:
       {
         gg.mode_p = 0.5;
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
           self.set_mode(MODE_WORK_IN,0);
         gg.exposition_box.tick();
@@ -544,6 +622,8 @@ var GamePlayScene = function(game, stage)
             gg.home_cam.wh = lerp(gg.lab.wh,gg.monitor.wh,zoom_p);
             screenSpace(gg.home_cam,gg.canv,gg.lab);
             screenSpace(gg.home_cam,gg.canv,gg.monitor);
+            screenSpace(gg.home_cam,gg.canv,gg.fuel);
+            screenSpace(gg.home_cam,gg.canv,gg.oxy);
           }
           else if(gg.mode_t < gg.zoom_t+gg.fade_t) //fade to work
           {
@@ -564,7 +644,7 @@ var GamePlayScene = function(game, stage)
           if(check) check = !gg.line.filter(keyer,blurer,dragger,clicker);
           gg.line.tick();
           if(check) check = !gg.timeline.filter(dragger,clicker);
-          if(check) check = !dragger.filter(gg.message_box);
+          if(check) { check = !dragger.filter(gg.message_box); if(check && gg.autoclick) gg.message_box.click({}); }
         }
 
         switch(gg.cur_level.progress)
@@ -672,6 +752,8 @@ var GamePlayScene = function(game, stage)
             gg.home_cam.wh = lerp(gg.monitor.wh,gg.lab.wh,zoom_p);
             screenSpace(gg.home_cam,gg.canv,gg.lab);
             screenSpace(gg.home_cam,gg.canv,gg.monitor);
+            screenSpace(gg.home_cam,gg.canv,gg.fuel);
+            screenSpace(gg.home_cam,gg.canv,gg.oxy);
           }
         }
         else self.set_mode(MODE_POST0,0);
@@ -679,18 +761,26 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_POST0:
       {
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
-          if(gg.cur_level.skip_system)
+          if(gg.cur_level.special)
           {
-            if(gg.cur_level.skip_night)
-              self.skip_to_mode(MODE_WORK_IN);
-            else
-              self.skip_to_mode(MODE_LAB_OUT);
+            gg.outro_vid.play();
+            self.set_mode(MODE_CREDITS,0);
           }
           else
-            self.set_mode(MODE_IMPROVE_IN,0);
+          {
+            if(gg.cur_level.skip_system)
+            {
+              if(gg.cur_level.skip_night)
+                self.skip_to_mode(MODE_WORK_IN);
+              else
+                self.skip_to_mode(MODE_LAB_OUT);
+            }
+            else
+              self.set_mode(MODE_IMPROVE_IN,0);
+          }
         }
         gg.exposition_box.tick();
       }
@@ -706,7 +796,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_IMPROVE:
       {
-        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*2);
+        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.ctxf_loop);
         if(gg.mode_p < 1 && !gg.keylistener.advance()) //display context
         {
         }
@@ -724,7 +814,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_POST1:
       {
-        if(!clicker.filter(gg.exposition_box) && gg.screenclicker.clicked) gg.exposition_box.click({});
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_night)
@@ -768,7 +858,19 @@ var GamePlayScene = function(game, stage)
         {
           var fade_p = (gg.mode_t-gg.fade_t)/gg.fade_t;
         }
-        else self.set_mode(MODE_PRE0,0);
+        else
+          self.set_mode(MODE_PRE0,0);
+      }
+        break;
+      case MODE_CREDITS:
+      {
+        gg.mode_p = gg.mode_t/(gg.fade_t+gg.fade_t);
+        if(gg.mode_t < gg.fade_t) //fade from black
+        {
+          var fade_p = 1-(gg.mode_t/gg.fade_t);
+        }
+        else if(gg.mode_t >= gg.credits_t+(gg.fade_t*2))
+          self.set_mode(MODE_MENU,0);
       }
         break;
     }
@@ -946,23 +1048,49 @@ var GamePlayScene = function(game, stage)
           gg.ctx.globalAlpha = 1;
         }
         break;
+      case MODE_CREDITS:
+        var c_t = clamp(0,1,(gg.mode_t-gg.fade_t)/gg.credits_t);
+        //draw credits between c_t = 0 and c_t = 1;
+        {
+        }
+        if(gg.mode_t < gg.fade_t)
+        {
+          var t = 1-(gg.mode_t/gg.fade_t); //fade in
+          gg.ctx.globalAlpha = t;
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        else if(gg.mode_t > gg.credits_t+gg.fade_t)
+        {
+          var t = (gg.mode_t-gg.credits_t-gg.fade_t)/gg.fade_t; //fade_out
+          gg.ctx.globalAlpha = t;
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+          gg.ctx.globalAlpha = 1;
+        }
+        break;
     }
   }
 
   self.ready = function()
   {
-    gg.max_days = 7;
-    gg.needed_fuel = 300;
+    gg.max_days = 8;
+    gg.needed_fuel = 350;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
     gg.monitor  = new monitor();
+    gg.fuel     = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
+    gg.oxy      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.lab      = {wx:0,wy:0,ww:0,wh:0,x:0,y:0,w:0,h:0};
     gg.fade_t = 20;
     gg.zoom_t = 50;
-    gg.ctxf_t = 4;
+    gg.ctxf_t = 8;
+    gg.ctxf_loop = 1;
     gg.pano_t = 250;
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
     gg.blackout_t = 100;
+    gg.credits_t = 100;
 
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
@@ -979,7 +1107,8 @@ var GamePlayScene = function(game, stage)
     gg.dark_console_img = GenImg("assets/console_dark.png");
     gg.background_img = GenImg("assets/background.jpg");
     gg.background_ui_img = GenImg("assets/background_ui.jpg");
-    gg.constant_bg_img = GenImg("assets/constant_bg.png");
+    gg.constant_bg_img = GenImg("assets/card_editable.png");
+    gg.variable_bg_img = GenImg("assets/card_not_editable.png");
     gg.crycollected_img = GenImg("assets/crycollected.png");
     gg.cryinitial_img = GenImg("assets/cryinitial.png");
     gg.cryrate_img = GenImg("assets/cryrate.png");
@@ -998,7 +1127,9 @@ var GamePlayScene = function(game, stage)
     gg.epano_imgs = [];
     gg.epano_imgs[0] = GenImg("assets/epano_bg.jpg");
     gg.epano_imgs[1] = GenImg("assets/epano_mg.png");
-    gg.epano_imgs[2] = GenImg("assets/epano_fg.png");
+    gg.epano_imgs[2] = [];
+    gg.epano_imgs[2][0] = GenImg("assets/epano_fg_0.png");
+    gg.epano_imgs[2][1] = GenImg("assets/epano_fg_1.png");
     gg.epano_imgs[3] = GenImg("assets/epano_ffg.png");
     gg.battery_img = GenImg("assets/battery.png");
     gg.drill_img = GenImg("assets/drill.png");
@@ -1068,8 +1199,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1081,6 +1210,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 0;
     l.push_work = 1;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1090,7 +1220,7 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [gg.levels[l.i-1].m_correct_total,];
-    l.m_correct = [2,];
+    l.m_correct = [4,];
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [gg.levels[l.i-1].b_correct_total,];
@@ -1106,8 +1236,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 90; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1119,6 +1247,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 0;
     l.push_work = 1;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1157,6 +1286,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 0;
     l.skip_night = 0;
     l.push_work = 1;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1182,8 +1312,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 53; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1195,6 +1323,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 1;
     l.push_work = 0;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1204,7 +1333,7 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [gg.levels[l.i-2].m_correct_total,];
-    l.m_correct = [1.1,];
+    l.m_correct = [1.2,];
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [gg.levels[l.i-2].b_correct_total,];
@@ -1220,8 +1349,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 0; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1233,6 +1360,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 0;
     l.push_work = 1;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1258,8 +1386,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 53; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1271,6 +1397,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 1;
     l.push_work = 0;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1280,7 +1407,7 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [gg.levels[l.i-2].m_correct_total,];
-    l.m_correct = [1.2,];
+    l.m_correct = [1.4,];
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [gg.levels[l.i-2].b_correct_total,];
@@ -1309,6 +1436,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 0;
     l.skip_night = 0;
     l.push_work = 1;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1334,8 +1462,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 53; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1347,6 +1473,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 1;
     l.push_work = 0;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1356,7 +1483,7 @@ var GamePlayScene = function(game, stage)
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
     l.m_starting = [gg.levels[l.i-2].m_correct_total,];
-    l.m_correct = [1.1,];
+    l.m_correct = [1.6,];
     l.m_label = ["Mining Rate",];
     l.m_icon = [GenImg("assets/cryrate.png"),];
     l.b_starting = [gg.levels[l.i-2].b_correct_total,];
@@ -1385,6 +1512,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 0;
     l.skip_night = 0;
     l.push_work = 1;
+    l.special = 0;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1410,8 +1538,6 @@ var GamePlayScene = function(game, stage)
     l.y_min = 0;
     for(var j = 0; j < 53; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
-    for(var j = 0; j < 1; j++)
-      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1423,6 +1549,7 @@ var GamePlayScene = function(game, stage)
     l.skip_system = 1;
     l.skip_night = 1;
     l.push_work = 1;
+    l.special = 1;
     l.text = used_text[i];
     gg.levels.push(l);
     i++;
@@ -1432,6 +1559,8 @@ var GamePlayScene = function(game, stage)
     gg.code_txt.focus();
     gg.code_txt.blur();
     self.set_mode(MODE_MENU,0);
+    gg.urlp = jsonFromURL();
+    gg.autoclick = gg.urlp.autoclick;
   };
 
   gg.time_mod_twelve_pi = 0;
@@ -1440,8 +1569,16 @@ var GamePlayScene = function(game, stage)
     gg.time_mod_twelve_pi += 0.01;
     if(gg.time_mod_twelve_pi > twelvepi) gg.time_mod_twelve_pi -= twelvepi;
 
-    gg.mode_t++;
-    gg.stage_t++;
+    if(
+      (gg.intro_vid.video && !gg.intro_vid.video.paused) ||
+      (gg.outro_vid.video && !gg.outro_vid.video.paused)
+    )
+      ;
+    else
+    {
+      gg.mode_t++;
+      gg.stage_t++;
+    }
     clicker.filter(gg.screenclicker);
     keyer.filter(gg.keylistener);
     gg.monitor.tick();
