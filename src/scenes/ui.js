@@ -809,10 +809,10 @@ var graph = function()
       gg.ctx.stroke();
 
       if(t == 0) gg.ctx.fillText(self.y0_max,self.x-15,self.y+5);
+      gg.ctx.globalAlpha = 1;
       gg.ctx.textAlign = "center";
       gg.ctx.fillStyle = black;
       gg.ctx.fillText(gg.cur_level.y_label,self.x-25-lw/2,self.y+5+self.h/2);
-      gg.ctx.globalAlpha = 1;
     }
     else
     {
@@ -832,10 +832,10 @@ var graph = function()
       gg.ctx.stroke();
 
       if(t == 1) gg.ctx.fillText(self.y1_max,self.x-15,self.y+5);
+      gg.ctx.globalAlpha = 1;
       gg.ctx.textAlign = "center";
       gg.ctx.fillStyle = black;
       gg.ctx.fillText(gg.cur_level.y_label,self.x-25-lw/2,self.y+5+self.h/2);
-      gg.ctx.globalAlpha = 1;
     }
 
       //tl
