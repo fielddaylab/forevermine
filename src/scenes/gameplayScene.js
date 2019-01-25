@@ -396,6 +396,7 @@ var GamePlayScene = function(game, stage)
         else gg.intro_vid.done = 1;
         break;
       case MODE_BOOT:
+        gg.monitor.boot_t = 0;
         if(skipping)
         {
           gg.next_level = gg.levels[0];

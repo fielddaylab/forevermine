@@ -44,6 +44,8 @@ var monitor = function()
   self.mouth_hy = 0.64; //"home" y
   self.mouth_vy = 0.25; //"variance" y
 
+  self.boot_t = 0;
+
   self.clicked = 0;
 
   self.init_screen = function()
@@ -66,6 +68,7 @@ var monitor = function()
     self.look_t++;  if(self.look_t  > self.look_t_thresh) { self.look_t = randIntBelow(1000); self.look_t_thresh = self.look_t+randIntBelow(500); }
     self.blink_t++; if(self.blink_t > 300) self.blink_t = randIntBelow(250);
     self.talk_t++;
+    self.boot_t++; if(self.boot_t > 500) self.boot_t = 500;
 
     var face_nx = (sin(self.look_t/50 )/5+1)/2;
     var face_ny = (sin(self.look_t/190)/5+1)/2;
@@ -123,6 +126,21 @@ var monitor = function()
     y = s.height*self.mouth_hy-h/2+self.mouth_ny*s.height*self.mouth_vy;
     //c.fillRect(x,y,w,h); //mouth
     c.drawImage(self.mouth_img,x,y,w,h);
+
+    if(self.boot_t < 50)
+    {
+      var t = self.boot_t/50;
+      t = 1-t;
+      t = t*t;
+      t = t*t;
+      c.fillStyle = black;
+      c.fillRect(0,0,s.width,s.height/2*t);
+      c.fillRect(0,s.height-s.height/2*t,s.width,s.height/2*t);
+      t = t*t;
+      t = t*t;
+      c.fillRect(0,0,s.width/2*t,s.height);
+      c.fillRect(s.width-s.width/2*t,0,s.width/2*t,s.height);
+    }
   }
 }
 
