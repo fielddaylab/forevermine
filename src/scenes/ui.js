@@ -374,7 +374,7 @@ var content_dragger = function()
         gg.cur_level.correct = 1;
         gg.message_box.nq_group(gg.cur_level.text.review);
         gg.cur_level.progress++;
-        if(gg.cur_level.skip_zoom)
+        //if(gg.cur_level.skip_zoom)
         {
           gg.message_box.nq_group(gg.cur_level.text.debrief);
           gg.cur_level.progress++;
