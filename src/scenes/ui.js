@@ -494,11 +494,22 @@ var content_dragger = function()
     }
     if(self.dragging_x)
     {
-      gg.ctx.fillText(gg.cur_level.x_label,self.last_evt.doX,self.last_evt.doY);
+      var lw = 100;
+      var lh = 60;
+      gg.ctx.drawImage(gg.axis_label_bg_img, self.last_evt.doX-lw/2, self.last_evt.doY-lh/2, lw, lh);
+      gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.x_label, self.last_evt.doX, self.last_evt.doY+lh/6);
+      gg.ctx.globalAlpha = 1;
     }
     if(self.dragging_y)
     {
-      gg.ctx.fillText(gg.cur_level.y_label,self.last_evt.doX,self.last_evt.doY);
+      var lw = 100;
+      var lh = 60;
+      gg.ctx.drawImage(gg.axis_label_bg_img, self.last_evt.doX-lw/2, self.last_evt.doY-lh/2, lw, lh);
+      gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.y_label, self.last_evt.doX, self.last_evt.doY+lh/6);
     }
     if(self.dragging_data)
     {
