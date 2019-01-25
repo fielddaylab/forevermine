@@ -909,12 +909,16 @@ var GamePlayScene = function(game, stage)
       {
         self.draw_home();
         drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+        if(gg.mode_t%100 < 50)
+          gg.ctx.drawImage(gg.boot_btn_img,gg.stage.width-150,gg.stage.height-100,100,100);
         var s = 40;
-        gg.ctx.drawImage(gg.notice_img,gg.monitor.x+gg.monitor.w-s/2,gg.monitor.y-s/2,s,s);
+        gg.ctx.drawImage(gg.notice_img,gg.stage.width-150,gg.stage.height-100,s,s);
+        /*
         gg.ctx.fillStyle = white;
         gg.ctx.font = "20px DisposableDroidBB";
         for(var i = 0; i < self.txt_lines.length; i++)
           gg.ctx.fillText(self.txt_lines[i],gg.monitor.x+10,gg.monitor.y+30+i*25);
+        */
       }
         break;
       case MODE_BOOT:
@@ -1132,6 +1136,7 @@ var GamePlayScene = function(game, stage)
     gg.chrrate_img = GenImg("assets/chrrate.png");
     gg.time_img = GenImg("assets/time.png");
     gg.bezel_img = GenImg("assets/bezel.png");
+    gg.boot_btn_img = GenImg("assets/boot_btn.png");
     gg.notice_img = GenImg("assets/alert.png");
     gg.data_img = GenImg("assets/data.png");
     gg.submit_img = GenImg("assets/submit.png");
@@ -1622,11 +1627,6 @@ var GamePlayScene = function(game, stage)
   self.draw = function()
   {
     if(self.txt_lines.length == 0)
-      /*
-      self.HACKTXT(`     You wake up in a dark room. All you see is the black screen of an old monitor.                       Your memory starts to return: you were on a routine mission to refurbish an old mining planet.      But before your ship was able to touch down, something went wrong. You must have stumbled into this abandoned control center and passed out.                                                   You check your vitals- uh oh. Only "+gg.max_days+" days worth of oxygen left, and your ship is out of fuel.                                                            You need to find a way off this planet.
-        `
-      );
-      */
       self.HACKTXT("You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 6 days of oxygen left. You need to find a way off this planet.");
     gg.monitor.draw(); //draws to self- not to screen
     self.draw_mode();

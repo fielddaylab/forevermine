@@ -136,6 +136,7 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/chrrate.png");
     img_srcs.push("assets/time.png");
     img_srcs.push("assets/bezel.png");
+    img_srcs.push("assets/boot_btn.png");
     img_srcs.push("assets/alert.png");
     img_srcs.push("assets/data.png");
     img_srcs.push("assets/submit.png");

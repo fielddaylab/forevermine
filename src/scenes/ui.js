@@ -189,7 +189,7 @@ var content_dragger = function()
   self.ptWithinSim = function(evt)
   {
     if(gg.table.simd_visible < gg.table.max_t) return 0;
-    if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
+    if(gg.timeline.t == gg.timeline.t_max && gg.cur_level.progress > 7 && ptWithin(gg.timeline.x+gg.timeline.w*9/10, gg.timeline.y, gg.timeline.w/10, gg.timeline.h, evt.doX, evt.doY)) return 1;
     var t = gg.table;
     var y1 = t.y+t.h*1/3;
     var y3 = t.y+t.h;
@@ -1726,6 +1726,12 @@ var table = function()
       x -= w/2;
       gg.ctx.fillStyle = black;
       gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
+      if(gg.timeline.t == gg.timeline.t_max && self.t_data[i] == gg.timeline.t_max && gg.cur_level.progress > 7)
+      {
+        var t_x = mapVal(0,gg.timeline.t_max,gg.timeline.sx,gg.timeline.ex,gg.timeline.t);
+        var s = 40;
+        gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+self.yoff,s,gg.timeline.h);
+      }
       if(self.simd_visible >= i)
       {
         if(gg.cur_level.progress >= 8 && self.data_visible && !gg.cur_level.perma_zoom)
