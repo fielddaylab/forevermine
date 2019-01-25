@@ -717,6 +717,7 @@ var graph = function()
   {
     var t = self.zoom;
     var zy;
+    var zx;
     var x;
     var y;
 
@@ -728,8 +729,10 @@ var graph = function()
       if(zy < self.y) zy = self.y;
       gg.ctx.fillStyle = "#75F3FF";
       gg.ctx.fillRect(self.x,self.y,self.w,zy-self.y);
+      zx = self.x_for_x((gg.max_days-1)*24);
+      if(zx > self.x+self.w) zx = self.x+self.w;
       gg.ctx.fillStyle = "#EFA6FF";
-      gg.ctx.fillRect(self.x,zy,self.w,self.y+self.h-zy);
+      gg.ctx.fillRect(zx,zy,self.w-(zx-self.x),self.y+self.h-zy);
 
       gg.ctx.globalAlpha = 1;
     }
@@ -846,7 +849,7 @@ var graph = function()
       gg.ctx.fillStyle = black;
       gg.ctx.textAlign = "left";
       if(y > self.y+5) gg.ctx.fillText("You Survive", self.x+5, zy-5);
-      gg.ctx.fillText("You Die", self.x+5, zy+15);
+      gg.ctx.fillText("You Die", zx+5, self.y+self.h-5);
       gg.ctx.globalAlpha = 1;
     }
 
