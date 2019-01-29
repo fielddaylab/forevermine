@@ -1162,6 +1162,7 @@ var GamePlayScene = function(game, stage)
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
     gg.iframe_img = GenImg("assets/iframe_img.jpg");
+    gg.reply_button_img = GenImg("assets/reply_button.png");
     gg.blackout_img = GenImg("assets/blackout.png");
     gg.eq_img = GenImg("assets/eq.png");
     gg.eq_pt_img = GenImg("assets/eq_pt.png");

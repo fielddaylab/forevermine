@@ -2165,17 +2165,9 @@ var message_box = function()
     gg.ctx.fillStyle = self.bg_color;
     gg.ctx.fillRect(self.x,self.input_y-self.pad+1,self.w,self.h);
 
-    if(!self.prompt_player_input)
+    gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
+    if(self.prompt_player_input)
     {
-      gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillRect(self.input_x,self.input_y,self.input_w,self.input_h);
-      gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
-    }
-    else //needs input
-    {
-      if(floor(self.advance_t/20)%2)
-        drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
-      gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
       var s = 20;
       gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s,self.input_y,s,s);
     }

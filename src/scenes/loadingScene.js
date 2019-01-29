@@ -115,6 +115,7 @@ var LoadingScene = function(game, stage)
 
     //put asset paths in img_srcs
     img_srcs.push("assets/iframe_img.jpg");
+    img_srcs.push("assets/reply_button.png");
     img_srcs.push("assets/blackout.png");
     img_srcs.push("assets/eq.png");
     img_srcs.push("assets/eq_pt.png");
