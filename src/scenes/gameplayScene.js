@@ -1158,6 +1158,7 @@ var GamePlayScene = function(game, stage)
     gg.dark_console_img = GenImg("assets/console_dark.png");
     gg.background_img = GenImg("assets/background.jpg");
     gg.background_ui_img = GenImg("assets/background_ui.jpg");
+    gg.ui_chart_overlay_img = GenImg("assets/ui_chart_overlay.png");
     gg.constant_bg_img = GenImg("assets/card_editable.png");
     gg.variable_bg_img = GenImg("assets/card_not_editable.png");
     gg.crycollected_img = GenImg("assets/crycollected.png");

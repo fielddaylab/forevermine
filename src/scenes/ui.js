@@ -927,6 +927,10 @@ var timeline = function()
     //gg.ctx.strokeStyle = red;
     //strokeBox(self,gg.ctx);
 
+    var ew = 80;
+    var eh = 120;
+    gg.ctx.drawImage(gg.ui_chart_overlay_img, gg.table.x-ew/2, gg.table.y-50+gg.table.yoff, gg.table.w+ew, gg.table.h+eh);
+
     var t_x;
 
     t_x = mapVal(0,self.t_max,self.sx,self.ex,self.t);
@@ -937,7 +941,7 @@ var timeline = function()
     {
       gg.ctx.font = "12px DisposableDroidBB";
       gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillText("simulating...",self.x+50,self.y-10);
+      gg.ctx.fillText("simulating...",self.x+50,self.y-30);
     }
 
     gg.ctx.fillStyle = black;
@@ -1097,7 +1101,7 @@ var editable_line = function()
     self.btn_w = gg.ctx.measureText("-0.0").width;
     self.btn_h = self.font_h*3;
     self.eqn_w = 0;
-    self.eqn_y = gg.stage.height/2;
+    self.eqn_y = gg.stage.height/2-20;
 
     //figure out w
     if(self.m.length == 1)
