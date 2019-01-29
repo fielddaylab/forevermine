@@ -95,41 +95,35 @@ var GamePlayScene = function(game, stage)
       var btn_h = 50;
 
       gg.continue_button.x = btn_x;
-      gg.continue_button.y = btn_y;
-      gg.continue_button.w = btn_w;
+      gg.continue_button.y = gg.canv.height/3;
+      gg.continue_button.w = btn_w*7.5;
       gg.continue_button.h = btn_h;
-      btn_y += btn_h*1.1;
 
       gg.new_button.x = btn_x;
-      gg.new_button.y = btn_y;
-      gg.new_button.w = btn_w;
+      gg.new_button.y = gg.continue_button.y+gg.continue_button.h*2;
+      gg.new_button.w = gg.continue_button.w;
       gg.new_button.h = btn_h;
-      btn_y += btn_h*1.1;
 
-      gg.code_txt.x = btn_x;
-      gg.code_txt.y = btn_y;
-      gg.code_txt.w = btn_w;
+      gg.code_txt.x = gg.new_button.x+gg.new_button.w;
+      gg.code_txt.y = gg.new_button.y+gg.new_button.h*2;
+      gg.code_txt.w = gg.continue_button.w;
       gg.code_txt.h = btn_h;
       gg.code_txt.size();
-      btn_y += btn_h*1.1;
 
-      gg.code_button.x = btn_x;
-      gg.code_button.y = btn_y;
+      gg.code_button.x = gg.code_txt.x+gg.code_txt.w+20;
+      gg.code_button.y = gg.code_txt.y;
       gg.code_button.w = btn_w;
       gg.code_button.h = btn_h;
-      btn_y += btn_h*1.1;
 
       gg.sound_button.x = btn_x;
-      gg.sound_button.y = btn_y;
-      gg.sound_button.w = btn_w;
+      gg.sound_button.y = gg.canv.height-btn_h*2;
+      gg.sound_button.w = gg.new_button.w*2/3;
       gg.sound_button.h = btn_h;
-      btn_y += btn_h*1.1;
 
-      gg.fullscreen_button.x = btn_x;
-      gg.fullscreen_button.y = btn_y;
-      gg.fullscreen_button.w = btn_w;
+      gg.fullscreen_button.x = gg.sound_button.x+gg.sound_button.w+20;
+      gg.fullscreen_button.y = gg.canv.height-btn_h*2;
+      gg.fullscreen_button.w = gg.new_button.w*4/5;
       gg.fullscreen_button.h = btn_h;
-      btn_y += btn_h*1.1;
     }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
@@ -926,13 +920,31 @@ var GamePlayScene = function(game, stage)
       case MODE_MENU:
       {
         self.draw_home();
-        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+        drawImageBox(gg.iframe_img,gg.lab,gg.ctx);
+        /*
+        gg.ctx.fillStyle = black;
         fillBox(gg.continue_button,gg.ctx);
         fillBox(gg.new_button,gg.ctx);
-        fillBox(gg.code_txt,gg.ctx);
         fillBox(gg.code_button,gg.ctx);
         fillBox(gg.sound_button,gg.ctx);
         fillBox(gg.fullscreen_button,gg.ctx);
+        */
+        gg.ctx.fillStyle = white;
+        gg.ctx.strokeStyle = white;
+        gg.ctx.font = gg.continue_button.h+"px DisposableDroidBB";
+        var txtbump = gg.continue_button.h/5;
+        gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
+        gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
+        gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y+gg.code_txt.h-txtbump);
+        if(gg.input_code) gg.ctx.fillText(gg.input_code,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
+        gg.ctx.strokeRect(gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
+        fillBox(gg.code_txt,gg.ctx);
+        gg.ctx.fillText("GO",gg.code_button.x,gg.code_button.y+gg.code_button.h-txtbump);
+        drawLine(gg.sound_button.x,gg.sound_button.y-10,gg.canv.width-gg.sound_button.x,gg.sound_button.y-10,gg.ctx);
+        gg.ctx.fillText("MUSIC FX",gg.sound_button.x,gg.sound_button.y+gg.sound_button.h-txtbump);
+        gg.ctx.strokeRect(gg.sound_button.x+gg.sound_button.w-gg.sound_button.h,gg.sound_button.y,gg.sound_button.h,gg.sound_button.h);
+        gg.ctx.fillText("FULLSCREEN",gg.fullscreen_button.x,gg.fullscreen_button.y+gg.fullscreen_button.h-txtbump);
+        gg.ctx.strokeRect(gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h,gg.fullscreen_button.y,gg.fullscreen_button.h,gg.fullscreen_button.h);
       }
         break;
       case MODE_CINEMATIC:
@@ -1144,6 +1156,7 @@ var GamePlayScene = function(game, stage)
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
+    gg.iframe_img = GenImg("assets/iframe_img.jpg");
     gg.blackout_img = GenImg("assets/blackout.png");
     gg.eq_img = GenImg("assets/eq.png");
     gg.eq_pt_img = GenImg("assets/eq_pt.png");
