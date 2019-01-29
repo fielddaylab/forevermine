@@ -27,7 +27,6 @@ var english_text =
       "Wha... What happened?", CONTENT_PLAYER, EMOTE_NULL,
       "You stumbled in here, powered me on, and then just passed out.", CONTENT_AI, EMOTE_NULL,
       "I... I need to get out of here.", CONTENT_PLAYER, EMOTE_NULL,
-      "BLACKOUT", CONTENT_AI, EMOTE_BLACKOUT,
       "What? But you just got here! I've been waiting 500 years!", CONTENT_AI, EMOTE_NULL,
       "Aren't you gonna get the mine running again?", CONTENT_AI, EMOTE_NULL,
       "Oh.", CONTENT_PLAYER, EMOTE_NULL,
