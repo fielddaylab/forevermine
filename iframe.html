@@ -48,7 +48,6 @@ body,div,canvas
 <script type="text/javascript" src="src/scenes/text.js"></script>
 
 <script type="text/javascript">
-var g;
 var game_width  = 1024;
 var game_height = 660;
 var game_first_audio_played = 0;
@@ -59,6 +58,18 @@ function size_containers(w,h)
   stage_container_container.style.width = w; stage_container_container.style.height = h;
   var stage_container = document.getElementById("stage_container");
   stage_container.style.width = w; stage_container.style.height = h;
+}
+function fullscreen()
+{
+  var el = document.body;
+  var requestMethod = el.requestFullscreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  if(requestMethod) requestMethod.call(el);
+}
+function unfullscreen()
+{
+  var el = document;
+  var exitMethod = el.exitFullscreen || el.webkitExitFullscreen || el.mozCancelFullScreen || el.msExitFullscreen;
+  if(exitMethod) exitMethod.call(el);
 }
 
 function resize()
@@ -71,7 +82,7 @@ function resize()
   //w = h/game_height*game_width;
   var w = game_width;
   var h = game_height;
-  if(g) g.resize({width:w,height:h});
+  if(gg.g) gg.g.resize({width:w,height:h});
   size_containers(w,h);
 }
 function begin()
@@ -95,9 +106,9 @@ function begin()
   else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchstart', play_first_audio);
   //game_first_audio_played = 1; first_audio.play(); //uncomment this if loaded through click-to-init iframe
 
-  g = new Game({width:w,height:h,container:"stage_container"});
+  gg.g = new Game({width:w,height:h,container:"stage_container"});
   resize();
-  g.begin();
+  gg.g.begin();
 }
 //window.addEventListener("touchstart", function(e){ e.preventDefault() }); //prevent browser from doing anything funny
 window.addEventListener("load",begin,false);

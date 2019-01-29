@@ -926,6 +926,7 @@ var GamePlayScene = function(game, stage)
         fillBox(gg.continue_button,gg.ctx);
         fillBox(gg.new_button,gg.ctx);
         fillBox(gg.code_button,gg.ctx);
+        fillBox(gg.code_txt,gg.ctx);
         fillBox(gg.sound_button,gg.ctx);
         fillBox(gg.fullscreen_button,gg.ctx);
         */
@@ -933,18 +934,20 @@ var GamePlayScene = function(game, stage)
         gg.ctx.strokeStyle = white;
         gg.ctx.font = gg.continue_button.h+"px DisposableDroidBB";
         var txtbump = gg.continue_button.h/5;
+        gg.ctx.fillText("STRANDED AT THE FOREVER MINE",gg.continue_button.x,10+gg.continue_button.h-txtbump);
         gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
         gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
         gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y+gg.code_txt.h-txtbump);
         if(gg.input_code) gg.ctx.fillText(gg.input_code,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
         gg.ctx.strokeRect(gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
-        fillBox(gg.code_txt,gg.ctx);
         gg.ctx.fillText("GO",gg.code_button.x,gg.code_button.y+gg.code_button.h-txtbump);
         drawLine(gg.sound_button.x,gg.sound_button.y-10,gg.canv.width-gg.sound_button.x,gg.sound_button.y-10,gg.ctx);
         gg.ctx.fillText("MUSIC FX",gg.sound_button.x,gg.sound_button.y+gg.sound_button.h-txtbump);
+        if(gg.sound) gg.ctx.strokeRect(gg.sound_button.x+gg.sound_button.w-gg.sound_button.h+2,gg.sound_button.y+2,gg.sound_button.h-4,gg.sound_button.h-4);
         gg.ctx.strokeRect(gg.sound_button.x+gg.sound_button.w-gg.sound_button.h,gg.sound_button.y,gg.sound_button.h,gg.sound_button.h);
         gg.ctx.fillText("FULLSCREEN",gg.fullscreen_button.x,gg.fullscreen_button.y+gg.fullscreen_button.h-txtbump);
         gg.ctx.strokeRect(gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h,gg.fullscreen_button.y,gg.fullscreen_button.h,gg.fullscreen_button.h);
+        if(gg.fullscreen) gg.ctx.strokeRect(gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h+2,gg.fullscreen_button.y+2,gg.fullscreen_button.h-4,gg.fullscreen_button.h-4);
       }
         break;
       case MODE_CINEMATIC:
@@ -1152,6 +1155,8 @@ var GamePlayScene = function(game, stage)
     gg.emp_start_boot_t = 10;
     gg.blackout_t = 100;
     gg.credits_t = 100;
+    gg.sound = 1;
+    gg.fullscreen = 0;
 
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
@@ -1227,8 +1232,8 @@ var GamePlayScene = function(game, stage)
         self.skip_to_mode(MODE_PRE0);
       }
     });
-    gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){ });
-    gg.fullscreen_button = new ToggleBox(0,0,0,0, 1, function(v){ });
+    gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){ gg.sound = !gg.sound; });
+    gg.fullscreen_button = new ToggleBox(0,0,0,0, 0, function(v){ gg.fullscreen = !gg.fullscreen; if(gg.fullscreen) fullscreen(); else unfullscreen();});
 
     gg.content_dragger = new content_dragger();
     gg.exposition_box = new exposition_box();

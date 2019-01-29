@@ -24,6 +24,11 @@ var Clicker = function(init)
   {
     doSetPosOnEvent(evt);
     evts.push(evt);
+    if(gg.g && !gg.g.already_ticked)
+    {
+      gg.g.dotick();
+      gg.g.already_ticked = 1;
+    }
   }
   self.filter = function(clickable)
   {

@@ -39,9 +39,17 @@ var Game = function(init)
     tick();
   };
 
+  self.already_ticked = 0;
   var tick = function()
   {
     requestAnimFrame(tick,stage.canv.canvas);
+    if(!self.already_ticked)
+      self.dotick();
+    self.already_ticked = 0;
+  };
+
+  self.dotick = function()
+  {
     self.scenes[self.cur_scene].tick();
     var slow = false;
     flop = Date.now();
@@ -61,7 +69,7 @@ var Game = function(init)
       self.scenes[self.cur_scene].draw();
     }
     self.old_cur_scene = self.cur_scene;
-  };
+  }
 
   self.nextScene = function()
   {
