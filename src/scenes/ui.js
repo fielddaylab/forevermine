@@ -1698,8 +1698,16 @@ var table = function()
     }
     else
     {
-      if(self.yoff > 0.01) self.yoff = lerp(self.yoff,0,0.1);
-      else self.yoff = 0;
+      if(1 || gg.cur_level.special)
+      {
+        if(self.yoff > 0.01) self.yoff = lerp(self.yoff,42,0.1);
+        else self.yoff = 42;
+      }
+      else
+      {
+        if(self.yoff > 0.01) self.yoff = lerp(self.yoff,0,0.1);
+        else self.yoff = 0;
+      }
     }
   }
 
