@@ -27,6 +27,7 @@ var english_text =
       "Wha... What happened?", CONTENT_PLAYER, EMOTE_NULL,
       "You stumbled in here, powered me on, and then just passed out.", CONTENT_AI, EMOTE_NULL,
       "I... I need to get out of here.", CONTENT_PLAYER, EMOTE_NULL,
+      "BLACKOUT", CONTENT_AI, EMOTE_BLACKOUT,
       "What? But you just got here! I've been waiting 500 years!", CONTENT_AI, EMOTE_NULL,
       "Aren't you gonna get the mine running again?", CONTENT_AI, EMOTE_NULL,
       "Oh.", CONTENT_PLAYER, EMOTE_NULL,
@@ -116,6 +117,7 @@ var english_text =
       "Sorry about the impending doom, and stuff.", CONTENT_AI, EMOTE_NULL,
       "I need to... need to figure out... ", CONTENT_PLAYER, EMOTE_NULL,
       "Human? Can you hear me? You're looking a little... ", CONTENT_AI, EMOTE_NULL,
+      "BLACKOUT", CONTENT_AI, EMOTE_BLACKOUT,
     ],
     improve: //LAB: [skip_system] show system
     [

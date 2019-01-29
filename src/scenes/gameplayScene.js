@@ -254,10 +254,27 @@ var GamePlayScene = function(game, stage)
     gg.exposition_box.draw();
     if(gg.exposition_box.blackout_t)
     {
-      var t = gg.exposition_box.blackout_t/gg.blackout_t;
+      var t = gg.exposition_box.blackout_t/(gg.blackout_t-1);
       gg.ctx.fillStyle = black;
-      gg.ctx.globalAlpha = 1-t;
-      gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      if(t < 0.3)
+      {
+        t = t/0.3;
+        gg.ctx.globalAlpha = t;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      }
+      else if(t < 0.6)
+      {
+        t = (t-0.3)/0.3;
+        gg.ctx.globalAlpha = 1-t;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      }
+      else
+      {
+        t = min(1,(t-0.6)/0.4);
+        gg.ctx.globalAlpha = t;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+        gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      }
       gg.ctx.globalAlpha = 1;
     }
     if(gg.exposition_box.emp_t)
@@ -797,6 +814,11 @@ var GamePlayScene = function(game, stage)
           }
         }
         gg.exposition_box.tick();
+        if(gg.exposition_box.blackout_t >= gg.blackout_t-1)
+        {
+          self.skip_to_mode(MODE_LAB_OUT);
+          gg.mode_t = gg.fade_t; //skip to "fade in" part
+        }
       }
         break;
       case MODE_IMPROVE_IN:
@@ -837,6 +859,11 @@ var GamePlayScene = function(game, stage)
             self.set_mode(MODE_LAB_OUT,0);
         }
         gg.exposition_box.tick();
+        if(gg.exposition_box.blackout_t >= gg.blackout_t-1)
+        {
+          self.skip_to_mode(MODE_LAB_OUT);
+          gg.mode_t = gg.fade_t; //skip to "fade in" part
+        }
       }
         break;
       case MODE_LAB_OUT:
@@ -1115,6 +1142,7 @@ var GamePlayScene = function(game, stage)
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
+    gg.blackout_img = GenImg("assets/blackout.png");
     gg.eq_img = GenImg("assets/eq.png");
     gg.eq_pt_img = GenImg("assets/eq_pt.png");
     gg.neq_img = GenImg("assets/neq.png");

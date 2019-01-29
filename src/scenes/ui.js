@@ -264,7 +264,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
       y += mb.pad;
     }
     return 0;
