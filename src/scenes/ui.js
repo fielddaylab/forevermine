@@ -199,7 +199,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
       y += mb.pad;
     }
     return 0;
@@ -234,7 +234,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
       y += mb.pad;
     }
     return 0;
@@ -1922,6 +1922,7 @@ var message_box = function()
       {
         for(var j = 0; j < self.bubbles[i].length; j++)
           self.max_top_y -= self.font_h+self.pad;
+        self.max_top_y -= self.pad;
       }
       self.max_top_y -= self.pad;
     }
@@ -2032,6 +2033,12 @@ var message_box = function()
         gg.ctx.fillStyle = self.you_text_color;
         gg.ctx.fillRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
         gg.ctx.strokeRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.beginPath();
+        gg.ctx.moveTo(self.x+self.pad*2+self.bubble_w-self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.fill();
+        gg.ctx.stroke();
 
         gg.ctx.fillStyle = self.ai_text_color;
         gg.ctx.textAlign = "right";
@@ -2041,12 +2048,23 @@ var message_box = function()
           gg.ctx.fillText(self.bubbles[i][j], self.x+self.w-self.pad*2, y+self.font_h);
           y += self.font_h+self.pad;
         }
+        y += self.pad;
       }
       else if(self.types[i] == CONTENT_AI)
       {
         gg.ctx.fillStyle = self.ai_text_color;
         gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.beginPath();
+        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.fill();
+        gg.ctx.beginPath();
+        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length           );
+        gg.ctx.stroke();
 
         gg.ctx.fillStyle = self.you_text_color;
         gg.ctx.textAlign = "left";
@@ -2056,6 +2074,7 @@ var message_box = function()
           gg.ctx.fillText(self.bubbles[i][j], self.x+self.pad*2, y+self.font_h);
           y += self.font_h+self.pad;
         }
+        y += self.pad;
       }
       else if(self.types[i] == CONTENT_DATA)
       {
