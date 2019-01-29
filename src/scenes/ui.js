@@ -514,6 +514,7 @@ var content_dragger = function()
     {
       var lw = 100;
       var lh = 60;
+      gg.ctx.font = "18px DisposableDroidBB";
       gg.ctx.drawImage(gg.axis_label_bg_img, self.last_evt.doX-lw/2, self.last_evt.doY-lh/2, lw, lh);
       gg.ctx.textAlign = "center";
       gg.ctx.fillStyle = black;
@@ -524,6 +525,7 @@ var content_dragger = function()
     {
       var lw = 100;
       var lh = 60;
+      gg.ctx.font = "18px DisposableDroidBB";
       gg.ctx.drawImage(gg.axis_label_bg_img, self.last_evt.doX-lw/2, self.last_evt.doY-lh/2, lw, lh);
       gg.ctx.textAlign = "center";
       gg.ctx.fillStyle = black;
