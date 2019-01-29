@@ -27,15 +27,15 @@ var GamePlayScene = function(game, stage)
       gg.lab.wh = gg.canv.height;
 
       gg.fuel.x = 300;
-      gg.fuel.y = 406;
+      gg.fuel.y = 422;
       gg.fuel.w = 100;
-      gg.fuel.h = 81;
+      gg.fuel.h = 65;
       worldSpace(gg.lab,gg.canv,gg.fuel);
 
       gg.oxy.x = 400;
-      gg.oxy.y = 406;
+      gg.oxy.y = 422;
       gg.oxy.w = 100;
-      gg.oxy.h = 81;
+      gg.oxy.h = 65;
       worldSpace(gg.lab,gg.canv,gg.oxy);
 
       gg.content_dragger.w = gg.canv.width;
@@ -204,6 +204,7 @@ var GamePlayScene = function(game, stage)
     gg.ctx.fillRect(gg.fuel.x,gg.fuel.y+gg.fuel.h-gg.fuel.h*fuel_p,gg.fuel.w,gg.fuel.h*fuel_p);
     gg.ctx.fillStyle = "#CDBA70";
     gg.ctx.fillRect(gg.oxy.x,gg.oxy.y+gg.oxy.h-gg.oxy.h*oxy_p,gg.oxy.w,gg.oxy.h*oxy_p);
+
     gg.ctx.fillStyle = white;
     if(gg.mode == MODE_CTX_IN)
     {
@@ -315,6 +316,7 @@ var GamePlayScene = function(game, stage)
       }
       gg.ctx.globalAlpha = 1;
     }
+
   }
 
   self.draw_work = function()
