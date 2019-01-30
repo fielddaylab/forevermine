@@ -964,7 +964,7 @@ var editable_line = function()
   self.label_font_h = 20;
   self.label_font = self.label_font_h+"px DisposableDroidBB";
   self.number_font_h = 40;
-  self.number_font = self.number_font_h+"px DisposableDroidBB";
+  self.number_font = self.number_font_h+"px Lato";
 
   self.m_label = [-1];
   self.m = [0];
@@ -1606,23 +1606,23 @@ var editable_line = function()
       }
 
       //value strings
-      gg.ctx.textAlign = "right";
+      gg.ctx.textAlign = "center";
       gg.ctx.font = self.number_font;
       if(gg.cur_level.progress > 7)
       {
         gg.ctx.fillStyle = black;
-        gg.ctx.fillText(fdisp(self.m_total*gg.timeline.t+self.b_total,1),self.y_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
-        gg.ctx.fillText(fdisp(gg.timeline.t,1),self.x_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
+        gg.ctx.fillText(fdisp(self.m_total*gg.timeline.t+self.b_total,1),self.y_x+self.btn_w/2,self.eqn_y+self.btn_h/2+self.label_font_h*1.5);
+        gg.ctx.fillText(fdisp(gg.timeline.t,1),self.x_x+self.btn_w/2,self.eqn_y+self.btn_h/2+self.label_font_h*1.5);
         gg.ctx.fillStyle = white;
         for(var i = 0; i < self.m_btn.length; i++)
         {
           b = self.m_btn[i];
-          gg.ctx.fillText(self.m[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
+          gg.ctx.fillText(self.m[i],b.x+b.w/2,self.eqn_y+b.h/2+self.label_font_h*1.5);
         }
         for(var i = 0; i < self.b_btn.length; i++)
         {
           b = self.b_btn[i];
-          gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
+          gg.ctx.fillText(self.b[i],b.x+b.w/2,self.eqn_y+b.h/2+self.label_font_h*1.5);
         }
       }
     }
@@ -2147,7 +2147,7 @@ var message_box = function()
         gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad+self.bubble_w/2,y+self.font_h);
         gg.ctx.font = "60px DisposableDroidBB";
         gg.ctx.fillText(c,self.x+self.pad+self.bubble_w*3/4,y+self.pad+self.font_h*3);
-        gg.ctx.font = "30px DisposableDroidBB";
+        gg.ctx.font = self.font;
         y += self.font_h*4;
       }
       else if(self.types[i] == CONTENT_SIM)
@@ -2193,7 +2193,6 @@ var message_box = function()
       gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
       gg.ctx.globalAlpha = 1;
     }
-
 
     //ai
     var s = self.w-self.pad*2;
