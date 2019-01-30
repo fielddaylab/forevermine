@@ -404,11 +404,14 @@ var GamePlayScene = function(game, stage)
         gg.outro_vid.done = 0;
         break;
       case MODE_CINEMATIC:
+        gg.cur_audio.pause();
         if(!skipping)
           gg.intro_vid.play();
         else gg.intro_vid.done = 1;
         break;
       case MODE_BOOT:
+        gg.cur_audio = gg.console_audio;
+        gg.cur_audio.play();
         gg.monitor.boot_t = 0;
         if(skipping)
         {
@@ -451,6 +454,9 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE1:
         break;
       case MODE_WORK_IN:
+        gg.cur_audio.pause();
+        gg.cur_audio = gg.modeling_audio;
+        gg.cur_audio.play();
         if(gg.cur_level.skip_zoom)
         {
           gg.graph.zoom = 0;
@@ -483,6 +489,9 @@ var GamePlayScene = function(game, stage)
         }
         break;
       case MODE_WORK_OUT:
+        gg.cur_audio.pause();
+        gg.cur_audio = gg.console_audio;
+        gg.cur_audio.play();
         gg.line.blur();
         gg.exposition_box.clear();
         break;
@@ -513,10 +522,16 @@ var GamePlayScene = function(game, stage)
       case MODE_POST1:
         break;
       case MODE_LAB_OUT:
+        gg.cur_audio.pause();
+        gg.cur_audio = gg.pano_audio;
+        gg.cur_audio.play();
         break;
       case MODE_NIGHT:
         break;
       case MODE_LAB_IN: //sets next level
+        gg.cur_audio.pause();
+        gg.cur_audio = gg.console_audio;
+        gg.cur_audio.play();
         if(gg.cur_level.i < gg.levels.length-1)
         {
           gg.next_level = gg.levels[gg.cur_level.i+1];
@@ -1143,6 +1158,26 @@ var GamePlayScene = function(game, stage)
 
   self.ready = function()
   {
+    gg.logos_and_menu_audio = GenAudio("assets/audio/logos_and_menu.mp3"); gg.logos_and_menu_audio.loop = true;
+    gg.console_audio = GenAudio("assets/audio/console.mp3"); gg.console_audio.loop = true;
+    gg.modeling_audio = GenAudio("assets/audio/modeling.mp3"); gg.modeling_audio.loop = true;
+    gg.pano_audio = GenAudio("assets/audio/pano.mp3"); gg.pano_audio.loop = true;
+    gg.credits_audio = GenAudio("assets/audio/credits.mp3"); gg.credits_audio.loop = true;
+    gg.modeling_stress_audio = GenAudio("assets/audio/modeling_stress.mp3"); gg.modeling_stress_audio.loop = true;
+    gg.console_stress_audio = GenAudio("assets/audio/console_stress.mp3"); gg.console_stress_audio.loop = true;
+    gg.hacking_audio = GenAudio("assets/audio/hacking.mp3"); gg.hacking_audio.loop = true;
+    gg.audios = [];
+    gg.audios.push(gg.logos_and_menu_audio);
+    gg.audios.push(gg.console_audio);
+    gg.audios.push(gg.credits_audio);
+    gg.audios.push(gg.modeling_stress_audio);
+    gg.audios.push(gg.console_stress_audio);
+    gg.audios.push(gg.hacking_audio);
+    gg.audios.push(gg.modeling_audio);
+    gg.audios.push(gg.pano_audio);
+    gg.cur_audio = gg.logos_and_menu_audio;
+    gg.cur_audio.play();
+
     gg.max_days = 8;
     gg.needed_fuel = 350;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
@@ -1242,7 +1277,13 @@ var GamePlayScene = function(game, stage)
         self.skip_to_mode(MODE_PRE0);
       }
     });
-    gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){ gg.sound = !gg.sound; });
+    gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){
+      gg.sound = v;
+      gg.cur_audio.pause();
+      if(!gg.sound && !gg.cur_audio.paused) gg.cur_audio.pause();
+      if(gg.sound && gg.cur_audio.paused) gg.cur_audio.play();
+    });
+
     gg.fullscreen_button = new ToggleBox(0,0,0,0, 0, function(v){ gg.fullscreen = !gg.fullscreen; if(gg.fullscreen) fullscreen(); else unfullscreen();});
 
     gg.content_dragger = new content_dragger();
