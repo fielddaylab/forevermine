@@ -474,42 +474,6 @@ var content_dragger = function()
 
   self.draw = function()
   {
-    if(gg.cur_level.i == 0)
-    {
-      gg.ctx.font = "30px DisposableDroidBB";
-      if(!gg.table.data_visible && gg.message_box.displayed_i > 0 && gg.message_box.types[gg.message_box.displayed_i-1] == CONTENT_DATA)
-      {
-        if(!self.dragging_data)
-        {
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.message_box.data_y-5);
-          gg.ctx.fillRect(gg.message_box.w,gg.message_box.data_y-5,gg.canv.width-gg.message_box.w,45);
-          gg.ctx.fillRect(0,gg.message_box.data_y+40,gg.canv.width,gg.canv.height-gg.message_box.data_y-40);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("<- DRAG",gg.message_box.x+gg.message_box.w,gg.message_box.data_y+20);
-        }
-      }
-      if(gg.table.correct && !gg.cur_level.correct && !gg.timeline.fast_sim)
-      {
-        if(!self.dragging_sim)
-        {
-          var y1 = gg.table.y+gg.table.h*1/3;
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,y1);
-          gg.ctx.fillRect(0,y1,gg.table.x,gg.table.h);
-          gg.ctx.fillRect(gg.table.x+gg.table.w,y1,gg.canv.width-(gg.table.x+gg.table.w),gg.table.h);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("DRAG \\/",gg.canv.width-200,y1-20);
-        }
-        else
-        {
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(gg.message_box.x+gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("<- DROP",gg.message_box.w+10,gg.canv.height/2);
-        }
-      }
-    }
     if(self.dragging_x)
     {
       var lw = 100;
@@ -1776,7 +1740,11 @@ var table = function()
       {
         var t_x = mapVal(0,gg.timeline.t_max,gg.timeline.sx,gg.timeline.ex,gg.timeline.t);
         var s = 40;
-        gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+self.yoff,s,gg.timeline.h);
+        gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+self.yoff-s/2,s,gg.timeline.h);
+        gg.ctx.textAlign = "center";
+        gg.ctx.font = "16px DisposableDroidBB";
+        gg.ctx.fillText("Modeled",t_x,gg.timeline.y+s/2+self.yoff);
+        gg.ctx.fillText("Data",t_x,gg.timeline.y+s/2+12+self.yoff);
       }
       if(self.simd_visible >= i)
       {
@@ -1803,8 +1771,8 @@ var table = function()
 
       if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)
       {
-        var s = 30;
-        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y1-s/2,s,s);
+        var s = 20;
+        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y1-3*s,s,s);
       }
     }
 
