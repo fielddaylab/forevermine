@@ -1782,7 +1782,7 @@ var table = function()
       {
         if(gg.cur_level.progress >= 8 && self.data_visible && !gg.cur_level.perma_zoom)
         {
-          if(self.known_data[i] == self.predicted_data[i] || self.correct)
+          if(self.known_data[i] == self.predicted_data[i])
             gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
           else if(self.known_data[i] != "-")
             gg.ctx.drawImage(gg.neq_img,x-10,y2-10,20,20);
