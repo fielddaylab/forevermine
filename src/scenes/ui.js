@@ -1235,7 +1235,7 @@ var editable_line = function()
     var b_correct_total = 0; for(var i = 0; i < gg.cur_level.b_correct.length; i++) b_correct_total += gg.cur_level.b_correct[i];
     for(var i = 0; i <= gg.timeline.t_max; i++)
     {
-      if(i < 3) gg.table.known_data[i] = m_correct_total*i+b_correct_total;
+      if(i < 3) gg.table.known_data[i] = fdisp(m_correct_total*i+b_correct_total,1);
       else      gg.table.known_data[i] = "-";
       gg.table.predicted_data[i] = self.v(i);
     }
