@@ -2109,12 +2109,13 @@ var message_box = function()
       else if(self.types[i] == CONTENT_LABEL)
       {
         var icon = 0;
+        var label = 0;
         for(var j = 0; j < gg.cur_level.m_label.length; j++)
-          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) { icon = gg.cur_level.m_icon[j]; break; }
+          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) { icon = gg.cur_level.m_icon[j]; label = gg.cur_level.m_label_fmt[j]; break; }
         if(!icon)
         {
           for(var j = 0; j < gg.cur_level.b_label.length; j++)
-            if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; break; }
+            if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; label = gg.cur_level.b_label_fmt[j]; break; }
         }
         var h = self.font_h*3;
         gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
@@ -2122,7 +2123,8 @@ var message_box = function()
 
         gg.ctx.textAlign = "left";
         gg.ctx.fillStyle = self.data_text_color;
-        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad+self.bubble_w/2,y+self.pad+self.font_h);
+        for(var j = 0; j < label.length; j++)
+          gg.ctx.fillText(label[j],self.x+self.pad+self.bubble_w/2,y+self.pad+self.font_h+self.font_h*j);
         y += self.font_h*3;
       }
       else if(self.types[i] == CONTENT_CONSTANT)
@@ -2143,7 +2145,9 @@ var message_box = function()
         gg.ctx.textAlign = "center";
         gg.ctx.fillStyle = self.data_text_color;
         gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad+self.bubble_w/2,y+self.font_h);
+        gg.ctx.font = "60px DisposableDroidBB";
         gg.ctx.fillText(c,self.x+self.pad+self.bubble_w*3/4,y+self.pad+self.font_h*3);
+        gg.ctx.font = "30px DisposableDroidBB";
         y += self.font_h*4;
       }
       else if(self.types[i] == CONTENT_SIM)
