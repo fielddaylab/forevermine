@@ -120,6 +120,7 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/menu/check_box_fill.png");
     img_srcs.push("assets/menu/text_area.png");
     img_srcs.push("assets/iframe_img.jpg");
+    img_srcs.push("assets/button_glow.png");
     img_srcs.push("assets/reply_button.png");
     img_srcs.push("assets/blackout.png");
     img_srcs.push("assets/eq.png");

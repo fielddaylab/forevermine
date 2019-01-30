@@ -411,7 +411,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_BOOT:
         gg.cur_audio = gg.console_audio;
-        gg.cur_audio.play();
+        if(gg.sound) gg.cur_audio.play();
         gg.monitor.boot_t = 0;
         if(skipping)
         {
@@ -456,7 +456,7 @@ var GamePlayScene = function(game, stage)
       case MODE_WORK_IN:
         gg.cur_audio.pause();
         gg.cur_audio = gg.modeling_audio;
-        gg.cur_audio.play();
+        if(gg.sound) gg.cur_audio.play();
         if(gg.cur_level.skip_zoom)
         {
           gg.graph.zoom = 0;
@@ -491,7 +491,7 @@ var GamePlayScene = function(game, stage)
       case MODE_WORK_OUT:
         gg.cur_audio.pause();
         gg.cur_audio = gg.console_audio;
-        gg.cur_audio.play();
+        if(gg.sound) gg.cur_audio.play();
         gg.line.blur();
         gg.exposition_box.clear();
         break;
@@ -524,14 +524,14 @@ var GamePlayScene = function(game, stage)
       case MODE_LAB_OUT:
         gg.cur_audio.pause();
         gg.cur_audio = gg.pano_audio;
-        gg.cur_audio.play();
+        if(gg.sound) gg.cur_audio.play();
         break;
       case MODE_NIGHT:
         break;
       case MODE_LAB_IN: //sets next level
         gg.cur_audio.pause();
         gg.cur_audio = gg.console_audio;
-        gg.cur_audio.play();
+        if(gg.sound) gg.cur_audio.play();
         if(gg.cur_level.i < gg.levels.length-1)
         {
           gg.next_level = gg.levels[gg.cur_level.i+1];
@@ -974,9 +974,9 @@ var GamePlayScene = function(game, stage)
         self.draw_home();
         drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
         if(gg.mode_t%100 < 50)
-          gg.ctx.drawImage(gg.boot_btn_img,gg.stage.width-150,gg.stage.height-100,100,100);
-        var s = 40;
-        gg.ctx.drawImage(gg.notice_img,gg.stage.width-150,gg.stage.height-100,s,s);
+          gg.ctx.drawImage(gg.button_glow_img,gg.stage.width-210, gg.stage.height-135, 210, 140);
+        var s = 30;
+        gg.ctx.drawImage(gg.notice_img,gg.stage.width-80,gg.stage.height-120,s,s);
         /*
         gg.ctx.fillStyle = white;
         gg.ctx.font = "20px DisposableDroidBB";
@@ -1206,6 +1206,7 @@ var GamePlayScene = function(game, stage)
     gg.menu_check_img = GenImg("assets/menu/check_box_fill.png");
     gg.menu_text_img = GenImg("assets/menu/text_area.png");
     gg.iframe_img = GenImg("assets/iframe_img.jpg");
+    gg.button_glow_img = GenImg("assets/button_glow.png");
     gg.reply_button_img = GenImg("assets/reply_button.png");
     gg.blackout_img = GenImg("assets/blackout.png");
     gg.eq_img = GenImg("assets/eq.png");
