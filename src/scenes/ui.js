@@ -901,7 +901,10 @@ var timeline = function()
 
     t_x = mapVal(0,self.t_max,self.sx,self.ex,self.t);
     var s = self.h;
-    gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y+gg.table.yoff,s,self.h);
+    if(self.t == self.t_max && gg.table.correct && gg.cur_level.progress > 7)
+      gg.ctx.drawImage(gg.timeline_scrubber_large_img,t_x-s/2,self.y+gg.table.yoff-self.h/2,s,self.h*1.5);
+    else
+      gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y+gg.table.yoff,s,self.h);
 
     if(self.t < self.t_target)
     {
@@ -1232,8 +1235,7 @@ var editable_line = function()
     var b_correct_total = 0; for(var i = 0; i < gg.cur_level.b_correct.length; i++) b_correct_total += gg.cur_level.b_correct[i];
     for(var i = 0; i <= gg.timeline.t_max; i++)
     {
-      gg.table.t_data[i] = i;
-      if(i < 3) gg.table.known_data[i] = m_correct_total*i+b_correct_total;
+      if(i < 3) gg.table.known_data[i] = fdisp(m_correct_total*i+b_correct_total,1);
       else      gg.table.known_data[i] = "-";
       gg.table.predicted_data[i] = self.v(i);
     }
@@ -1283,7 +1285,7 @@ var editable_line = function()
     self.ey1 = gg.graph.y_for_y(self.ey1);
 
     for(var i = 0; i <= gg.timeline.t_max; i++)
-      gg.table.predicted_data[i] = fdisp(self.v(gg.table.t_data[i]),1);
+      gg.table.predicted_data[i] = fdisp(self.v(i),1);
     gg.table.verify();
 
     gg.graph.zoom = oldzoom;
@@ -1611,7 +1613,6 @@ var table = function()
   self.known_color = "#5CC8D9";
   self.text_color = "#4D514B";
 
-  self.t_data = [];
   self.known_data = [];
   self.predicted_data = [];
   self.data_visible = 0;
@@ -1623,7 +1624,6 @@ var table = function()
 
   self.clear = function()
   {
-    self.t_data = [];
     self.known_data = [];
     self.predicted_data = [];
     self.data_visible = 0;
@@ -1735,17 +1735,8 @@ var table = function()
         drawLine(x,y1,x,y2,gg.ctx);
       x -= w/2;
       gg.ctx.fillStyle = black;
-      gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
-      if(gg.timeline.t == gg.timeline.t_max && self.t_data[i] == gg.timeline.t_max && gg.cur_level.progress > 7)
-      {
-        var t_x = mapVal(0,gg.timeline.t_max,gg.timeline.sx,gg.timeline.ex,gg.timeline.t);
-        var s = 40;
-        gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+self.yoff-s/2,s,gg.timeline.h);
-        gg.ctx.textAlign = "center";
-        gg.ctx.font = "16px DisposableDroidBB";
-        gg.ctx.fillText("Modeled",t_x,gg.timeline.y+s/2+self.yoff);
-        gg.ctx.fillText("Data",t_x,gg.timeline.y+s/2+12+self.yoff);
-      }
+      if(!(i == gg.timeline.t_max && gg.timeline.t == gg.timeline.t_max && self.correct && gg.cur_level.progress > 7))
+        gg.ctx.fillText(i,x,y01+self.font_h/2);
       if(self.simd_visible >= i)
       {
         if(gg.cur_level.progress >= 8 && self.data_visible && !gg.cur_level.perma_zoom)
@@ -1769,11 +1760,22 @@ var table = function()
         else gg.ctx.fillText("-",x,y23+self.font_h/2);
       }
 
-      if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)
-      {
-        var s = 20;
-        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y1-3*s,s,s);
-      }
+    }
+    if(gg.timeline.t == gg.timeline.t_max && self.correct && gg.cur_level.progress > 7)
+    {
+      var t_x = mapVal(0,gg.timeline.t_max,gg.timeline.sx,gg.timeline.ex,gg.timeline.t);
+      var s = 40;
+      gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+self.yoff-s/2,s,gg.timeline.h);
+      gg.ctx.textAlign = "center";
+      gg.ctx.font = "16px DisposableDroidBB";
+      gg.ctx.fillText("Modeled",t_x,gg.timeline.y+s/2+self.yoff);
+      gg.ctx.fillText("Data",t_x,gg.timeline.y+s/2+10+self.yoff);
+      gg.ctx.font = self.font;
+    }
+    if(gg.timeline.t == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)
+    {
+      var s = 20;
+      gg.ctx.drawImage(gg.notice_img,x+w/2-s,y1-3*s,s,s);
     }
 
   }

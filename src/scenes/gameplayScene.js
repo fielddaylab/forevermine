@@ -434,7 +434,16 @@ var GamePlayScene = function(game, stage)
         gg.cur_level = gg.next_level;
         gg.graph.x_off = gg.cur_level.day*24;
         gg.graph.y0_min = gg.cur_level.y_min;
-        gg.graph.y0_max = gg.graph.y0_min+10;
+        if(gg.cur_level.i == 1)
+        {
+          gg.graph.y0_max = gg.graph.y0_min+20;
+          gg.graph.y0_grid = 2;
+        }
+        else
+        {
+          gg.graph.y0_max = gg.graph.y0_min+10;
+          gg.graph.y0_grid = 1;
+        }
         gg.timeline.t_speed = gg.cur_level.t_speed;
         gg.timeline.fast_t_speed = gg.cur_level.fast_t_speed;
         self.reset_level();
@@ -1215,6 +1224,7 @@ var GamePlayScene = function(game, stage)
     gg.neq_pt_img = GenImg("assets/neq_pt.png");
     gg.exposition_bg_img = GenImg("assets/exposition_bg.png");
     gg.timeline_scrubber_img = GenImg("assets/timeline_scrubber.png");
+    gg.timeline_scrubber_large_img = GenImg("assets/timeline_scrubber_large.png");
     gg.arrow_up_img = GenImg("assets/arrow_up.png");
     gg.arrow_down_img = GenImg("assets/arrow_down.png");
     gg.number_bg_img = GenImg("assets/number_bg.png");
