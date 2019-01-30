@@ -104,7 +104,7 @@ function begin()
   }
   if(platform == DO_PLATFORM_PC)          stage_container.addEventListener('mousedown',  play_first_audio);
   else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchstart', play_first_audio);
-  //game_first_audio_played = 1; first_audio.play(); //uncomment this if loaded through click-to-init iframe
+  game_first_audio_played = 1; first_audio.play(); //uncomment this if loaded through click-to-init iframe
 
   gg.g = new Game({width:w,height:h,container:"stage_container"});
   resize();

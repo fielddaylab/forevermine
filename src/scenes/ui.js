@@ -474,42 +474,6 @@ var content_dragger = function()
 
   self.draw = function()
   {
-    if(gg.cur_level.i == 0)
-    {
-      gg.ctx.font = "30px DisposableDroidBB";
-      if(!gg.table.data_visible && gg.message_box.displayed_i > 0 && gg.message_box.types[gg.message_box.displayed_i-1] == CONTENT_DATA)
-      {
-        if(!self.dragging_data)
-        {
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.message_box.data_y-5);
-          gg.ctx.fillRect(gg.message_box.w,gg.message_box.data_y-5,gg.canv.width-gg.message_box.w,45);
-          gg.ctx.fillRect(0,gg.message_box.data_y+40,gg.canv.width,gg.canv.height-gg.message_box.data_y-40);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("<- DRAG",gg.message_box.x+gg.message_box.w,gg.message_box.data_y+20);
-        }
-      }
-      if(gg.table.correct && !gg.cur_level.correct && !gg.timeline.fast_sim)
-      {
-        if(!self.dragging_sim)
-        {
-          var y1 = gg.table.y+gg.table.h*1/3;
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,y1);
-          gg.ctx.fillRect(0,y1,gg.table.x,gg.table.h);
-          gg.ctx.fillRect(gg.table.x+gg.table.w,y1,gg.canv.width-(gg.table.x+gg.table.w),gg.table.h);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("DRAG \\/",gg.canv.width-200,y1-20);
-        }
-        else
-        {
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(gg.message_box.x+gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("<- DROP",gg.message_box.w+10,gg.canv.height/2);
-        }
-      }
-    }
     if(self.dragging_x)
     {
       var lw = 100;
@@ -621,7 +585,7 @@ var exposition_box = function()
 
   self.click = function(evt)
   {
-    if(self.emp_t) return;
+    if(self.emp_t || self.blackout_t) return;
     if(self.displayed_i < self.texts.length) self.advance();
   }
 
@@ -750,7 +714,7 @@ var graph = function()
     var lh = 60;
     gg.ctx.drawImage(gg.axis_label_bg_img, self.x+self.w/2-lw/2, self.y+self.h+40-lh/2, lw, lh);
     if(gg.cur_level.msg_progress == 6 && !gg.line.x_set && !gg.content_dragger.dragging_x)
-      drawImageSizeCentered(gg.notice_img, self.x+self.w/2-lw/2, self.y+self.h+40, 20, gg.ctx);
+      drawImageSizeCentered(gg.notice_img, self.x+self.w/2+lw/3, self.y+self.h+25, 20, gg.ctx);
     if(t < 0.5)
     {
       gg.ctx.fillStyle = white;
@@ -795,7 +759,7 @@ var graph = function()
       //horizontal lines
     gg.ctx.drawImage(gg.axis_label_bg_img, self.x-25-lw, self.y+self.h/2-lh/2, lw, lh);
     if(gg.cur_level.msg_progress == 6 && !gg.line.y_set && !gg.content_dragger.dragging_y)
-      drawImageSizeCentered(gg.notice_img, self.x-25-lw, self.y+self.h/2, 20, gg.ctx);
+      drawImageSizeCentered(gg.notice_img, self.x-lw*3/7, self.y+self.h/2-16, 20, gg.ctx);
     if(t < 0.5)
     {
       gg.ctx.fillStyle = white;
@@ -964,7 +928,7 @@ var editable_line = function()
   self.label_font_h = 20;
   self.label_font = self.label_font_h+"px DisposableDroidBB";
   self.number_font_h = 40;
-  self.number_font = self.number_font_h+"px DisposableDroidBB";
+  self.number_font = self.number_font_h+"px Lato";
 
   self.m_label = [-1];
   self.m = [0];
@@ -1606,23 +1570,23 @@ var editable_line = function()
       }
 
       //value strings
-      gg.ctx.textAlign = "right";
+      gg.ctx.textAlign = "center";
       gg.ctx.font = self.number_font;
       if(gg.cur_level.progress > 7)
       {
         gg.ctx.fillStyle = black;
-        gg.ctx.fillText(fdisp(self.m_total*gg.timeline.t+self.b_total,1),self.y_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
-        gg.ctx.fillText(fdisp(gg.timeline.t,1),self.x_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
+        gg.ctx.fillText(fdisp(self.m_total*gg.timeline.t+self.b_total,1),self.y_x+self.btn_w/2,self.eqn_y+self.btn_h/2+self.label_font_h*1.5);
+        gg.ctx.fillText(fdisp(gg.timeline.t,1),self.x_x+self.btn_w/2,self.eqn_y+self.btn_h/2+self.label_font_h*1.5);
         gg.ctx.fillStyle = white;
         for(var i = 0; i < self.m_btn.length; i++)
         {
           b = self.m_btn[i];
-          gg.ctx.fillText(self.m[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
+          gg.ctx.fillText(self.m[i],b.x+b.w/2,self.eqn_y+b.h/2+self.label_font_h*1.5);
         }
         for(var i = 0; i < self.b_btn.length; i++)
         {
           b = self.b_btn[i];
-          gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
+          gg.ctx.fillText(self.b[i],b.x+b.w/2,self.eqn_y+b.h/2+self.label_font_h*1.5);
         }
       }
     }
@@ -1776,13 +1740,17 @@ var table = function()
       {
         var t_x = mapVal(0,gg.timeline.t_max,gg.timeline.sx,gg.timeline.ex,gg.timeline.t);
         var s = 40;
-        gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+self.yoff,s,gg.timeline.h);
+        gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+self.yoff-s/2,s,gg.timeline.h);
+        gg.ctx.textAlign = "center";
+        gg.ctx.font = "16px DisposableDroidBB";
+        gg.ctx.fillText("Modeled",t_x,gg.timeline.y+s/2+self.yoff);
+        gg.ctx.fillText("Data",t_x,gg.timeline.y+s/2+12+self.yoff);
       }
       if(self.simd_visible >= i)
       {
         if(gg.cur_level.progress >= 8 && self.data_visible && !gg.cur_level.perma_zoom)
         {
-          if(self.known_data[i] == self.predicted_data[i] || self.correct)
+          if(self.known_data[i] == self.predicted_data[i])
             gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
           else if(self.known_data[i] != "-")
             gg.ctx.drawImage(gg.neq_img,x-10,y2-10,20,20);
@@ -1803,8 +1771,8 @@ var table = function()
 
       if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)
       {
-        var s = 30;
-        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y1-s/2,s,s);
+        var s = 20;
+        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y1-3*s,s,s);
       }
     }
 
@@ -2109,12 +2077,13 @@ var message_box = function()
       else if(self.types[i] == CONTENT_LABEL)
       {
         var icon = 0;
+        var label = 0;
         for(var j = 0; j < gg.cur_level.m_label.length; j++)
-          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) { icon = gg.cur_level.m_icon[j]; break; }
+          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) { icon = gg.cur_level.m_icon[j]; label = gg.cur_level.m_label_fmt[j]; break; }
         if(!icon)
         {
           for(var j = 0; j < gg.cur_level.b_label.length; j++)
-            if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; break; }
+            if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; label = gg.cur_level.b_label_fmt[j]; break; }
         }
         var h = self.font_h*3;
         gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
@@ -2122,7 +2091,8 @@ var message_box = function()
 
         gg.ctx.textAlign = "left";
         gg.ctx.fillStyle = self.data_text_color;
-        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad+self.bubble_w/2,y+self.pad+self.font_h);
+        for(var j = 0; j < label.length; j++)
+          gg.ctx.fillText(label[j],self.x+self.pad+self.bubble_w/2,y+self.pad+self.font_h+self.font_h*j);
         y += self.font_h*3;
       }
       else if(self.types[i] == CONTENT_CONSTANT)
@@ -2143,7 +2113,9 @@ var message_box = function()
         gg.ctx.textAlign = "center";
         gg.ctx.fillStyle = self.data_text_color;
         gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad+self.bubble_w/2,y+self.font_h);
+        gg.ctx.font = "60px DisposableDroidBB";
         gg.ctx.fillText(c,self.x+self.pad+self.bubble_w*3/4,y+self.pad+self.font_h*3);
+        gg.ctx.font = self.font;
         y += self.font_h*4;
       }
       else if(self.types[i] == CONTENT_SIM)
@@ -2161,26 +2133,33 @@ var message_box = function()
     }
     gg.ctx.textAlign = "left";
 
+    //"ai typing"
+    if(self.prompt_ai_typing)
+    {
+      gg.ctx.fillStyle = self.data_text_color;
+      switch(floor(self.advance_t/20)%3)
+      {
+        case 0: gg.ctx.fillText("typing.",self.x+self.pad*2,y+self.font_h/2); break;
+        case 1: gg.ctx.fillText("typing..",self.x+self.pad*2,y+self.font_h/2); break;
+        case 2: gg.ctx.fillText("typing...",self.x+self.pad*2,y+self.font_h/2); break;
+      }
+    }
+
     //"input" box
     gg.ctx.fillStyle = self.bg_color;
     gg.ctx.fillRect(self.x,self.input_y-self.pad+1,self.w,self.h);
 
-    gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
     if(self.prompt_player_input)
     {
       var s = 20;
+      gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
       gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s,self.input_y,s,s);
     }
-
-    //"ai typing"
-    if(self.prompt_ai_typing)
+    else
     {
-      switch(floor(self.advance_t/20)%3)
-      {
-        case 0: gg.ctx.fillText("typing.",self.x+self.pad*2,y+self.font_h); break;
-        case 1: gg.ctx.fillText("typing..",self.x+self.pad*2,y+self.font_h); break;
-        case 2: gg.ctx.fillText("typing...",self.x+self.pad*2,y+self.font_h); break;
-      }
+      gg.ctx.globalAlpha = 0.6;
+      gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
+      gg.ctx.globalAlpha = 1;
     }
 
     //ai
