@@ -699,7 +699,10 @@ var GamePlayScene = function(game, stage)
             break;
           case 11: //pre_improve
             if(!gg.cur_level.skip_zoom)
-              gg.graph.zoom = 1;
+            {
+              if(gg.graph.zoom < 1) gg.graph.zoom = min(gg.stage_t,100)/100;
+              else gg.graph.zoom = 1;
+            }
             break;
           case 12: //improve
             break;
@@ -812,6 +815,7 @@ var GamePlayScene = function(game, stage)
         gg.exposition_box.tick();
         if(gg.exposition_box.blackout_t >= gg.blackout_t-1)
         {
+          gg.exposition_box.blackout_t = 0;
           self.skip_to_mode(MODE_LAB_OUT);
           gg.mode_t = gg.fade_t; //skip to "fade in" part
         }

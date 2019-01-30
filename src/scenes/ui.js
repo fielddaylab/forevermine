@@ -621,7 +621,7 @@ var exposition_box = function()
 
   self.click = function(evt)
   {
-    if(self.emp_t) return;
+    if(self.emp_t || self.blackout_t) return;
     if(self.displayed_i < self.texts.length) self.advance();
   }
 
