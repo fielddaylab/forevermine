@@ -91,12 +91,12 @@ var GamePlayScene = function(game, stage)
 
       var btn_x = 10;
       var btn_y = 10;
-      var btn_w = 50;
+      var btn_w = 80;
       var btn_h = 50;
 
       gg.continue_button.x = btn_x;
       gg.continue_button.y = gg.canv.height/3;
-      gg.continue_button.w = btn_w*7.5;
+      gg.continue_button.w = btn_w*4;
       gg.continue_button.h = btn_h;
 
       gg.new_button.x = btn_x;
@@ -920,7 +920,7 @@ var GamePlayScene = function(game, stage)
       case MODE_MENU:
       {
         self.draw_home();
-        drawImageBox(gg.iframe_img,gg.lab,gg.ctx);
+        drawImageBox(gg.menu_bg_img,gg.lab,gg.ctx);
         /*
         gg.ctx.fillStyle = black;
         fillBox(gg.continue_button,gg.ctx);
@@ -932,22 +932,22 @@ var GamePlayScene = function(game, stage)
         */
         gg.ctx.fillStyle = white;
         gg.ctx.strokeStyle = white;
-        gg.ctx.font = gg.continue_button.h+"px DisposableDroidBB";
+        gg.ctx.font = (gg.continue_button.h*2/3)+"px Lato";
         var txtbump = gg.continue_button.h/5;
         gg.ctx.fillText("STRANDED AT THE FOREVER MINE",gg.continue_button.x,10+gg.continue_button.h-txtbump);
         gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
         gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
         gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y+gg.code_txt.h-txtbump);
         if(gg.input_code) gg.ctx.fillText(gg.input_code,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
-        gg.ctx.strokeRect(gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
-        gg.ctx.fillText("GO",gg.code_button.x,gg.code_button.y+gg.code_button.h-txtbump);
+        gg.ctx.drawImage(gg.menu_text_img,gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
+        gg.ctx.drawImage(gg.menu_go_img,gg.code_button.x,gg.code_button.y,gg.code_button.w,gg.code_button.h);
         drawLine(gg.sound_button.x,gg.sound_button.y-10,gg.canv.width-gg.sound_button.x,gg.sound_button.y-10,gg.ctx);
         gg.ctx.fillText("MUSIC FX",gg.sound_button.x,gg.sound_button.y+gg.sound_button.h-txtbump);
-        if(gg.sound) gg.ctx.strokeRect(gg.sound_button.x+gg.sound_button.w-gg.sound_button.h+2,gg.sound_button.y+2,gg.sound_button.h-4,gg.sound_button.h-4);
-        gg.ctx.strokeRect(gg.sound_button.x+gg.sound_button.w-gg.sound_button.h,gg.sound_button.y,gg.sound_button.h,gg.sound_button.h);
+        if(gg.sound) gg.ctx.drawImage(gg.menu_check_img,gg.sound_button.x+gg.sound_button.w-gg.sound_button.h+2,gg.sound_button.y+2,gg.sound_button.h-4,gg.sound_button.h-4);
+        gg.ctx.drawImage(gg.menu_box_img,gg.sound_button.x+gg.sound_button.w-gg.sound_button.h,gg.sound_button.y,gg.sound_button.h,gg.sound_button.h);
         gg.ctx.fillText("FULLSCREEN",gg.fullscreen_button.x,gg.fullscreen_button.y+gg.fullscreen_button.h-txtbump);
-        gg.ctx.strokeRect(gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h,gg.fullscreen_button.y,gg.fullscreen_button.h,gg.fullscreen_button.h);
-        if(gg.fullscreen) gg.ctx.strokeRect(gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h+2,gg.fullscreen_button.y+2,gg.fullscreen_button.h-4,gg.fullscreen_button.h-4);
+        gg.ctx.drawImage(gg.menu_box_img,gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h,gg.fullscreen_button.y,gg.fullscreen_button.h,gg.fullscreen_button.h);
+        if(gg.fullscreen) gg.ctx.drawImage(gg.menu_check_img,gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h+2,gg.fullscreen_button.y+2,gg.fullscreen_button.h-4,gg.fullscreen_button.h-4);
       }
         break;
       case MODE_CINEMATIC:
@@ -1161,6 +1161,11 @@ var GamePlayScene = function(game, stage)
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
+    gg.menu_bg_img = GenImg("assets/menu/background.png");
+    gg.menu_go_img = GenImg("assets/menu/button_go.png");
+    gg.menu_box_img = GenImg("assets/menu/check_box.png");
+    gg.menu_check_img = GenImg("assets/menu/check_box_fill.png");
+    gg.menu_text_img = GenImg("assets/menu/text_area.png");
     gg.iframe_img = GenImg("assets/iframe_img.jpg");
     gg.reply_button_img = GenImg("assets/reply_button.png");
     gg.blackout_img = GenImg("assets/blackout.png");

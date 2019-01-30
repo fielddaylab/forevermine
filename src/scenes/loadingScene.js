@@ -114,6 +114,11 @@ var LoadingScene = function(game, stage)
     loadingImageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put asset paths in img_srcs
+    img_srcs.push("assets/menu/background.png");
+    img_srcs.push("assets/menu/button_go.png");
+    img_srcs.push("assets/menu/check_box.png");
+    img_srcs.push("assets/menu/check_box_fill.png");
+    img_srcs.push("assets/menu/text_area.png");
     img_srcs.push("assets/iframe_img.jpg");
     img_srcs.push("assets/reply_button.png");
     img_srcs.push("assets/blackout.png");
