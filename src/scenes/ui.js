@@ -750,7 +750,7 @@ var graph = function()
     var lh = 60;
     gg.ctx.drawImage(gg.axis_label_bg_img, self.x+self.w/2-lw/2, self.y+self.h+40-lh/2, lw, lh);
     if(gg.cur_level.msg_progress == 6 && !gg.line.x_set && !gg.content_dragger.dragging_x)
-      drawImageSizeCentered(gg.notice_img, self.x+self.w/2-lw/2, self.y+self.h+40, 20, gg.ctx);
+      drawImageSizeCentered(gg.notice_img, self.x+self.w/2+lw/3, self.y+self.h+25, 20, gg.ctx);
     if(t < 0.5)
     {
       gg.ctx.fillStyle = white;
@@ -795,7 +795,7 @@ var graph = function()
       //horizontal lines
     gg.ctx.drawImage(gg.axis_label_bg_img, self.x-25-lw, self.y+self.h/2-lh/2, lw, lh);
     if(gg.cur_level.msg_progress == 6 && !gg.line.y_set && !gg.content_dragger.dragging_y)
-      drawImageSizeCentered(gg.notice_img, self.x-25-lw, self.y+self.h/2, 20, gg.ctx);
+      drawImageSizeCentered(gg.notice_img, self.x-lw*3/7, self.y+self.h/2-16, 20, gg.ctx);
     if(t < 0.5)
     {
       gg.ctx.fillStyle = white;
@@ -2161,27 +2161,35 @@ var message_box = function()
     }
     gg.ctx.textAlign = "left";
 
+    //"ai typing"
+    if(self.prompt_ai_typing)
+    {
+      gg.ctx.fillStyle = self.data_text_color;
+      switch(floor(self.advance_t/20)%3)
+      {
+        case 0: gg.ctx.fillText("typing.",self.x+self.pad*2,y+self.font_h/2); break;
+        case 1: gg.ctx.fillText("typing..",self.x+self.pad*2,y+self.font_h/2); break;
+        case 2: gg.ctx.fillText("typing...",self.x+self.pad*2,y+self.font_h/2); break;
+      }
+    }
+
     //"input" box
     gg.ctx.fillStyle = self.bg_color;
     gg.ctx.fillRect(self.x,self.input_y-self.pad+1,self.w,self.h);
 
-    gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
     if(self.prompt_player_input)
     {
       var s = 20;
+      gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
       gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s,self.input_y,s,s);
     }
-
-    //"ai typing"
-    if(self.prompt_ai_typing)
+    else
     {
-      switch(floor(self.advance_t/20)%3)
-      {
-        case 0: gg.ctx.fillText("typing.",self.x+self.pad*2,y+self.font_h); break;
-        case 1: gg.ctx.fillText("typing..",self.x+self.pad*2,y+self.font_h); break;
-        case 2: gg.ctx.fillText("typing...",self.x+self.pad*2,y+self.font_h); break;
-      }
+      gg.ctx.globalAlpha = 0.6;
+      gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
+      gg.ctx.globalAlpha = 1;
     }
+
 
     //ai
     var s = self.w-self.pad*2;
