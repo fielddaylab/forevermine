@@ -223,7 +223,7 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_IMPROVE_IN)
     {
-      var img = gg.cur_level.context_imgs[0];
+      var img = gg.cur_level.system_imgs[0];
       drawImageBox(img,gg.monitor,gg.ctx);
       gg.ctx.globalAlpha = 1-gg.mode_p;
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -231,12 +231,12 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_IMPROVE)
     {
-      var img = gg.cur_level.context_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.context_imgs.length)];
+      var img = gg.cur_level.system_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.system_imgs.length)];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_IMPROVE_OUT)
     {
-      var img = gg.cur_level.context_imgs[gg.cur_level.context_imgs.length-1];
+      var img = gg.cur_level.system_imgs[gg.cur_level.system_imgs.length-1];
       drawImageBox(img,gg.monitor,gg.ctx);
       gg.ctx.globalAlpha = gg.mode_p;
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -863,7 +863,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_IMPROVE:
       {
-        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.ctxf_loop);
+        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.systemf_loop);
         if(gg.mode_p < 1 && !gg.keylistener.advance()) //display context
         {
         }
@@ -1205,6 +1205,7 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
     gg.ctxf_t = 8;
     gg.ctxf_loop = 1;
+    gg.systemf_loop = 100;
     gg.pano_t = 250;
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
