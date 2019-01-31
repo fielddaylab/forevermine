@@ -172,6 +172,7 @@ var GamePlayScene = function(game, stage)
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     gg.line.consume_cur_level();
+    setCookie("level", ""+gg.cur_level.i, 999)
   }
 
   self.draw_home = function()
@@ -1278,7 +1279,7 @@ var GamePlayScene = function(game, stage)
     gg.battery_img = GenImg("assets/battery.png");
     gg.drill_img = GenImg("assets/drill.png");
 
-    gg.continue_code = 0;
+    gg.continue_code = getCookie("level");
     gg.input_code = 0;
     gg.input_code_valid = 0;
     gg.continuable = 0;
