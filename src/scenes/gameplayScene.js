@@ -1244,6 +1244,7 @@ var GamePlayScene = function(game, stage)
     gg.constant_bg_img = GenImg("assets/card_editable.png");
     gg.variable_bg_img = GenImg("assets/card_not_editable.png");
     gg.crycollected_img = GenImg("assets/crycollected.png");
+    gg.battery_charge_img = GenImg("assets/battery_charge.png");
     gg.cryinitial_img = GenImg("assets/cryinitial.png");
     gg.cryrate_img = GenImg("assets/cryrate.png");
     gg.chrinitial_img = GenImg("assets/chrinitial.png");
@@ -1447,7 +1448,7 @@ var GamePlayScene = function(game, stage)
     //improve charge rate
     l = new level();
     l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
+    l.y_icon = GenImg("assets/battery_charge.png");
     l.m_starting = [0.5,];
     l.m_correct = [1,];
     l.m_label = ["Charge Rate",];
@@ -1521,7 +1522,7 @@ var GamePlayScene = function(game, stage)
     //initial charge rate
     l = new level();
     l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
+    l.y_icon = GenImg("assets/battery_charge.png");
     l.m_starting = [0,];
     l.m_correct = [1,];
     l.m_label = ["Charge Rate",];
@@ -1597,7 +1598,7 @@ var GamePlayScene = function(game, stage)
     //improve solar panels
     l = new level();
     l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
+    l.y_icon = GenImg("assets/battery_charge.png");
     l.m_starting = [0.5,];
     l.m_correct = [1,];
     l.m_label = ["Charge Rate",];
