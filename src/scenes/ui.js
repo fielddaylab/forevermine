@@ -2117,7 +2117,7 @@ var message_box = function()
         }
         var h = self.font_h*4;
         gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
-        drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+self.font_h+self.font_h*3/2, h*0.8, gg.ctx);
+        drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+self.font_h+self.font_h*3/2, h*0.6, gg.ctx);
 
         gg.ctx.textAlign = "center";
         gg.ctx.fillStyle = self.data_text_color;
