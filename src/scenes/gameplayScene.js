@@ -317,11 +317,8 @@ var GamePlayScene = function(game, stage)
   {
     gg.ctx.drawImage(gg.background_ui_img,0,0,gg.canv.width,gg.canv.height);
     gg.graph.draw();
-    if(!gg.cur_level.special)
-    {
-      gg.timeline.draw();
-      gg.table.draw();
-    }
+    gg.timeline.draw();
+    gg.table.draw();
     gg.line.draw();
     gg.cur_level.draw();
     gg.message_box.draw();
