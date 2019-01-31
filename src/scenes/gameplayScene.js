@@ -289,6 +289,8 @@ var GamePlayScene = function(game, stage)
       }
       else
       {
+        gg.monitor.boot_t = 0;
+        gg.monitor.mode = 2;
         var t = (gg.exposition_box.emp_t-gg.emp_start_boot_t)/(gg.emp_t-gg.emp_start_boot_t);
         gg.ctx.fillStyle = black;
         gg.ctx.globalAlpha = 1-t;

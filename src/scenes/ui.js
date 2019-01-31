@@ -172,7 +172,12 @@ var monitor = function()
     //c.fillRect(x,y,w,h); //mouth
     c.drawImage(self.mouth_img[self.mode],x,y,w,h);
 
-    if(self.boot_t < 50)
+    if(self.boot_t <= 1)
+    {
+      c.fillStyle = black;
+      c.fillRect(0,0,s.width,s.height);
+    }
+    else if(self.boot_t < 50)
     {
       var t = self.boot_t/50;
       t = 1-t;
@@ -625,7 +630,7 @@ var exposition_box = function()
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
     if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
-    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; gg.monitor.mode = 2; gg.boot_t = 0; }
+    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
   }
 
   self.click = function(evt)
