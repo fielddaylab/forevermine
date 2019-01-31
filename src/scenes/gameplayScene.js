@@ -348,6 +348,16 @@ var GamePlayScene = function(game, stage)
       pano_sx = 0;
       pano_ex = pimg.width-vis_pano_w;
       gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,pt),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
+      if(gg.cur_level.pano == 0) //transition to dark and back
+      {
+        gg.ctx.globalAlpha = 1-psin(t*twopi+halfpi)/2;
+        pimg = gg.pano_imgs_dark[i];
+        vis_pano_w = gg.canv.width/gg.canv.height*pimg.height;
+        pano_sx = 0;
+        pano_ex = pimg.width-vis_pano_w;
+        gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,pt),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
+        gg.ctx.globalAlpha = 1;
+      }
     }
 
     gg.ctx.fillStyle = white;
@@ -1252,6 +1262,10 @@ var GamePlayScene = function(game, stage)
     gg.pano_imgs[0] = GenImg("assets/pano_bg.jpg");
     gg.pano_imgs[1] = GenImg("assets/pano_mg.png");
     gg.pano_imgs[2] = GenImg("assets/pano_fg.png");
+    gg.pano_imgs_dark = [];
+    gg.pano_imgs_dark[0] = GenImg("assets/pano_bg_dark.jpg");
+    gg.pano_imgs_dark[1] = GenImg("assets/pano_mg_dark.png");
+    gg.pano_imgs_dark[2] = GenImg("assets/pano_fg_dark.png");
     gg.epano_imgs = [];
     gg.epano_imgs[0] = GenImg("assets/epano_bg.jpg");
     gg.epano_imgs[1] = GenImg("assets/epano_mg.png");

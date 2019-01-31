@@ -156,6 +156,9 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/pano_bg.jpg");
     img_srcs.push("assets/pano_mg.png");
     img_srcs.push("assets/pano_fg.png");
+    img_srcs.push("assets/pano_bg_dark.jpg");
+    img_srcs.push("assets/pano_mg_dark.png");
+    img_srcs.push("assets/pano_fg_dark.png");
     img_srcs.push("assets/epano_bg.jpg");
     img_srcs.push("assets/epano_mg.png");
     img_srcs.push("assets/epano_fg_0.png");
