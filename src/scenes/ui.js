@@ -75,10 +75,10 @@ var monitor = function()
   self.mouth_img.push(GenImg("assets/mouth_1.png"));
 
   //glitched
-  self.eyes_pw.push(0.15);
-  self.eyes_ph.push(0.08);
-  self.mouth_pw.push(0.4);
-  self.mouth_ph.push(0.18);
+  self.eyes_pw.push(0.45);
+  self.eyes_ph.push(0.45);
+  self.mouth_pw.push(0.6);
+  self.mouth_ph.push(0.25);
 
   self.eyes_hy.push(0.42); //"home" y
   self.eyes_vy.push(0.25); //"variance" y
@@ -95,7 +95,7 @@ var monitor = function()
 
   self.init_screen = function()
   {
-    var d = 5;
+    var d = 3;
     self.screen = GenIcon(self.ww/d,self.wh/d);
     self.screen.context.imageSmoothingEnabled = 1;
     self.draw();
@@ -2245,4 +2245,3 @@ var message_box = function()
   }
 
 }
-
