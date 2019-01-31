@@ -16,7 +16,7 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 99999;
 
-  self.mode = 0; //0- normal, 1- angry, 2- glitched
+  self.mode = 2; //0- normal, 1- angry, 2- glitched
 
   self.bg_color = [];
   self.eye_img = [];
@@ -56,8 +56,8 @@ var monitor = function()
   self.mouth_vy.push(0.25); //"variance" y
 
   self.bg_color.push("#F1F9EB");
-  self.eye_img.push(GenImg("assets/eye.png"));
-  self.mouth_img.push(GenImg("assets/mouth.png"));
+  self.eye_img.push(GenImg("assets/eye_0.png"));
+  self.mouth_img.push(GenImg("assets/mouth_0.png"));
 
   //angry
   self.eyes_pw.push(0.15);
@@ -71,8 +71,8 @@ var monitor = function()
   self.mouth_vy.push(0.25); //"variance" y
 
   self.bg_color.push("#F1F9EB");
-  self.eye_img.push(GenImg("assets/eye.png"));
-  self.mouth_img.push(GenImg("assets/mouth.png"));
+  self.eye_img.push(GenImg("assets/eye_1.png"));
+  self.mouth_img.push(GenImg("assets/mouth_1.png"));
 
   //glitched
   self.eyes_pw.push(0.15);
@@ -86,8 +86,8 @@ var monitor = function()
   self.mouth_vy.push(0.25); //"variance" y
 
   self.bg_color.push("#F1F9EB");
-  self.eye_img.push(GenImg("assets/eye.png"));
-  self.mouth_img.push(GenImg("assets/mouth.png"));
+  self.eye_img.push(GenImg("assets/eye_2.png"));
+  self.mouth_img.push(GenImg("assets/mouth_2.png"));
 
   self.boot_t = 0;
 

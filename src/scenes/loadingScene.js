@@ -120,6 +120,12 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/menu/check_box_fill.png");
     img_srcs.push("assets/menu/text_area.png");
     img_srcs.push("assets/iframe_img.jpg");
+    img_srcs.push("assets/eye_0.png");
+    img_srcs.push("assets/mouth_0.png");
+    img_srcs.push("assets/eye_1.png");
+    img_srcs.push("assets/mouth_1.png");
+    img_srcs.push("assets/eye_2.png");
+    img_srcs.push("assets/mouth_2.png");
     img_srcs.push("assets/button_glow.png");
     img_srcs.push("assets/reply_button.png");
     img_srcs.push("assets/drop_data.png");
