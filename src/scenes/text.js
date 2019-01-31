@@ -835,7 +835,8 @@ var english_text =
     [
       get_timer(20), "Here are labels", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drill Rate", CONTENT_LABEL, 0,
-      get_timer(60), "Zoom Rate", CONTENT_LABEL, 0,
+      get_timer(60), "Surface Area", CONTENT_LABEL, 0,
+      get_timer(60), "Crystal Density", CONTENT_LABEL, 0,
       get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
