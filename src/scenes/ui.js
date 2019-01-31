@@ -16,7 +16,7 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 99999;
 
-  self.mode = 2; //0- normal, 1- angry, 2- glitched
+  self.mode = 0; //0- normal, 1- angry, 2- glitched
 
   self.bg_color = [];
   self.eye_img = [];
@@ -624,8 +624,8 @@ var exposition_box = function()
     if(self.displayed_i < self.texts.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
     if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
-    if(self.metas[self.displayed_i] == EMOTE_CHANGE)   self.change_t = 1;
-    if(self.metas[self.displayed_i] == EMOTE_EMP)      self.emp_t = 1;
+    if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
+    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; gg.monitor.mode = 2; gg.boot_t = 0; }
   }
 
   self.click = function(evt)
