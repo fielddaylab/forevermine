@@ -16,10 +16,11 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 99999;
 
-  self.bg_color = "#F1F9EB";
+  self.mode = 0; //0- normal, 1- angry, 2- glitched
 
-  self.eye_img = GenImg("assets/eye.png");
-  self.mouth_img = GenImg("assets/mouth.png");
+  self.bg_color = [];
+  self.eye_img = [];
+  self.mouth_img = [];
 
   self.eyes_nx = 0;
   self.eyes_ny = 0;
@@ -34,15 +35,59 @@ var monitor = function()
   self.mouth_nsw = 0;
   self.mouth_nsvw = 0;
 
-  self.eyes_pw = 0.15;
-  self.eyes_ph = 0.08;
-  self.mouth_pw = 0.4;
-  self.mouth_ph = 0.18;
+  self.eyes_pw = [];
+  self.eyes_ph = [];
+  self.mouth_pw = [];
+  self.mouth_ph = [];
+  self.eyes_hy = []; //"home" y
+  self.eyes_vy = []; //"variance" y
+  self.mouth_hy = []; //"home" y
+  self.mouth_vy = []; //"variance" y
 
-  self.eyes_hy = 0.42; //"home" y
-  self.eyes_vy = 0.25; //"variance" y
-  self.mouth_hy = 0.64; //"home" y
-  self.mouth_vy = 0.25; //"variance" y
+  //normal
+  self.eyes_pw.push(0.15);
+  self.eyes_ph.push(0.08);
+  self.mouth_pw.push(0.4);
+  self.mouth_ph.push(0.18);
+
+  self.eyes_hy.push(0.42); //"home" y
+  self.eyes_vy.push(0.25); //"variance" y
+  self.mouth_hy.push(0.64); //"home" y
+  self.mouth_vy.push(0.25); //"variance" y
+
+  self.bg_color.push("#F1F9EB");
+  self.eye_img.push(GenImg("assets/eye.png"));
+  self.mouth_img.push(GenImg("assets/mouth.png"));
+
+  //angry
+  self.eyes_pw.push(0.15);
+  self.eyes_ph.push(0.08);
+  self.mouth_pw.push(0.4);
+  self.mouth_ph.push(0.18);
+
+  self.eyes_hy.push(0.42); //"home" y
+  self.eyes_vy.push(0.25); //"variance" y
+  self.mouth_hy.push(0.64); //"home" y
+  self.mouth_vy.push(0.25); //"variance" y
+
+  self.bg_color.push("#F1F9EB");
+  self.eye_img.push(GenImg("assets/eye.png"));
+  self.mouth_img.push(GenImg("assets/mouth.png"));
+
+  //glitched
+  self.eyes_pw.push(0.15);
+  self.eyes_ph.push(0.08);
+  self.mouth_pw.push(0.4);
+  self.mouth_ph.push(0.18);
+
+  self.eyes_hy.push(0.42); //"home" y
+  self.eyes_vy.push(0.25); //"variance" y
+  self.mouth_hy.push(0.64); //"home" y
+  self.mouth_vy.push(0.25); //"variance" y
+
+  self.bg_color.push("#F1F9EB");
+  self.eye_img.push(GenImg("assets/eye.png"));
+  self.mouth_img.push(GenImg("assets/mouth.png"));
 
   self.boot_t = 0;
 
@@ -102,7 +147,7 @@ var monitor = function()
     //c.strokeStyle = red;
     //c.strokeRect(0,0,s.width,s.height);
 
-    c.fillStyle = self.bg_color;
+    c.fillStyle = self.bg_color[self.mode];
     c.fillRect(0,0,s.width,s.height);
 
     c.fillStyle = blue;
@@ -110,22 +155,22 @@ var monitor = function()
     var h;
     var x;
     var y;
-    w = s.width*(self.eyes_pw+self.eyes_nsw/2)*self.eyes_nw;
-    h = s.height*self.eyes_ph*self.eyes_nh;
+    w = s.width*(self.eyes_pw[self.mode]+self.eyes_nsw/2)*self.eyes_nw;
+    h = s.height*self.eyes_ph[self.mode]*self.eyes_nh;
     x = self.eyes_nx*s.width/2-w/2;
-    y = s.height*self.eyes_hy-h/2+self.eyes_ny*s.height*self.eyes_vy;
+    y = s.height*self.eyes_hy[self.mode]-h/2+self.eyes_ny*s.height*self.eyes_vy[self.mode];
     //c.fillRect(x,y,w,h); //left eye
-    c.drawImage(self.eye_img,x,y,w,h);
+    c.drawImage(self.eye_img[self.mode],x,y,w,h);
     x = s.width/2+self.eyes_nx*s.width/2-w/2;
     //c.fillRect(x,y,w,h); //right eye
-    c.drawImage(self.eye_img,x,y,w,h);
+    c.drawImage(self.eye_img[self.mode],x,y,w,h);
 
-    w = s.width*(self.mouth_pw+self.mouth_nsw/2)*self.mouth_nw;
-    h = s.height*self.mouth_ph*self.mouth_nh;
+    w = s.width*(self.mouth_pw[self.mode]+self.mouth_nsw/2)*self.mouth_nw;
+    h = s.height*self.mouth_ph[self.mode]*self.mouth_nh;
     x = s.width/4+self.mouth_nx*s.width/2-w/2;
-    y = s.height*self.mouth_hy-h/2+self.mouth_ny*s.height*self.mouth_vy;
+    y = s.height*self.mouth_hy[self.mode]-h/2+self.mouth_ny*s.height*self.mouth_vy[self.mode];
     //c.fillRect(x,y,w,h); //mouth
-    c.drawImage(self.mouth_img,x,y,w,h);
+    c.drawImage(self.mouth_img[self.mode],x,y,w,h);
 
     if(self.boot_t < 50)
     {
