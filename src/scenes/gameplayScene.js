@@ -1289,6 +1289,11 @@ var GamePlayScene = function(game, stage)
       else                                                 { gg.code_txt.bg_color = "rgba(255,0,0,0.1)"; gg.input_code_valid = 0; }
     });
     gg.code_button     = new ButtonBox( 0,0,0,0, function(evt){
+      if(gg.code_txt.box_on)
+      {
+        gg.code_txt.set(gg.code_txt.box.value);
+        gg.code_txt.blur();
+      }
       if(!gg.input_code) gg.new_button.click({});
       else
       {
