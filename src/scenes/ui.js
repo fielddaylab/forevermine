@@ -1477,7 +1477,7 @@ var editable_line = function()
       gg.ctx.fillStyle = black;
       if(self.y_set)
       {
-      drawImageSizeCentered(gg.cur_level.y_icon, self.y_x+self.btn_w/2, self.eqn_y+self.font_h*2/3+yoff, self.font_h*1.5, gg.ctx);
+      drawImageSizeCentered(gg.cur_level.y_icon, self.y_x+self.btn_w/2, self.eqn_y+self.font_h*2/3+yoff, self.font_h*1.2, gg.ctx);
       gg.ctx.fillText(gg.cur_level.y_label,self.y_x+self.btn_w/2,self.eqn_y+yoff+self.btn_h-pad);
       }
       if(self.x_set)
@@ -1539,14 +1539,14 @@ var editable_line = function()
           if(self.m_label[i] < mlen)
           {
             ind = self.m_label[i];
-            drawImageSizeCentered(gg.cur_level.m_icon[ind], x, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            drawImageSizeCentered(gg.cur_level.m_icon[ind], x, b.y+yoff+b.h/4, b.h*2/5, gg.ctx);
             for(var j = 0; j < gg.cur_level.m_label_fmt[ind].length; j++)
               gg.ctx.fillText(gg.cur_level.m_label_fmt[ind][gg.cur_level.m_label_fmt[ind].length-1-j],x,b.y+yoff+b.h-pad-self.label_font_h*j);
           }
           else
           {
             ind = self.m_label[i]-mlen;
-            drawImageSizeCentered(gg.cur_level.b_icon[ind], x, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            drawImageSizeCentered(gg.cur_level.b_icon[ind], x, b.y+yoff+b.h/4, b.h*2/5, gg.ctx);
             for(var j = 0; j < gg.cur_level.b_label_fmt[ind].length; j++)
               gg.ctx.fillText(gg.cur_level.b_label_fmt[ind][gg.cur_level.b_label_fmt[ind].length-1-j],x,b.y+yoff+b.h-pad-self.label_font_h*j);
           }
@@ -1561,14 +1561,14 @@ var editable_line = function()
           if(self.b_label[i] < mlen)
           {
             ind = self.b_label[i];
-            drawImageSizeCentered(gg.cur_level.m_icon[ind], x, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            drawImageSizeCentered(gg.cur_level.m_icon[ind], x, b.y+yoff+b.h/4, b.h*2/5, gg.ctx);
             for(var j = 0; j < gg.cur_level.m_label_fmt[ind].length; j++)
               gg.ctx.fillText(gg.cur_level.m_label_fmt[ind][gg.cur_level.m_label_fmt[ind].length-1-j],x, b.y+yoff+b.h-pad-self.label_font_h*j);
           }
           else
           {
             ind = self.b_label[i]-mlen;
-            drawImageSizeCentered(gg.cur_level.b_icon[ind], x, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            drawImageSizeCentered(gg.cur_level.b_icon[ind], x, b.y+yoff+b.h/4, b.h*2/5, gg.ctx);
             for(var j = 0; j < gg.cur_level.b_label_fmt[ind].length; j++)
               gg.ctx.fillText(gg.cur_level.b_label_fmt[ind][gg.cur_level.b_label_fmt[ind].length-1-j], x, b.y+yoff+b.h-pad-self.label_font_h*j);
           }
@@ -2096,7 +2096,7 @@ var message_box = function()
         }
         var h = self.font_h*3;
         gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
-        drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+h/2, h, gg.ctx);
+        drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+h/2, h*0.8, gg.ctx);
 
         gg.ctx.textAlign = "left";
         gg.ctx.fillStyle = self.data_text_color;
@@ -2117,7 +2117,7 @@ var message_box = function()
         }
         var h = self.font_h*4;
         gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
-        drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+self.font_h+self.font_h*3/2, h, gg.ctx);
+        drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+self.font_h+self.font_h*3/2, h*0.8, gg.ctx);
 
         gg.ctx.textAlign = "center";
         gg.ctx.fillStyle = self.data_text_color;

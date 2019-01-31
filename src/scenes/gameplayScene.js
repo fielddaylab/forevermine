@@ -444,7 +444,7 @@ var GamePlayScene = function(game, stage)
         gg.cur_level = gg.next_level;
         gg.graph.x_off = gg.cur_level.day*24;
         gg.graph.y0_min = gg.cur_level.y_min;
-        if(gg.cur_level.i == 1)
+        if(gg.cur_level.i == 1 || gg.cur_level.i == 8)
         {
           gg.graph.y0_max = gg.graph.y0_min+20;
           gg.graph.y0_grid = 2;
