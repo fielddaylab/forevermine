@@ -2158,17 +2158,22 @@ var message_box = function()
     gg.ctx.fillStyle = self.bg_color;
     gg.ctx.fillRect(self.x,self.input_y-self.pad+1,self.w,self.h);
 
-    if(self.prompt_player_input)
-    {
-      var s = 20;
-      gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
-      gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s,self.input_y,s,s);
-    }
+    if(gg.content_dragger.dragging_sim)
+      gg.ctx.drawImage(gg.drop_data_img,self.input_x,self.input_y,self.input_w,self.input_h);
     else
     {
-      gg.ctx.globalAlpha = 0.6;
-      gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
-      gg.ctx.globalAlpha = 1;
+      if(self.prompt_player_input)
+      {
+        var s = 20;
+        gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
+        gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s,self.input_y,s,s);
+      }
+      else
+      {
+        gg.ctx.globalAlpha = 0.6;
+        gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
+        gg.ctx.globalAlpha = 1;
+      }
     }
 
     //ai
