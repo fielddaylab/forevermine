@@ -1224,6 +1224,7 @@ var GamePlayScene = function(game, stage)
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
+    gg.fmlogo_img = GenImg("assets/fmlogo.png");
     gg.menu_bg_img = GenImg("assets/menu/background.png");
     gg.menu_go_img = GenImg("assets/menu/button_go.png");
     gg.menu_box_img = GenImg("assets/menu/check_box.png");
