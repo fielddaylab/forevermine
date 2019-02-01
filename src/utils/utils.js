@@ -484,6 +484,7 @@ var GenWAudio = function(src)
     }, function() { console.error('The request failed.'); } );
   }
   xhr.send();
+
   waudio.play  = function() { waudio.paused = 0; if(waudio.loaded) waudio.source.start(0); }
   waudio.pause = function() { waudio.paused = 1; if(waudio.loaded) waudio.source.stop(); }
   return waudio;
