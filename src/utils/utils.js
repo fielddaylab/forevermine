@@ -470,10 +470,9 @@ var GenWAudio = function(src)
   waudio.paused = 1;
   if(window.AudioContext)
     waudio.ctx = new AudioContext();
-  else if(window.webkitAudioContext)
-    waudio.ctx = new webkitAudioContext();
+  //else if(window.webkitAudioContext) //don't bother trying- totally fails
+    //waudio.ctx = new webkitAudioContext();
   else return GenAudio(src);
-  if(!waudio.ctx) return GenAudio(src);
   waudio.source = waudio.ctx.createBufferSource();
   waudio.source.connect(waudio.ctx.destination);
 
