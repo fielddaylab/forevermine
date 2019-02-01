@@ -96,14 +96,14 @@ function begin()
   {
     first_audio.play();
     game_first_audio_played = 1;
-    if(platform == DO_PLATFORM_PC)          stage_container.removeEventListener('mousedown',  play_first_audio);
-    else if(platform == DO_PLATFORM_MOBILE) stage_container.removeEventListener('touchstart', play_first_audio);
+    if(platform == DO_PLATFORM_PC)          stage_container.removeEventListener('mouseup',  play_first_audio);
+    else if(platform == DO_PLATFORM_MOBILE) stage_container.removeEventListener('touchend', play_first_audio);
 
-    if(platform == DO_PLATFORM_PC)          stage_container.addEventListener('mousedown',  flush_unplayed_audio);
-    else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchstart', flush_unplayed_audio);
+    if(platform == DO_PLATFORM_PC)          stage_container.addEventListener('mouseup',  flush_unplayed_audio);
+    else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchend', flush_unplayed_audio);
   }
-  if(platform == DO_PLATFORM_PC)          stage_container.addEventListener('mousedown',  play_first_audio);
-  else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchstart', play_first_audio);
+  if(platform == DO_PLATFORM_PC)          stage_container.addEventListener('mouseup',  play_first_audio);
+  else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchend', play_first_audio);
   game_first_audio_played = 1; first_audio.play(); //uncomment this if loaded through click-to-init iframe
 
   gg.g = new Game({width:w,height:h,container:"stage_container"});
