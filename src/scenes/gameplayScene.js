@@ -178,7 +178,10 @@ var GamePlayScene = function(game, stage)
   self.draw_home = function()
   {
     strokeBox(gg.lab,gg.ctx);
-    drawImageBox(gg.background_img,gg.lab,gg.ctx);
+    if(!gg.cur_level || gg.cur_level.i == 0 || gg.cur_level.i == 9)
+      drawImageBox(gg.background_night_img,gg.lab,gg.ctx);
+    else
+      drawImageBox(gg.background_img,gg.lab,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 0;
     var fuel_p = 0;
     var oxy_p = 0;
@@ -1243,6 +1246,7 @@ var GamePlayScene = function(game, stage)
     gg.console_img = GenImg("assets/console.png");
     gg.dark_console_img = GenImg("assets/console_dark.png");
     gg.background_img = GenImg("assets/background.jpg");
+    gg.background_night_img = GenImg("assets/background_night.jpg");
     gg.background_ui_img = GenImg("assets/background_ui.jpg");
     gg.ui_chart_overlay_img = GenImg("assets/ui_chart_overlay.png");
     gg.constant_bg_img = GenImg("assets/card_editable.png");
