@@ -114,11 +114,29 @@ var LoadingScene = function(game, stage)
     loadingImageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put asset paths in img_srcs
+    img_srcs.push("assets/menu/background.png");
+    img_srcs.push("assets/menu/button_go.png");
+    img_srcs.push("assets/menu/check_box.png");
+    img_srcs.push("assets/menu/check_box_fill.png");
+    img_srcs.push("assets/menu/text_area.png");
+    img_srcs.push("assets/iframe_img.jpg");
+    img_srcs.push("assets/eye_0.png");
+    img_srcs.push("assets/mouth_0.png");
+    img_srcs.push("assets/eye_1.png");
+    img_srcs.push("assets/mouth_1.png");
+    img_srcs.push("assets/eye_2.png");
+    img_srcs.push("assets/mouth_2.png");
+    img_srcs.push("assets/button_glow.png");
+    img_srcs.push("assets/reply_button.png");
+    img_srcs.push("assets/drop_data.png");
+    img_srcs.push("assets/blackout.png");
     img_srcs.push("assets/eq.png");
     img_srcs.push("assets/eq_pt.png");
     img_srcs.push("assets/neq.png");
     img_srcs.push("assets/neq_pt.png");
+    img_srcs.push("assets/exposition_bg.png");
     img_srcs.push("assets/timeline_scrubber.png");
+    img_srcs.push("assets/timeline_scrubber_large.png");
     img_srcs.push("assets/arrow_up.png");
     img_srcs.push("assets/arrow_down.png");
     img_srcs.push("assets/number_bg.png");
@@ -126,22 +144,29 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/console_dark.png");
     img_srcs.push("assets/background.jpg");
     img_srcs.push("assets/background_ui.jpg");
+    img_srcs.push("assets/ui_chart_overlay.png");
     img_srcs.push("assets/card_editable.png");
     img_srcs.push("assets/card_not_editable.png");
     img_srcs.push("assets/crycollected.png");
+    img_srcs.push("assets/battery_charge.png");
     img_srcs.push("assets/cryinitial.png");
     img_srcs.push("assets/cryrate.png");
     img_srcs.push("assets/chrinitial.png");
     img_srcs.push("assets/chrrate.png");
     img_srcs.push("assets/time.png");
     img_srcs.push("assets/bezel.png");
+    img_srcs.push("assets/boot_btn.png");
     img_srcs.push("assets/alert.png");
     img_srcs.push("assets/data.png");
     img_srcs.push("assets/submit.png");
     img_srcs.push("assets/neck_heart.png");
+    img_srcs.push("assets/axis_label_bg.png");
     img_srcs.push("assets/pano_bg.jpg");
     img_srcs.push("assets/pano_mg.png");
     img_srcs.push("assets/pano_fg.png");
+    img_srcs.push("assets/pano_bg_dark.jpg");
+    img_srcs.push("assets/pano_mg_dark.png");
+    img_srcs.push("assets/pano_fg_dark.png");
     img_srcs.push("assets/epano_bg.jpg");
     img_srcs.push("assets/epano_mg.png");
     img_srcs.push("assets/epano_fg_0.png");
@@ -267,30 +292,30 @@ var LoadingScene = function(game, stage)
       if(ticks_since_loading_ready < 50)
       {
         ctx.globalAlpha = ticks_since_loading_ready/50;
-        drawImageHeightCentered(loading_imgs[0],canv.width/2,canv.height/2,100,ctx);
+        drawImageWidthCentered(loading_imgs[0],canv.width/2,canv.height/2,400,ctx);
       }
       else if(ticks_since_loading_ready < 200)
       {
-        drawImageHeightCentered(loading_imgs[0],canv.width/2,canv.height/2,100,ctx);
+        drawImageWidthCentered(loading_imgs[0],canv.width/2,canv.height/2,400,ctx);
       }
       else if(ticks_since_loading_ready < 250)
       {
         ctx.globalAlpha = 1-((ticks_since_loading_ready-200)/50);
-        drawImageHeightCentered(loading_imgs[0],canv.width/2,canv.height/2,100,ctx);
+        drawImageWidthCentered(loading_imgs[0],canv.width/2,canv.height/2,400,ctx);
       }
       else if(ticks_since_loading_ready < 300)
       {
         ctx.globalAlpha = (ticks_since_loading_ready-250)/50;
-        drawImageHeightCentered(loading_imgs[1],canv.width/2,canv.height/2,100,ctx);
+        drawImageWidthCentered(loading_imgs[1],canv.width/2,canv.height/2,400,ctx);
       }
       else if(ticks_since_loading_ready < 450)
       {
-        drawImageHeightCentered(loading_imgs[1],canv.width/2,canv.height/2,100,ctx);
+        drawImageWidthCentered(loading_imgs[1],canv.width/2,canv.height/2,400,ctx);
       }
       else if(ticks_since_loading_ready < 500)
       {
         ctx.globalAlpha = 1-((ticks_since_loading_ready-450)/50);
-        drawImageHeightCentered(loading_imgs[1],canv.width/2,canv.height/2,100,ctx);
+        drawImageWidthCentered(loading_imgs[1],canv.width/2,canv.height/2,400,ctx);
       }
       else if(ticks_since_loading_ready < 550)
       {

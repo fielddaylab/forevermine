@@ -855,7 +855,6 @@ function drawImageSizeCentered(image,x,y,s,ctx)
     w = s;
   }
   ctx.drawImage(image,x-w/2,y-h/2,w,h);
-
 }
 function drawImageBox(image,box,ctx)
 {

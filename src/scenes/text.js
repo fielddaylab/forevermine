@@ -125,6 +125,7 @@ var english_text =
       "Sorry about the impending doom, and stuff.", CONTENT_AI, EMOTE_NULL,
       "I need to... need to figure out... ", CONTENT_PLAYER, EMOTE_NULL,
       "Human? Can you hear me? You're looking a little... ", CONTENT_AI, EMOTE_NULL,
+      "BLACKOUT", CONTENT_AI, EMOTE_BLACKOUT,
     ],
     improve: //LAB: [skip_system] show system
     [
@@ -905,7 +906,8 @@ var english_text =
     [
       get_timer(20), "Here are labels", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drill Rate", CONTENT_LABEL, 0,
-      get_timer(60), "Zoom Rate", CONTENT_LABEL, 0,
+      get_timer(60), "Surface Area", CONTENT_LABEL, 0,
+      get_timer(60), "Crystal Density", CONTENT_LABEL, 0,
       get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset

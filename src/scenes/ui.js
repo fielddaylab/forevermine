@@ -16,10 +16,11 @@ var monitor = function()
   self.blink_t = 0;
   self.talk_t = 99999;
 
-  self.bg_color = "#F1F9EB";
+  self.mode = 0; //0- normal, 1- angry, 2- glitched
 
-  self.eye_img = GenImg("assets/eye.png");
-  self.mouth_img = GenImg("assets/mouth.png");
+  self.bg_color = [];
+  self.eye_img = [];
+  self.mouth_img = [];
 
   self.eyes_nx = 0;
   self.eyes_ny = 0;
@@ -34,21 +35,67 @@ var monitor = function()
   self.mouth_nsw = 0;
   self.mouth_nsvw = 0;
 
-  self.eyes_pw = 0.15;
-  self.eyes_ph = 0.08;
-  self.mouth_pw = 0.4;
-  self.mouth_ph = 0.18;
+  self.eyes_pw = [];
+  self.eyes_ph = [];
+  self.mouth_pw = [];
+  self.mouth_ph = [];
+  self.eyes_hy = []; //"home" y
+  self.eyes_vy = []; //"variance" y
+  self.mouth_hy = []; //"home" y
+  self.mouth_vy = []; //"variance" y
 
-  self.eyes_hy = 0.42; //"home" y
-  self.eyes_vy = 0.25; //"variance" y
-  self.mouth_hy = 0.64; //"home" y
-  self.mouth_vy = 0.25; //"variance" y
+  //normal
+  self.eyes_pw.push(0.15);
+  self.eyes_ph.push(0.08);
+  self.mouth_pw.push(0.4);
+  self.mouth_ph.push(0.18);
+
+  self.eyes_hy.push(0.42); //"home" y
+  self.eyes_vy.push(0.25); //"variance" y
+  self.mouth_hy.push(0.64); //"home" y
+  self.mouth_vy.push(0.25); //"variance" y
+
+  self.bg_color.push("#F1F9EB");
+  self.eye_img.push(GenImg("assets/eye_0.png"));
+  self.mouth_img.push(GenImg("assets/mouth_0.png"));
+
+  //angry
+  self.eyes_pw.push(0.15);
+  self.eyes_ph.push(0.08);
+  self.mouth_pw.push(0.4);
+  self.mouth_ph.push(0.18);
+
+  self.eyes_hy.push(0.42); //"home" y
+  self.eyes_vy.push(0.25); //"variance" y
+  self.mouth_hy.push(0.64); //"home" y
+  self.mouth_vy.push(0.25); //"variance" y
+
+  self.bg_color.push("#F1F9EB");
+  self.eye_img.push(GenImg("assets/eye_1.png"));
+  self.mouth_img.push(GenImg("assets/mouth_1.png"));
+
+  //glitched
+  self.eyes_pw.push(0.45);
+  self.eyes_ph.push(0.45);
+  self.mouth_pw.push(0.6);
+  self.mouth_ph.push(0.25);
+
+  self.eyes_hy.push(0.42); //"home" y
+  self.eyes_vy.push(0.25); //"variance" y
+  self.mouth_hy.push(0.64); //"home" y
+  self.mouth_vy.push(0.25); //"variance" y
+
+  self.bg_color.push("#F1F9EB");
+  self.eye_img.push(GenImg("assets/eye_2.png"));
+  self.mouth_img.push(GenImg("assets/mouth_2.png"));
+
+  self.boot_t = 0;
 
   self.clicked = 0;
 
   self.init_screen = function()
   {
-    var d = 5;
+    var d = 3;
     self.screen = GenIcon(self.ww/d,self.wh/d);
     self.screen.context.imageSmoothingEnabled = 1;
     self.draw();
@@ -66,6 +113,7 @@ var monitor = function()
     self.look_t++;  if(self.look_t  > self.look_t_thresh) { self.look_t = randIntBelow(1000); self.look_t_thresh = self.look_t+randIntBelow(500); }
     self.blink_t++; if(self.blink_t > 300) self.blink_t = randIntBelow(250);
     self.talk_t++;
+    self.boot_t++; if(self.boot_t > 500) self.boot_t = 500;
 
     var face_nx = (sin(self.look_t/50 )/5+1)/2;
     var face_ny = (sin(self.look_t/190)/5+1)/2;
@@ -99,7 +147,7 @@ var monitor = function()
     //c.strokeStyle = red;
     //c.strokeRect(0,0,s.width,s.height);
 
-    c.fillStyle = self.bg_color;
+    c.fillStyle = self.bg_color[self.mode];
     c.fillRect(0,0,s.width,s.height);
 
     c.fillStyle = blue;
@@ -107,22 +155,42 @@ var monitor = function()
     var h;
     var x;
     var y;
-    w = s.width*(self.eyes_pw+self.eyes_nsw/2)*self.eyes_nw;
-    h = s.height*self.eyes_ph*self.eyes_nh;
+    w = s.width*(self.eyes_pw[self.mode]+self.eyes_nsw/2)*self.eyes_nw;
+    h = s.height*self.eyes_ph[self.mode]*self.eyes_nh;
     x = self.eyes_nx*s.width/2-w/2;
-    y = s.height*self.eyes_hy-h/2+self.eyes_ny*s.height*self.eyes_vy;
+    y = s.height*self.eyes_hy[self.mode]-h/2+self.eyes_ny*s.height*self.eyes_vy[self.mode];
     //c.fillRect(x,y,w,h); //left eye
-    c.drawImage(self.eye_img,x,y,w,h);
+    c.drawImage(self.eye_img[self.mode],x,y,w,h);
     x = s.width/2+self.eyes_nx*s.width/2-w/2;
     //c.fillRect(x,y,w,h); //right eye
-    c.drawImage(self.eye_img,x,y,w,h);
+    c.drawImage(self.eye_img[self.mode],x,y,w,h);
 
-    w = s.width*(self.mouth_pw+self.mouth_nsw/2)*self.mouth_nw;
-    h = s.height*self.mouth_ph*self.mouth_nh;
+    w = s.width*(self.mouth_pw[self.mode]+self.mouth_nsw/2)*self.mouth_nw;
+    h = s.height*self.mouth_ph[self.mode]*self.mouth_nh;
     x = s.width/4+self.mouth_nx*s.width/2-w/2;
-    y = s.height*self.mouth_hy-h/2+self.mouth_ny*s.height*self.mouth_vy;
+    y = s.height*self.mouth_hy[self.mode]-h/2+self.mouth_ny*s.height*self.mouth_vy[self.mode];
     //c.fillRect(x,y,w,h); //mouth
-    c.drawImage(self.mouth_img,x,y,w,h);
+    c.drawImage(self.mouth_img[self.mode],x,y,w,h);
+
+    if(self.boot_t <= 1)
+    {
+      c.fillStyle = black;
+      c.fillRect(0,0,s.width,s.height);
+    }
+    else if(self.boot_t < 50)
+    {
+      var t = self.boot_t/50;
+      t = 1-t;
+      t = t*t;
+      t = t*t;
+      c.fillStyle = black;
+      c.fillRect(0,0,s.width,s.height/2*t);
+      c.fillRect(0,s.height-s.height/2*t,s.width,s.height/2*t);
+      t = t*t;
+      t = t*t;
+      c.fillRect(0,0,s.width/2*t,s.height);
+      c.fillRect(s.width-s.width/2*t,0,s.width/2*t,s.height);
+    }
   }
 }
 
@@ -174,10 +242,14 @@ var content_dragger = function()
       if(mb.types[i] == CONTENT_DATA && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
         return 1;
       y += mb.pad;
-      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM)
         y += mb.font_h+mb.pad;
+      else if(mb.types[i] == CONTENT_LABEL)
+        y += mb.font_h*3-mb.pad;
+      else if(mb.types[i] == CONTENT_CONSTANT)
+        y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
       y += mb.pad;
     }
     return 0;
@@ -185,7 +257,7 @@ var content_dragger = function()
   self.ptWithinSim = function(evt)
   {
     if(gg.table.simd_visible < gg.table.max_t) return 0;
-    if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
+    if(gg.timeline.t == gg.timeline.t_max && gg.cur_level.progress > 7 && ptWithin(gg.timeline.x+gg.timeline.w*9/10, gg.timeline.y, gg.timeline.w/10, gg.timeline.h, evt.doX, evt.doY)) return 1;
     var t = gg.table;
     var y1 = t.y+t.h*1/3;
     var y3 = t.y+t.h;
@@ -199,16 +271,20 @@ var content_dragger = function()
     if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
     for(var i = 0; i < mb.displayed_i; i++)
     {
-      if(mb.types[i] == CONTENT_LABEL && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
+      if(mb.types[i] == CONTENT_LABEL && ptWithin(mb.x+mb.pad, y, mb.bubble_w, mb.pad+mb.font_h*3-mb.pad, evt.doX,evt.doY))
       {
         self.label_val = mb.bubbles[i][0];
         return 1;
       }
       y += mb.pad;
-      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM)
         y += mb.font_h+mb.pad;
+      else if(mb.types[i] == CONTENT_LABEL)
+        y += mb.font_h*3-mb.pad;
+      else if(mb.types[i] == CONTENT_CONSTANT)
+        y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
       y += mb.pad;
     }
     return 0;
@@ -221,7 +297,7 @@ var content_dragger = function()
     if(evt.doY < gg.message_box.monitor_y+gg.message_box.monitor_h) return 0;
     for(var i = 0; i < mb.displayed_i; i++)
     {
-      if(mb.types[i] == CONTENT_CONSTANT && ptWithin(mb.x+mb.pad,  y,mb.bubble_w,mb.pad+(mb.font_h+mb.pad), evt.doX,evt.doY))
+      if(mb.types[i] == CONTENT_CONSTANT && ptWithin(mb.x+mb.pad, y, mb.bubble_w, mb.pad+mb.font_h*4-mb.pad, evt.doX,evt.doY))
       {
         var c = 0;
         for(var j = 0; j < gg.cur_level.m_label.length; j++)
@@ -231,10 +307,14 @@ var content_dragger = function()
         return 1;
       }
       y += mb.pad;
-      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM || mb.types[i] == CONTENT_LABEL || mb.types[i] == CONTENT_CONSTANT)
+      if(mb.types[i] == CONTENT_DATA || mb.types[i] == CONTENT_SIM)
         y += mb.font_h+mb.pad;
+      else if(mb.types[i] == CONTENT_LABEL)
+        y += mb.font_h*3-mb.pad;
+      else if(mb.types[i] == CONTENT_CONSTANT)
+        y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length;
+        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
       y += mb.pad;
     }
     return 0;
@@ -276,8 +356,8 @@ var content_dragger = function()
     if(gg.cur_level.msg_progress == 6 && self.ptWithinY(evt))                        { self.dragging_y = 1;        return 1; }
     if(!gg.table.data_visible && self.ptWithinData(evt))                             { self.dragging_data = 1;     return 1; }
     if(gg.table.data_visible && gg.cur_level.progress < 10 && self.ptWithinSim(evt)) { self.dragging_sim = 1;      return 1; }
-    if(self.ptWithinLabel(evt))                                                      { self.dragging_label = 1;    return 1; }
-    if(self.ptWithinConstant(evt))                                                   { self.dragging_constant = 1; return 1; }
+    if(gg.cur_level.msg_progress == 7 && self.ptWithinLabel(evt))                    { self.dragging_label = 1;    return 1; }
+    if(gg.cur_level.msg_progress == 8 && self.ptWithinConstant(evt))                 { self.dragging_constant = 1; return 1; }
     self.dragging = 0;
     return 0;
   }
@@ -362,7 +442,7 @@ var content_dragger = function()
         gg.cur_level.correct = 1;
         gg.message_box.nq_group(gg.cur_level.text.review);
         gg.cur_level.progress++;
-        if(gg.cur_level.skip_zoom)
+        //if(gg.cur_level.skip_zoom)
         {
           gg.message_box.nq_group(gg.cur_level.text.debrief);
           gg.cur_level.progress++;
@@ -444,58 +524,26 @@ var content_dragger = function()
 
   self.draw = function()
   {
-    if(gg.cur_level.i == 0)
-    {
-      gg.ctx.font = "30px DisposableDroidBB";
-      if(!gg.table.data_visible && gg.message_box.displayed_i > 0 && gg.message_box.types[gg.message_box.displayed_i-1] == CONTENT_DATA)
-      {
-        if(!self.dragging_data)
-        {
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,gg.message_box.data_y-5);
-          gg.ctx.fillRect(gg.message_box.w,gg.message_box.data_y-5,gg.canv.width-gg.message_box.w,45);
-          gg.ctx.fillRect(0,gg.message_box.data_y+40,gg.canv.width,gg.canv.height-gg.message_box.data_y-40);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("<- DRAG",gg.message_box.x+gg.message_box.w,gg.message_box.data_y+20);
-        }
-        else
-        {
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.table.x,gg.canv.height);
-          gg.ctx.fillRect(gg.table.x,0,gg.table.w,gg.canv.height-gg.table.h);
-          gg.ctx.fillRect(gg.table.x+gg.table.w,0,gg.canv.width-(gg.table.x+gg.table.w),gg.canv.height);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("\\/ DROP",gg.table.x+100,gg.table.y-20);
-        }
-      }
-      if(gg.table.correct && !gg.cur_level.correct && !gg.timeline.fast_sim)
-      {
-        if(!self.dragging_sim)
-        {
-          var y1 = gg.table.y+gg.table.h*1/3;
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(0,0,gg.canv.width,y1);
-          gg.ctx.fillRect(0,y1,gg.table.x,gg.table.h);
-          gg.ctx.fillRect(gg.table.x+gg.table.w,y1,gg.canv.width-(gg.table.x+gg.table.w),gg.table.h);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("DRAG \\/",gg.canv.width-200,y1-20);
-        }
-        else
-        {
-          gg.ctx.fillStyle = "rgba(0,0,0,0.5)";
-          gg.ctx.fillRect(gg.message_box.x+gg.message_box.w,0,gg.canv.width-gg.message_box.w,gg.canv.height);
-          gg.ctx.fillStyle = white;
-          gg.ctx.fillText("<- DROP",gg.message_box.w+10,gg.canv.height/2);
-        }
-      }
-    }
     if(self.dragging_x)
     {
-      gg.ctx.fillText(gg.cur_level.x_label,self.last_evt.doX,self.last_evt.doY);
+      var lw = 100;
+      var lh = 60;
+      gg.ctx.font = "18px DisposableDroidBB";
+      gg.ctx.drawImage(gg.axis_label_bg_img, self.last_evt.doX-lw/2, self.last_evt.doY-lh/2, lw, lh);
+      gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.x_label, self.last_evt.doX, self.last_evt.doY+lh/6);
+      gg.ctx.globalAlpha = 1;
     }
     if(self.dragging_y)
     {
-      gg.ctx.fillText(gg.cur_level.y_label,self.last_evt.doX,self.last_evt.doY);
+      var lw = 100;
+      var lh = 60;
+      gg.ctx.font = "18px DisposableDroidBB";
+      gg.ctx.drawImage(gg.axis_label_bg_img, self.last_evt.doX-lw/2, self.last_evt.doY-lh/2, lw, lh);
+      gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.y_label, self.last_evt.doX, self.last_evt.doY+lh/6);
     }
     if(self.dragging_data)
     {
@@ -529,7 +577,7 @@ var exposition_box = function()
 
   self.text_w = 0;
 
-  self.pad = 10;
+  self.pad = 50;
   self.font_h = 30;
   self.ai_font = self.font_h+"px DisposableDroidBB";
   self.player_font = floor(self.font_h*0.7)+"px Lato";
@@ -581,13 +629,13 @@ var exposition_box = function()
     if(self.displayed_i < self.texts.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
     if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
-    if(self.metas[self.displayed_i] == EMOTE_CHANGE)   self.change_t = 1;
-    if(self.metas[self.displayed_i] == EMOTE_EMP)      self.emp_t = 1;
+    if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
+    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
   }
 
   self.click = function(evt)
   {
-    if(self.emp_t) return;
+    if(self.emp_t || self.blackout_t) return;
     if(self.displayed_i < self.texts.length) self.advance();
   }
 
@@ -604,12 +652,7 @@ var exposition_box = function()
 
     if(self.emp_t || self.blackout_t) return;
 
-    gg.ctx.lineWidth = 1;
-    strokeBox(self,gg.ctx);
-    gg.ctx.fillStyle = black;
-    gg.ctx.globalAlpha = 0.5;
-    fillBox(self,gg.ctx);
-    gg.ctx.globalAlpha = 1;
+    gg.ctx.drawImage(gg.exposition_bg_img, self.x,self.y,self.w,self.h);
 
     gg.ctx.textAlign = "left";
     var y = self.y+self.pad+self.font_h/2;
@@ -618,7 +661,7 @@ var exposition_box = function()
       case CONTENT_AI:
         gg.ctx.font = self.ai_font;
         gg.ctx.fillStyle = cyan;
-        gg.ctx.fillText("CRIS",self.x+self.pad,y);
+        gg.ctx.fillText("MAT",self.x+self.pad,y);
         break;
       case CONTENT_PLAYER:
         gg.ctx.font = self.player_font;
@@ -690,6 +733,7 @@ var graph = function()
   {
     var t = self.zoom;
     var zy;
+    var zx;
     var x;
     var y;
 
@@ -701,8 +745,10 @@ var graph = function()
       if(zy < self.y) zy = self.y;
       gg.ctx.fillStyle = "#75F3FF";
       gg.ctx.fillRect(self.x,self.y,self.w,zy-self.y);
+      zx = self.x_for_x((gg.max_days-1)*24);
+      if(zx > self.x+self.w) zx = self.x+self.w;
       gg.ctx.fillStyle = "#EFA6FF";
-      gg.ctx.fillRect(self.x,zy,self.w,self.y+self.h-zy);
+      gg.ctx.fillRect(zx,zy,self.w-(zx-self.x),self.y+self.h-zy);
 
       gg.ctx.globalAlpha = 1;
     }
@@ -711,12 +757,17 @@ var graph = function()
     gg.ctx.textAlign = "center";
 
     //grid
-    gg.ctx.fillStyle = white;
     gg.ctx.strokeStyle = "rgba(255,255,255,0.5)";
     gg.ctx.lineWidth = 2;
       //vertical lines
+    var lw = 100;
+    var lh = 60;
+    gg.ctx.drawImage(gg.axis_label_bg_img, self.x+self.w/2-lw/2, self.y+self.h+40-lh/2, lw, lh);
+    if(gg.cur_level.msg_progress == 6 && !gg.line.x_set && !gg.content_dragger.dragging_x)
+      drawImageSizeCentered(gg.notice_img, self.x+self.w/2+lw/3, self.y+self.h+25, 20, gg.ctx);
     if(t < 0.5)
     {
+      gg.ctx.fillStyle = white;
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
       for(var i = self.x0_min; i <= self.x0_max; i += self.x0_grid)
@@ -730,11 +781,13 @@ var graph = function()
       gg.ctx.stroke();
 
       if(t == 0) gg.ctx.fillText(self.x0_max,self.x+self.w,self.y+self.h+15);
-      gg.ctx.fillText(gg.cur_level.x_label,self.x+self.w/2,self.y+self.h+30);
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.x_label,self.x+self.w/2,self.y+self.h+45);
       gg.ctx.globalAlpha = 1;
     }
     else
     {
+      gg.ctx.fillStyle = white;
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
       for(var i = self.x1_min; i <= self.x1_max; i += self.x1_grid)
@@ -748,13 +801,18 @@ var graph = function()
       gg.ctx.stroke();
 
       if(t == 1) gg.ctx.fillText(self.x1_max/24,self.x+self.w,self.y+self.h+15);
-      gg.ctx.fillText("DAYS",self.x+self.w/2,self.y+self.h+30);
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText("DAYS",self.x+self.w/2,self.y+self.h+45);
       gg.ctx.globalAlpha = 1;
     }
 
       //horizontal lines
+    gg.ctx.drawImage(gg.axis_label_bg_img, self.x-25-lw, self.y+self.h/2-lh/2, lw, lh);
+    if(gg.cur_level.msg_progress == 6 && !gg.line.y_set && !gg.content_dragger.dragging_y)
+      drawImageSizeCentered(gg.notice_img, self.x-lw*3/7, self.y+self.h/2-16, 20, gg.ctx);
     if(t < 0.5)
     {
+      gg.ctx.fillStyle = white;
       gg.ctx.globalAlpha = 1-(t*2);
       gg.ctx.beginPath();
       for(var i = self.y0_min; i <= self.y0_max; i += self.y0_grid)
@@ -762,18 +820,19 @@ var graph = function()
         y = self.y_for_y(i);
         gg.ctx.moveTo(self.x,y);
         gg.ctx.lineTo(self.x+self.w,y);
-        gg.ctx.fillText(i,self.x-12,y+5);
+        gg.ctx.fillText(i,self.x-15,y+5);
       }
       gg.ctx.stroke();
 
-      if(t == 0) gg.ctx.fillText(self.y0_max,self.x-12,self.y+5);
-      gg.ctx.textAlign = "right";
-      gg.ctx.fillText(gg.cur_level.y_label,self.x-25,self.y+self.h/2);
-      gg.ctx.textAlign = "center";
+      if(t == 0) gg.ctx.fillText(self.y0_max,self.x-15,self.y+5);
       gg.ctx.globalAlpha = 1;
+      gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.y_label,self.x-25-lw/2,self.y+5+self.h/2);
     }
     else
     {
+      gg.ctx.fillStyle = white;
       gg.ctx.globalAlpha = (t-0.5)*2;
       gg.ctx.beginPath();
       for(var i = self.y1_min; i <= self.y1_max; i += self.y1_grid)
@@ -783,16 +842,16 @@ var graph = function()
         {
           gg.ctx.moveTo(self.x,y);
           gg.ctx.lineTo(self.x+self.w,y);
-          gg.ctx.fillText(i,self.x-12,y+5);
+          gg.ctx.fillText(i,self.x-15,y+5);
         }
       }
       gg.ctx.stroke();
 
-      if(t == 1) gg.ctx.fillText(self.y1_max,self.x-12,self.y+5);
-      gg.ctx.textAlign = "right";
-      gg.ctx.fillText(gg.cur_level.y_label,self.x-25,self.y+self.h/2);
-      gg.ctx.textAlign = "center";
+      if(t == 1) gg.ctx.fillText(self.y1_max,self.x-15,self.y+5);
       gg.ctx.globalAlpha = 1;
+      gg.ctx.textAlign = "center";
+      gg.ctx.fillStyle = black;
+      gg.ctx.fillText(gg.cur_level.y_label,self.x-25-lw/2,self.y+5+self.h/2);
     }
 
       //tl
@@ -806,7 +865,7 @@ var graph = function()
       gg.ctx.fillStyle = black;
       gg.ctx.textAlign = "left";
       if(y > self.y+5) gg.ctx.fillText("You Survive", self.x+5, zy-5);
-      gg.ctx.fillText("You Die", self.x+5, zy+15);
+      gg.ctx.fillText("You Die", zx+5, self.y+self.h-5);
       gg.ctx.globalAlpha = 1;
     }
 
@@ -834,18 +893,8 @@ var timeline = function()
   self.t_speed = 0.01;
   self.fast_t_speed = 0.1;
 
-  self.advance_btn = {x:0,y:0,w:0,h:0,click:function(evt){
-    self.t_target++;
-    if(self.t_target > self.t_max) self.t_target = self.t_max;
-  }};
-
   self.size = function()
   {
-    self.advance_btn.w = 50;
-    self.advance_btn.h = self.h;
-    self.advance_btn.x = self.x;
-    self.advance_btn.y = self.y;
-
     self.sx = self.x+self.w*1.5/(self.t_max+2)
     self.ex = self.x+self.w*(self.t_max+1.5)/(self.t_max+2);
   }
@@ -856,6 +905,7 @@ var timeline = function()
   }
   self.drag = function(evt)
   {
+    if(gg.cur_level.progress < 8) { self.t = 0; return; }
     var t = clampMapVal(self.sx,self.ex,0,self.t_max,evt.doX);
     self.t_target = ceil(t);
     self.t = t;
@@ -867,13 +917,17 @@ var timeline = function()
   self.filter = function(dragger, clicker)
   {
     var check = true;
-    if(check) check = !clicker.filter(self.advance_btn);
     if(check) check = !dragger.filter(self);
     return !check;
   }
 
+  self.t_correct = 0;
   self.tick = function()
   {
+    if(self.t == self.t_max && gg.table.correct && gg.cur_level.progress > 7)
+      self.t_correct++;
+    else self.t_correct = 0;
+    if(gg.cur_level.progress < 8) { self.t = 0; return; }
     if(self.fast_sim && self.t < self.t_max) self.t += self.fast_t_speed;
     else
     {
@@ -893,19 +947,24 @@ var timeline = function()
     //gg.ctx.strokeStyle = red;
     //strokeBox(self,gg.ctx);
 
-    //strokeBox(self.advance_btn,gg.ctx);
+    var ew = 80;
+    var eh = 120;
+    gg.ctx.drawImage(gg.ui_chart_overlay_img, gg.table.x-ew/2, gg.table.y-50+gg.table.yoff, gg.table.w+ew, gg.table.h+eh);
 
     var t_x;
 
     t_x = mapVal(0,self.t_max,self.sx,self.ex,self.t);
-    var s = self.h;
-    gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y,s,self.h);
+    var s = (self.h-15);
+    if(self.t == self.t_max && gg.table.correct && gg.cur_level.progress > 7)
+      gg.ctx.drawImage(gg.timeline_scrubber_large_img,t_x-s*3/4,self.y+15+gg.table.yoff-s/2,s*3/2,s*1.5);
+    else
+      gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y+15+gg.table.yoff,s,s);
 
     if(self.t < self.t_target)
     {
       gg.ctx.font = "12px DisposableDroidBB";
       gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillText("simulating...",self.x,self.y-10);
+      gg.ctx.fillText("simulating...",self.x+50,self.y-15);
     }
 
     gg.ctx.fillStyle = black;
@@ -926,7 +985,9 @@ var editable_line = function()
   self.label_font_h = 20;
   self.label_font = self.label_font_h+"px DisposableDroidBB";
   self.number_font_h = 40;
-  self.number_font = self.number_font_h+"px DisposableDroidBB";
+  self.number_font = self.number_font_h+"px Lato";
+  self.small_number_font_h = 30;
+  self.small_number_font = self.small_number_font_h+"px Lato";
 
   self.m_label = [-1];
   self.m = [0];
@@ -945,10 +1006,14 @@ var editable_line = function()
   self.day_m = [];
   self.day_b = [];
 
+  self.x_draw_h = 0;
+  self.y_draw_h = 0;
   self.m_btn = [];
+  self.m_btn_draw_h = [];
   self.minc_btn = [];
   self.mdec_btn = [];
   self.b_btn = [];
+  self.b_btn_draw_h = [];
   self.binc_btn = [];
   self.bdec_btn = [];
 
@@ -993,8 +1058,11 @@ var editable_line = function()
 
   self.consume_cur_level = function()
   {
+    self.x_draw_h = 0;
+    self.y_draw_h = 0;
     self.m = [];
     self.m_btn = [];
+    self.m_btn_draw_h = [];
     self.minc_btn = [];
     self.mdec_btn = [];
     if(gg.cur_level.skip_axis)
@@ -1016,11 +1084,13 @@ var editable_line = function()
       self.m[i] = gg.cur_level.m_starting[i];
       self.m_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.m[i] == v) return; self.m[i] = v; self.calc_m_total(); self.calculate_table(); self.draw_params(); self.invalidate_sim();  });})(i);
       self.m_btn[i].set(gg.cur_level.m_starting[i]);
-      self.minc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number+0.1); });})(i);
-      self.mdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.m_btn[i].set(self.m_btn[i].number-0.1); });})(i);
+      self.m_btn_draw_h[i] = 0;
+      self.minc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = gg.cur_level.m_correct[i]-self.m_btn[i].number; if(d < 1) d = 0.1; else if(d < 10) d = 1; else if(d < 100) d = 10; self.m_btn[i].set(self.m_btn[i].number+d); });})(i);
+      self.mdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = self.m_btn[i].number-gg.cur_level.m_correct[i]; if(d < 1) d = 0.1; else if(d < 10) d = 1; else if(d < 100) d = 10; self.m_btn[i].set(self.m_btn[i].number-d); });})(i);
     }
     self.b = [];
     self.b_btn = [];
+    self.b_btn_draw_h = [];
     self.binc_btn = [];
     self.bdec_btn = [];
     for(var i = 0; i < gg.cur_level.b_starting.length; i++)
@@ -1032,8 +1102,9 @@ var editable_line = function()
       self.b[i] = gg.cur_level.b_starting[i];
       self.b_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.b[i] == v) return; self.b[i] = v; self.calc_b_total(); self.calculate_table(); self.draw_params();  self.invalidate_sim(); });})(i);
       self.b_btn[i].set(gg.cur_level.b_starting[i]);
-      self.binc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number+0.1); });})(i);
-      self.bdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ self.b_btn[i].set(self.b_btn[i].number-0.1); });})(i);
+      self.b_btn_draw_h[i] = 0;
+      self.binc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = gg.cur_level.b_correct[i]-self.b_btn[i].number; if(d < 1) d = 0.1; else if(d < 10) d = 1; else if(d < 100) d = 10; self.b_btn[i].set(self.b_btn[i].number+d); });})(i);
+      self.bdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = self.b_btn[i].number-gg.cur_level.b_correct[i]; if(d < 1) d = 0.1; else if(d < 10) d = 1; else if(d < 100) d = 10; self.b_btn[i].set(self.b_btn[i].number-d); });})(i);
     }
     self.size();
     self.calc_m_total();
@@ -1055,7 +1126,7 @@ var editable_line = function()
     self.btn_w = gg.ctx.measureText("-0.0").width;
     self.btn_h = self.font_h*3;
     self.eqn_w = 0;
-    self.eqn_y = gg.stage.height*4/9;
+    self.eqn_y = gg.stage.height/2-20;
 
     //figure out w
     if(self.m.length == 1)
@@ -1220,8 +1291,7 @@ var editable_line = function()
     var b_correct_total = 0; for(var i = 0; i < gg.cur_level.b_correct.length; i++) b_correct_total += gg.cur_level.b_correct[i];
     for(var i = 0; i <= gg.timeline.t_max; i++)
     {
-      gg.table.t_data[i] = i;
-      if(i < 3) gg.table.known_data[i] = m_correct_total*i+b_correct_total;
+      if(i < 3) gg.table.known_data[i] = fdisp(m_correct_total*i+b_correct_total,1);
       else      gg.table.known_data[i] = "-";
       gg.table.predicted_data[i] = self.v(i);
     }
@@ -1271,7 +1341,7 @@ var editable_line = function()
     self.ey1 = gg.graph.y_for_y(self.ey1);
 
     for(var i = 0; i <= gg.timeline.t_max; i++)
-      gg.table.predicted_data[i] = fdisp(self.v(gg.table.t_data[i]),1);
+      gg.table.predicted_data[i] = fdisp(self.v(i),1);
     gg.table.verify();
 
     gg.graph.zoom = oldzoom;
@@ -1442,13 +1512,24 @@ var editable_line = function()
           gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
       }
       gg.ctx.font = self.label_font;
-      gg.ctx.drawImage(gg.variable_bg_img,self.x_x,self.eqn_y+yoff,self.btn_w,self.btn_h);
-      gg.ctx.drawImage(gg.variable_bg_img,self.y_x,self.eqn_y+yoff,self.btn_w,self.btn_h);
+
+      if(gg.cur_level.progress < 5 || (!gg.content_dragger.dragging_y && !self.y_set))
+        self.y_draw_h = lerp(self.y_draw_h,50,0.1);
+      else
+        self.y_draw_h = lerp(self.y_draw_h,self.btn_h,0.1);
+      gg.ctx.drawImage(gg.variable_bg_img,self.y_x,self.eqn_y+yoff,self.btn_w,self.y_draw_h);
+
+      if(gg.cur_level.progress < 5 || (!gg.content_dragger.dragging_x && !self.x_set))
+        self.x_draw_h = lerp(self.x_draw_h,50,0.1);
+      else
+        self.x_draw_h = lerp(self.x_draw_h,self.btn_h,0.1);
+      gg.ctx.drawImage(gg.variable_bg_img,self.x_x,self.eqn_y+yoff,self.btn_w,self.x_draw_h);
+
       gg.ctx.textAlign = "center";
       gg.ctx.fillStyle = black;
       if(self.y_set)
       {
-      drawImageSizeCentered(gg.cur_level.y_icon, self.y_x+self.btn_w/2, self.eqn_y+self.font_h*2/3+yoff, self.font_h*1.5, gg.ctx);
+      drawImageSizeCentered(gg.cur_level.y_icon, self.y_x+self.btn_w/2, self.eqn_y+self.font_h*2/3+yoff, self.font_h*1.2, gg.ctx);
       gg.ctx.fillText(gg.cur_level.y_label,self.y_x+self.btn_w/2,self.eqn_y+yoff+self.btn_h-pad);
       }
       if(self.x_set)
@@ -1461,12 +1542,20 @@ var editable_line = function()
       for(var i = 0; i < self.m_btn.length; i++)
       {
         b = self.m_btn[i];
-        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
+        if(gg.cur_level.progress < 6 || (!gg.content_dragger.dragging_label && self.m_label[i] == -1))
+          self.m_btn_draw_h[i] = lerp(self.m_btn_draw_h[i],50,0.1);
+        else
+          self.m_btn_draw_h[i] = lerp(self.m_btn_draw_h[i],b.h,0.1);
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,self.m_btn_draw_h[i]);
       }
       for(var i = 0; i < self.b_btn.length; i++)
       {
         b = self.b_btn[i];
-        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,b.h);
+        if(gg.cur_level.progress < 6 || (!gg.content_dragger.dragging_label && self.b_label[i] == -1))
+          self.b_btn_draw_h[i] = lerp(self.b_btn_draw_h[i],50,0.1);
+        else
+          self.b_btn_draw_h[i] = lerp(self.b_btn_draw_h[i],b.h,0.1);
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,self.b_btn_draw_h[i]);
       }
 
       //selector
@@ -1502,20 +1591,18 @@ var editable_line = function()
           if(self.m_label[i] < mlen)
           {
             ind = self.m_label[i];
-            drawImageSizeCentered(gg.cur_level.m_icon[ind], x, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            drawImageSizeCentered(gg.cur_level.m_icon[ind], x, b.y+yoff+b.h/4, b.h*2/5, gg.ctx);
             for(var j = 0; j < gg.cur_level.m_label_fmt[ind].length; j++)
               gg.ctx.fillText(gg.cur_level.m_label_fmt[ind][gg.cur_level.m_label_fmt[ind].length-1-j],x,b.y+yoff+b.h-pad-self.label_font_h*j);
           }
           else
           {
             ind = self.m_label[i]-mlen;
-            drawImageSizeCentered(gg.cur_level.b_icon[ind], x, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            drawImageSizeCentered(gg.cur_level.b_icon[ind], x, b.y+yoff+b.h/4, b.h*2/5, gg.ctx);
             for(var j = 0; j < gg.cur_level.b_label_fmt[ind].length; j++)
               gg.ctx.fillText(gg.cur_level.b_label_fmt[ind][gg.cur_level.b_label_fmt[ind].length-1-j],x,b.y+yoff+b.h-pad-self.label_font_h*j);
           }
         }
-        else if(gg.cur_level.msg_progress == 7)
-          drawImageSizeCentered(gg.notice_img, x, b.y+yoff+b.h/4, 20, gg.ctx);
       }
       for(var i = 0; i < self.b_btn.length; i++)
       {
@@ -1526,50 +1613,46 @@ var editable_line = function()
           if(self.b_label[i] < mlen)
           {
             ind = self.b_label[i];
-            drawImageSizeCentered(gg.cur_level.m_icon[ind], x, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            drawImageSizeCentered(gg.cur_level.m_icon[ind], x, b.y+yoff+b.h/4, b.h*2/5, gg.ctx);
             for(var j = 0; j < gg.cur_level.m_label_fmt[ind].length; j++)
               gg.ctx.fillText(gg.cur_level.m_label_fmt[ind][gg.cur_level.m_label_fmt[ind].length-1-j],x, b.y+yoff+b.h-pad-self.label_font_h*j);
           }
           else
           {
             ind = self.b_label[i]-mlen;
-            drawImageSizeCentered(gg.cur_level.b_icon[ind], x, b.y+yoff+b.h/4, b.h/2, gg.ctx);
+            drawImageSizeCentered(gg.cur_level.b_icon[ind], x, b.y+yoff+b.h/4, b.h*2/5, gg.ctx);
             for(var j = 0; j < gg.cur_level.b_label_fmt[ind].length; j++)
               gg.ctx.fillText(gg.cur_level.b_label_fmt[ind][gg.cur_level.b_label_fmt[ind].length-1-j], x, b.y+yoff+b.h-pad-self.label_font_h*j);
           }
         }
-        else if(gg.cur_level.msg_progress == 7)
-          drawImageSizeCentered(gg.notice_img, x, b.y+yoff+b.h/4, 20, gg.ctx);
       }
 
       //value strings
-      gg.ctx.textAlign = "right";
+      gg.ctx.textAlign = "center";
       gg.ctx.font = self.number_font;
       if(gg.cur_level.progress > 7)
       {
         gg.ctx.fillStyle = black;
-        gg.ctx.fillText(fdisp(self.m_total*gg.timeline.t+self.b_total,1),self.y_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
-        gg.ctx.fillText(fdisp(gg.timeline.t,1),self.x_x+self.btn_w-pad,self.eqn_y+self.btn_h/2+self.label_font_h);
+        if(self.m_total*gg.timeline.t+self.b_total >= 100) gg.ctx.font = self.small_number_font;
+        gg.ctx.fillText(fdisp(self.m_total*gg.timeline.t+self.b_total,1),self.y_x+self.btn_w/2,self.eqn_y+self.btn_h/2+self.label_font_h*1.5);
+        gg.ctx.font = self.number_font;
+        gg.ctx.fillText(fdisp(gg.timeline.t,1),self.x_x+self.btn_w/2,self.eqn_y+self.btn_h/2+self.label_font_h*1.5);
         gg.ctx.fillStyle = white;
         for(var i = 0; i < self.m_btn.length; i++)
         {
           b = self.m_btn[i];
-          gg.ctx.fillText(self.m[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
+          if(self.m[i] >= 100) gg.ctx.font = self.small_number_font;
+          gg.ctx.fillText(self.m[i],b.x+b.w/2,self.eqn_y+b.h/2+self.label_font_h*1.5);
+          gg.ctx.font = self.number_font;
         }
         for(var i = 0; i < self.b_btn.length; i++)
         {
           b = self.b_btn[i];
-          gg.ctx.fillText(self.b[i],b.x+b.w-pad,self.eqn_y+b.h/2+self.label_font_h);
+          if(self.b[i] >= 100) gg.ctx.font = self.small_number_font;
+          gg.ctx.fillText(self.b[i],b.x+b.w/2,self.eqn_y+b.h/2+self.label_font_h*1.5);
+          gg.ctx.font = self.number_font;
         }
       }
-
-      gg.ctx.textAlign = "left";
-
-      /*
-      gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillText("X = "+fdisp(gg.timeline.t,1),self.yeq_x,self.eqn_y+self.eqn_h*3);
-      gg.ctx.fillText("Y = "+fdisp(self.m*fdisp(gg.timeline.t,1)+self.b,1),self.yeq_x,self.eqn_y+self.eqn_h*4);
-      */
     }
 
   }
@@ -1592,7 +1675,6 @@ var table = function()
   self.known_color = "#5CC8D9";
   self.text_color = "#4D514B";
 
-  self.t_data = [];
   self.known_data = [];
   self.predicted_data = [];
   self.data_visible = 0;
@@ -1600,9 +1682,10 @@ var table = function()
 
   self.correct = 0;
 
+  self.yoff = 0;
+
   self.clear = function()
   {
-    self.t_data = [];
     self.known_data = [];
     self.predicted_data = [];
     self.data_visible = 0;
@@ -1636,6 +1719,24 @@ var table = function()
   self.tick = function()
   {
     if(gg.timeline.t > self.simd_visible) self.simd_visible = gg.timeline.t;
+    if(gg.cur_level.progress < 6 && !gg.content_dragger.dragging_data)
+    {
+      if(self.yoff < self.h) self.yoff = lerp(self.yoff,self.h,0.1);
+      else self.yoff = self.h;
+    }
+    else
+    {
+      if(gg.cur_level.special)
+      {
+        if(self.yoff > 0.01) self.yoff = lerp(self.yoff,42,0.1);
+        else self.yoff = 42;
+      }
+      else
+      {
+        if(self.yoff > 0.01) self.yoff = lerp(self.yoff,0,0.1);
+        else self.yoff = 0;
+      }
+    }
   }
 
   self.draw = function()
@@ -1646,10 +1747,10 @@ var table = function()
     gg.ctx.strokeStyle = self.bg_color;
     gg.ctx.lineWidth = 3;
 
-    var y0 = self.y;
-    var y1 = self.y+self.h/3;
-    var y2 = self.y+self.h*2/3;
-    var y3 = self.y+self.h;
+    var y0 = self.y+self.yoff;
+    var y1 = self.y+self.h/3+self.yoff;
+    var y2 = self.y+self.h*2/3+self.yoff;
+    var y3 = self.y+self.h+self.yoff;
     var y01 = lerp(y0,y1,0.5);
     var y12 = lerp(y1,y2,0.5);
     var y23 = lerp(y2,y3,0.5);
@@ -1685,32 +1786,61 @@ var table = function()
     for(var i = 0; i <= gg.timeline.t_max; i++)
     {
       x = self.x+(i+2)*w;
-      drawLine(x,y1,x,y3,gg.ctx);
+      if(i < 2)
+        drawLine(x,y1,x,y3,gg.ctx);
+      if(i == 2)
+      {
+        drawLine(x-1,y1,x-1,y3,gg.ctx);
+        drawLine(x+1,y1,x+1,y3,gg.ctx);
+      }
+      else
+        drawLine(x,y1,x,y2,gg.ctx);
       x -= w/2;
       gg.ctx.fillStyle = black;
-      gg.ctx.fillText(self.t_data[i],x,y01+self.font_h/2);
+      if(!(i == gg.timeline.t_max && gg.timeline.t == gg.timeline.t_max && self.correct && gg.cur_level.progress > 7))
+        gg.ctx.fillText(i,x,y01+self.font_h/2);
       if(self.simd_visible >= i)
       {
-        if(self.data_visible && !gg.cur_level.perma_zoom)
+        if(gg.cur_level.progress >= 8 && self.data_visible && !gg.cur_level.perma_zoom)
         {
-          if(self.known_data[i] == self.predicted_data[i] || self.correct)
+          if(self.known_data[i] == self.predicted_data[i])
             gg.ctx.drawImage(gg.eq_img,x-10,y2-10,20,20);
           else if(self.known_data[i] != "-")
             gg.ctx.drawImage(gg.neq_img,x-10,y2-10,20,20);
         }
-        gg.ctx.fillText(self.predicted_data[i],x,y12+self.font_h/3);
+        if(gg.cur_level.progress < 8)
+          gg.ctx.fillText("-",x,y12+self.font_h/3);
+        else
+          gg.ctx.fillText(self.predicted_data[i],x,y12+self.font_h/3);
       }
       else gg.ctx.fillText("-",x,y12+self.font_h/3);
 
-      gg.ctx.fillStyle = white;
-      if(self.data_visible) gg.ctx.fillText(self.known_data[i],x,y23+self.font_h/2);
-      else gg.ctx.fillText("-",x,y23+self.font_h/2);
-
-      if(i == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)
+      if(i < 3)
       {
-        var s = 30;
-        gg.ctx.drawImage(gg.notice_img,x+w/2-s/2,y1-s/2,s,s);
+        gg.ctx.fillStyle = white;
+        if(self.data_visible) gg.ctx.fillText(self.known_data[i],x,y23+self.font_h/2);
+        else gg.ctx.fillText("-",x,y23+self.font_h/2);
       }
+
+    }
+    if(gg.timeline.t == gg.timeline.t_max && self.correct && gg.cur_level.progress > 7)
+    {
+      var t_x = mapVal(0,gg.timeline.t_max,gg.timeline.sx,gg.timeline.ex,gg.timeline.t);
+      var s = 40;
+      var syoff = 0;
+      if(gg.timeline.t_correct < 100)
+        syoff = abs(sin(gg.timeline.t_correct/10))*(1-(gg.timeline.t_correct/100))*20;
+      gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+15+self.yoff-s/2-syoff,s,gg.timeline.h-15);
+      gg.ctx.textAlign = "center";
+      gg.ctx.font = "16px DisposableDroidBB";
+      gg.ctx.fillText("Modeled",t_x,gg.timeline.y+15+s/2+self.yoff);
+      gg.ctx.fillText("Data",t_x,gg.timeline.y+15+s/2+10+self.yoff);
+      gg.ctx.font = self.font;
+    }
+    if(gg.timeline.t == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)
+    {
+      var s = 20;
+      gg.ctx.drawImage(gg.notice_img,x+w/2-s,y1-3*s,s,s);
     }
 
   }
@@ -1833,10 +1963,15 @@ var message_box = function()
       self.max_top_y -= self.pad;
       if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM)
         self.max_top_y -= self.font_h+self.pad;
-      else
+      else if(self.types[i] == CONTENT_LABEL)
+        self.max_top_y -= self.font_h*3-self.pad;
+      else if(self.types[i] == CONTENT_CONSTANT)
+        self.max_top_y -= self.font_h*4-self.pad;
+      else //CONTENT_PLAYER || CONTENT_AI
       {
         for(var j = 0; j < self.bubbles[i].length; j++)
           self.max_top_y -= self.font_h+self.pad;
+        self.max_top_y -= self.pad;
       }
       self.max_top_y -= self.pad;
     }
@@ -1850,7 +1985,7 @@ var message_box = function()
     self.advance_t = 0;
     self.displayed_i++;
     self.calculate_top();
-    if(self.types[self.displayed_i-1] == CONTENT_AI)
+    if(self.types[self.displayed_i-1] != CONTENT_PLAYER)
       gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
   }
@@ -1864,10 +1999,7 @@ var message_box = function()
     }
     if(self.displayed_i < self.texts.length)
     {
-      if(self.types[self.displayed_i] == CONTENT_AI)
-        self.advance();
-      else //if(ptWithin(self.input_x,self.input_y,self.input_w,self.input_h,evt.doX,evt.doY))
-        self.advance();
+      self.advance();
       return 1;
     }
     else
@@ -1921,7 +2053,7 @@ var message_box = function()
         else if(self.triggers[self.displayed_i].type == TRIGGER_TIMER)
           ; //odd
       }
-      else if(self.types[self.displayed_i] == CONTENT_AI)
+      else //CONTENT_AI || CONTENT_DATA || CONTENT_LABEL || CONTENT_CONSTANT || CONTENT_SIM (but not actually CONTENT_SIM)
       {
         if(self.triggers[self.displayed_i].type == TRIGGER_CLICK)
           ; //odd
@@ -1937,9 +2069,6 @@ var message_box = function()
 
   self.draw = function()
   {
-    //gg.ctx.strokeStyle = red;
-    //strokeBox(self,gg.ctx);
-
     gg.ctx.lineWidth = 1;
     gg.ctx.fillStyle = black;
     gg.ctx.textAlign = "left";
@@ -1947,17 +2076,54 @@ var message_box = function()
     var y = self.top_y;
     for(var i = 0; i < self.displayed_i; i++)
     {
+
       if(self.types[i] == CONTENT_PLAYER)
       {
         gg.ctx.fillStyle = self.you_text_color;
         gg.ctx.fillRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
         gg.ctx.strokeRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.beginPath();
+        gg.ctx.moveTo(self.x+self.pad*2+self.bubble_w-self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.fill();
+        gg.ctx.stroke();
+
+        gg.ctx.fillStyle = self.ai_text_color;
+        gg.ctx.textAlign = "right";
+        y += self.pad;
+        for(var j = 0; j < self.bubbles[i].length; j++)
+        {
+          gg.ctx.fillText(self.bubbles[i][j], self.x+self.w-self.pad*2, y+self.font_h);
+          y += self.font_h+self.pad;
+        }
+        y += self.pad;
       }
       else if(self.types[i] == CONTENT_AI)
       {
         gg.ctx.fillStyle = self.ai_text_color;
         gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
         gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.beginPath();
+        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.fill();
+        gg.ctx.beginPath();
+        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length           );
+        gg.ctx.stroke();
+
+        gg.ctx.fillStyle = self.you_text_color;
+        gg.ctx.textAlign = "left";
+        y += self.pad;
+        for(var j = 0; j < self.bubbles[i].length; j++)
+        {
+          gg.ctx.fillText(self.bubbles[i][j], self.x+self.pad*2, y+self.font_h);
+          y += self.font_h+self.pad;
+        }
+        y += self.pad;
       }
       else if(self.types[i] == CONTENT_DATA)
       {
@@ -1968,18 +2134,33 @@ var message_box = function()
           gg.ctx.drawImage(gg.notice_img,self.x+self.pad+self.bubble_w-s,y,s,s);
         }
         self.data_y = y;
+
+        y += self.pad;
+        gg.ctx.textAlign = "left";
+        gg.ctx.fillStyle = self.data_text_color;
+        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+        y += self.font_h+self.pad;
       }
       else if(self.types[i] == CONTENT_LABEL)
       {
         var icon = 0;
+        var label = 0;
         for(var j = 0; j < gg.cur_level.m_label.length; j++)
-          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) { icon = gg.cur_level.m_icon[j]; break; }
+          if(self.bubbles[i][0] == gg.cur_level.m_label[j]) { icon = gg.cur_level.m_icon[j]; label = gg.cur_level.m_label_fmt[j]; break; }
         if(!icon)
         {
           for(var j = 0; j < gg.cur_level.b_label.length; j++)
-            if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; break; }
+            if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; label = gg.cur_level.b_label_fmt[j]; break; }
         }
-        drawImageSizeCentered(icon, self.x+self.bubble_w-30, y+(self.pad+self.font_h+self.pad)/2, 60, gg.ctx);
+        var h = self.font_h*3;
+        gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
+        drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+h/2, h*0.8, gg.ctx);
+
+        gg.ctx.textAlign = "left";
+        gg.ctx.fillStyle = self.data_text_color;
+        for(var j = 0; j < label.length; j++)
+          gg.ctx.fillText(label[j],self.x+self.pad+self.bubble_w/2,y+self.pad+self.font_h+self.font_h*j);
+        y += self.font_h*3;
       }
       else if(self.types[i] == CONTENT_CONSTANT)
       {
@@ -1992,60 +2173,65 @@ var message_box = function()
           for(var j = 0; j < gg.cur_level.b_label.length; j++)
             if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; c = gg.cur_level.b_correct[j]; break; }
         }
-        drawImageSizeCentered(icon, self.x+self.bubble_w-30, y+(self.pad+self.font_h+self.pad)/2, 60, gg.ctx);
-        gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(c,self.x+self.bubble_w-60, y+(self.pad+self.font_h+self.pad)*2/3);
+        var h = self.font_h*4;
+        gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
+        drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+self.font_h+self.font_h*3/2, h*0.6, gg.ctx);
+
+        gg.ctx.textAlign = "center";
+        gg.ctx.fillStyle = self.data_text_color;
+        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad+self.bubble_w/2,y+self.font_h);
+        gg.ctx.font = "60px DisposableDroidBB";
+        if(c >= 100) gg.ctx.font = "40px DisposableDroidBB";
+        gg.ctx.fillText(c,self.x+self.pad+self.bubble_w*3/4,y+self.pad+self.font_h*3);
+        gg.ctx.font = self.font;
+        y += self.font_h*4;
       }
       else if(self.types[i] == CONTENT_SIM)
       {
         gg.ctx.drawImage(gg.submit_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
-      }
-      gg.ctx.fillStyle = black;
-      y += self.pad;
-      if(self.types[i] == CONTENT_DATA || self.types[i] == CONTENT_SIM || self.types[i] == CONTENT_LABEL || self.types[i] == CONTENT_CONSTANT)
-      {
-        gg.ctx.textAlign = "left"; gg.ctx.fillStyle = self.data_text_color; gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+
+        y += self.pad;
+        gg.ctx.textAlign = "left";
+        gg.ctx.fillStyle = self.data_text_color;
+        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
         y += self.font_h+self.pad;
       }
-      else
-      {
-        for(var j = 0; j < self.bubbles[i].length; j++)
-        {
-          if(self.types[i] == CONTENT_PLAYER) { gg.ctx.textAlign = "right"; gg.ctx.fillStyle = self.ai_text_color;  gg.ctx.fillText(self.bubbles[i][j],self.x+self.w-self.pad*2,y+self.font_h); }
-          else                                { gg.ctx.textAlign = "left";  gg.ctx.fillStyle = self.you_text_color; gg.ctx.fillText(self.bubbles[i][j],self.x+self.pad*2,       y+self.font_h); }
-          y += self.font_h+self.pad;
-        }
-      }
+
       y += self.pad;
     }
     gg.ctx.textAlign = "left";
+
+    //"ai typing"
+    if(self.prompt_ai_typing)
+    {
+      gg.ctx.fillStyle = self.data_text_color;
+      switch(floor(self.advance_t/20)%3)
+      {
+        case 0: gg.ctx.fillText("typing.",self.x+self.pad*2,y+self.font_h/2); break;
+        case 1: gg.ctx.fillText("typing..",self.x+self.pad*2,y+self.font_h/2); break;
+        case 2: gg.ctx.fillText("typing...",self.x+self.pad*2,y+self.font_h/2); break;
+      }
+    }
 
     //"input" box
     gg.ctx.fillStyle = self.bg_color;
     gg.ctx.fillRect(self.x,self.input_y-self.pad+1,self.w,self.h);
 
-    if(!self.prompt_player_input)
+    if(gg.content_dragger.dragging_sim)
+      gg.ctx.drawImage(gg.drop_data_img,self.input_x,self.input_y,self.input_w,self.input_h);
+    else
     {
-      gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillRect(self.input_x,self.input_y,self.input_w,self.input_h);
-      gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
-    }
-    else //needs input
-    {
-      if(floor(self.advance_t/20)%2)
-        drawLine(self.input_x+self.pad,self.input_y+self.pad,self.input_x+self.pad,self.input_y+self.input_h-self.pad,gg.ctx)
-      gg.ctx.strokeRect(self.input_x,self.input_y,self.input_w,self.input_h);
-      var s = 20;
-      gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s,self.input_y,s,s);
-    }
-
-    //"ai typing"
-    if(self.prompt_ai_typing)
-    {
-      switch(floor(self.advance_t/20)%3)
+      if(self.prompt_player_input)
       {
-        case 0: gg.ctx.fillText("typing.",self.x+self.pad*2,y+self.font_h); break;
-        case 1: gg.ctx.fillText("typing..",self.x+self.pad*2,y+self.font_h); break;
-        case 2: gg.ctx.fillText("typing...",self.x+self.pad*2,y+self.font_h); break;
+        var s = 20;
+        gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
+        gg.ctx.drawImage(gg.notice_img,self.input_x+self.input_w-s,self.input_y,s,s);
+      }
+      else
+      {
+        gg.ctx.globalAlpha = 0.6;
+        gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
+        gg.ctx.globalAlpha = 1;
       }
     }
 
@@ -2064,4 +2250,3 @@ var message_box = function()
   }
 
 }
-

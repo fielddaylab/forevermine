@@ -27,15 +27,15 @@ var GamePlayScene = function(game, stage)
       gg.lab.wh = gg.canv.height;
 
       gg.fuel.x = 300;
-      gg.fuel.y = 406;
+      gg.fuel.y = 422;
       gg.fuel.w = 100;
-      gg.fuel.h = 81;
+      gg.fuel.h = 65;
       worldSpace(gg.lab,gg.canv,gg.fuel);
 
       gg.oxy.x = 400;
-      gg.oxy.y = 406;
+      gg.oxy.y = 422;
       gg.oxy.w = 100;
-      gg.oxy.h = 81;
+      gg.oxy.h = 65;
       worldSpace(gg.lab,gg.canv,gg.oxy);
 
       gg.content_dragger.w = gg.canv.width;
@@ -44,9 +44,9 @@ var GamePlayScene = function(game, stage)
       gg.content_dragger.y = 0;
 
       gg.exposition_box.w = gg.canv.width-20;
-      gg.exposition_box.h = 100;
+      gg.exposition_box.h = 150;
       gg.exposition_box.x = 10;
-      gg.exposition_box.y = gg.canv.height-10-gg.exposition_box.h;
+      gg.exposition_box.y = gg.canv.height-gg.exposition_box.h;
       gg.exposition_box.size();
 
       gg.message_box.w = 210;
@@ -66,9 +66,9 @@ var GamePlayScene = function(game, stage)
       gg.graph.y = 30;
 
       gg.timeline.w = gg.table.w;
-      gg.timeline.h = 40;
+      gg.timeline.h = 55;
       gg.timeline.x = gg.table.x;
-      gg.timeline.y = gg.table.y+5;
+      gg.timeline.y = gg.table.y-10;
       gg.timeline.size();
 
       gg.line.h = gg.canv.height;
@@ -91,34 +91,39 @@ var GamePlayScene = function(game, stage)
 
       var btn_x = 10;
       var btn_y = 10;
-      var btn_w = 50;
+      var btn_w = 80;
       var btn_h = 50;
 
       gg.continue_button.x = btn_x;
-      gg.continue_button.y = btn_y;
-      gg.continue_button.w = btn_w;
+      gg.continue_button.y = gg.canv.height/3;
+      gg.continue_button.w = btn_w*4;
       gg.continue_button.h = btn_h;
-      btn_y += btn_h*1.1;
 
       gg.new_button.x = btn_x;
-      gg.new_button.y = btn_y;
-      gg.new_button.w = btn_w;
+      gg.new_button.y = gg.continue_button.y+gg.continue_button.h*2;
+      gg.new_button.w = gg.continue_button.w;
       gg.new_button.h = btn_h;
-      btn_y += btn_h*1.1;
 
-      gg.code_txt.x = btn_x;
-      gg.code_txt.y = btn_y;
-      gg.code_txt.w = btn_w;
+      gg.code_txt.x = gg.new_button.x+gg.new_button.w;
+      gg.code_txt.y = gg.new_button.y+gg.new_button.h*2;
+      gg.code_txt.w = gg.continue_button.w;
       gg.code_txt.h = btn_h;
       gg.code_txt.size();
-      btn_y += btn_h*1.1;
 
-      gg.code_button.x = btn_x;
-      gg.code_button.y = btn_y;
+      gg.code_button.x = gg.code_txt.x+gg.code_txt.w+20;
+      gg.code_button.y = gg.code_txt.y;
       gg.code_button.w = btn_w;
       gg.code_button.h = btn_h;
-      btn_y += btn_h*1.1;
 
+      gg.sound_button.x = btn_x;
+      gg.sound_button.y = gg.canv.height-btn_h*2;
+      gg.sound_button.w = gg.new_button.w*2/3;
+      gg.sound_button.h = btn_h;
+
+      gg.fullscreen_button.x = gg.sound_button.x+gg.sound_button.w+20;
+      gg.fullscreen_button.y = gg.canv.height-btn_h*2;
+      gg.fullscreen_button.w = gg.new_button.w*4/5;
+      gg.fullscreen_button.h = btn_h;
     }
 
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
@@ -163,9 +168,11 @@ var GamePlayScene = function(game, stage)
     gg.cur_level.correct = 0;
     gg.cur_level.progress = 1;
     gg.table.data_visible = 0;
+    gg.table.yoff = gg.table.h;
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     gg.line.consume_cur_level();
+    setCookie("level", ""+gg.cur_level.i, 999)
   }
 
   self.draw_home = function()
@@ -192,6 +199,7 @@ var GamePlayScene = function(game, stage)
     gg.ctx.fillRect(gg.fuel.x,gg.fuel.y+gg.fuel.h-gg.fuel.h*fuel_p,gg.fuel.w,gg.fuel.h*fuel_p);
     gg.ctx.fillStyle = "#CDBA70";
     gg.ctx.fillRect(gg.oxy.x,gg.oxy.y+gg.oxy.h-gg.oxy.h*oxy_p,gg.oxy.w,gg.oxy.h*oxy_p);
+
     gg.ctx.fillStyle = white;
     if(gg.mode == MODE_CTX_IN)
     {
@@ -216,7 +224,7 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_IMPROVE_IN)
     {
-      var img = gg.cur_level.context_imgs[0];
+      var img = gg.cur_level.system_imgs[0];
       drawImageBox(img,gg.monitor,gg.ctx);
       gg.ctx.globalAlpha = 1-gg.mode_p;
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -224,12 +232,12 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_IMPROVE)
     {
-      var img = gg.cur_level.context_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.context_imgs.length)];
+      var img = gg.cur_level.system_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.system_imgs.length)];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_IMPROVE_OUT)
     {
-      var img = gg.cur_level.context_imgs[gg.cur_level.context_imgs.length-1];
+      var img = gg.cur_level.system_imgs[gg.cur_level.system_imgs.length-1];
       drawImageBox(img,gg.monitor,gg.ctx);
       gg.ctx.globalAlpha = gg.mode_p;
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -242,10 +250,27 @@ var GamePlayScene = function(game, stage)
     gg.exposition_box.draw();
     if(gg.exposition_box.blackout_t)
     {
-      var t = gg.exposition_box.blackout_t/gg.blackout_t;
+      var t = gg.exposition_box.blackout_t/(gg.blackout_t-1);
       gg.ctx.fillStyle = black;
-      gg.ctx.globalAlpha = 1-t;
-      gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      if(t < 0.3)
+      {
+        t = t/0.3;
+        gg.ctx.globalAlpha = t;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      }
+      else if(t < 0.6)
+      {
+        t = (t-0.3)/0.3;
+        gg.ctx.globalAlpha = 1-t;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      }
+      else
+      {
+        t = min(1,(t-0.6)/0.4);
+        gg.ctx.globalAlpha = t;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+        gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      }
       gg.ctx.globalAlpha = 1;
     }
     if(gg.exposition_box.emp_t)
@@ -265,6 +290,8 @@ var GamePlayScene = function(game, stage)
       }
       else
       {
+        gg.monitor.boot_t = 0;
+        gg.monitor.mode = 2;
         var t = (gg.exposition_box.emp_t-gg.emp_start_boot_t)/(gg.emp_t-gg.emp_start_boot_t);
         gg.ctx.fillStyle = black;
         gg.ctx.globalAlpha = 1-t;
@@ -286,17 +313,15 @@ var GamePlayScene = function(game, stage)
       }
       gg.ctx.globalAlpha = 1;
     }
+
   }
 
   self.draw_work = function()
   {
     gg.ctx.drawImage(gg.background_ui_img,0,0,gg.canv.width,gg.canv.height);
     gg.graph.draw();
-    if(!gg.cur_level.special)
-    {
-      gg.timeline.draw();
-      gg.table.draw();
-    }
+    gg.timeline.draw();
+    gg.table.draw();
     gg.line.draw();
     gg.cur_level.draw();
     gg.message_box.draw();
@@ -323,6 +348,16 @@ var GamePlayScene = function(game, stage)
       pano_sx = 0;
       pano_ex = pimg.width-vis_pano_w;
       gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,pt),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
+      if(gg.cur_level.pano == 0) //transition to dark and back
+      {
+        gg.ctx.globalAlpha = 1-psin(t*twopi+halfpi)/2;
+        pimg = gg.pano_imgs_dark[i];
+        vis_pano_w = gg.canv.width/gg.canv.height*pimg.height;
+        pano_sx = 0;
+        pano_ex = pimg.width-vis_pano_w;
+        gg.ctx.drawImage(pimg,lerp(pano_sx,pano_ex,pt),0,vis_pano_w,pimg.height,0,0,gg.canv.width,gg.canv.height);
+        gg.ctx.globalAlpha = 1;
+      }
     }
 
     gg.ctx.fillStyle = white;
@@ -379,11 +414,15 @@ var GamePlayScene = function(game, stage)
         gg.outro_vid.done = 0;
         break;
       case MODE_CINEMATIC:
+        gg.cur_audio.pause();
         if(!skipping)
           gg.intro_vid.play();
         else gg.intro_vid.done = 1;
         break;
       case MODE_BOOT:
+        gg.cur_audio = gg.console_audio;
+        if(gg.sound) gg.cur_audio.play();
+        gg.monitor.boot_t = 0;
         if(skipping)
         {
           gg.next_level = gg.levels[0];
@@ -405,7 +444,16 @@ var GamePlayScene = function(game, stage)
         gg.cur_level = gg.next_level;
         gg.graph.x_off = gg.cur_level.day*24;
         gg.graph.y0_min = gg.cur_level.y_min;
-        gg.graph.y0_max = gg.graph.y0_min+10;
+        if(gg.cur_level.i == 1 || gg.cur_level.i == 8)
+        {
+          gg.graph.y0_max = gg.graph.y0_min+20;
+          gg.graph.y0_grid = 2;
+        }
+        else
+        {
+          gg.graph.y0_max = gg.graph.y0_min+10;
+          gg.graph.y0_grid = 1;
+        }
         gg.timeline.t_speed = gg.cur_level.t_speed;
         gg.timeline.fast_t_speed = gg.cur_level.fast_t_speed;
         self.reset_level();
@@ -425,6 +473,9 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE1:
         break;
       case MODE_WORK_IN:
+        gg.cur_audio.pause();
+        gg.cur_audio = gg.modeling_audio;
+        if(gg.sound) gg.cur_audio.play();
         if(gg.cur_level.skip_zoom)
         {
           gg.graph.zoom = 0;
@@ -450,7 +501,6 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.monitor);
         screenSpace(gg.home_cam,gg.canv,gg.fuel);
         screenSpace(gg.home_cam,gg.canv,gg.oxy);
-        gg.timeline.fast_sim = 1;
         if(skipping)
         {
           if(gg.cur_level.push_work)
@@ -458,6 +508,9 @@ var GamePlayScene = function(game, stage)
         }
         break;
       case MODE_WORK_OUT:
+        gg.cur_audio.pause();
+        gg.cur_audio = gg.console_audio;
+        if(gg.sound) gg.cur_audio.play();
         gg.line.blur();
         gg.exposition_box.clear();
         break;
@@ -488,10 +541,16 @@ var GamePlayScene = function(game, stage)
       case MODE_POST1:
         break;
       case MODE_LAB_OUT:
+        gg.cur_audio.pause();
+        gg.cur_audio = gg.pano_audio;
+        if(gg.sound) gg.cur_audio.play();
         break;
       case MODE_NIGHT:
         break;
       case MODE_LAB_IN: //sets next level
+        gg.cur_audio.pause();
+        gg.cur_audio = gg.console_audio;
+        if(gg.sound) gg.cur_audio.play();
         if(gg.cur_level.i < gg.levels.length-1)
         {
           gg.next_level = gg.levels[gg.cur_level.i+1];
@@ -530,6 +589,8 @@ var GamePlayScene = function(game, stage)
           !clicker.filter(gg.new_button) &&
           !clicker.filter(gg.code_txt) &&
           !clicker.filter(gg.code_button) &&
+          !clicker.filter(gg.sound_button) &&
+          !clicker.filter(gg.fullscreen_button) &&
           false)
           ;
         break;
@@ -672,7 +733,10 @@ var GamePlayScene = function(game, stage)
             break;
           case 11: //pre_improve
             if(!gg.cur_level.skip_zoom)
-              gg.graph.zoom = 1;
+            {
+              if(gg.graph.zoom < 1) gg.graph.zoom = min(gg.stage_t,100)/100;
+              else gg.graph.zoom = 1;
+            }
             break;
           case 12: //improve
             break;
@@ -783,6 +847,12 @@ var GamePlayScene = function(game, stage)
           }
         }
         gg.exposition_box.tick();
+        if(gg.exposition_box.blackout_t >= gg.blackout_t-1)
+        {
+          gg.exposition_box.blackout_t = 0;
+          self.skip_to_mode(MODE_LAB_OUT);
+          gg.mode_t = gg.fade_t; //skip to "fade in" part
+        }
       }
         break;
       case MODE_IMPROVE_IN:
@@ -796,7 +866,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_IMPROVE:
       {
-        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.ctxf_loop);
+        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.systemf_loop);
         if(gg.mode_p < 1 && !gg.keylistener.advance()) //display context
         {
         }
@@ -823,6 +893,11 @@ var GamePlayScene = function(game, stage)
             self.set_mode(MODE_LAB_OUT,0);
         }
         gg.exposition_box.tick();
+        if(gg.exposition_box.blackout_t >= gg.blackout_t-1)
+        {
+          self.skip_to_mode(MODE_LAB_OUT);
+          gg.mode_t = gg.fade_t; //skip to "fade in" part
+        }
       }
         break;
       case MODE_LAB_OUT:
@@ -883,23 +958,50 @@ var GamePlayScene = function(game, stage)
       case MODE_MENU:
       {
         self.draw_home();
-        drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
+        drawImageBox(gg.menu_bg_img,gg.lab,gg.ctx);
+        /*
+        gg.ctx.fillStyle = black;
         fillBox(gg.continue_button,gg.ctx);
         fillBox(gg.new_button,gg.ctx);
-        fillBox(gg.code_txt,gg.ctx);
         fillBox(gg.code_button,gg.ctx);
+        fillBox(gg.code_txt,gg.ctx);
+        fillBox(gg.sound_button,gg.ctx);
+        fillBox(gg.fullscreen_button,gg.ctx);
+        */
+        gg.ctx.fillStyle = white;
+        gg.ctx.strokeStyle = white;
+        gg.ctx.font = (gg.continue_button.h*2/3)+"px Lato";
+        var txtbump = gg.continue_button.h/5;
+        gg.ctx.fillText("STRANDED AT THE FOREVER MINE",gg.continue_button.x,10+gg.continue_button.h-txtbump);
+        gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
+        gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
+        gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y+gg.code_txt.h-txtbump);
+        if(gg.input_code) gg.ctx.fillText(gg.input_code,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
+        gg.ctx.drawImage(gg.menu_text_img,gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
+        gg.ctx.drawImage(gg.menu_go_img,gg.code_button.x,gg.code_button.y,gg.code_button.w,gg.code_button.h);
+        drawLine(gg.sound_button.x,gg.sound_button.y-10,gg.canv.width-gg.sound_button.x,gg.sound_button.y-10,gg.ctx);
+        gg.ctx.fillText("MUSIC FX",gg.sound_button.x,gg.sound_button.y+gg.sound_button.h-txtbump);
+        if(gg.sound) gg.ctx.drawImage(gg.menu_check_img,gg.sound_button.x+gg.sound_button.w-gg.sound_button.h+2,gg.sound_button.y+2,gg.sound_button.h-4,gg.sound_button.h-4);
+        gg.ctx.drawImage(gg.menu_box_img,gg.sound_button.x+gg.sound_button.w-gg.sound_button.h,gg.sound_button.y,gg.sound_button.h,gg.sound_button.h);
+        gg.ctx.fillText("FULLSCREEN",gg.fullscreen_button.x,gg.fullscreen_button.y+gg.fullscreen_button.h-txtbump);
+        gg.ctx.drawImage(gg.menu_box_img,gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h,gg.fullscreen_button.y,gg.fullscreen_button.h,gg.fullscreen_button.h);
+        if(gg.fullscreen) gg.ctx.drawImage(gg.menu_check_img,gg.fullscreen_button.x+gg.fullscreen_button.w-gg.fullscreen_button.h+2,gg.fullscreen_button.y+2,gg.fullscreen_button.h-4,gg.fullscreen_button.h-4);
       }
         break;
       case MODE_CINEMATIC:
       {
         self.draw_home();
         drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
-        var s = 40;
-        gg.ctx.drawImage(gg.notice_img,gg.monitor.x+gg.monitor.w-s/2,gg.monitor.y-s/2,s,s);
+        if(gg.mode_t%100 < 50)
+          gg.ctx.drawImage(gg.button_glow_img,gg.stage.width-210, gg.stage.height-135, 210, 140);
+        var s = 30;
+        gg.ctx.drawImage(gg.notice_img,gg.stage.width-80,gg.stage.height-120,s,s);
+        /*
         gg.ctx.fillStyle = white;
         gg.ctx.font = "20px DisposableDroidBB";
         for(var i = 0; i < self.txt_lines.length; i++)
           gg.ctx.fillText(self.txt_lines[i],gg.monitor.x+10,gg.monitor.y+30+i*25);
+        */
       }
         break;
       case MODE_BOOT:
@@ -1075,6 +1177,26 @@ var GamePlayScene = function(game, stage)
 
   self.ready = function()
   {
+    gg.logos_and_menu_audio = GenAudio("assets/audio/logos_and_menu.mp3"); gg.logos_and_menu_audio.loop = true;
+    gg.console_audio = GenAudio("assets/audio/console.mp3"); gg.console_audio.loop = true;
+    gg.modeling_audio = GenAudio("assets/audio/modeling.mp3"); gg.modeling_audio.loop = true;
+    gg.pano_audio = GenAudio("assets/audio/pano.mp3"); gg.pano_audio.loop = true;
+    gg.credits_audio = GenAudio("assets/audio/credits.mp3"); gg.credits_audio.loop = true;
+    gg.modeling_stress_audio = GenAudio("assets/audio/modeling_stress.mp3"); gg.modeling_stress_audio.loop = true;
+    gg.console_stress_audio = GenAudio("assets/audio/console_stress.mp3"); gg.console_stress_audio.loop = true;
+    gg.hacking_audio = GenAudio("assets/audio/hacking.mp3"); gg.hacking_audio.loop = true;
+    gg.audios = [];
+    gg.audios.push(gg.logos_and_menu_audio);
+    gg.audios.push(gg.console_audio);
+    gg.audios.push(gg.credits_audio);
+    gg.audios.push(gg.modeling_stress_audio);
+    gg.audios.push(gg.console_stress_audio);
+    gg.audios.push(gg.hacking_audio);
+    gg.audios.push(gg.modeling_audio);
+    gg.audios.push(gg.pano_audio);
+    gg.cur_audio = gg.logos_and_menu_audio;
+    gg.cur_audio.play();
+
     gg.max_days = 8;
     gg.needed_fuel = 350;
     gg.home_cam = {wx:0,wy:0,ww:0,wh:0};
@@ -1086,20 +1208,35 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
     gg.ctxf_t = 8;
     gg.ctxf_loop = 1;
+    gg.systemf_loop = 100;
     gg.pano_t = 250;
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
     gg.blackout_t = 100;
     gg.credits_t = 100;
+    gg.sound = 1;
+    gg.fullscreen = 0;
 
     gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
+    gg.menu_bg_img = GenImg("assets/menu/background.png");
+    gg.menu_go_img = GenImg("assets/menu/button_go.png");
+    gg.menu_box_img = GenImg("assets/menu/check_box.png");
+    gg.menu_check_img = GenImg("assets/menu/check_box_fill.png");
+    gg.menu_text_img = GenImg("assets/menu/text_area.png");
+    gg.iframe_img = GenImg("assets/iframe_img.jpg");
+    gg.button_glow_img = GenImg("assets/button_glow.png");
+    gg.reply_button_img = GenImg("assets/reply_button.png");
+    gg.drop_data_img = GenImg("assets/drop_data.png");
+    gg.blackout_img = GenImg("assets/blackout.png");
     gg.eq_img = GenImg("assets/eq.png");
     gg.eq_pt_img = GenImg("assets/eq_pt.png");
     gg.neq_img = GenImg("assets/neq.png");
     gg.neq_pt_img = GenImg("assets/neq_pt.png");
+    gg.exposition_bg_img = GenImg("assets/exposition_bg.png");
     gg.timeline_scrubber_img = GenImg("assets/timeline_scrubber.png");
+    gg.timeline_scrubber_large_img = GenImg("assets/timeline_scrubber_large.png");
     gg.arrow_up_img = GenImg("assets/arrow_up.png");
     gg.arrow_down_img = GenImg("assets/arrow_down.png");
     gg.number_bg_img = GenImg("assets/number_bg.png");
@@ -1107,23 +1244,31 @@ var GamePlayScene = function(game, stage)
     gg.dark_console_img = GenImg("assets/console_dark.png");
     gg.background_img = GenImg("assets/background.jpg");
     gg.background_ui_img = GenImg("assets/background_ui.jpg");
+    gg.ui_chart_overlay_img = GenImg("assets/ui_chart_overlay.png");
     gg.constant_bg_img = GenImg("assets/card_editable.png");
     gg.variable_bg_img = GenImg("assets/card_not_editable.png");
     gg.crycollected_img = GenImg("assets/crycollected.png");
+    gg.battery_charge_img = GenImg("assets/battery_charge.png");
     gg.cryinitial_img = GenImg("assets/cryinitial.png");
     gg.cryrate_img = GenImg("assets/cryrate.png");
     gg.chrinitial_img = GenImg("assets/chrinitial.png");
     gg.chrrate_img = GenImg("assets/chrrate.png");
     gg.time_img = GenImg("assets/time.png");
     gg.bezel_img = GenImg("assets/bezel.png");
+    gg.boot_btn_img = GenImg("assets/boot_btn.png");
     gg.notice_img = GenImg("assets/alert.png");
     gg.data_img = GenImg("assets/data.png");
     gg.submit_img = GenImg("assets/submit.png");
     gg.neck_heart_img = GenImg("assets/neck_heart.png");
+    gg.axis_label_bg_img = GenImg("assets/axis_label_bg.png");
     gg.pano_imgs = [];
     gg.pano_imgs[0] = GenImg("assets/pano_bg.jpg");
     gg.pano_imgs[1] = GenImg("assets/pano_mg.png");
     gg.pano_imgs[2] = GenImg("assets/pano_fg.png");
+    gg.pano_imgs_dark = [];
+    gg.pano_imgs_dark[0] = GenImg("assets/pano_bg_dark.jpg");
+    gg.pano_imgs_dark[1] = GenImg("assets/pano_mg_dark.png");
+    gg.pano_imgs_dark[2] = GenImg("assets/pano_fg_dark.png");
     gg.epano_imgs = [];
     gg.epano_imgs[0] = GenImg("assets/epano_bg.jpg");
     gg.epano_imgs[1] = GenImg("assets/epano_mg.png");
@@ -1134,7 +1279,7 @@ var GamePlayScene = function(game, stage)
     gg.battery_img = GenImg("assets/battery.png");
     gg.drill_img = GenImg("assets/drill.png");
 
-    gg.continue_code = 0;
+    gg.continue_code = getCookie("level");
     gg.input_code = 0;
     gg.input_code_valid = 0;
     gg.continuable = 0;
@@ -1146,6 +1291,11 @@ var GamePlayScene = function(game, stage)
       else                                                 { gg.code_txt.bg_color = "rgba(255,0,0,0.1)"; gg.input_code_valid = 0; }
     });
     gg.code_button     = new ButtonBox( 0,0,0,0, function(evt){
+      if(gg.code_txt.box_on)
+      {
+        gg.code_txt.set(gg.code_txt.box.value);
+        gg.code_txt.blur();
+      }
       if(!gg.input_code) gg.new_button.click({});
       else
       {
@@ -1160,6 +1310,14 @@ var GamePlayScene = function(game, stage)
         self.skip_to_mode(MODE_PRE0);
       }
     });
+    gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){
+      gg.sound = v;
+      gg.cur_audio.pause();
+      if(!gg.sound && !gg.cur_audio.paused) gg.cur_audio.pause();
+      if(gg.sound && gg.cur_audio.paused) gg.cur_audio.play();
+    });
+
+    gg.fullscreen_button = new ToggleBox(0,0,0,0, 0, function(v){ gg.fullscreen = !gg.fullscreen; if(gg.fullscreen) fullscreen(); else unfullscreen();});
 
     gg.content_dragger = new content_dragger();
     gg.exposition_box = new exposition_box();
@@ -1194,7 +1352,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "FUEL";
+    l.y_label = "FUEL (kg)";
     l.day = 0;
     l.y_min = 0;
     for(var j = 0; j < 90; j++)
@@ -1231,7 +1389,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "FUEL";
+    l.y_label = "FUEL (kg)";
     l.day = 1;
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 90; j++)
@@ -1268,7 +1426,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "FUEL";
+    l.y_label = "FUEL (kg)";
     l.day = 2;
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 90; j++)
@@ -1294,7 +1452,7 @@ var GamePlayScene = function(game, stage)
     //improve charge rate
     l = new level();
     l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
+    l.y_icon = GenImg("assets/battery_charge.png");
     l.m_starting = [0.5,];
     l.m_correct = [1,];
     l.m_label = ["Charge Rate",];
@@ -1344,7 +1502,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "FUEL";
+    l.y_label = "FUEL (kg)";
     l.day = 3;
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 0; j++)
@@ -1368,7 +1526,7 @@ var GamePlayScene = function(game, stage)
     //initial charge rate
     l = new level();
     l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
+    l.y_icon = GenImg("assets/battery_charge.png");
     l.m_starting = [0,];
     l.m_correct = [1,];
     l.m_label = ["Charge Rate",];
@@ -1418,7 +1576,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "FUEL";
+    l.y_label = "FUEL (kg)";
     l.day = 4;
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 0; j++)
@@ -1444,7 +1602,7 @@ var GamePlayScene = function(game, stage)
     //improve solar panels
     l = new level();
     l.i = i;
-    l.y_icon = GenImg("assets/crycollected.png");
+    l.y_icon = GenImg("assets/battery_charge.png");
     l.m_starting = [0.5,];
     l.m_correct = [1,];
     l.m_label = ["Charge Rate",];
@@ -1494,7 +1652,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "FUEL";
+    l.y_label = "FUEL (kg)";
     l.day = 5;
     l.y_min = floor(l.b_correct_total/10)*10;
     for(var j = 0; j < 0; j++)
@@ -1521,10 +1679,10 @@ var GamePlayScene = function(game, stage)
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/crycollected.png");
-    l.m_starting = [gg.levels[l.i-1].m_correct_total,0,];
-    l.m_correct = [3,4,];
-    l.m_label = ["Drill Rate","Zoom Rate",];
-    l.m_icon = [GenImg("assets/cryrate.png"),GenImg("assets/cryrate.png"),];
+    l.m_starting = [gg.levels[l.i-1].m_correct_total,0,0,];
+    l.m_correct = [1,1,4.5,];
+    l.m_label = ["Drill Rate","Surface Area","Crystal Density",];
+    l.m_icon = [GenImg("assets/cryrate.png"),GenImg("assets/cryrate.png"),GenImg("assets/cryrate.png")];
     l.b_starting = [gg.levels[l.i-1].b_correct_total,];
     l.b_correct = [gg.levels[l.i-1].b_correct_total+gg.levels[l.i-1].m_correct_total*24,];
     l.b_label = ["Existing Fuel",];
@@ -1533,7 +1691,7 @@ var GamePlayScene = function(game, stage)
     l.t_speed = 0.01;
     l.fast_t_speed = 0.1;
     l.x_label = "HOURS";
-    l.y_label = "FUEL";
+    l.y_label = "FUEL (kg)";
     l.day = 6;
     l.y_min = 0;
     for(var j = 0; j < 53; j++)
@@ -1603,11 +1761,6 @@ var GamePlayScene = function(game, stage)
   self.draw = function()
   {
     if(self.txt_lines.length == 0)
-      /*
-      self.HACKTXT(`     You wake up in a dark room. All you see is the black screen of an old monitor.                       Your memory starts to return: you were on a routine mission to refurbish an old mining planet.      But before your ship was able to touch down, something went wrong. You must have stumbled into this abandoned control center and passed out.                                                   You check your vitals- uh oh. Only "+gg.max_days+" days worth of oxygen left, and your ship is out of fuel.                                                            You need to find a way off this planet.
-        `
-      );
-      */
       self.HACKTXT("You wake up in a dark room. All you see is the black screen of an old monitor. Your memory starts to return: you were on a routine mission to refurbish an old mining planet. On the way down, a mysterious pulse scrambled your equipment. You used up the last of your fuel making an emergency landing. Somehow, you stumbled across the barren landscape to this abandoned control room. You managed to flip the power switch and then passed out. You check your vitals: only 6 days of oxygen left. You need to find a way off this planet.");
     gg.monitor.draw(); //draws to self- not to screen
     self.draw_mode();
@@ -1623,3 +1776,4 @@ var GamePlayScene = function(game, stage)
   };
 
 };
+
