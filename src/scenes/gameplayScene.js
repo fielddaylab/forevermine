@@ -250,7 +250,7 @@ var GamePlayScene = function(game, stage)
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 1;
     drawImageBox(gg.console_img,gg.lab,gg.ctx);
-    gg.exposition_box.draw();
+    if(!gg.monitor.boot_t || gg.monitor.boot_t > 250) gg.exposition_box.draw();
     if(gg.exposition_box.blackout_t)
     {
       var t = gg.exposition_box.blackout_t/(gg.blackout_t-1);
@@ -625,7 +625,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE0:
       {
         gg.mode_p = 0.5;
-        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
+        if((!gg.monitor.boot_t || gg.monitor.boot_t > 250) && !clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_context)
@@ -666,7 +666,7 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE1:
       {
         gg.mode_p = 0.5;
-        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
+        if((!gg.monitor.boot_t || gg.monitor.boot_t > 250) && !clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
           self.set_mode(MODE_WORK_IN,0);
         gg.exposition_box.tick();
@@ -828,7 +828,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_POST0:
       {
-        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
+        if((!gg.monitor.boot_t || gg.monitor.boot_t > 250) && !clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.skip_system)
@@ -879,7 +879,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_POST1:
       {
-        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
+        if((!gg.monitor.boot_t || gg.monitor.boot_t > 250) && !clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
           if(gg.cur_level.special)
