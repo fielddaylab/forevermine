@@ -541,16 +541,16 @@ var GamePlayScene = function(game, stage)
       case MODE_POST1:
         break;
       case MODE_LAB_OUT:
-        gg.cur_audio.pause();
-        gg.cur_audio = gg.pano_audio;
-        if(gg.sound) gg.cur_audio.play();
+        //gg.cur_audio.pause();
+        //gg.cur_audio = gg.pano_audio;
+        //if(gg.sound) gg.cur_audio.play();
         break;
       case MODE_NIGHT:
         break;
       case MODE_LAB_IN: //sets next level
-        gg.cur_audio.pause();
-        gg.cur_audio = gg.console_audio;
-        if(gg.sound) gg.cur_audio.play();
+        //gg.cur_audio.pause();
+        //gg.cur_audio = gg.console_audio;
+        //if(gg.sound) gg.cur_audio.play();
         if(gg.cur_level.i < gg.levels.length-1)
         {
           gg.next_level = gg.levels[gg.cur_level.i+1];
