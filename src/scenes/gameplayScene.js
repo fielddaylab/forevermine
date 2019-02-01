@@ -862,6 +862,7 @@ var GamePlayScene = function(game, stage)
       case MODE_IMPROVE:
       {
         gg.mode_p = gg.mode_t/(gg.systemf_t*gg.cur_level.system_imgs.length*gg.systemf_loop);
+        if(gg.cur_level.special) gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.system_imgs.length*gg.ctxf_loop);
         if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_IMPROVE_OUT,0);
