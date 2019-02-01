@@ -114,18 +114,30 @@ var LoadingScene = function(game, stage)
     loadingImageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put asset paths in img_srcs
-    img_srcs.push("assets/menu/background.png");
-    img_srcs.push("assets/menu/button_go.png");
-    img_srcs.push("assets/menu/check_box.png");
-    img_srcs.push("assets/menu/check_box_fill.png");
-    img_srcs.push("assets/menu/text_area.png");
-    img_srcs.push("assets/iframe_img.jpg");
+    for(var j = 0; j < 90; j++) img_srcs.push("assets/context/0-"+j+".png"); //only load 0th- others will load next
+    img_srcs.push("assets/crycollected.png");
+    img_srcs.push("assets/cryrate.png");
+    img_srcs.push("assets/cryinitial.png");
+    img_srcs.push("assets/battery_charge.png");
+    img_srcs.push("assets/chrrate.png");
+    img_srcs.push("assets/chrinitial.png");
+    img_srcs.push("assets/solar-charge.png");
+    img_srcs.push("assets/sdrrate.png");
+    img_srcs.push("assets/plungerate.png");
+    img_srcs.push("assets/area.png");
+    img_srcs.push("assets/density.png");
     img_srcs.push("assets/eye_0.png");
     img_srcs.push("assets/mouth_0.png");
     img_srcs.push("assets/eye_1.png");
     img_srcs.push("assets/mouth_1.png");
     img_srcs.push("assets/eye_2.png");
     img_srcs.push("assets/mouth_2.png");
+    img_srcs.push("assets/menu/background.png");
+    img_srcs.push("assets/menu/button_go.png");
+    img_srcs.push("assets/menu/check_box.png");
+    img_srcs.push("assets/menu/check_box_fill.png");
+    img_srcs.push("assets/menu/text_area.png");
+    img_srcs.push("assets/iframe_img.jpg");
     img_srcs.push("assets/button_glow.png");
     img_srcs.push("assets/reply_button.png");
     img_srcs.push("assets/return_button.png");
@@ -149,12 +161,6 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/ui_chart_overlay.png");
     img_srcs.push("assets/card_editable.png");
     img_srcs.push("assets/card_not_editable.png");
-    img_srcs.push("assets/crycollected.png");
-    img_srcs.push("assets/battery_charge.png");
-    img_srcs.push("assets/cryinitial.png");
-    img_srcs.push("assets/cryrate.png");
-    img_srcs.push("assets/chrinitial.png");
-    img_srcs.push("assets/chrrate.png");
     img_srcs.push("assets/time.png");
     img_srcs.push("assets/bezel.png");
     img_srcs.push("assets/boot_btn.png");
@@ -176,26 +182,6 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/epano_ffg.png");
     img_srcs.push("assets/battery.png");
     img_srcs.push("assets/drill.png");
-    for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/context/0-"+i+".png");
-    for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/context/1-"+i+".png");
-    for(var i = 0; i < 90; i++)
-      img_srcs.push("assets/context/2-"+i+".png");
-    for(var i = 0; i < 53; i++)
-      img_srcs.push("assets/context/3-"+i+".png");
-    for(var i = 0; i < 53; i++)
-      img_srcs.push("assets/context/5-"+i+".png");
-    for(var i = 0; i < 53; i++)
-      img_srcs.push("assets/context/7-"+i+".png");
-    for(var i = 0; i < 53; i++)
-      img_srcs.push("assets/context/9-"+i+".png");
-    for(var i = 0; i < 1; i++)
-      img_srcs.push("assets/system/2-"+i+".png");
-    for(var i = 0; i < 1; i++)
-      img_srcs.push("assets/system/6-"+i+".png");
-    for(var i = 0; i < 1; i++)
-      img_srcs.push("assets/system/8-"+i+".png");
     for(var i = 0; i < img_srcs.length; i++)
     {
       imgs[i] = new Image();
