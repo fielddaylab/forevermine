@@ -211,7 +211,7 @@ var english_text =
     [
       trigger_click, "Tomorrow?", CONTENT_PLAYER, EMOTE_NULL,
       trigger_click, "MAL, I don't need to make any more models.", CONTENT_PLAYER, EMOTE_NULL,
-      trigger_click, "Look at the graph. I'm gonna survive!", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Look at the graph. If we keep this up, I'm gonna survive!", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(120), "Wait. You are???", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Wow. Those little bots really ARE working fast.", CONTENT_AI, EMOTE_NULL,
     ],
