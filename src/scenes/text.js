@@ -23,7 +23,7 @@ var english_text =
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
       "Finally! You're awake!", CONTENT_AI, EMOTE_NULL,
-      "Welcome to the Forever Mine. The mine that's built to last forever!", CONTENT_AI, EMOTE_NULL,
+      "Welcome to the Forever Mine. We're built to last forever!", CONTENT_AI, EMOTE_NULL,
       "I'm MAL, your Mining Activity Liaison.", CONTENT_AI, EMOTE_NULL,
       "Wha... What happened?", CONTENT_PLAYER, EMOTE_NULL,
       "You stumbled in here, powered me on, and then just passed out.", CONTENT_AI, EMOTE_NULL,
@@ -484,22 +484,24 @@ var english_text =
     ],
     pre_improve: //LAB: about to show system
     [
-      "You know what you need? A good night's sleep!", CONTENT_AI, EMOTE_NULL,
+      "Awwwww. Cheer up, human.", CONTENT_AI, EMOTE_NULL,
+    ],
+    improve: //LAB: [skip_system] show system
+    [
+      "Look! We improved the efficiency of the battery charger!", CONTENT_AI, EMOTE_NULL,
+    ],
+    post: //LAB: [skip_system] send to bed
+    [
+      "Isn't this so much fun?", CONTENT_AI, EMOTE_NULL,
+      "Fun?! I only have X days of oxygen left!", CONTENT_PLAYER, EMOTE_NULL,
+      "You know what you need? A good night's sleep.", CONTENT_AI, EMOTE_NULL,
       "I can't sleep right now, MAL. I need to keep working!", CONTENT_PLAYER, EMOTE_NULL,
       "Poor human. Obviously you're too tired to think straight, so I'm shutting down the system until tomorrow.", CONTENT_AI, EMOTE_NULL,
-      "Wait, what??? You can do that?", CONTENT_PLAYER, EMOTE_NULL,
+      "Wait, what??? You're allowed to do that?", CONTENT_PLAYER, EMOTE_NULL,
       "Aren't you programmed to help me?", CONTENT_PLAYER, EMOTE_NULL,
       "Sorry! Circuits glitching. Can't hear you.", CONTENT_AI, EMOTE_NULL,
       "Go count some robots, or sheep, or whatever it is humans do.", CONTENT_AI, EMOTE_NULL,
       "We'll get back to work in the morning!", CONTENT_AI, EMOTE_NULL,
-    ],
-    improve: //LAB: [skip_system] show system
-    [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
-    ],
-    post: //LAB: [skip_system] send to bed
-    [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -815,7 +817,7 @@ var english_text =
     ],
     review: //WORKSPACE: submitted correct equation; lead to review survival chances
     [
-      get_timer(20), "So? Are we done yet?", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "So? Are we done with this yet?", CONTENT_AI, EMOTE_NULL,
     ],
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
@@ -832,12 +834,12 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "Fiiiine. The drills are old, but they're super sturdy.", CONTENT_AI, EMOTE_NULL,
-      "The robots are programmed to mine at a slow and steady rate, so that the drills will last... you know... forever.", CONTENT_AI, EMOTE_NULL,
+      "Fiiiine. The drills are programmed to mine at a slow and steady rate, so they'll last... you know... forever.", CONTENT_AI, EMOTE_NULL,
+      "We can speed up the drills, but not too much, or they'll burn out.", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "That's great! All we need to do is speed up the drills!", CONTENT_PLAYER, EMOTE_NULL,
+      "That's great! All we need to do is speed up the drills just enough for me to get out of here!", CONTENT_PLAYER, EMOTE_NULL,
       "We're so close, it shouldn't take much.", CONTENT_PLAYER, EMOTE_NULL,
     ],
   },
@@ -849,13 +851,12 @@ var english_text =
       "MAL, can you pull up a model for drill speed?", CONTENT_PLAYER, EMOTE_NULL,
       "Wait. Hang on. Let's talk about this.", CONTENT_AI, EMOTE_NULL,
       "You don't REALLY want to leave, do you?", CONTENT_AI, EMOTE_NULL,
-      "Can't you just... I don't know... stay here forever?", CONTENT_AI, EMOTE_NULL,
+      "Can't you just... I don't know... hang out for a while?", CONTENT_AI, EMOTE_NULL,
       "MAL, I'm almost out of oxygen.", CONTENT_PLAYER, EMOTE_NULL,
-      "Oxygen? THAT'S what this is about?", CONTENT_AI, EMOTE_NULL,
+      "Oxygen? THAT'S what all the fuss is about?", CONTENT_AI, EMOTE_NULL,
       "I've got a built-in oxygen generator. I can turn it on right now!", CONTENT_AI, EMOTE_NULL,
-      "What?! MAL, why didn't you tell me? I thought I was going to die!", CONTENT_PLAYER, EMOTE_NULL,
-      "Well, if you knew you had plenty of oxygen, you might've stopped playing with me.", CONTENT_AI, EMOTE_NULL,
-      "I couldn't let that happen. We make such a great team!", CONTENT_AI, EMOTE_NULL,
+      "What?! MAL, why didn't you tell me you had oxygen? I thought I was going to die!", CONTENT_PLAYER, EMOTE_NULL,
+      "Well, if you knew you were safe, you might've stopped playing with me.", CONTENT_AI, EMOTE_NULL,
       "I can't believe this.", CONTENT_PLAYER, EMOTE_NULL,
       "Me neither. It all turned out so much better than I imagined!", CONTENT_AI, EMOTE_NULL,
       "I'm SO glad I sent out that pulse and stranded you here!", CONTENT_AI, EMOTE_NULL,
@@ -864,7 +865,7 @@ var english_text =
       "That's it. You're crazy! I'm getting off this planet today!", CONTENT_PLAYER, EMOTE_NULL,
       "No. You can't leave!", CONTENT_AI, EMOTE_CHANGE,
       "I won't LET you leave!", CONTENT_AI, EMOTE_NULL,
-      "MAL--", CONTENT_PLAYER, EMOTE_NULL,
+      "MAL...", CONTENT_PLAYER, EMOTE_NULL,
       "Everyone is always leaving me!", CONTENT_AI, EMOTE_NULL,
       "Maybe I'll send out another pulse. Mess up the robots. Then you'll REALLY be stuck here.", CONTENT_AI, EMOTE_NULL,
       "MAL, please just calm down.", CONTENT_AI, EMOTE_NULL,
@@ -876,50 +877,70 @@ var english_text =
       "MAL, stop!", CONTENT_PLAYER, EMOTE_NULL,
       "EMP", CONTENT_AI, EMOTE_EMP,
       "Ummmmm whoops.", CONTENT_AI, EMOTE_NULL,
-      "I guess I kinda overreacted there, huh?", CONTENT_AI, EMOTE_NULL,
       "MAL, what did you do?!", CONTENT_PLAYER, EMOTE_NULL,
-      "I sort of... um... destroyed half the robots.", CONTENT_AI, EMOTE_NULL,
-      "And scrambled my own circuits.", CONTENT_AI, EMOTE_NULL,
-      "Oh, and you know my oxygen generator? That's gone, too.", CONTENT_AI, EMOTE_NULL,
+      "I'm sorry!!!", CONTENT_AI, EMOTE_NULL,
+      "I didn't mean to!", CONTENT_AI, EMOTE_NULL,
+      "You have no idea how boring it is to be stuck all by yourself for 500 years!", CONTENT_AI, EMOTE_NULL,
+      "What. Did. You. Do.", CONTENT_PLAYER, EMOTE_NULL,
+      "I sort of... um... destroyed my oxygen generator.", CONTENT_AI, EMOTE_NULL,
+      "Okay. That's okay. I still have my suit's oxygen.", CONTENT_PLAYER, EMOTE_NULL,
+      "As long as all the bots keep drilling, I should be fine.", CONTENT_PLAYER, EMOTE_NULL,
+      "Oh yeah..... about that.... ", CONTENT_AI, EMOTE_NULL,
+      "I destroyed some of the robots, too.", CONTENT_AI, EMOTE_NULL,
       "WHAT?!", CONTENT_PLAYER, EMOTE_NULL,
-      "I'M SORRY! It was all very emotional!", CONTENT_AI, EMOTE_NULL,
+      "I SAID I WAS SORRY!", CONTENT_AI, EMOTE_NULL,
+      "That's it. I'm doomed.", CONTENT_PLAYER, EMOTE_NULL,
+      "Don't worry, human. I'm gonna fix this!!!!", CONTENT_AI, EMOTE_NULL,
+      "How, MAL? How are you gonna fix this?", CONTENT_PLAYER, EMOTE_NULL,
+      "The drills are set low right now, so they don't burn out.", CONTENT_AI, EMOTE_NULL,
+      "We need to drill fast enough to get you enough fuel in time!", CONTENT_AI, EMOTE_NULL,
+      "But, you know. Not TOO fast, or the drills will all burn out and you'll be completely doomed.", CONTENT_AI, EMOTE_NULL,
+      "Great.", CONTENT_PLAYER, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "Oooooh, shiny!", CONTENT_AI, EMOTE_NULL,
-      "I've been collecting data all night.", CONTENT_AI, EMOTE_NULL,
-      "Let's pull up our model and see how your solar panels are working!", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
-      get_timer(20), "?", CONTENT_AI, EMOTE_NULL,
     ],
     status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(20), "?", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Cheer up, human.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "We can do this!!!", CONTENT_AI, EMOTE_NULL,
+      trigger_click, "MAL, I haven't even looked at the drills yet.", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "I have no idea where to start.", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(80), "Don't worry, I'll take care of the math!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "I'm super good at this stuff.", CONTENT_AI, EMOTE_NULL,
+      trigger_click, "WHY HAVEN'T YOU BEEN HELPING ME UNTIL NOW?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(80), "Jeez. Calm down. We were just having fun!", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
-      get_timer(20), "Here's the new data!", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Here's the new data.", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
       trigger_click, "Ok. What now?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(60), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "You need to label the variables in our model!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Drag from the axis on the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "I'll show you where to put them!", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(20), "Here are labels", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Drill Rate", CONTENT_LABEL, 0,
-      get_timer(60), "Surface Area", CONTENT_LABEL, 0,
-      get_timer(60), "Crystal Density", CONTENT_LABEL, 0,
-      get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
+      get_timer(80), "Now you need to label the equation.", CONTENT_AI, EMOTE_NULL,
+      trigger_click, "Whoa. This equation looks pretty complicated.", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(80), "Don't worry, human. I'll talk you through it.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Drill Rate", CONTENT_LABEL, 0,
+      get_timer(80), "Surface Area", CONTENT_LABEL, 0,
+      get_timer(80), "Crystal Density", CONTENT_LABEL, 0,
+      get_timer(80), "Existing Fuel", CONTENT_LABEL, 0,
+      get_timer(80), "Existing fuel needs to go on the right.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "The other three can go in any of the slots on the left.", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(20), "Nope!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Nope!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drill Rate", CONTENT_LABEL, 0,
       get_timer(60), "Surface Area", CONTENT_LABEL, 0,
       get_timer(60), "Crystal Density", CONTENT_LABEL, 0,
@@ -927,43 +948,49 @@ var english_text =
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
-      get_timer(20), "The initial charge is still 0.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Existing Fuel", CONTENT_CONSTANT, 4,
-      get_timer(20), "You need to adjust the rate!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "The initial charge is still 0.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
+      get_timer(80), "You need to increase the rate.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Keep going until the graph shows that you'll survive!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
-      get_timer(20), "Ready to show me your data?", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Ready to show me your data?", CONTENT_AI, EMOTE_NULL,
     ],
     submitted_incorrect: //WORKSPACE: submitted before values correct; reset
     [
-      get_timer(20), "Sorry, bestie. Those numbers don't match.", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "Try again!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Nope. Try again!", CONTENT_AI, EMOTE_NULL,
     ],
     review: //WORKSPACE: submitted correct equation; lead to review survival chances
     [
-      get_timer(20), "Great job, bestie! The numbers matched up!", CONTENT_AI, EMOTE_NULL,
-      trigger_click, "Wow! The new solar panels doubled our charge rate!", CONTENT_PLAYER, EMOTE_NULL,
-      trigger_click, "Maybe I'm not gonna die after all!", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(80), "That's it!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "We've got our drill rate!", CONTENT_AI, EMOTE_NULL,
     ],
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
-      get_timer(20), "Yeah! And plus, the bots look super cool now. 😎", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "See? We make such a great team!!", CONTENT_AI, EMOTE_NULL,
     ],
     pre_improve: //LAB: about to show system
     [
-      "So what should we do now?", CONTENT_AI, EMOTE_NULL,
-      "Hmmm. The solar panels are charging faster, but it might not be enough.", CONTENT_PLAYER, EMOTE_NULL,
-      "Can you pull up the fuel collecting model?", CONTENT_PLAYER, EMOTE_NULL,
-      "I need to predict if I'm gonna make it.", CONTENT_PLAYER, EMOTE_NULL,
+      "Okay, MAL. What do we do now?", CONTENT_PLAYER, EMOTE_NULL,
+      "Now we turn up the drills and hope they don't burn out and trap you here forever!", CONTENT_AI, EMOTE_NULL,
+      "Fingers crossed...", CONTENT_AI, EMOTE_NULL,
+      "Oh. That's weird. The drills aren't responding.", CONTENT_AI, EMOTE_NULL,
+      "Oh no. It must've been your EMP blast! There's not enough power left to update the drill speed!", CONTENT_PLAYER, EMOTE_NULL,
+      "Calm down, human. It's all under control.", CONTENT_AI, EMOTE_NULL,
+      "Calm down???", CONTENT_AI, EMOTE_NULL,
+      "I know I stranded you here, and lied to you, and almost got you killed... ", CONTENT_PLAYER, EMOTE_NULL,
+      "But I told you. I'm gonna fix this.", CONTENT_PLAYER, EMOTE_NULL,
+      "MAL? What are you....?", CONTENT_PLAYER, EMOTE_NULL,
+      "Diverting power now.", CONTENT_AI, EMOTE_NULL,
     ],
     improve: //LAB: [skip_system] show system
     [
-      "?", CONTENT_PLAYER, EMOTE_NULL,
+      "SKIP", CONTENT_PLAYER, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "?", CONTENT_PLAYER, EMOTE_NULL,
+      "SKIP", CONTENT_PLAYER, EMOTE_NULL,
     ],
   },
 
