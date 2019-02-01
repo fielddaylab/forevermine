@@ -831,23 +831,15 @@ var GamePlayScene = function(game, stage)
         if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
-          if(gg.cur_level.special)
+          if(gg.cur_level.skip_system)
           {
-            gg.outro_vid.play();
-            self.set_mode(MODE_CREDITS,0);
+            if(gg.cur_level.skip_night)
+              self.skip_to_mode(MODE_WORK_IN);
+            else
+              self.skip_to_mode(MODE_LAB_OUT);
           }
           else
-          {
-            if(gg.cur_level.skip_system)
-            {
-              if(gg.cur_level.skip_night)
-                self.skip_to_mode(MODE_WORK_IN);
-              else
-                self.skip_to_mode(MODE_LAB_OUT);
-            }
-            else
-              self.set_mode(MODE_IMPROVE_IN,0);
-          }
+            self.set_mode(MODE_IMPROVE_IN,0);
         }
         gg.exposition_box.tick();
         if(gg.exposition_box.blackout_t >= gg.blackout_t-1)
@@ -889,10 +881,18 @@ var GamePlayScene = function(game, stage)
         if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if(gg.exposition_box.displayed_i >= gg.exposition_box.texts.length || gg.keylistener.advance())
         {
-          if(gg.cur_level.skip_night)
-            self.skip_to_mode(MODE_WORK_IN);
+          if(gg.cur_level.special)
+          {
+            gg.outro_vid.play();
+            self.set_mode(MODE_CREDITS,0);
+          }
           else
-            self.set_mode(MODE_LAB_OUT,0);
+          {
+            if(gg.cur_level.skip_night)
+              self.skip_to_mode(MODE_WORK_IN);
+            else
+              self.set_mode(MODE_LAB_OUT,0);
+          }
         }
         gg.exposition_box.tick();
         if(gg.exposition_box.blackout_t >= gg.blackout_t-1)
@@ -1727,6 +1727,8 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 6;
     l.y_min = 0;
+    for(var j = 0; j < 90; j++)
+      l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
     l.pano_et = 0.05;
@@ -1735,7 +1737,7 @@ var GamePlayScene = function(game, stage)
     l.perma_zoom = 1;
     l.skip_axis = 0;
     l.skip_labels = 0;
-    l.skip_system = 1;
+    l.skip_system = 0;
     l.skip_night = 1;
     l.push_work = 1;
     l.special = 1;
