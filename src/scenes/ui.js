@@ -490,7 +490,18 @@ var content_dragger = function()
       if(filled)
       {
         var lcorrect = 1;
-        for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] != i) lcorrect = 0;
+        if(gg.cur_level.special)
+        {
+          var in_0 = 0;
+          var in_1 = 0;
+          var in_2 = 0;
+          for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] == 0) in_0 = 1;
+          for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] == 1) in_1 = 1;
+          for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] == 2) in_2 = 1;
+          if(!(in_0 && in_1 && in_2)) lcorrect = 0;
+        }
+        else
+          for(var i = 0; i < gg.line.m_label.length; i++) if(gg.line.m_label[i] != i) lcorrect = 0;
         for(var i = 0; i < gg.line.b_label.length; i++) if(gg.line.b_label[i] != gg.cur_level.m_label.length+i) lcorrect = 0;
         if(lcorrect)
         {
