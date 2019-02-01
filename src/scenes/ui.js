@@ -183,18 +183,18 @@ var monitor = function()
       c.fillStyle = black;
       c.fillRect(0,0,s.width,s.height);
     }
-    else if(self.boot_t < 50)
+    else if(self.boot_t < 100)
     {
       c.fillStyle = black;
       c.fillRect(0,0,s.width,s.height);
       if(self.boot_t < 10)
         gg.ctx.globalAlpha = self.boot_t/10;
-      else if(self.boot_t > 40)
-        gg.ctx.globalAlpha = 1-((self.boot_t-40)/10);
+      else if(self.boot_t > 90)
+        gg.ctx.globalAlpha = 1-((self.boot_t-90)/10);
       c.drawImage(gg.fmlogo_img,0,s.height/4,s.width,s.height/2);
       gg.ctx.globalAlpha = 1;
     }
-    else if(self.boot_t < 150)
+    else if(self.boot_t < 200)
     {
       c.fillStyle = black;
       c.fillRect(0,0,s.width,s.height);
@@ -215,12 +215,12 @@ var monitor = function()
       c.fillStyle = "#D692E7";
       var x = s.width/4+p+p;
       var w = ((s.width/2-2*p-p)/10)-p;
-      for(var i = 0; i < floor((self.boot_t-50)/10); i++)
+      for(var i = 0; i < floor((self.boot_t-100)/10); i++)
         c.fillRect(x+(w+p)*i,s.height/2-10+p+p,w,20-4*p);
     }
-    else if(self.boot_t < 200)
+    else if(self.boot_t < 250)
     {
-      var t = (self.boot_t-150)/50;
+      var t = (self.boot_t-200)/50;
       t = 1-t;
       t = t*t;
       t = t*t;
