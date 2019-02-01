@@ -183,9 +183,33 @@ var monitor = function()
       c.fillStyle = black;
       c.fillRect(0,0,s.width,s.height);
     }
-    else if(self.boot_t < 50)
+    else if(self.boot_t < 100)
     {
-      var t = self.boot_t/50;
+      c.fillStyle = black;
+      c.fillRect(0,0,s.width,s.height);
+      c.fillStyle = "#D692E7";
+      c.textAlign = "left";
+      c.font = "18px DisposableDroidBB";
+      switch(floor((self.boot_t/10)) % 4)
+      {
+        case 0: c.fillText("LOADING",   s.width/4,s.height/2-15); break;
+        case 1: c.fillText("LOADING.",  s.width/4,s.height/2-15); break;
+        case 2: c.fillText("LOADING..", s.width/4,s.height/2-15); break;
+        case 3: c.fillText("LOADING...",s.width/4,s.height/2-15); break;
+      }
+      c.fillRect(s.width/4,s.height/2-10,s.width/2,20);
+      c.fillStyle = black;
+      var p = 3;
+      c.fillRect(s.width/4+p,s.height/2-10+p,s.width/2-2*p,20-2*p);
+      c.fillStyle = "#D692E7";
+      var x = s.width/4+p+p;
+      var w = ((s.width/2-2*p-p)/10)-p;
+      for(var i = 0; i < floor(self.boot_t/10); i++)
+        c.fillRect(x+(w+p)*i,s.height/2-10+p+p,w,20-4*p);
+    }
+    else if(self.boot_t < 150)
+    {
+      var t = (self.boot_t-100)/50;
       t = 1-t;
       t = t*t;
       t = t*t;
