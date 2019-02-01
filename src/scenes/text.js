@@ -27,7 +27,7 @@ var english_text =
       "I'm MAL, your Mining Activity Liaison.", CONTENT_AI, EMOTE_NULL,
       "Wha... What happened?", CONTENT_PLAYER, EMOTE_NULL,
       "You stumbled in here, powered me on, and then just passed out.", CONTENT_AI, EMOTE_NULL,
-      "I... I need to get out of here.", CONTENT_PLAYER, EMOTE_NULL,
+      "I need to get out of here.", CONTENT_PLAYER, EMOTE_NULL,
       "What? But you just got here! I've been waiting 500 years!", CONTENT_AI, EMOTE_NULL,
       "Aren't we gonna get the mine running again?", CONTENT_AI, EMOTE_NULL,
       "Oh.", CONTENT_PLAYER, EMOTE_NULL,
@@ -48,7 +48,7 @@ var english_text =
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
       "Not bad for a heap of scrap metal, huh?", CONTENT_AI, EMOTE_NULL,
-      "Ok, fine. I'm sorry I called you outdated.", CONTENT_PLAYER, EMOTE_NULL,
+      "Okay, fine. I'm sorry I called you outdated.", CONTENT_PLAYER, EMOTE_NULL,
       "Do you think we can get enough fuel in time?", CONTENT_PLAYER, EMOTE_NULL,
       "Sure!", CONTENT_AI, EMOTE_NULL,
       "Well, maybe. I have no idea.", CONTENT_AI, EMOTE_NULL,
@@ -71,7 +71,7 @@ var english_text =
       trigger_click, "Ok. Now what?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(80), "You sure you want my help?", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "Isn't there a newer, fancier AI you could call?", CONTENT_AI, EMOTE_NULL,
-      trigger_click, "MAL.", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "MAL, please.", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(80), "Fiiiine.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "We need to make our model. Then we'll use it to make predictions.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "First you need to define our variables.", CONTENT_AI, EMOTE_NULL,
