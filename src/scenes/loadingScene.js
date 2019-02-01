@@ -53,7 +53,6 @@ var LoadingScene = function(game, stage)
   {
     if(img) img.loaded = 1;
     n_imgs_loaded++;
-    console.log(n_imgs_loaded);
   };
   var fontLoaded = function()
   {
@@ -187,7 +186,7 @@ var LoadingScene = function(game, stage)
     {
       imgs[i] = new Image();
       //imgs[i].onload = (function(i){return function(){imageLoaded(imgs[i])}})(i);
-      imgs[i].onload = imageLoaded();
+      imgs[i].onload = imageLoaded;
       imgs[i].src = img_srcs[i];
     }
     imageLoaded(); //call once to prevent 0/0 != 100% bug
