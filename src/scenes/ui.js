@@ -1291,7 +1291,14 @@ var editable_line = function()
 
   self.calculate_table = function()
   {
-    var m_correct_total = 0; for(var i = 0; i < gg.cur_level.m_correct.length; i++) m_correct_total += gg.cur_level.m_correct[i];
+    var m_correct_total = 0;
+    if(gg.cur_level.special)
+    {
+      m_correct_total = 1;
+      for(var i = 0; i < gg.cur_level.m_correct.length; i++) m_correct_total *= gg.cur_level.m_correct[i];
+    }
+    else
+      for(var i = 0; i < gg.cur_level.m_correct.length; i++) m_correct_total += gg.cur_level.m_correct[i];
     var b_correct_total = 0; for(var i = 0; i < gg.cur_level.b_correct.length; i++) b_correct_total += gg.cur_level.b_correct[i];
     for(var i = 0; i <= gg.timeline.t_max; i++)
     {

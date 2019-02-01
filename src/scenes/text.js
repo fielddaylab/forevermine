@@ -929,6 +929,8 @@ var english_text =
     [
       get_timer(20), "The initial charge is still 0.", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "Existing Fuel", CONTENT_CONSTANT, 4,
+      get_timer(20), "Surface Area", CONTENT_CONSTANT, 4,
+      get_timer(20), "Crystal Density", CONTENT_CONSTANT, 4,
       get_timer(20), "You need to adjust the rate!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
