@@ -83,6 +83,8 @@ var english_text =
     [
       get_timer(60), "Silly human. That's not right.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Try again!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
+      get_timer(60), "Mining Rate", CONTENT_LABEL, 0,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -361,6 +363,8 @@ var english_text =
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
       get_timer(20), "Nope! Try again.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Starting Charge", CONTENT_LABEL, 0,
+      get_timer(60), "Charge Rate", CONTENT_LABEL, 0,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -673,6 +677,8 @@ var english_text =
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
       get_timer(20), "Nope!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Starting Charge", CONTENT_LABEL, 0,
+      get_timer(60), "Charge Rate", CONTENT_LABEL, 0,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -842,6 +848,10 @@ var english_text =
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
       get_timer(20), "Nope!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Drill Rate", CONTENT_LABEL, 0,
+      get_timer(60), "Surface Area", CONTENT_LABEL, 0,
+      get_timer(60), "Crystal Density", CONTENT_LABEL, 0,
+      get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [

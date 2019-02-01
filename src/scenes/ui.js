@@ -494,7 +494,9 @@ var content_dragger = function()
         }
         else
         {
-          if(!gg.cur_level.sent_labels_incorrect)
+          //if(!gg.cur_level.sent_labels_incorrect)
+          for(var i = 0; i < gg.line.m_label.length; i++) gg.line.m_label[i] = -1;
+          for(var i = 0; i < gg.line.b_label.length; i++) gg.line.b_label[i] = -1;
           gg.message_box.nq_group(gg.cur_level.text.labels_incorrect);
           //gg.cur_level.progress++; //don't advance
           gg.cur_level.sent_labels_incorrect = 1;
