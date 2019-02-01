@@ -53,6 +53,7 @@ var LoadingScene = function(game, stage)
   {
     if(img) img.loaded = 1;
     n_imgs_loaded++;
+    console.log(n_imgs_loaded);
   };
   var fontLoaded = function()
   {
