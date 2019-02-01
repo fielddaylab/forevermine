@@ -232,7 +232,7 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_IMPROVE)
     {
-      var img = gg.cur_level.system_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.system_imgs.length)];
+      var img = gg.cur_level.system_imgs[floor((gg.mode_t/gg.systemf_t)%gg.cur_level.system_imgs.length)];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_IMPROVE_OUT)
@@ -866,11 +866,10 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_IMPROVE:
       {
-        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.systemf_loop);
-        if(gg.mode_p < 1 && !gg.keylistener.advance()) //display context
-        {
-        }
-        else self.set_mode(MODE_IMPROVE_OUT,0);
+        gg.mode_p = gg.mode_t/(gg.systemf_t*gg.cur_level.system_imgs.length*gg.systemf_loop);
+        if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
+        if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
+          self.set_mode(MODE_IMPROVE_OUT,0);
       }
         break;
       case MODE_IMPROVE_OUT:
@@ -1208,7 +1207,8 @@ var GamePlayScene = function(game, stage)
     gg.zoom_t = 50;
     gg.ctxf_t = 8;
     gg.ctxf_loop = 1;
-    gg.systemf_loop = 100;
+    gg.systemf_t = 8;
+    gg.systemf_loop = 10;
     gg.pano_t = 250;
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
