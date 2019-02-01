@@ -680,7 +680,7 @@ var exposition_box = function()
       case CONTENT_AI:
         gg.ctx.font = self.ai_font;
         gg.ctx.fillStyle = cyan;
-        gg.ctx.fillText("MAT",self.x+self.pad,y);
+        gg.ctx.fillText("MAL",self.x+self.pad,y);
         break;
       case CONTENT_PLAYER:
         gg.ctx.font = self.player_font;
