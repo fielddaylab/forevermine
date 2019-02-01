@@ -369,14 +369,14 @@ var GamePlayScene = function(game, stage)
     {
       gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
       gg.ctx.font = "20px DisposableDroidBB";
-      gg.ctx.fillText(gg.max_days-gg.cur_level.day+" days of oxygen remain", 20,gg.canv.height-80+30);
+      gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
     }
     else if(t < 0.5)
     {
       gg.ctx.globalAlpha = (0.5-t)*10;
       gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
       gg.ctx.font = "20px DisposableDroidBB";
-      gg.ctx.fillText(gg.max_days-gg.cur_level.day+" days of oxygen remain", 20,gg.canv.height-80+30);
+      gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
       gg.ctx.globalAlpha = 1;
     }
     else if(t < 0.6)
@@ -384,14 +384,14 @@ var GamePlayScene = function(game, stage)
       gg.ctx.globalAlpha = (t-0.5)*10;
       gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
       gg.ctx.font = "20px DisposableDroidBB";
-      gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+      gg.ctx.fillText((gg.max_days-gg.cur_level.day-2)+" days of oxygen remain", 20,gg.canv.height-80+30);
       gg.ctx.globalAlpha = 1;
     }
     else
     {
       gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
       gg.ctx.font = "20px DisposableDroidBB";
-      gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+      gg.ctx.fillText((gg.max_days-gg.cur_level.day-2)+" days of oxygen remain", 20,gg.canv.height-80+30);
     }
   }
 

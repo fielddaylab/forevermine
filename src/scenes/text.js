@@ -191,7 +191,8 @@ var english_text =
     [
       get_timer(100), "Here's our existing fuel.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
-      get_timer(100), "You need to figure out the rate.", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "Here's the updated fuel count from yesterday's mining.", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "You need to figure out the new rate.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
