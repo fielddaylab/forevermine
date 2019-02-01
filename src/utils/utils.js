@@ -463,6 +463,32 @@ var GenAudio = function(src)
   return aud;
 }
 
+var GenWAudio = function(src)
+{
+  var waudio = {};
+  waudio.loaded = 0;
+  waudio.paused = 1;
+  waudio.ctx = new AudioContext();
+  waudio.source = waudio.ctx.createBufferSource();
+  waudio.source.connect(waudio.ctx.destination);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', src, true);
+  xhr.responseType = 'arraybuffer';
+  xhr.onload = function() {
+    waudio.ctx.decodeAudioData(xhr.response, function(r) {
+      waudio.loaded = 1;
+      waudio.source.buffer = r;
+      waudio.source.loop = true;
+      if(!waudio.paused) waudio.source.start(0);
+    }, function() { console.error('The request failed.'); } );
+  }
+  xhr.send();
+  waudio.play  = function() { waudio.paused = 0; if(waudio.loaded) waudio.source.start(0); }
+  waudio.pause = function() { waudio.paused = 1; if(waudio.loaded) waudio.source.stop(); }
+  return waudio;
+}
+
 var Vid = function(container, source, callback)
 {
   var self = this;

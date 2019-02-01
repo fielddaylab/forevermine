@@ -1179,14 +1179,14 @@ var GamePlayScene = function(game, stage)
 
   self.ready = function()
   {
-    gg.logos_and_menu_audio = GenAudio("assets/audio/logos_and_menu.mp3"); gg.logos_and_menu_audio.loop = true;
-    gg.console_audio = GenAudio("assets/audio/console.mp3"); gg.console_audio.loop = true;
-    gg.modeling_audio = GenAudio("assets/audio/modeling.mp3"); gg.modeling_audio.loop = true;
-    gg.pano_audio = GenAudio("assets/audio/pano.mp3"); gg.pano_audio.loop = true;
-    gg.credits_audio = GenAudio("assets/audio/credits.mp3"); gg.credits_audio.loop = true;
-    gg.modeling_stress_audio = GenAudio("assets/audio/modeling_stress.mp3"); gg.modeling_stress_audio.loop = true;
-    gg.console_stress_audio = GenAudio("assets/audio/console_stress.mp3"); gg.console_stress_audio.loop = true;
-    gg.hacking_audio = GenAudio("assets/audio/hacking.mp3"); gg.hacking_audio.loop = true;
+    gg.logos_and_menu_audio = GenWAudio("assets/audio/logos_and_menu.mp3"); gg.logos_and_menu_audio.loop = true;
+    gg.console_audio = GenWAudio("assets/audio/console.mp3"); gg.console_audio.loop = true;
+    gg.modeling_audio = GenWAudio("assets/audio/modeling.mp3"); gg.modeling_audio.loop = true;
+    gg.pano_audio = GenWAudio("assets/audio/pano.mp3"); gg.pano_audio.loop = true;
+    gg.credits_audio = GenWAudio("assets/audio/credits.mp3"); gg.credits_audio.loop = true;
+    gg.modeling_stress_audio = GenWAudio("assets/audio/modeling_stress.mp3"); gg.modeling_stress_audio.loop = true;
+    gg.console_stress_audio = GenWAudio("assets/audio/console_stress.mp3"); gg.console_stress_audio.loop = true;
+    gg.hacking_audio = GenWAudio("assets/audio/hacking.mp3"); gg.hacking_audio.loop = true;
     gg.audios = [];
     gg.audios.push(gg.logos_and_menu_audio);
     gg.audios.push(gg.console_audio);
