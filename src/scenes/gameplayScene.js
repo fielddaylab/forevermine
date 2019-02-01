@@ -978,7 +978,7 @@ var GamePlayScene = function(game, stage)
         gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
         gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
         gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y+gg.code_txt.h-txtbump);
-        if(gg.input_code) gg.ctx.fillText(gg.input_code,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
+        if(gg.input_code_valid) gg.ctx.fillText(gg.code_txt.box.value,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
         gg.ctx.drawImage(gg.menu_text_img,gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
         gg.ctx.drawImage(gg.menu_go_img,gg.code_button.x,gg.code_button.y,gg.code_button.w,gg.code_button.h);
         drawLine(gg.sound_button.x,gg.sound_button.y-10,gg.canv.width-gg.sound_button.x,gg.sound_button.y-10,gg.ctx);
@@ -1287,13 +1287,44 @@ var GamePlayScene = function(game, stage)
     gg.continue_code = getCookie("level");
     gg.input_code = 0;
     gg.input_code_valid = 0;
+    gg.input_output = function(input)
+    {
+      //for debugging
+      switch(input)
+      {
+        case "0": return 0;
+        case "1": return 1;
+        case "2": return 2;
+        case "3": return 3;
+        case "4": return 4;
+        case "5": return 5;
+        case "6": return 6;
+        case "7": return 7;
+        case "8": return 8;
+        case "9": return 9;
+      }
+      switch(input)
+      {
+        case "0test": return 0;
+        case "1test": return 1;
+        case "2test": return 2;
+        case "3test": return 3;
+        case "4test": return 4;
+        case "5test": return 5;
+        case "6test": return 6;
+        case "7test": return 7;
+        case "8test": return 8;
+        case "9test": return 9;
+      }
+      return "blah";
+    }
     gg.continuable = 0;
     gg.continue_button = new ButtonBox( 0,0,0,0, function(evt){ if(!gg.continue_code) gg.new_button.click({}); else { gg.input_code = gg.continue_code; gg.code_button.click({}); } });
     gg.new_button      = new ButtonBox( 0,0,0,0, function(evt){ self.set_mode(MODE_CINEMATIC,0); });
     gg.code_txt        = new DomTextBox(0,0,0,0, gg.canv,"",function(txt){
-           if(txt == "")                                   { gg.code_txt.bg_color = "rgba(255,255,255,0.1)"; gg.input_code_valid = 0; }
-      else if(!isNaN(parseInt(txt)) && parseInt(txt) < 10) { gg.code_txt.bg_color = "rgba(0,255,0,0.1)"; gg.input_code_valid = 1; gg.input_code = parseInt(txt); }
-      else                                                 { gg.code_txt.bg_color = "rgba(255,0,0,0.1)"; gg.input_code_valid = 0; }
+           if(txt == "")                                                 { gg.code_txt.bg_color = "rgba(255,255,255,0.1)"; gg.input_code_valid = 0; }
+      else if(!isNaN(gg.input_output(txt)) && gg.input_output(txt) < 10) { gg.code_txt.bg_color = "rgba(0,255,0,0.1)";     gg.input_code_valid = 1; gg.input_code = gg.input_output(txt); }
+      else                                                               { gg.code_txt.bg_color = "rgba(255,0,0,0.1)";     gg.input_code_valid = 0; gg.code_txt.box.value = ""; }
     });
     gg.code_button     = new ButtonBox( 0,0,0,0, function(evt){
       if(gg.code_txt.box_on)
@@ -1301,7 +1332,7 @@ var GamePlayScene = function(game, stage)
         gg.code_txt.set(gg.code_txt.box.value);
         gg.code_txt.blur();
       }
-      if(!gg.input_code) gg.new_button.click({});
+      if(!gg.input_code_valid) gg.new_button.click({});
       else
       {
         self.set_mode(MODE_CINEMATIC,1);

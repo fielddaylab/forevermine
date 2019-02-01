@@ -53,7 +53,7 @@ var english_text =
       "Sure!", CONTENT_AI, EMOTE_NULL,
       "Well, maybe. I have no idea.", CONTENT_AI, EMOTE_NULL,
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(100), "This is a modeling tool.", CONTENT_AI, EMOTE_NULL,
       get_timer(100), "We can use it to predict if we're mining fast enough to get you out of here!", CONTENT_AI, EMOTE_NULL,
@@ -164,7 +164,7 @@ var english_text =
       "MAL, I swear. I will switch you off.", CONTENT_PLAYER, EMOTE_NULL,
       "Ha. Good luck. I don't even know what half these buttons are for.", CONTENT_AI, EMOTE_NULL,
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(120), "Here's our model!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "I know you're still mildly concussed, so I'll walk you through it again.", CONTENT_AI, EMOTE_NULL,
@@ -260,7 +260,7 @@ var english_text =
       "MAL, please.", CONTENT_PLAYER, EMOTE_NULL,
       "Oh, fine. Come on.", CONTENT_AI, EMOTE_NULL,
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(80), "Here we go.", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "Let's predict how doomed you are!", CONTENT_AI, EMOTE_NULL,
@@ -350,7 +350,7 @@ var english_text =
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
@@ -437,7 +437,7 @@ var english_text =
     [
       "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(80), "This is our fuel collection model.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "Let's predict if we'll get enough fuel before you run out of air!", CONTENT_AI, EMOTE_NULL,
@@ -525,7 +525,7 @@ var english_text =
       "Sure!", CONTENT_AI, EMOTE_NULL,
       "Or, you know, not. I really have no idea.", CONTENT_AI, EMOTE_NULL,
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
@@ -612,7 +612,7 @@ var english_text =
     [
       "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(20), "Let's see if you're gonna get enough fuel in time!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -692,7 +692,7 @@ var english_text =
       "Thanks, MAL. Do you have the new charging data?", CONTENT_PLAYER, EMOTE_NULL,
       "Yep! We're ready to work!", CONTENT_AI, EMOTE_NULL,
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
@@ -779,9 +779,9 @@ var english_text =
     [
       "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(80), "You need enough fuel by Day 14.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "You need enough fuel by Day 7.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "Blah, blah, blah.", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
@@ -903,7 +903,7 @@ var english_text =
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
     ],
-    status: //WORKSPACE: [skip_zoom] full "14 days" graph shown, w/ "survive/die" zones (unknown where you will land).
+    status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(80), "Cheer up, human.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "We can do this!!!", CONTENT_AI, EMOTE_NULL,
