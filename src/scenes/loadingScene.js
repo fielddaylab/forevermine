@@ -128,6 +128,7 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/mouth_2.png");
     img_srcs.push("assets/button_glow.png");
     img_srcs.push("assets/reply_button.png");
+    img_srcs.push("assets/return_button.png");
     img_srcs.push("assets/drop_data.png");
     img_srcs.push("assets/blackout.png");
     img_srcs.push("assets/eq.png");

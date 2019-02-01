@@ -2243,7 +2243,11 @@ var message_box = function()
       gg.ctx.drawImage(gg.drop_data_img,self.input_x,self.input_y,self.input_w,self.input_h);
     else
     {
-      if(self.prompt_player_input)
+      if(self.prompt_end)
+      {
+        gg.ctx.drawImage(gg.return_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
+      }
+      else if(self.prompt_player_input)
       {
         var s = 20;
         gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);

@@ -1231,6 +1231,7 @@ var GamePlayScene = function(game, stage)
     gg.iframe_img = GenImg("assets/iframe_img.jpg");
     gg.button_glow_img = GenImg("assets/button_glow.png");
     gg.reply_button_img = GenImg("assets/reply_button.png");
+    gg.return_button_img = GenImg("assets/return_button.png");
     gg.drop_data_img = GenImg("assets/drop_data.png");
     gg.blackout_img = GenImg("assets/blackout.png");
     gg.eq_img = GenImg("assets/eq.png");
