@@ -112,8 +112,8 @@ var monitor = function()
 
     self.look_t++;  if(self.look_t  > self.look_t_thresh) { self.look_t = randIntBelow(1000); self.look_t_thresh = self.look_t+randIntBelow(500); }
     self.blink_t++; if(self.blink_t > 300) self.blink_t = randIntBelow(250);
-    self.talk_t++;
     self.boot_t++; if(self.boot_t > 500) self.boot_t = 500;
+    if(self.boot_t > 250) self.talk_t++;
 
     var face_nx = (sin(self.look_t/50 )/5+1)/2;
     var face_ny = (sin(self.look_t/190)/5+1)/2;
