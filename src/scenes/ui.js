@@ -954,17 +954,17 @@ var timeline = function()
     var t_x;
 
     t_x = mapVal(0,self.t_max,self.sx,self.ex,self.t);
-    var s = self.h;
+    var s = (self.h-15);
     if(self.t == self.t_max && gg.table.correct && gg.cur_level.progress > 7)
-      gg.ctx.drawImage(gg.timeline_scrubber_large_img,t_x-s*3/4,self.y+gg.table.yoff-self.h/2,s*3/2,self.h*1.5);
+      gg.ctx.drawImage(gg.timeline_scrubber_large_img,t_x-s*3/4,self.y+15+gg.table.yoff-s/2,s*3/2,s*1.5);
     else
-      gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y+gg.table.yoff,s,self.h);
+      gg.ctx.drawImage(gg.timeline_scrubber_img,t_x-s/2,self.y+15+gg.table.yoff,s,s);
 
     if(self.t < self.t_target)
     {
       gg.ctx.font = "12px DisposableDroidBB";
       gg.ctx.fillStyle = light_gray;
-      gg.ctx.fillText("simulating...",self.x+50,self.y-30);
+      gg.ctx.fillText("simulating...",self.x+50,self.y-15);
     }
 
     gg.ctx.fillStyle = black;
@@ -1830,11 +1830,11 @@ var table = function()
       var syoff = 0;
       if(gg.timeline.t_correct < 100)
         syoff = abs(sin(gg.timeline.t_correct/10))*(1-(gg.timeline.t_correct/100))*20;
-      gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+self.yoff-s/2-syoff,s,gg.timeline.h);
+      gg.ctx.drawImage(gg.submit_img,t_x-s/2,gg.timeline.y+15+self.yoff-s/2-syoff,s,gg.timeline.h-15);
       gg.ctx.textAlign = "center";
       gg.ctx.font = "16px DisposableDroidBB";
-      gg.ctx.fillText("Modeled",t_x,gg.timeline.y+s/2+self.yoff);
-      gg.ctx.fillText("Data",t_x,gg.timeline.y+s/2+10+self.yoff);
+      gg.ctx.fillText("Modeled",t_x,gg.timeline.y+15+s/2+self.yoff);
+      gg.ctx.fillText("Data",t_x,gg.timeline.y+15+s/2+10+self.yoff);
       gg.ctx.font = self.font;
     }
     if(gg.timeline.t == gg.timeline.t_max && self.correct && !gg.cur_level.correct && !gg.timeline.fast_sim && !gg.content_dragger.dragging_sim)

@@ -66,9 +66,9 @@ var GamePlayScene = function(game, stage)
       gg.graph.y = 30;
 
       gg.timeline.w = gg.table.w;
-      gg.timeline.h = 40;
+      gg.timeline.h = 55;
       gg.timeline.x = gg.table.x;
-      gg.timeline.y = gg.table.y+5;
+      gg.timeline.y = gg.table.y-10;
       gg.timeline.size();
 
       gg.line.h = gg.canv.height;
