@@ -1085,8 +1085,8 @@ var editable_line = function()
       self.m_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.m[i] == v) return; self.m[i] = v; self.calc_m_total(); self.calculate_table(); self.draw_params(); self.invalidate_sim();  });})(i);
       self.m_btn[i].set(gg.cur_level.m_starting[i]);
       self.m_btn_draw_h[i] = 0;
-      self.minc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = gg.cur_level.m_correct[i]-self.m_btn[i].number; if(d < 1) d = 0.1; else if(d < 10) d = 1; else if(d < 100) d = 10; self.m_btn[i].set(self.m_btn[i].number+d); });})(i);
-      self.mdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = self.m_btn[i].number-gg.cur_level.m_correct[i]; if(d < 1) d = 0.1; else if(d < 10) d = 1; else if(d < 100) d = 10; self.m_btn[i].set(self.m_btn[i].number-d); });})(i);
+      self.minc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = gg.cur_level.m_correct[i]-self.m_btn[i].number; if(d <= 1) d = 0.1; else if(d <= 10) d = 1; else if(d <= 100) d = 10; self.m_btn[i].set(self.m_btn[i].number+d); });})(i);
+      self.mdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = self.m_btn[i].number-gg.cur_level.m_correct[i]; if(d <= 1) d = 0.1; else if(d <= 10) d = 1; else if(d <= 100) d = 10; self.m_btn[i].set(self.m_btn[i].number-d); });})(i);
     }
     self.b = [];
     self.b_btn = [];
@@ -1103,8 +1103,8 @@ var editable_line = function()
       self.b_btn[i] = (function(i){return new NumberBox(0,0,0,0,0,0.01,function(v){ v = fdisp(v,1); if(self.b[i] == v) return; self.b[i] = v; self.calc_b_total(); self.calculate_table(); self.draw_params();  self.invalidate_sim(); });})(i);
       self.b_btn[i].set(gg.cur_level.b_starting[i]);
       self.b_btn_draw_h[i] = 0;
-      self.binc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = gg.cur_level.b_correct[i]-self.b_btn[i].number; if(d < 1) d = 0.1; else if(d < 10) d = 1; else if(d < 100) d = 10; self.b_btn[i].set(self.b_btn[i].number+d); });})(i);
-      self.bdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = self.b_btn[i].number-gg.cur_level.b_correct[i]; if(d < 1) d = 0.1; else if(d < 10) d = 1; else if(d < 100) d = 10; self.b_btn[i].set(self.b_btn[i].number-d); });})(i);
+      self.binc_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = gg.cur_level.b_correct[i]-self.b_btn[i].number; if(d <= 1) d = 0.1; else if(d <= 10) d = 1; else if(d <= 100) d = 10; self.b_btn[i].set(self.b_btn[i].number+d); });})(i);
+      self.bdec_btn[i] = (function(i){return new ButtonBox(0,0,0,0, function(){ var d = self.b_btn[i].number-gg.cur_level.b_correct[i]; if(d <= 1) d = 0.1; else if(d <= 10) d = 1; else if(d <= 100) d = 10; self.b_btn[i].set(self.b_btn[i].number-d); });})(i);
     }
     self.size();
     self.calc_m_total();
