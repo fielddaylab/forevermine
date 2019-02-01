@@ -1289,6 +1289,7 @@ var GamePlayScene = function(game, stage)
     gg.input_code_valid = 0;
     gg.input_output = function(input)
     {
+      input = input.toLowerCase();
       //for debugging
       switch(input)
       {
@@ -1305,16 +1306,16 @@ var GamePlayScene = function(game, stage)
       }
       switch(input)
       {
-        case "0test": return 0;
-        case "1test": return 1;
-        case "2test": return 2;
-        case "3test": return 3;
-        case "4test": return 4;
-        case "5test": return 5;
-        case "6test": return 6;
-        case "7test": return 7;
-        case "8test": return 8;
-        case "9test": return 9;
+        case "begin": return 0;
+        case "goodnews": return 1;
+        case "badnews": return 2;
+        case "engineer": return 3;
+        case "checkup": return 4;
+        case "prefilled": return 5;
+        case "recheckup": return 6;
+        case "panels": return 7;
+        case "goodenough": return 8;
+        case "emp": return 9;
       }
       return "blah";
     }
