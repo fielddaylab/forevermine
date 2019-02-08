@@ -1365,8 +1365,6 @@ var GamePlayScene = function(game, stage)
     gg.timeline = new timeline();
     gg.table = new table();
     gg.line = new editable_line();
-    gg.intro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){ gg.intro_vid.done = 1; })
-    gg.intro_vid.load();
     gg.outro_vid = new Vid(document.getElementById(gg.stage.container), "assets/outro.mp4", function(){ gg.outro_vid.done = 1; })
     gg.outro_vid.load();
 
