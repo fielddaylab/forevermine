@@ -247,7 +247,7 @@ var english_text =
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "The bots reached the end of the fuel pocket. They're mining super slow.", CONTENT_AI, EMOTE_NULL,
+      "The bots reached the end of the fuel pocket. They're bringing back fuel super slow.", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
@@ -314,7 +314,7 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "This diagram shows the different systems that affect the robots' mining rate.", CONTENT_AI, EMOTE_NULL,
+      "This model shows the different systems that affect the robots' mining rate.", CONTENT_AI, EMOTE_NULL,
       "Maybe you can use your material science skillz to improve something!", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
