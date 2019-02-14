@@ -144,7 +144,7 @@ var english_text =
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
-      "Good morning, human! Feeling better?", CONTENT_AI, EMOTE_NULL,
+      "Hooray, you're awake! Feeling better?", CONTENT_AI, EMOTE_NULL,
       "I think so.", CONTENT_PLAYER, EMOTE_NULL,
       "About time. I've got a surprise for you!", CONTENT_AI, EMOTE_NULL,
       "Uh oh.", CONTENT_PLAYER, EMOTE_NULL,
