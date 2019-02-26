@@ -179,8 +179,8 @@ var GamePlayScene = function(game, stage)
   {
     strokeBox(gg.lab,gg.ctx);
     if(!gg.cur_level ||
-      (gg.mode >  MODE_NIGHT && (gg.next_level.i == 0 || gg.next_level.i == 9)) ||
-      (gg.mode <= MODE_NIGHT && (gg.cur_level.i  == 0 || gg.cur_level.i  == 9))
+      (gg.mode >  MODE_NIGHT && (gg.next_level.i == 0)) ||// || gg.next_level.i == 9)) || //was told to remove
+      (gg.mode <= MODE_NIGHT && (gg.cur_level.i  == 0))// || gg.cur_level.i  == 9)) //was told to remove
     )
       drawImageBox(gg.background_night_img,gg.lab,gg.ctx);
     else
