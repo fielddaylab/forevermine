@@ -178,7 +178,10 @@ var GamePlayScene = function(game, stage)
   self.draw_home = function()
   {
     strokeBox(gg.lab,gg.ctx);
-    if(!gg.cur_level || gg.cur_level.i == 0 || gg.cur_level.i == 9)
+    if(!gg.cur_level ||
+      (gg.mode >  MODE_NIGHT && (gg.next_level.i == 0 || gg.next_level.i == 9)) ||
+      (gg.mode <= MODE_NIGHT && (gg.cur_level.i  == 0 || gg.cur_level.i  == 9))
+    )
       drawImageBox(gg.background_night_img,gg.lab,gg.ctx);
     else
       drawImageBox(gg.background_img,gg.lab,gg.ctx);
