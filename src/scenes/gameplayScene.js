@@ -445,6 +445,7 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.oxy);
         //assume pre_text_0 already enqueued
         gg.cur_level = gg.next_level;
+        if(!skipping) ga('send', 'event', 'modeller_level', 'begin', gg.cur_level.i, 1);
         gg.graph.x_off = gg.cur_level.day*24;
         gg.graph.y0_min = gg.cur_level.y_min;
         if(gg.cur_level.i == 1 || gg.cur_level.i == 8)
@@ -557,6 +558,7 @@ var GamePlayScene = function(game, stage)
         if(gg.cur_level.i < gg.levels.length-1)
         {
           gg.next_level = gg.levels[gg.cur_level.i+1];
+          if(!skipping) ga('send', 'event', 'modeller_level', 'complete', gg.cur_level.i, 1);
           gg.exposition_box.clear();
           if(!skipping) gg.exposition_box.nq_group(gg.next_level.text.pre_context);
           gg.cur_level.progress++;
@@ -1338,6 +1340,7 @@ var GamePlayScene = function(game, stage)
       if(!gg.input_code_valid) gg.new_button.click({});
       else
       {
+        ga('send', 'event', 'modeller_level', 'jump', gg.input_code, 1);
         self.set_mode(MODE_CINEMATIC,1);
         self.set_mode(MODE_BOOT,1);
         self.set_mode(MODE_PRE0,1);
