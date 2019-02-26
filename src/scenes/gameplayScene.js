@@ -357,6 +357,7 @@ var GamePlayScene = function(game, stage)
       if(gg.cur_level.pano == 0) //transition to dark and back
       {
         gg.ctx.globalAlpha = 1-psin(t*twopi+halfpi)/2;
+        if(gg.cur_level.i == 0 && t < 0.5) gg.ctx.globalAlpha = 1;
         pimg = gg.pano_imgs_dark[i];
         vis_pano_w = gg.canv.width/gg.canv.height*pimg.height;
         pano_sx = 0;
