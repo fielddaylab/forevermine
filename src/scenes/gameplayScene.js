@@ -1003,7 +1003,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_t%100 < 50)
           gg.ctx.drawImage(gg.button_glow_img,gg.stage.width-210, gg.stage.height-135, 210, 140);
         var s = 30;
-        gg.ctx.drawImage(gg.notice_img,gg.stage.width-80,gg.stage.height-120,s,s);
+        //gg.ctx.drawImage(gg.notice_img,gg.stage.width-80,gg.stage.height-120,s,s); //was told to remove
         /*
         gg.ctx.fillStyle = white;
         gg.ctx.font = "20px DisposableDroidBB";
