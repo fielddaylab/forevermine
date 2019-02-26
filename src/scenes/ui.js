@@ -2315,7 +2315,7 @@ var message_box = function()
     if(self.prompt_end)
     {
       var s = 20;
-      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y+s,s,s);
+      //gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y+s,s,s); //was told to remove
     }
     var h = gg.neck_heart_img.height/gg.neck_heart_img.width*self.monitor_w;
     gg.ctx.drawImage(gg.neck_heart_img,self.monitor_x,self.monitor_y+self.monitor_h-h/2,self.monitor_w,h);
