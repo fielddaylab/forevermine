@@ -403,6 +403,91 @@ var GamePlayScene = function(game, stage)
     }
   }
 
+  self.credits_o = {
+    spacing:30,
+    lines:[
+      "",
+      "Field Day",
+      "",
+      "",
+      "Executive Producer",
+      "",
+      "Anne Lynn Gillian-Daniel",
+      "",
+      "",
+      "Producer",
+      "",
+      "David Gagnon",
+      "",
+      "",
+      "Education Fellows Director",
+      "",
+      "Jim Mathews",
+      "",
+      "",
+      "Creative Director",
+      "",
+      "Sarah Gagnon",
+      "",
+      "",
+      "Graphic Design and User Interface",
+      "",
+      "Eric Lang",
+      "",
+      "",
+      "Art & Animation",
+      "",
+      "Reyna Groff",
+      "Eric Lang",
+      "Rodney Lambright II",
+      "",
+      "",
+      "Content",
+      "",
+      "Anne Lynn Gillian-Daniel",
+      "Matthew Stillwell",
+      "David Gagnon",
+      "",
+      "",
+      "Writing",
+      "",
+      "Sarah Gagnon",
+      "Lindy Biller",
+      "Eric Lang",
+      "Philip Dougherty",
+      "",
+      "",
+      "Original Music & Sound",
+      "",
+      "Cyril Peck",
+      "",
+      "",
+      "Software Development",
+      "",
+      "Philip Dougherty",
+      "",
+      "",
+      "Administration Support",
+      "",
+      "Angel Cartagena",
+      "Adam Chase",
+      "Ahna Holliday",
+      "Becki Kohl",
+      "Jim Lyne",
+      "",
+      "",
+      "Quality Assurance",
+      "",
+      "[All the teachers that fill out the testing survey and their kids]",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
+  }
+
   self.set_mode = function(mode,skipping)
   {
     gg.mode = mode;
@@ -983,6 +1068,7 @@ var GamePlayScene = function(game, stage)
         */
         gg.ctx.fillStyle = white;
         gg.ctx.strokeStyle = white;
+        gg.ctx.textAlign = "left";
         gg.ctx.font = (gg.continue_button.h*2/3)+"px Lato";
         var txtbump = gg.continue_button.h/5;
         gg.ctx.fillText("STRANDED AT THE FOREVER MINE",gg.continue_button.x,10+gg.continue_button.h-txtbump);
@@ -1165,13 +1251,11 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CREDITS:
         var c_t = clamp(0,1,(gg.mode_t-gg.fade_t)/gg.credits_t);
-        //draw credits between c_t = 0 and c_t = 1;
-        {
-        }
         if(gg.mode_t < gg.fade_t)
         {
           var t = 1-(gg.mode_t/gg.fade_t); //fade in
           gg.ctx.globalAlpha = t;
+          gg.ctx.globalAlpha = 1; //just start black actually
           gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
@@ -1183,6 +1267,29 @@ var GamePlayScene = function(game, stage)
           gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
+        }
+        else
+        //draw credits between c_t = 0 and c_t = 1;
+        {
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+
+          var bottom = gg.canv.height;
+          var top = 0-self.credits_o.spacing*self.credits_o.lines.length;
+          var p = lerp(bottom,top,c_t);
+          gg.ctx.fillStyle = white;
+          gg.ctx.textAlign = "center";
+          for(var i = 0; i < self.credits_o.lines.length; i++)
+          {
+            if(p > 10 && p < gg.canv.height+self.credits_o.spacing)
+            {
+              if(p < 110) gg.ctx.globalAlpha = (p-10)/100;
+              gg.ctx.fillText(self.credits_o.lines[i],gg.canv.width/2,p);
+              gg.ctx.globalAlpha = 1;
+            }
+            p += self.credits_o.spacing;
+          }
+
         }
         break;
     }
@@ -1227,7 +1334,7 @@ var GamePlayScene = function(game, stage)
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
     gg.blackout_t = 100;
-    gg.credits_t = 100;
+    gg.credits_t = 5000;
     gg.sound = 1;
     gg.fullscreen = 0;
 
