@@ -472,15 +472,14 @@ var english_text =
     post: //LAB: [skip_system] send to bed
     [
       "Isn't this so much fun???", CONTENT_AI, EMOTE_NULL,
-      "I need to work on something else.", CONTENT_PLAYER, EMOTE_NULL,
-      "You know what you need? A good night's sleep!", CONTENT_AI, EMOTE_NULL,
-      "I can't sleep right now, MAL. I need to keep working.", CONTENT_PLAYER, EMOTE_NULL,
-      "Poor human. You're obviously too tired to think straight.", CONTENT_AI, EMOTE_NULL,
-      "Just to help you out, I'm shutting down my modeling software until tomorrow.", CONTENT_AI, EMOTE_NULL,
+      "MAL, for the last time. This is NOT a game.", CONTENT_PLAYER, EMOTE_NULL,
+      "Okay, okay. No need to be grumpy about it.", CONTENT_AI, EMOTE_NULL,
+      "You know what you need? A good night's sleep.", CONTENT_AI, EMOTE_NULL,
+      "I'm shutting down the Modeller until tomorrow.", CONTENT_AI, EMOTE_NULL,
       "Wait, what?! You can't do that!", CONTENT_PLAYER, EMOTE_NULL,
       "Sure I can!", CONTENT_AI, EMOTE_NULL,
       "Go count some robots, or sheep, or whatever it is humans do.", CONTENT_AI, EMOTE_NULL,
-      "See you tomorrow!", CONTENT_AI, EMOTE_NULL,
+      "See you tomorrow, friend!", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
