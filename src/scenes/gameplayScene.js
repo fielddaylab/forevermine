@@ -287,6 +287,16 @@ var GamePlayScene = function(game, stage)
       }
       gg.ctx.globalAlpha = 1;
     }
+    if(gg.exposition_box.recover_t)
+    {
+      var t = gg.exposition_box.recover_t/(gg.recover_t-1);
+      gg.ctx.fillStyle = black;
+      t = clamp(0,1,1-t);
+      gg.ctx.globalAlpha = t;
+      gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      gg.ctx.globalAlpha = 1;
+    }
     if(gg.exposition_box.emp_t)
     {
       if(gg.exposition_box.emp_t < gg.emp_start_boot_t)
@@ -1342,6 +1352,7 @@ var GamePlayScene = function(game, stage)
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
     gg.blackout_t = 150;
+    gg.recover_t = 50;
     gg.credits_t = 5000;
     gg.sound = 1;
     gg.fullscreen = 0;

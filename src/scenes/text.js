@@ -25,7 +25,7 @@ var english_text =
       "HOORAY!!! Somebody to talk to!", CONTENT_AI, EMOTE_NULL,
       "Um... hello? Are you okay, human?", CONTENT_AI, EMOTE_NULL,
       "BLACKOUT", CONTENT_AI, EMOTE_BLACKOUT,
-      "Ugh. What is this place?", CONTENT_PLAYER, EMOTE_NULL,
+      "Ugh. What is this place?", CONTENT_PLAYER, EMOTE_RECOVER,
       "Finally! You're awake!", CONTENT_AI, EMOTE_NULL,
       "Welcome to the Forever Mine. We're built to run forever!", CONTENT_AI, EMOTE_NULL,
       "I'm MAL, your Mining Activity Liaison.", CONTENT_AI, EMOTE_NULL,
@@ -942,7 +942,7 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "MAL, you did it! It's working!", CONTENT_PLAYER, EMOTE_NULL,
+      "MAL, you did it! It's working!", CONTENT_PLAYER, EMOTE_DIE,
     ],
     post: //LAB: [skip_system] send to bed
     [
