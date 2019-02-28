@@ -17,6 +17,7 @@ var monitor = function()
   self.talk_t = 99999;
 
   self.mode = 0; //0- normal, 1- angry, 2- glitched
+  self.dead = 0;
 
   self.bg_color = [];
   self.eye_img = [];
@@ -146,6 +147,13 @@ var monitor = function()
 
     //c.strokeStyle = red;
     //c.strokeRect(0,0,s.width,s.height);
+
+    if(self.dead)
+    {
+    c.fillStyle = black;
+    c.fillRect(0,0,s.width,s.height);
+    return;
+    }
 
     var tmode = self.mode;
     if(tmode == 2)
@@ -644,6 +652,7 @@ var exposition_box = function()
   self.displayed_i = 0;
 
   self.blackout_t = 0;
+  self.recover_t = 0;
   self.change_t = 0;
   self.emp_t = 0;
 
@@ -668,6 +677,12 @@ var exposition_box = function()
     else self.bubbles.push(textToLines(self.player_font,self.text_w,text,gg.ctx));
     self.types.push(type);
     self.metas.push(meta);
+    //disabling all but "DIE" (at time of adding this code) because I know it works w/o them, and only for-sure need "DIE" to work here #HACKS
+    //if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
+    //if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
+    //if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
+    //if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
+    if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
     if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
   }
 
@@ -683,8 +698,10 @@ var exposition_box = function()
     if(self.displayed_i < self.texts.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
     if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
+    if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
     if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
+    if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
   }
 
   self.click = function(evt)
@@ -696,6 +713,7 @@ var exposition_box = function()
   self.tick = function()
   {
     if(self.blackout_t) { self.blackout_t++; if(self.blackout_t == gg.blackout_t) { self.blackout_t = 0; self.advance(); } }
+    if(self.recover_t) { self.recover_t++; if(self.recover_t == gg.recover_t) self.recover_t = 0; }
     if(self.change_t) self.change_t++;
     if(self.emp_t)  { self.emp_t++; if(self.emp_t == gg.emp_t) { self.emp_t = 0; self.advance(); } }
   }

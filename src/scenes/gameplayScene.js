@@ -169,6 +169,7 @@ var GamePlayScene = function(game, stage)
     gg.cur_level.progress = 1;
     gg.table.data_visible = 0;
     gg.table.yoff = gg.table.h;
+    gg.monitor.dead = 0;
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     gg.line.consume_cur_level();
@@ -258,25 +259,42 @@ var GamePlayScene = function(game, stage)
     {
       var t = gg.exposition_box.blackout_t/(gg.blackout_t-1);
       gg.ctx.fillStyle = black;
-      if(t < 0.3)
+      if(t < 0.2)
       {
-        t = t/0.3;
+        t = t/0.2;
         gg.ctx.globalAlpha = t;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      }
+      else if(t < 0.4)
+      {
+        t = (t-0.2)/0.2;
+        gg.ctx.globalAlpha = 1-t;
         gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
       }
       else if(t < 0.6)
       {
-        t = (t-0.3)/0.3;
-        gg.ctx.globalAlpha = 1-t;
-        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
-      }
-      else
-      {
-        t = min(1,(t-0.6)/0.4);
+        t = min(1,(t-0.4)/0.2);
         gg.ctx.globalAlpha = t;
         gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
         gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
       }
+      else
+      {
+        t = min(1,(t-0.6)/0.2);
+        gg.ctx.globalAlpha = 1;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+        gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      }
+      gg.ctx.globalAlpha = 1;
+    }
+    if(gg.exposition_box.recover_t)
+    {
+      var t = gg.exposition_box.recover_t/(gg.recover_t-1);
+      gg.ctx.fillStyle = black;
+      t = clamp(0,1,1-t);
+      gg.ctx.globalAlpha = t;
+      gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
       gg.ctx.globalAlpha = 1;
     }
     if(gg.exposition_box.emp_t)
@@ -1333,7 +1351,8 @@ var GamePlayScene = function(game, stage)
     gg.pano_t = 350;
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
-    gg.blackout_t = 100;
+    gg.blackout_t = 150;
+    gg.recover_t = 50;
     gg.credits_t = 5000;
     gg.sound = 1;
     gg.fullscreen = 0;
