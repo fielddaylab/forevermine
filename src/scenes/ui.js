@@ -17,6 +17,7 @@ var monitor = function()
   self.talk_t = 99999;
 
   self.mode = 0; //0- normal, 1- angry, 2- glitched
+  self.dead = 0;
 
   self.bg_color = [];
   self.eye_img = [];
@@ -146,6 +147,8 @@ var monitor = function()
 
     //c.strokeStyle = red;
     //c.strokeRect(0,0,s.width,s.height);
+
+    if(self.dead) return;
 
     var tmode = self.mode;
     if(tmode == 2)
@@ -685,6 +688,7 @@ var exposition_box = function()
     if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
     if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
+    if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
   }
 
   self.click = function(evt)
