@@ -115,6 +115,7 @@ var monitor = function()
     self.blink_t++; if(self.blink_t > 300) self.blink_t = randIntBelow(250);
     self.boot_t++; if(self.boot_t > 500) self.boot_t = 500;
     if(self.boot_t > 250) self.talk_t++;
+    if(self.boot_t == 249) { if(gg.sound) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play(); }
 
     var face_nx = (sin(self.look_t/50 )/5+1)/2;
     var face_ny = (sin(self.look_t/190)/5+1)/2;
@@ -677,13 +678,20 @@ var exposition_box = function()
     else self.bubbles.push(textToLines(self.player_font,self.text_w,text,gg.ctx));
     self.types.push(type);
     self.metas.push(meta);
-    //disabling all but "DIE" (at time of adding this code) because I know it works w/o them, and only for-sure need "DIE" to work here #HACKS
-    //if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
-    //if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
-    //if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
-    //if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
-    if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
-    if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
+    if(self.displayed_i == self.texts.length-1)
+    {
+      //disabling all but "DIE" (at time of adding this code) because I know it works w/o them, and only for-sure need "DIE" to work here #HACKS
+      //if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
+      //if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
+      //if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
+      //if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
+      if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
+      if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
+      if(self.types[self.displayed_i] == CONTENT_AI)
+      {
+        if(gg.sound) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
+      }
+    }
   }
 
   self.nq_group = function(text)
@@ -702,6 +710,14 @@ var exposition_box = function()
     if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
     if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
     if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
+    if(self.types[self.displayed_i] == CONTENT_AI)
+    {
+      if(gg.sound) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
+      if(gg.cur_level.i == 9)
+      {
+        ;
+      }
+    }
   }
 
   self.click = function(evt)
