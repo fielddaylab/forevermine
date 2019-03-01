@@ -1364,6 +1364,7 @@ var GamePlayScene = function(game, stage)
     gg.menu_check_img = GenImg("assets/menu/check_box_fill.png");
     gg.menu_text_img = GenImg("assets/menu/text_area.png");
     gg.iframe_img = GenImg("assets/iframe_img.jpg");
+    gg.glitch_bg_img = GenImg("assets/glitch_bg.jpg");
     gg.button_glow_img = GenImg("assets/button_glow.png");
     gg.reply_button_img = GenImg("assets/reply_button.png");
     gg.return_button_img = GenImg("assets/return_button.png");

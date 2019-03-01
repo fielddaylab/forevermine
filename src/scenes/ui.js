@@ -164,6 +164,7 @@ var monitor = function()
     return;
     }
 
+
     var tmode = self.mode;
     if(tmode == 2)
     {
@@ -171,7 +172,10 @@ var monitor = function()
     }
 
     c.fillStyle = self.bg_color[tmode];
-    c.fillRect(0,0,s.width,s.height);
+    if(self.mode == 2)
+      c.drawImage(gg.glitch_bg_img,0,0,s.width,s.height);
+    else
+      c.fillRect(0,0,s.width,s.height);
 
     c.fillStyle = blue;
     var w;
