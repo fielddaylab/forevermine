@@ -17,12 +17,11 @@ var get_timer = function(t)
 
 var english_text =
 [
-
   //check fuel
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
-      "HOORAY!!! Somebody to talk to!", CONTENT_AI, EMOTE_NULL,
+      "HOORAY!!! Somebody to talk to!", CONTENT_AI, EMOTE_SILENT, //let boot trigger sound
       "Um... hello? Are you okay, human?", CONTENT_AI, EMOTE_NULL,
       "BLACKOUT", CONTENT_AI, EMOTE_BLACKOUT,
       "Finally! You're awake!", CONTENT_AI, EMOTE_RECOVER,
@@ -829,14 +828,14 @@ var english_text =
       "No. You can't leave!", CONTENT_AI, EMOTE_CHANGE,
       "MAL--", CONTENT_PLAYER, EMOTE_NULL,
       "I'll send out another pulse. Mess up the robots. Then you'll REALLY be stuck here.", CONTENT_AI, EMOTE_NULL,
-      "MAL, please calm down.", CONTENT_AI, EMOTE_NULL,
+      "MAL, please calm down.", CONTENT_PLAYER, EMOTE_NULL,
       "One EMP blast. That's all it would take.", CONTENT_AI, EMOTE_NULL,
       "MAL, I could die!", CONTENT_PLAYER, EMOTE_NULL,
       "You'll be fine. I've got plenty of oxygen!", CONTENT_AI, EMOTE_NULL,
       "I'm going to EMP. I'm gonna do it!", CONTENT_AI, EMOTE_NULL,
       "MAL, stop!", CONTENT_PLAYER, EMOTE_NULL,
       "EMP", CONTENT_AI, EMOTE_EMP,
-      "Ummmmm whoops. I kinda got carried away back there.", CONTENT_AI, EMOTE_NULL,
+      "Ummmmm whoops. I kinda got carried away back there.", CONTENT_AI, EMOTE_SILENT, //let boot trigger audio
       "MAL, what did you do?!", CONTENT_PLAYER, EMOTE_NULL,
       "Um... that wasn't supposed to happen.", CONTENT_AI, EMOTE_NULL,
       "What. Did. You. Do.", CONTENT_PLAYER, EMOTE_NULL,

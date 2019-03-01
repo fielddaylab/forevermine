@@ -90,7 +90,7 @@ var monitor = function()
   self.eye_img.push(GenImg("assets/eye_2.png"));
   self.mouth_img.push(GenImg("assets/mouth_2.png"));
 
-  self.boot_t = 0;
+  self.boot_t = 500;
 
   self.clicked = 0;
 
@@ -115,7 +115,15 @@ var monitor = function()
     self.blink_t++; if(self.blink_t > 300) self.blink_t = randIntBelow(250);
     self.boot_t++; if(self.boot_t > 500) self.boot_t = 500;
     if(self.boot_t > 250) self.talk_t++;
-    if(self.boot_t == 249) { if(gg.sound) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play(); }
+    if(self.boot_t == 249)
+    {
+      if(gg.sound)
+      {
+             if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
+        else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
+        else                          gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)].play();
+      }
+    }
 
     var face_nx = (sin(self.look_t/50 )/5+1)/2;
     var face_ny = (sin(self.look_t/190)/5+1)/2;
@@ -689,7 +697,12 @@ var exposition_box = function()
       if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
       if(self.types[self.displayed_i] == CONTENT_AI)
       {
-        if(gg.sound) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
+        if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound)
+        {
+               if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
+          else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
+          else                          gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)].play();
+        }
       }
     }
   }
@@ -712,10 +725,11 @@ var exposition_box = function()
     if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
     if(self.types[self.displayed_i] == CONTENT_AI)
     {
-      if(gg.sound) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
-      if(gg.cur_level.i == 9)
+      if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound)
       {
-        ;
+             if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
+        else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
+        else                          gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)].play();
       }
     }
   }
@@ -2084,11 +2098,18 @@ var message_box = function()
   {
     self.prompt_ai_typing = 0;
     self.advance_t = 0;
+    if(self.types[self.displayed_i] == CONTENT_AI && gg.sound)
+    {
+           if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
+      else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
+      else                          gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)].play();
+    }
     self.displayed_i++;
     self.calculate_top();
     if(self.types[self.displayed_i-1] != CONTENT_PLAYER)
       gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
+
   }
 
   self.click = function(evt)
@@ -2165,7 +2186,9 @@ var message_box = function()
     else if(self.displayed_i == self.texts.length) self.prompt_end = 1;
 
     if(old_prompt_ai_typing != self.prompt_ai_typing)
+    {
       self.calculate_top();
+    }
   }
 
   self.draw = function()
