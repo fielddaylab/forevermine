@@ -30,6 +30,7 @@ var EMOTE_RECOVER  = ENUM; ENUM++;
 var EMOTE_CHANGE   = ENUM; ENUM++;
 var EMOTE_DIE      = ENUM; ENUM++;
 var EMOTE_EMP      = ENUM; ENUM++;
+var EMOTE_BUILD    = ENUM; ENUM++;
 var EMOTE_NULL     = ENUM; ENUM++;
 
 var level = function()

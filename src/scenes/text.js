@@ -829,7 +829,7 @@ var english_text =
       "MAL--", CONTENT_PLAYER, EMOTE_NULL,
       "I'll send out another pulse. Mess up the robots. Then you'll REALLY be stuck here.", CONTENT_AI, EMOTE_NULL,
       "MAL, please calm down.", CONTENT_PLAYER, EMOTE_NULL,
-      "One EMP blast. That's all it would take.", CONTENT_AI, EMOTE_NULL,
+      "One EMP blast. That's all it would take.", CONTENT_AI, EMOTE_BUILD,
       "MAL, I could die!", CONTENT_PLAYER, EMOTE_NULL,
       "You'll be fine. I've got plenty of oxygen!", CONTENT_AI, EMOTE_NULL,
       "I'm going to EMP. I'm gonna do it!", CONTENT_AI, EMOTE_NULL,

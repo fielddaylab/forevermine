@@ -117,7 +117,7 @@ var monitor = function()
     if(self.boot_t > 250) self.talk_t++;
     if(self.boot_t == 249)
     {
-      if(gg.sound)
+      if(gg.sound && !gg.skipping)
       {
              if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
         else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
@@ -697,7 +697,7 @@ var exposition_box = function()
       if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
       if(self.types[self.displayed_i] == CONTENT_AI)
       {
-        if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound)
+        if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound && !gg.skipping)
         {
                if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
           else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
@@ -721,11 +721,12 @@ var exposition_box = function()
     if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
-    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
+    if(self.metas[self.displayed_i] == EMOTE_BUILD)  { if(gg.sound) gg.build_audio.play(); }
+    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; if(!gg.build_audio.paused) gg.build_audio.pause(); if(gg.sound) gg.emp_audio.play(); }
     if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
     if(self.types[self.displayed_i] == CONTENT_AI)
     {
-      if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound)
+      if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound && !gg.skipping)
       {
              if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
         else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
@@ -2098,7 +2099,7 @@ var message_box = function()
   {
     self.prompt_ai_typing = 0;
     self.advance_t = 0;
-    if(self.types[self.displayed_i] == CONTENT_AI && gg.sound)
+    if(self.types[self.displayed_i] == CONTENT_AI && gg.sound && !gg.skipping)
     {
            if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
       else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();

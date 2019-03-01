@@ -681,14 +681,16 @@ var GamePlayScene = function(game, stage)
   self.skip_to_mode = function(mode)
   {
     var nmode;
+    gg.skipping = 1;
     while(gg.mode != mode)
     {
       nmode = gg.mode+1;
       if(gg.mode == MODE_LAB_IN) nmode = MODE_PRE0;
 
       if(mode == nmode) self.set_mode(nmode,0)
-      else self.set_mode(nmode,1)
+      else { gg.skipping = 0; self.set_mode(nmode,1) }
     }
+    gg.skipping = 0;
   }
 
   self.tick_mode = function()
@@ -1323,6 +1325,8 @@ var GamePlayScene = function(game, stage)
     for(var i = 0; i < 9; i++) gg.voices.clean.push(  GenWAudio("assets/audio/voice/clean/"  +i+".mp3"));
     for(var i = 0; i < 5; i++) gg.voices.angry.push(  GenWAudio("assets/audio/voice/angry/"  +i+".mp3"));
     for(var i = 0; i < 9; i++) gg.voices.glitchy.push(GenWAudio("assets/audio/voice/glitchy/"+i+".mp3"));
+    gg.weld_audio = GenWAudio("assets/audio/weld.mp3");
+    gg.build_audio = GenWAudio("assets/audio/build.mp3");
     gg.emp_audio = GenWAudio("assets/audio/EMP.mp3");
 
     gg.cur_audio = gg.menu_audio;
