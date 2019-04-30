@@ -1129,9 +1129,8 @@ var system_indexs = [
         gg.ctx.fillStyle = white;
         gg.ctx.strokeStyle = white;
         gg.ctx.textAlign = "left";
-        gg.ctx.font = (gg.continue_button.h*2/3)+"px Lato";
+        gg.ctx.font = (gg.continue_button.h*1/3)+"px Lato";
         var txtbump = gg.continue_button.h/5;
-        gg.ctx.fillText("STRANDED AT THE FOREVER MINE",gg.continue_button.x,10+gg.continue_button.h-txtbump);
         gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
         gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
         gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y+gg.code_txt.h-txtbump);
@@ -1401,7 +1400,7 @@ var system_indexs = [
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
     gg.fmlogo_img = GenImg("assets/fmlogo.png");
-    gg.menu_bg_img = GenImg("assets/menu/background.png");
+    gg.menu_bg_img = GenImg("assets/menu/background.jpg");
     gg.menu_go_img = GenImg("assets/menu/button_go.png");
     gg.menu_box_img = GenImg("assets/menu/check_box.png");
     gg.menu_check_img = GenImg("assets/menu/check_box_fill.png");
@@ -1988,4 +1987,3 @@ var system_indexs = [
   };
 
 };
-

@@ -143,7 +143,7 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/mouth_1.png");
     img_srcs.push("assets/eye_2.png");
     img_srcs.push("assets/mouth_2.png");
-    img_srcs.push("assets/menu/background.png");
+    img_srcs.push("assets/menu/background.jpg");
     img_srcs.push("assets/menu/button_go.png");
     img_srcs.push("assets/menu/check_box.png");
     img_srcs.push("assets/menu/check_box_fill.png");
@@ -380,4 +380,3 @@ var LoadingScene = function(game, stage)
     if(keyer) keyer.detach(); keyer = 0;
   };
 };
-
