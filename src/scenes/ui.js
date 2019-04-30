@@ -864,7 +864,7 @@ var graph = function()
     gg.ctx.textAlign = "center";
 
     //grid
-    gg.ctx.strokeStyle = "rgba(255,255,255,0.5)";
+    gg.ctx.strokeStyle = "rgba(0,0,0,0.2)";
     gg.ctx.lineWidth = 2;
       //vertical lines
     var lw = 100;
@@ -879,7 +879,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.x0_min; i <= self.x0_max; i += self.x0_grid)
       {
-        x = self.off_x_for_x(i);
+        x = floor(self.off_x_for_x(i));
         if(x < self.x || x > self.x+self.w) continue;
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
@@ -899,7 +899,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.x1_min; i <= self.x1_max; i += self.x1_grid)
       {
-        x = self.x_for_x(i);
+        x = floor(self.x_for_x(i));
         if(x < self.x || x > self.x+self.w) continue;
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
@@ -924,7 +924,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.y0_min; i <= self.y0_max; i += self.y0_grid)
       {
-        y = self.y_for_y(i);
+        y = floor(self.y_for_y(i));
         gg.ctx.moveTo(self.x,y);
         gg.ctx.lineTo(self.x+self.w,y);
         gg.ctx.fillText(i,self.x-15,y+5);
@@ -944,7 +944,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.y1_min; i <= self.y1_max; i += self.y1_grid)
       {
-        y = self.y_for_y(i);
+        y = floor(self.y_for_y(i));
         if(y > self.y)
         {
           gg.ctx.moveTo(self.x,y);
@@ -1514,7 +1514,7 @@ var editable_line = function()
     {
       gg.ctx.fillStyle = white;
       gg.ctx.font = self.font;
-      gg.ctx.lineWidth = 2;
+      gg.ctx.lineWidth = 4;
       gg.ctx.strokeStyle = white;
 
         //line
@@ -1525,7 +1525,6 @@ var editable_line = function()
       var sy;
       var ex;
       var ey;
-      gg.ctx.strokeStyle = dark_gray;
       if(gg.graph.zoom > 0)
       {
         var imax = min(self.day_m.length,gg.cur_level.day);
