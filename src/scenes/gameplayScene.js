@@ -229,7 +229,6 @@ var system_indexs = [
       drawImageBox(gg.background_night_img,gg.lab,gg.ctx);
     else
       drawImageBox(gg.background_img,gg.lab,gg.ctx);
-    gg.ctx.imageSmoothingEnabled = 0;
     var fuel_p = 0;
     var oxy_p = 0;
     gg.ctx.fillStyle = green;
@@ -250,6 +249,7 @@ var system_indexs = [
     gg.ctx.fillStyle = "#CDBA70";
     gg.ctx.fillRect(gg.oxy.x,gg.oxy.y+gg.oxy.h-gg.oxy.h*oxy_p,gg.oxy.w,gg.oxy.h*oxy_p);
 
+    gg.ctx.imageSmoothingEnabled = 0;
     gg.ctx.fillStyle = white;
     if(gg.mode == MODE_CTX_IN)
     {
