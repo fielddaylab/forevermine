@@ -311,7 +311,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
+        y += mb.font_h*mb.bubbles[i].length+mb.pad*2;
       y += mb.pad;
     }
     return 0;
@@ -346,7 +346,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
+        y += mb.font_h*mb.bubbles[i].length+mb.pad*2;
       y += mb.pad;
     }
     return 0;
@@ -376,7 +376,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
+        y += mb.font_h*mb.bubbles[i].length+mb.pad*2;
       y += mb.pad;
     }
     return 0;
@@ -2090,8 +2090,8 @@ var message_box = function()
       else //CONTENT_PLAYER || CONTENT_AI
       {
         for(var j = 0; j < self.bubbles[i].length; j++)
-          self.max_top_y -= self.font_h+self.pad;
-        self.max_top_y -= self.pad;
+          self.max_top_y -= self.font_h;
+        self.max_top_y -= self.pad*2;
       }
       self.max_top_y -= self.pad;
     }
@@ -2209,12 +2209,12 @@ var message_box = function()
       if(self.types[i] == CONTENT_PLAYER)
       {
         gg.ctx.fillStyle = self.you_text_color;
-        gg.ctx.fillRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
-        gg.ctx.strokeRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.fillRect(self.x+self.pad*2,y,self.bubble_w,self.pad*2+self.font_h*self.bubbles[i].length);
+        gg.ctx.strokeRect(self.x+self.pad*2,y,self.bubble_w,self.pad*2+self.font_h*self.bubbles[i].length);
         gg.ctx.beginPath();
-        gg.ctx.moveTo(self.x+self.pad*2+self.bubble_w-self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
-        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
-        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.moveTo(self.x+self.pad*2+self.bubble_w-self.pad,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad*2+self.font_h*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
         gg.ctx.fill();
         gg.ctx.stroke();
 
@@ -2223,25 +2223,25 @@ var message_box = function()
         y += self.pad;
         for(var j = 0; j < self.bubbles[i].length; j++)
         {
-          gg.ctx.fillText(self.bubbles[i][j], self.x+self.w-self.pad*2, y+self.font_h);
-          y += self.font_h+self.pad;
+          gg.ctx.fillText(self.bubbles[i][j], self.x+self.w-self.pad*2, y+self.font_h-self.pad/2);
+          y += self.font_h;
         }
-        y += self.pad;
+        y += self.pad*2;
       }
       else if(self.types[i] == CONTENT_AI)
       {
         gg.ctx.fillStyle = self.ai_text_color;
-        gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
-        gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad*2+self.font_h*self.bubbles[i].length);
+        gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad*2+self.font_h*self.bubbles[i].length);
         gg.ctx.beginPath();
-        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
-        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
-        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad*2+self.font_h*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
         gg.ctx.fill();
         gg.ctx.beginPath();
-        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
-        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
-        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length           );
+        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad*2+self.font_h*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad*2+self.font_h*self.bubbles[i].length           );
         gg.ctx.stroke();
 
         gg.ctx.fillStyle = self.you_text_color;
@@ -2249,10 +2249,10 @@ var message_box = function()
         y += self.pad;
         for(var j = 0; j < self.bubbles[i].length; j++)
         {
-          gg.ctx.fillText(self.bubbles[i][j], self.x+self.pad*2, y+self.font_h);
-          y += self.font_h+self.pad;
+          gg.ctx.fillText(self.bubbles[i][j], self.x+self.pad*2, y+self.font_h-self.pad/2);
+          y += self.font_h;
         }
-        y += self.pad;
+        y += self.pad*2;
       }
       else if(self.types[i] == CONTENT_DATA)
       {
@@ -2282,7 +2282,7 @@ var message_box = function()
             if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; label = gg.cur_level.b_label_fmt[j]; break; }
         }
         var h = self.font_h*3;
-        gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
+        gg.ctx.drawImage(gg.chat_constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
         drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+h/2, h*0.8, gg.ctx);
 
         gg.ctx.textAlign = "left";
@@ -2303,7 +2303,7 @@ var message_box = function()
             if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; c = gg.cur_level.b_correct[j]; break; }
         }
         var h = self.font_h*4;
-        gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
+        gg.ctx.drawImage(gg.chat_constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
         drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+self.font_h+self.font_h*3/2, h*0.6, gg.ctx);
 
         gg.ctx.textAlign = "center";
@@ -2363,7 +2363,7 @@ var message_box = function()
       }
       else
       {
-        gg.ctx.globalAlpha = 0.6;
+        gg.ctx.globalAlpha = 0.4;
         gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
         gg.ctx.globalAlpha = 1;
       }
@@ -2384,3 +2384,4 @@ var message_box = function()
   }
 
 }
+

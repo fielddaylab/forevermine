@@ -1431,6 +1431,7 @@ var system_indexs = [
     gg.ui_chart_overlay_img = GenImg("assets/ui_chart_overlay.png");
     gg.constant_bg_img = GenImg("assets/card_editable.png");
     gg.variable_bg_img = GenImg("assets/card_not_editable.png");
+    gg.chat_constant_bg_img = GenImg("assets/chat_card.png");
     gg.crycollected_img = GenImg("assets/crycollected.png");
     gg.battery_charge_img = GenImg("assets/battery_charge.png");
     gg.cryinitial_img = GenImg("assets/cryinitial.png");
