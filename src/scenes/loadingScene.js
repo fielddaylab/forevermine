@@ -124,7 +124,7 @@ var LoadingScene = function(game, stage)
     loadingImageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put asset paths in img_srcs
-    for(var j = 0; j < 90; j++) img_srcs.push("assets/context/0-"+j+".png"); //only load 0th- others will load next
+    for(var j = 0; j < 50; j++) img_srcs.push("assets/context/0-"+j+".png"); //only load 0th- others will load next
     img_srcs.push("assets/fmlogo.png");
     img_srcs.push("assets/crycollected.png");
     img_srcs.push("assets/cryrate.png");

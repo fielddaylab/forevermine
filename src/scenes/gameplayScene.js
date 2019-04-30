@@ -3,6 +3,49 @@ var GamePlayScene = function(game, stage)
 {
   var self = this;
 
+/*
+  //use on output of compress_contexts to pare down
+  for(var i = 0; i < context_indexs.length; i++)
+  {
+    var list = context_indexs[i];
+    var uniq = 0;
+    for(var j = 0; j < list.length; j++)
+    {
+      if(list[j] == uniq) uniq++;
+      else
+      {
+        for(var k = uniq; k < list.length; k++)
+          if(list[k] > uniq) list[k]--;
+      }
+    }
+    console.log(list);
+  }
+*/
+
+var context_indexs = [
+[0, 1, 2, 3, 4, 5, 4, 6, 4, 6, 4, 6, 4, 6, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 10, 14, 15, 16, 17, 14, 15, 16, 18, 14, 15, 19, 20, 21, 22, 23, 22, 23, 22, 23, 22, 23, 24, 23, 25, 26, 27, 28, 29, 30, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48],
+[0, 1, 2, 3, 4, 5, 4, 6, 4, 6, 4, 6, 4, 6, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 10, 14, 15, 16, 17, 14, 15, 16, 18, 14, 15, 19, 20, 21, 22, 23, 22, 23, 22, 23, 22, 23, 24, 23, 25, 26, 27, 28, 29, 30, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 48, 49, 48, 49, 50, 49, 50, 49, 50, 49, 50, 49, 50, 49, 50],
+[0, 1, 2, 3, 4, 5, 4, 6, 4, 6, 4, 6, 4, 6, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 10, 14, 15, 16, 17, 14, 15, 16, 18, 14, 15, 19, 20, 21, 22, 23, 22, 23, 22, 23, 22, 23, 24, 23, 25, 26, 27, 28, 29, 30, 30, 31, 32, 33, 30, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 47, 48, 47, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49],
+[0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 7, 7, 6, 5, 4, 3, 2, 1, 0, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 32, 33, 32, 33, 32, 33, 32],
+[],
+[0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 34, 35, 34, 35, 34, 35, 34],
+[],
+[0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 34, 36, 34, 36, 34, 35, 34],
+];
+
+var system_indexs = [
+[],
+[],
+[0],
+[],
+[],
+[],
+[0],
+[],
+[0],
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 10, 9, 11, 12, 13, 14, 15, 16, 17, 14, 15, 16, 17, 14, 18, 19, 20, 21, 18, 19, 20, 22, 18, 19, 23, 24, 25, 26, 27, 26, 27, 26, 27, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 35, 36, 35, 36, 35, 36, 35, 36, 35, 36, 35, 36, 35, 37, 38, 39, 40, 41, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42],
+];
+
   self.resize = function(s)
   {
     stage = s;
@@ -218,12 +261,12 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_CTX)
     {
-      var img = gg.cur_level.context_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.context_imgs.length)];
+      var img = gg.cur_level.context_imgs[context_indexs[gg.cur_level.i][floor((gg.mode_t/gg.ctxf_t)%context_indexs[gg.cur_level.i].length)]];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_CTX_OUT)
     {
-      var img = gg.cur_level.context_imgs[gg.cur_level.context_imgs.length-1];
+      var img = gg.cur_level.context_imgs[context_indexs[gg.cur_level.i][context_indexs[gg.cur_level.i].length-1]];
       drawImageBox(img,gg.monitor,gg.ctx);
       gg.ctx.globalAlpha = gg.mode_p;
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -239,12 +282,12 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_IMPROVE)
     {
-      var img = gg.cur_level.system_imgs[floor((gg.mode_t/gg.systemf_t)%gg.cur_level.system_imgs.length)];
+      var img = gg.cur_level.system_imgs[system_indexs[gg.cur_level.i][floor((gg.mode_t/gg.systemf_t)%system_indexs[gg.cur_level.i].length)]];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_IMPROVE_OUT)
     {
-      var img = gg.cur_level.system_imgs[gg.cur_level.system_imgs.length-1];
+      var img = gg.cur_level.system_imgs[system_indexs[gg.cur_level.i][system_indexs[gg.cur_level.i].length-1]];
       drawImageBox(img,gg.monitor,gg.ctx);
       gg.ctx.globalAlpha = gg.mode_p;
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -760,7 +803,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CTX:
       {
-        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.ctxf_loop);
+        gg.mode_p = gg.mode_t/(gg.ctxf_t*context_indexs[gg.cur_level.i].length*gg.ctxf_loop);
         if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_CTX_OUT,0);
@@ -973,8 +1016,8 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_IMPROVE:
       {
-        gg.mode_p = gg.mode_t/(gg.systemf_t*gg.cur_level.system_imgs.length*gg.systemf_loop);
-        if(gg.cur_level.special) gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.system_imgs.length*gg.ctxf_loop);
+        gg.mode_p = gg.mode_t/(gg.systemf_t*system_indexs[gg.cur_level.i].length*gg.systemf_loop);
+        if(gg.cur_level.special) gg.mode_p = gg.mode_t/(gg.ctxf_t*system_indexs[gg.cur_level.i].length*gg.ctxf_loop);
         if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_IMPROVE_OUT,0);
@@ -1527,7 +1570,7 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 0;
     l.y_min = 0;
-    for(var j = 0; j < 90; j++)
+    for(var j = 0; j < 50; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
@@ -1564,7 +1607,7 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 1;
     l.y_min = floor(l.b_correct_total/10)*10;
-    for(var j = 0; j < 90; j++)
+    for(var j = 0; j < 51; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
@@ -1601,7 +1644,7 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 2;
     l.y_min = floor(l.b_correct_total/10)*10;
-    for(var j = 0; j < 90; j++)
+    for(var j = 0; j < 50; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
@@ -1640,7 +1683,7 @@ var GamePlayScene = function(game, stage)
     l.y_label = "CHARGE";
     l.day = 3;
     l.y_min = 0;
-    for(var j = 0; j < 53; j++)
+    for(var j = 0; j < 34; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
@@ -1714,7 +1757,7 @@ var GamePlayScene = function(game, stage)
     l.y_label = "CHARGE";
     l.day = 4;
     l.y_min = 0;
-    for(var j = 0; j < 53; j++)
+    for(var j = 0; j < 36; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
@@ -1788,7 +1831,7 @@ var GamePlayScene = function(game, stage)
     l.y_label = "CHARGE";
     l.day = 5;
     l.y_min = 0;
-    for(var j = 0; j < 53; j++)
+    for(var j = 0; j < 37; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
@@ -1862,7 +1905,7 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 6;
     l.y_min = 0;
-    for(var j = 0; j < 90; j++)
+    for(var j = 0; j < 44; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
