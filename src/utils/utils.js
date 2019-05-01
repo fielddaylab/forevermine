@@ -634,6 +634,7 @@ var Vid = function(container, source, callback)
   self.video.style.zIndex = "999";
   self.video.controls = false;
   self.video.loop = false;
+  self.video.preload = "auto";
   self.video.playsinline = true;
   self.video.setAttribute("webkit-playsinline","webkit-playsinline"); //ugh
   var dom_src = document.createElement('source');
