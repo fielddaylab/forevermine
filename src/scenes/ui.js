@@ -119,9 +119,9 @@ var monitor = function()
     {
       if(gg.sound && !gg.skipping)
       {
-             if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
-        else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
-        else                          gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)].play();
+             if(gg.monitor.mode == 0) gg.audwrangler.play(gg.voices.clean[randIntBelow(gg.voices.clean.length)]);
+        else if(gg.monitor.mode == 1) gg.audwrangler.play(gg.voices.angry[randIntBelow(gg.voices.angry.length)]);
+        else                          gg.audwrangler.play(gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)]);
       }
     }
 
@@ -703,9 +703,9 @@ var exposition_box = function()
       {
         if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound && !gg.skipping)
         {
-               if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
-          else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
-          else                          gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)].play();
+               if(gg.monitor.mode == 0) gg.audwrangler.play(gg.voices.clean[randIntBelow(gg.voices.clean.length)]);
+          else if(gg.monitor.mode == 1) gg.audwrangler.play(gg.voices.angry[randIntBelow(gg.voices.angry.length)]);
+          else                          gg.audwrangler.play(gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)]);
         }
       }
     }
@@ -725,16 +725,16 @@ var exposition_box = function()
     if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
-    if(self.metas[self.displayed_i] == EMOTE_BUILD)  { if(gg.sound) gg.build_audio.play(); }
-    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; if(!gg.build_audio.paused) gg.build_audio.pause(); if(gg.sound) gg.emp_audio.play(); }
+    if(self.metas[self.displayed_i] == EMOTE_BUILD)  { if(gg.sound) gg.audwrangler.play(gg.build_audio); }
+    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; if(!gg.build_audio.paused) gg.build_audio.pause(); if(gg.sound) gg.audwrangler.play(gg.emp_audio); }
     if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
     if(self.types[self.displayed_i] == CONTENT_AI)
     {
       if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound && !gg.skipping)
       {
-             if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
-        else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
-        else                          gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)].play();
+             if(gg.monitor.mode == 0) gg.audwrangler.play(gg.voices.clean[randIntBelow(gg.voices.clean.length)]);
+        else if(gg.monitor.mode == 1) gg.audwrangler.play(gg.voices.angry[randIntBelow(gg.voices.angry.length)]);
+        else                          gg.audwrangler.play(gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)]);
       }
     }
   }
@@ -2105,9 +2105,9 @@ var message_box = function()
     self.advance_t = 0;
     if(self.types[self.displayed_i] == CONTENT_AI && gg.sound && !gg.skipping)
     {
-           if(gg.monitor.mode == 0) gg.voices.clean[randIntBelow(gg.voices.clean.length)].play();
-      else if(gg.monitor.mode == 1) gg.voices.angry[randIntBelow(gg.voices.angry.length)].play();
-      else                          gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)].play();
+           if(gg.monitor.mode == 0) gg.audwrangler.play(gg.voices.clean[randIntBelow(gg.voices.clean.length)]);
+      else if(gg.monitor.mode == 1) gg.audwrangler.play(gg.voices.angry[randIntBelow(gg.voices.angry.length)]);
+      else                          gg.audwrangler.play(gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)]);
     }
     self.displayed_i++;
     self.calculate_top();

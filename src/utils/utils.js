@@ -455,44 +455,167 @@ var GenImg = function(src)
   return img;
 }
 
-var GenAudio = function(src)
+var AudWrangler = function(silence_src)
 {
-  var aud = new Audio();
-  aud.src = src;
-  aud.load();
-  return aud;
-}
+  var self = this;
 
-var GenWAudio = function(src)
-{
-  var waudio = {};
-  waudio.loaded = 0;
-  waudio.paused = 1;
-  if(window.AudioContext && false)
-    waudio.ctx = new AudioContext();
-  //else if(window.webkitAudioContext) //don't bother trying- totally fails
-    //waudio.ctx = new webkitAudioContext();
-  else return GenAudio(src);
-  waudio.source = waudio.ctx.createBufferSource();
-  waudio.source.connect(waudio.ctx.destination);
+  var ctx;
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', src, true);
-  xhr.responseType = 'arraybuffer';
-  xhr.onload = function() {
-    waudio.ctx.decodeAudioData(xhr.response, function(r) {
-      waudio.loaded = 1;
-      waudio.source.buffer = r;
-      waudio.source.loop = true;
-      if(!waudio.paused) waudio.source.start(0);
-    }, function() { console.error('The request failed.'); } );
+  var aud_src = [];
+  var aud_data = [];
+  var aud_buffer = [];
+
+  var music_src = 0;
+  var music_data = 0;
+  var music_buffer = 0;
+  var music_track = 0;
+  var music_shouldbeplaying = 0;
+
+  self.held = 0;
+  self.initd = 0;
+
+  self.hold = function()
+  {
+    if(self.initd) return; //doesn't matter
+    if(self.held) return; //already done
+    self.held = 1;
+    self.unregisterevt();
   }
-  xhr.send();
+  self.unhold = function()
+  {
+    if(self.initd) return; //doesn't matter
+    if(!self.held) return; //already done
+    self.held = 0;
+    self.registerevt();
+  }
 
-  waudio.play  = function() { waudio.paused = 0; if(waudio.loaded) waudio.source.start(0); }
-  waudio.pause = function() { waudio.paused = 1; if(waudio.loaded) waudio.source.stop(); }
-  return waudio;
+  var evtpkg = {capture:true,once:false,passive:false};
+  self.registerevt = function()
+  {
+         if(platform == DO_PLATFORM_PC)     document.getElementById("stage_container").addEventListener('click',    self.init, evtpkg);
+    else if(platform == DO_PLATFORM_MOBILE) document.getElementById("stage_container").addEventListener('touchend', self.init, evtpkg);
+  }
+
+  self.unregisterevt = function()
+  {
+         if(platform == DO_PLATFORM_PC)     document.getElementById("stage_container").removeEventListener('click',    self.init, evtpkg);
+    else if(platform == DO_PLATFORM_MOBILE) document.getElementById("stage_container").removeEventListener('touchend', self.init, evtpkg);
+  }
+
+  self.init = function() //must be called by click on ios!
+  {
+    if(!ctx)
+    {
+      if(window.AudioContext) ctx = new AudioContext();
+      else if(window.webkitAudioContext) ctx = new webkitAudioContext();
+    }
+    var all_ready = 1;
+    for(var i = 0; i < aud_src.length; i++)
+    {
+      if(aud_data[i] && !aud_buffer[i])
+      {
+        (function(i){ctx.decodeAudioData(aud_data[i], function(b){ aud_buffer[i] = b; },
+        function(e){ console.log("Error with decoding audio data" + e.err); });
+        })(i);
+        aud_data[i] = 0;
+      }
+      if(!aud_buffer[i]) all_ready = 0;
+    }
+    if(music_data && !music_buffer)
+    {
+      ctx.decodeAudioData(music_data, function(b){ music_buffer = b; if(music_shouldbeplaying) self.play_music(); },
+      function(e){ console.log("Error with decoding music data" + e.err); });
+      music_data = 0;
+      if(!music_buffer) all_ready = 0;
+    }
+    if(all_ready)
+    {
+      self.unregisterevt();
+      self.initd = 1;
+      self.play(0); //silence
+    }
+  }
+
+  self.register = function(src)
+  {
+    var i = aud_src.length;
+
+    aud_src[i] = src;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', src, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function() {
+      xhr.onload = 0;
+      aud_data[i] = xhr.response;
+      if(ctx)
+      {
+        ctx.decodeAudioData(aud_data[i], function(b){ aud_buffer[i] = b; },
+        function(e){ console.log("Error with decoding audio data" + e.err); });
+        aud_data[i] = 0;
+      }
+    };
+    xhr.send();
+
+    return i;
+  }
+
+  self.play = function(i)
+  {
+    if(ctx && ctx.state === 'suspended') ctx.resume();
+    if(ctx && aud_buffer[i])
+    {
+      var track;
+      track = ctx.createBufferSource();
+      track.buffer = aud_buffer[i];
+      track.connect(ctx.destination);
+      track.start(0);
+    }
+  }
+
+  self.register_music = function(src)
+  {
+    music_src = src;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', src, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function() {
+      xhr.onload = 0;
+      music_data = xhr.response;
+      if(ctx)
+      {
+        ctx.decodeAudioData(music_data, function(b){ music_buffer = b; if(music_shouldbeplaying) self.play_music(); },
+        function(e){ console.log("Error with decoding music data" + e.err); });
+        music_data = 0;
+      }
+    };
+    xhr.send();
+
+    return 0;
+  }
+  self.play_music = function()
+  {
+    music_shouldbeplaying = 1;
+    if(ctx && ctx.state === 'suspended') ctx.resume();
+    if(ctx && music_buffer)
+    {
+      music_track = ctx.createBufferSource();
+      music_track.buffer = music_buffer;
+      music_track.connect(ctx.destination);
+      music_track.loop = true;
+      music_track.start(0);
+    }
+  }
+  self.stop_music = function()
+  {
+    music_shouldbeplaying = 0;
+    if(music_track) music_track.stop();
+    music_track = 0;
+  }
+
+  self.register(silence_src);
+  self.registerevt();
 }
+
 
 var Vid = function(container, source, callback)
 {
@@ -1908,34 +2031,6 @@ var running_deriv_variable_graph = function()
     ctx.lineWidth = 1;
     ctx.strokeRect(self.x,self.y,self.w,self.h);
   }
-}
-
-var unplayed_audio_queue = [];
-var playHandlePromise = function(audio,q)
-{
-  r = audio.play();
-  if(!r) return;
-  r.catch(function(err){
-    if(!q) return;
-    for(var i = 0; i < unplayed_audio_queue.length; i++)
-      if(unplayed_audio_queue[i] == audio) return;
-    unplayed_audio_queue.push(audio);
-  });
-}
-
-function flush_unplayed_audio()
-{
-  for(var i = 0; i < unplayed_audio_queue.length; i++)
-  {
-    var r = unplayed_audio_queue[i].play();
-    if(r) r.catch(noop);
-  }
-  unplayed_audio_queue = [];
-}
-
-function break_unplayed_audio()
-{
-  unplayed_audio_queue = [];
 }
 
 function fullscreen()

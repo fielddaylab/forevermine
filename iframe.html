@@ -101,20 +101,18 @@ function begin()
   var h = game_height;
   size_containers(w,h);
 
-  var first_audio = GenAudio("assets/silence.mp3");
+  gg.audwrangler = new AudWrangler("assets/audio/silence.mp3");
+
   var play_first_audio = function()
   {
-    first_audio.play();
+    gg.audwrangler.init();
     game_first_audio_played = 1;
     if(platform == DO_PLATFORM_PC)          stage_container.removeEventListener('mouseup',  play_first_audio);
     else if(platform == DO_PLATFORM_MOBILE) stage_container.removeEventListener('touchend', play_first_audio);
-
-    if(platform == DO_PLATFORM_PC)          stage_container.addEventListener('mouseup',  flush_unplayed_audio);
-    else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchend', flush_unplayed_audio);
   }
   if(platform == DO_PLATFORM_PC)          stage_container.addEventListener('mouseup',  play_first_audio);
   else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchend', play_first_audio);
-  game_first_audio_played = 1; first_audio.play(); //uncomment this if loaded through click-to-init iframe
+  game_first_audio_played = 1; play_first_audio(); //uncomment this if loaded through click-to-init iframe
 
   gg.g = new Game({width:w,height:h,container:"stage_container"});
   resize();
