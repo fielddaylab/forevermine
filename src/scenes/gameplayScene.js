@@ -604,14 +604,14 @@ var system_indexs = [
         gg.outro_vid.done = 0;
         break;
       case MODE_CINEMATIC:
-        gg.audwrangler.hold();
+        gg.audwrangler.hold(); gg.audwrangler.stop_music();
         if(!skipping)
           gg.intro_vid.play();
         else gg.intro_vid.done = 1;
         break;
       case MODE_BOOT:
         gg.cur_audio = gg.console_audio;
-        if(gg.sound) gg.audwrangler.unhold();
+        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
         gg.monitor.boot_t = 0;
         if(skipping)
         {
@@ -665,7 +665,7 @@ var system_indexs = [
         break;
       case MODE_WORK_IN:
         gg.cur_audio = gg.modeling_audio;
-        if(gg.sound) gg.audwrangler.unhold();
+        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
         if(gg.cur_level.skip_zoom)
         {
           gg.graph.zoom = 0;
@@ -699,7 +699,7 @@ var system_indexs = [
         break;
       case MODE_WORK_OUT:
         gg.cur_audio = gg.console_audio;
-        if(gg.sound) gg.audwrangler.unhold();
+        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
         gg.line.blur();
         gg.exposition_box.clear();
         break;
@@ -1597,8 +1597,8 @@ var system_indexs = [
     gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){
       gg.sound = v;
 
-      if(!gg.sound) gg.audwrangler.hold();
-      if(gg.sound) gg.audwrangler.unhold();
+      if(!gg.sound) { gg.audwrangler.hold();   gg.audwrangler.stop_music(); }
+      if( gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
     });
 
     gg.fullscreen_button = new ToggleBox(0,0,0,0, 0, function(v){ gg.fullscreen = !gg.fullscreen; if(gg.fullscreen) fullscreen(); else unfullscreen();});
