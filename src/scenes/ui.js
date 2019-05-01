@@ -864,7 +864,7 @@ var graph = function()
     gg.ctx.textAlign = "center";
 
     //grid
-    gg.ctx.strokeStyle = "rgba(255,255,255,0.5)";
+    gg.ctx.strokeStyle = "rgba(0,0,0,0.2)";
     gg.ctx.lineWidth = 2;
       //vertical lines
     var lw = 100;
@@ -879,7 +879,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.x0_min; i <= self.x0_max; i += self.x0_grid)
       {
-        x = self.off_x_for_x(i);
+        x = floor(self.off_x_for_x(i));
         if(x < self.x || x > self.x+self.w) continue;
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
@@ -899,7 +899,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.x1_min; i <= self.x1_max; i += self.x1_grid)
       {
-        x = self.x_for_x(i);
+        x = floor(self.x_for_x(i));
         if(x < self.x || x > self.x+self.w) continue;
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
@@ -924,7 +924,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.y0_min; i <= self.y0_max; i += self.y0_grid)
       {
-        y = self.y_for_y(i);
+        y = floor(self.y_for_y(i));
         gg.ctx.moveTo(self.x,y);
         gg.ctx.lineTo(self.x+self.w,y);
         gg.ctx.fillText(i,self.x-15,y+5);
@@ -944,7 +944,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.y1_min; i <= self.y1_max; i += self.y1_grid)
       {
-        y = self.y_for_y(i);
+        y = floor(self.y_for_y(i));
         if(y > self.y)
         {
           gg.ctx.moveTo(self.x,y);
@@ -1225,7 +1225,7 @@ var editable_line = function()
 
   self.size = function()
   {
-    gg.ctx.font = self.font;
+    gg.ctx.font = self.font_h+"px Lato";
     self.eqn_strings = [];
     self.eqn_xs = [];
     var eqn_i = 0;
@@ -1248,7 +1248,7 @@ var editable_line = function()
       self.m_btn[m_i].w = self.btn_w;
       self.eqn_w += self.m_btn[m_i].w;
       m_i++;
-      self.eqn_strings[eqn_i] = "*";
+      self.eqn_strings[eqn_i] = "×";
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -1281,7 +1281,7 @@ var editable_line = function()
       self.m_btn[m_i].w = self.btn_w;
       self.eqn_w += self.m_btn[m_i].w;
       m_i++;
-      self.eqn_strings[eqn_i] = ")*";
+      self.eqn_strings[eqn_i] = ")×";
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -1514,7 +1514,7 @@ var editable_line = function()
     {
       gg.ctx.fillStyle = white;
       gg.ctx.font = self.font;
-      gg.ctx.lineWidth = 2;
+      gg.ctx.lineWidth = 4;
       gg.ctx.strokeStyle = white;
 
         //line
@@ -1525,7 +1525,6 @@ var editable_line = function()
       var sy;
       var ex;
       var ey;
-      gg.ctx.strokeStyle = dark_gray;
       if(gg.graph.zoom > 0)
       {
         var imax = min(self.day_m.length,gg.cur_level.day);
@@ -1600,7 +1599,8 @@ var editable_line = function()
       var mlen = gg.cur_level.m_label.length;
 
       //eqn strings
-      gg.ctx.font = self.font;
+      //gg.ctx.font = self.font;
+      gg.ctx.font = self.font_h+"px Lato";
       gg.ctx.fillStyle = white;
       gg.ctx.textAlign = "left";
       if(gg.cur_level.special)
@@ -1611,21 +1611,21 @@ var editable_line = function()
           if(overwrite)
           {
             if(self.eqn_strings[i] == "+")
-              gg.ctx.fillText("*",self.eqn_xs[i],self.eqn_y+self.font_h);
+              gg.ctx.fillText("×",self.eqn_xs[i],self.eqn_y+self.font_h*2);
             else
             {
-              if(self.eqn_strings[i] == "*" || self.eqn_strings[i] == ")*") overwrite = 0;
-              gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+              if(self.eqn_strings[i] == "×" || self.eqn_strings[i] == ")×") overwrite = 0;
+              gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h*2);
             }
           }
           else
-            gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+            gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h*2);
         }
       }
       else
       {
         for(var i = 0; i < self.eqn_strings.length; i++)
-          gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+          gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h*2);
       }
       gg.ctx.font = self.label_font;
 
@@ -1633,13 +1633,13 @@ var editable_line = function()
         self.y_draw_h = lerp(self.y_draw_h,50,0.1);
       else
         self.y_draw_h = lerp(self.y_draw_h,self.btn_h,0.1);
-      gg.ctx.drawImage(gg.variable_bg_img,self.y_x,self.eqn_y+yoff,self.btn_w,self.y_draw_h);
+      gg.ctx.drawImage(gg.variable_bg_img,self.y_x,self.eqn_y+yoff+(self.btn_h-self.y_draw_h)/2,self.btn_w,self.y_draw_h);
 
       if(gg.cur_level.progress < 5 || (!gg.content_dragger.dragging_x && !self.x_set))
         self.x_draw_h = lerp(self.x_draw_h,50,0.1);
       else
         self.x_draw_h = lerp(self.x_draw_h,self.btn_h,0.1);
-      gg.ctx.drawImage(gg.variable_bg_img,self.x_x,self.eqn_y+yoff,self.btn_w,self.x_draw_h);
+      gg.ctx.drawImage(gg.variable_bg_img,self.x_x,self.eqn_y+yoff+(self.btn_h-self.x_draw_h)/2,self.btn_w,self.x_draw_h);
 
       gg.ctx.textAlign = "center";
       gg.ctx.fillStyle = black;
@@ -1662,7 +1662,7 @@ var editable_line = function()
           self.m_btn_draw_h[i] = lerp(self.m_btn_draw_h[i],50,0.1);
         else
           self.m_btn_draw_h[i] = lerp(self.m_btn_draw_h[i],b.h,0.1);
-        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,self.m_btn_draw_h[i]);
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+(b.h-self.m_btn_draw_h[i])/2,b.w,self.m_btn_draw_h[i]);
       }
       for(var i = 0; i < self.b_btn.length; i++)
       {
@@ -1671,7 +1671,7 @@ var editable_line = function()
           self.b_btn_draw_h[i] = lerp(self.b_btn_draw_h[i],50,0.1);
         else
           self.b_btn_draw_h[i] = lerp(self.b_btn_draw_h[i],b.h,0.1);
-        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,self.b_btn_draw_h[i]);
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+(b.h-self.b_btn_draw_h[i])/2,b.w,self.b_btn_draw_h[i]);
       }
 
       //selector
