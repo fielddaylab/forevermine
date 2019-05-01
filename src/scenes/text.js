@@ -874,31 +874,31 @@ var english_text =
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
       get_timer(80), "Now label the equation.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Put Existing Fuel on the far right.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "The other three labels can go in any of the remaining empty slots.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "Drill Rate", CONTENT_LABEL, 0,
       get_timer(80), "Surface Area", CONTENT_LABEL, 0,
       get_timer(80), "Crystal Density", CONTENT_LABEL, 0,
       get_timer(80), "Existing Fuel", CONTENT_LABEL, 0,
-      get_timer(80), "Put Existing Fuel on the far right.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "The other three labels can go in any of the remaining empty slots.", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
       get_timer(80), "Nope! Try again.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Existing Fuel goes on the far right.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "The other three labels can go in any of the remaining slots.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drill Rate", CONTENT_LABEL, 0,
       get_timer(60), "Surface Area", CONTENT_LABEL, 0,
       get_timer(60), "Crystal Density", CONTENT_LABEL, 0,
       get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
-      get_timer(80), "Existing Fuel goes on the far right.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "The other three labels can go in any of the remaining slots.", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(80), "Now put in the data.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Plug these numbers in:", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(20), "Surface Area", CONTENT_CONSTANT, 4,
       get_timer(20), "Crystal Density", CONTENT_CONSTANT, 4,
-      get_timer(80), "Plug those numbers in first.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "Then increase the drill rate until the model predicts that you'll survive!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Finally, increase the drill rate until the model predicts that you'll survive!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
