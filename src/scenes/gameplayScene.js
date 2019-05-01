@@ -1430,7 +1430,39 @@ var system_indexs = [
     gg.sound = 1;
     gg.fullscreen = 0;
 
-    gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
+    gg.keylistener = {
+      last_key:0,
+      advanceable:0,
+      secretprogress:0,
+      key_down:function(evt)
+      {
+        gg.keylistener.last_key = evt.keyCode;
+        if(!gg.keylistener.advanceable)
+        {
+          var secret = "spyparty";
+          if(secret[gg.keylistener.secretprogress] == String.fromCharCode(evt.keyCode).toLowerCase()) gg.keylistener.secretprogress++;
+          else                                                                          gg.keylistener.secretprogress = 0;
+          if(gg.keylistener.secretprogress == secret.length) gg.keylistener.advanceable = 1;
+          console.log(gg.keylistener.secretprogress);
+          console.log(String.fromCharCode(evt.keyCode));
+          console.log(gg.keylistener.secretprogress);
+        }
+      },
+      advance:function()
+      {
+        if(gg.keylistener.advanceable && gg.keylistener.last_key == 32 /*space*/)
+        {
+          if(!gg.intro_vid.done) gg.intro_vid.stop();
+          gg.keylistener.last_key = 0;
+          return 1;
+        }
+        else
+        {
+          gg.keylistener.last_key = 0;
+          return 0;
+        }
+      }
+    };
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
     gg.fmlogo_img = GenImg("assets/fmlogo.png");
@@ -1500,9 +1532,24 @@ var system_indexs = [
     gg.continue_code = getCookie("level");
     gg.input_code = 0;
     gg.input_code_valid = 0;
+    gg.input_codes = [
+      "stranded", //0
+      "goodnews", //1
+      "badnews", //2
+      "icanfixit", //3
+      "status", //4
+      "leftovers", //5
+      "willitwork", //6
+      "solar", //7
+      "goodenough", //8
+      "dontgo", //9
+    ];
     gg.input_output = function(input)
     {
       input = input.toLowerCase();
+      for(var i = 0; i < gg.input_codes.length; i++)
+        if(input == gg.input_codes[i]) return i;
+
       //for debugging
       switch(input)
       {
@@ -1517,20 +1564,7 @@ var system_indexs = [
         case "8": return 8;
         case "9": return 9;
       }
-      switch(input)
-      {
-        case "begin": return 0;
-        case "goodnews": return 1;
-        case "badnews": return 2;
-        case "engineer": return 3;
-        case "checkup": return 4;
-        case "prefilled": return 5;
-        case "recheckup": return 6;
-        case "panels": return 7;
-        case "goodenough": return 8;
-        case "emp": return 9;
-      }
-      return "blah";
+      return "NOT A NUMBER";
     }
     gg.continuable = 0;
     gg.continue_button = new ButtonBox( 0,0,0,0, function(evt){ if(!gg.continue_code) gg.new_button.click({}); else { gg.input_code = gg.continue_code; gg.code_button.click({}); } });
@@ -1608,7 +1642,7 @@ var system_indexs = [
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1645,7 +1679,7 @@ var system_indexs = [
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1684,7 +1718,7 @@ var system_indexs = [
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 1;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1721,7 +1755,7 @@ var system_indexs = [
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 1;
     l.perma_zoom = 0;
@@ -1758,7 +1792,7 @@ var system_indexs = [
       l.system_imgs.push(GenImg("assets/system/"+(i+2)+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1795,7 +1829,7 @@ var system_indexs = [
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 1;
     l.perma_zoom = 0;
@@ -1832,7 +1866,7 @@ var system_indexs = [
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 1;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1869,7 +1903,7 @@ var system_indexs = [
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 1;
     l.perma_zoom = 0;
@@ -1906,7 +1940,7 @@ var system_indexs = [
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1943,7 +1977,7 @@ var system_indexs = [
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 1;
