@@ -44,6 +44,9 @@ var LoadingScene = function(game, stage)
   var n_audios_loaded;
   var audio_srcs;
   var audios;
+  var n_videos_loaded;
+  var video_srcs;
+  var videos;
 
   var loadingImageLoaded = function()
   {
@@ -61,6 +64,10 @@ var LoadingScene = function(game, stage)
   var audioLoaded = function()
   {
     n_audios_loaded++;
+  };
+  var videoLoaded = function()
+  {
+    n_videos_loaded++;
   };
 
   var tryfont = function()
@@ -101,6 +108,9 @@ var LoadingScene = function(game, stage)
     n_audios_loaded = 0;
     audio_srcs = [];
     audios = [];
+    n_videos_loaded = 0;
+    video_srcs = [];
+    videos = []; //not actually used
 
     //put asset paths in loading_img_srcs (for assets used on loading screen itself)
     loading_img_srcs.push("assets/logo_fd.png");
@@ -114,7 +124,7 @@ var LoadingScene = function(game, stage)
     loadingImageLoaded(); //call once to prevent 0/0 != 100% bug
 
     //put asset paths in img_srcs
-    for(var j = 0; j < 90; j++) img_srcs.push("assets/context/0-"+j+".png"); //only load 0th- others will load next
+    for(var j = 0; j < 50; j++) img_srcs.push("assets/context/0-"+j+".png"); //only load 0th- others will load next
     img_srcs.push("assets/fmlogo.png");
     img_srcs.push("assets/crycollected.png");
     img_srcs.push("assets/cryrate.png");
@@ -133,12 +143,13 @@ var LoadingScene = function(game, stage)
     img_srcs.push("assets/mouth_1.png");
     img_srcs.push("assets/eye_2.png");
     img_srcs.push("assets/mouth_2.png");
-    img_srcs.push("assets/menu/background.png");
+    img_srcs.push("assets/menu/background.jpg");
     img_srcs.push("assets/menu/button_go.png");
     img_srcs.push("assets/menu/check_box.png");
     img_srcs.push("assets/menu/check_box_fill.png");
     img_srcs.push("assets/menu/text_area.png");
     img_srcs.push("assets/iframe_img.jpg");
+    img_srcs.push("assets/glitch_bg.jpg");
     img_srcs.push("assets/button_glow.png");
     img_srcs.push("assets/reply_button.png");
     img_srcs.push("assets/return_button.png");
@@ -221,6 +232,12 @@ var LoadingScene = function(game, stage)
     }
     audioLoaded(); //call once to prevent 0/0 != 100% bug
 
+    audio_srcs.push("assets/intro.mp4"); //only really used to keep track of "n videos"
+    gg.intro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){ gg.intro_vid.done = 1; })
+    gg.intro_vid.video.addEventListener('loadeddata', videoLoaded, false);
+    gg.intro_vid.load();
+    videoLoaded();
+
     self.resize(stage);
   };
 
@@ -252,7 +269,7 @@ var LoadingScene = function(game, stage)
     //note- assets used on loading screen itself NOT included in wait
     loading_percent_loaded = n_loading_imgs_loaded/(loading_img_srcs.length+1);
     if(loading_percent_loaded >= 1.0) ticks_since_loading_ready++;
-    percent_loaded = (n_imgs_loaded+n_fonts_loaded+n_audios_loaded)/((img_srcs.length+1)+(font_srcs.length+1)+(audio_srcs.length+1));
+    percent_loaded = (n_imgs_loaded+n_fonts_loaded+n_audios_loaded+n_videos_loaded)/((img_srcs.length+1)+(font_srcs.length+1)+(audio_srcs.length+1)+(video_srcs.length+1));
     if(chase_percent_loaded <= percent_loaded) chase_percent_loaded += 0.01;
     lerp_percent_loaded = lerp(lerp_percent_loaded,percent_loaded,0.1);
     lerp_chase_percent_loaded = lerp(lerp_chase_percent_loaded,chase_percent_loaded,0.1);
@@ -363,4 +380,3 @@ var LoadingScene = function(game, stage)
     if(keyer) keyer.detach(); keyer = 0;
   };
 };
-

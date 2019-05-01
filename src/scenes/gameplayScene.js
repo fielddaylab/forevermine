@@ -3,6 +3,49 @@ var GamePlayScene = function(game, stage)
 {
   var self = this;
 
+/*
+  //use on output of compress_contexts to pare down
+  for(var i = 0; i < context_indexs.length; i++)
+  {
+    var list = context_indexs[i];
+    var uniq = 0;
+    for(var j = 0; j < list.length; j++)
+    {
+      if(list[j] == uniq) uniq++;
+      else
+      {
+        for(var k = uniq; k < list.length; k++)
+          if(list[k] > uniq) list[k]--;
+      }
+    }
+    console.log(list);
+  }
+*/
+
+var context_indexs = [
+[0, 1, 2, 3, 4, 5, 4, 6, 4, 6, 4, 6, 4, 6, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 10, 14, 15, 16, 17, 14, 15, 16, 18, 14, 15, 19, 20, 21, 22, 23, 22, 23, 22, 23, 22, 23, 24, 23, 25, 26, 27, 28, 29, 30, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48],
+[0, 1, 2, 3, 4, 5, 4, 6, 4, 6, 4, 6, 4, 6, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 10, 14, 15, 16, 17, 14, 15, 16, 18, 14, 15, 19, 20, 21, 22, 23, 22, 23, 22, 23, 22, 23, 24, 23, 25, 26, 27, 28, 29, 30, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 48, 49, 48, 49, 50, 49, 50, 49, 50, 49, 50, 49, 50, 49, 50],
+[0, 1, 2, 3, 4, 5, 4, 6, 4, 6, 4, 6, 4, 6, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 10, 14, 15, 16, 17, 14, 15, 16, 18, 14, 15, 19, 20, 21, 22, 23, 22, 23, 22, 23, 22, 23, 24, 23, 25, 26, 27, 28, 29, 30, 30, 31, 32, 33, 30, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 47, 48, 47, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49],
+[0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 7, 7, 6, 5, 4, 3, 2, 1, 0, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 32, 33, 32, 33, 32, 33, 32],
+[],
+[0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 34, 35, 34, 35, 34, 35, 34],
+[],
+[0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 34, 36, 34, 36, 34, 35, 34],
+];
+
+var system_indexs = [
+[],
+[],
+[0],
+[],
+[],
+[],
+[0],
+[],
+[0],
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 10, 9, 11, 12, 13, 14, 15, 16, 17, 14, 15, 16, 17, 14, 18, 19, 20, 21, 18, 19, 20, 22, 18, 19, 23, 24, 25, 26, 27, 26, 27, 26, 27, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 35, 36, 35, 36, 35, 36, 35, 36, 35, 36, 35, 36, 35, 37, 38, 39, 40, 41, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42],
+];
+
   self.resize = function(s)
   {
     stage = s;
@@ -169,6 +212,7 @@ var GamePlayScene = function(game, stage)
     gg.cur_level.progress = 1;
     gg.table.data_visible = 0;
     gg.table.yoff = gg.table.h;
+    gg.monitor.dead = 0;
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     gg.line.consume_cur_level();
@@ -178,11 +222,13 @@ var GamePlayScene = function(game, stage)
   self.draw_home = function()
   {
     strokeBox(gg.lab,gg.ctx);
-    if(!gg.cur_level || gg.cur_level.i == 0 || gg.cur_level.i == 9)
+    if(!gg.cur_level ||
+      (gg.mode >  MODE_NIGHT && (gg.next_level.i == 0)) ||// || gg.next_level.i == 9)) || //was told to remove
+      (gg.mode <= MODE_NIGHT && (gg.cur_level.i  == 0))// || gg.cur_level.i  == 9)) //was told to remove
+    )
       drawImageBox(gg.background_night_img,gg.lab,gg.ctx);
     else
       drawImageBox(gg.background_img,gg.lab,gg.ctx);
-    gg.ctx.imageSmoothingEnabled = 0;
     var fuel_p = 0;
     var oxy_p = 0;
     gg.ctx.fillStyle = green;
@@ -203,6 +249,7 @@ var GamePlayScene = function(game, stage)
     gg.ctx.fillStyle = "#CDBA70";
     gg.ctx.fillRect(gg.oxy.x,gg.oxy.y+gg.oxy.h-gg.oxy.h*oxy_p,gg.oxy.w,gg.oxy.h*oxy_p);
 
+    gg.ctx.imageSmoothingEnabled = 0;
     gg.ctx.fillStyle = white;
     if(gg.mode == MODE_CTX_IN)
     {
@@ -214,12 +261,12 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_CTX)
     {
-      var img = gg.cur_level.context_imgs[floor((gg.mode_t/gg.ctxf_t)%gg.cur_level.context_imgs.length)];
+      var img = gg.cur_level.context_imgs[context_indexs[gg.cur_level.i][floor((gg.mode_t/gg.ctxf_t)%context_indexs[gg.cur_level.i].length)]];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_CTX_OUT)
     {
-      var img = gg.cur_level.context_imgs[gg.cur_level.context_imgs.length-1];
+      var img = gg.cur_level.context_imgs[context_indexs[gg.cur_level.i][context_indexs[gg.cur_level.i].length-1]];
       drawImageBox(img,gg.monitor,gg.ctx);
       gg.ctx.globalAlpha = gg.mode_p;
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -235,12 +282,12 @@ var GamePlayScene = function(game, stage)
     }
     else if(gg.mode == MODE_IMPROVE)
     {
-      var img = gg.cur_level.system_imgs[floor((gg.mode_t/gg.systemf_t)%gg.cur_level.system_imgs.length)];
+      var img = gg.cur_level.system_imgs[system_indexs[gg.cur_level.i][floor((gg.mode_t/gg.systemf_t)%system_indexs[gg.cur_level.i].length)]];
       drawImageBox(img,gg.monitor,gg.ctx);
     }
     else if(gg.mode == MODE_IMPROVE_OUT)
     {
-      var img = gg.cur_level.system_imgs[gg.cur_level.system_imgs.length-1];
+      var img = gg.cur_level.system_imgs[system_indexs[gg.cur_level.i][system_indexs[gg.cur_level.i].length-1]];
       drawImageBox(img,gg.monitor,gg.ctx);
       gg.ctx.globalAlpha = gg.mode_p;
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
@@ -255,25 +302,42 @@ var GamePlayScene = function(game, stage)
     {
       var t = gg.exposition_box.blackout_t/(gg.blackout_t-1);
       gg.ctx.fillStyle = black;
-      if(t < 0.3)
+      if(t < 0.2)
       {
-        t = t/0.3;
+        t = t/0.2;
         gg.ctx.globalAlpha = t;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      }
+      else if(t < 0.4)
+      {
+        t = (t-0.2)/0.2;
+        gg.ctx.globalAlpha = 1-t;
         gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
       }
       else if(t < 0.6)
       {
-        t = (t-0.3)/0.3;
-        gg.ctx.globalAlpha = 1-t;
-        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
-      }
-      else
-      {
-        t = min(1,(t-0.6)/0.4);
+        t = min(1,(t-0.4)/0.2);
         gg.ctx.globalAlpha = t;
         gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
         gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
       }
+      else
+      {
+        t = min(1,(t-0.6)/0.2);
+        gg.ctx.globalAlpha = 1;
+        gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+        gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+      }
+      gg.ctx.globalAlpha = 1;
+    }
+    if(gg.exposition_box.recover_t)
+    {
+      var t = gg.exposition_box.recover_t/(gg.recover_t-1);
+      gg.ctx.fillStyle = black;
+      t = clamp(0,1,1-t);
+      gg.ctx.globalAlpha = t;
+      gg.ctx.drawImage(gg.blackout_img,0,0,gg.canv.width,gg.canv.height);
+      gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
       gg.ctx.globalAlpha = 1;
     }
     if(gg.exposition_box.emp_t)
@@ -354,6 +418,7 @@ var GamePlayScene = function(game, stage)
       if(gg.cur_level.pano == 0) //transition to dark and back
       {
         gg.ctx.globalAlpha = 1-psin(t*twopi+halfpi)/2;
+        if(gg.cur_level.i == 0 && t < 0.5) gg.ctx.globalAlpha = 1;
         pimg = gg.pano_imgs_dark[i];
         vis_pano_w = gg.canv.width/gg.canv.height*pimg.height;
         pano_sx = 0;
@@ -367,17 +432,21 @@ var GamePlayScene = function(game, stage)
     gg.ctx.font = "40px DisposableDroidBB";
     if(t < 0.4)
     {
+    /* //was told to remove
       gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
       gg.ctx.font = "20px DisposableDroidBB";
       gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
+    */
     }
     else if(t < 0.5)
     {
+    /* //was told to remove
       gg.ctx.globalAlpha = (0.5-t)*10;
       gg.ctx.fillText("Day "+gg.cur_level.day, 20,gg.canv.height-80);
       gg.ctx.font = "20px DisposableDroidBB";
       gg.ctx.fillText((gg.max_days-gg.cur_level.day-1)+" days of oxygen remain", 20,gg.canv.height-80+30);
       gg.ctx.globalAlpha = 1;
+    */
     }
     else if(t < 0.6)
     {
@@ -393,6 +462,124 @@ var GamePlayScene = function(game, stage)
       gg.ctx.font = "20px DisposableDroidBB";
       gg.ctx.fillText((gg.max_days-gg.cur_level.day-2)+" days of oxygen remain", 20,gg.canv.height-80+30);
     }
+  }
+
+  self.credits_o = {
+    spacing:30,
+    lines:[
+      "",
+      "Field Day",
+      "",
+      "",
+      "Executive Producer",
+      "",
+      "Anne Lynn Gillian-Daniel",
+      "",
+      "",
+      "Producer",
+      "",
+      "David Gagnon",
+      "",
+      "",
+      "Education Fellows Director",
+      "",
+      "Jim Mathews",
+      "",
+      "",
+      "Creative Director",
+      "",
+      "Sarah Gagnon",
+      "",
+      "",
+      "Software Development",
+      "",
+      "Philip Dougherty",
+      "",
+      "",
+      "Graphic Design and User Interface",
+      "",
+      "Eric Lang",
+      "",
+      "",
+      "Art & Animation",
+      "",
+      "Reyna Groff",
+      "",
+      "Eric Lang",
+      "",
+      "Rodney Lambright II",
+      "",
+      "",
+      "Content",
+      "",
+      "Anne Lynn Gillian-Daniel",
+      "",
+      "Matthew Stilwell",
+      "",
+      "David Gagnon",
+      "",
+      "",
+      "Content Consultants:",
+      "",
+      "Wendy Crone",
+      "",
+      "Amanda Smith",
+      "",
+      "Eli Towle",
+      "",
+      "Benjamin Afflerbach",
+      "",
+      "Tesia Janicki",
+      "",
+      "Marc Brousseau",
+      "",
+      "Noah Edelstein",
+      "",
+      "Sarah Sprangers",
+      "",
+      "MRSEC faculty, graduate students, and staff",
+      "",
+      "",
+      "Writing",
+      "",
+      "Sarah Gagnon",
+      "",
+      "Lindy Biller",
+      "",
+      "Eric Lang",
+      "",
+      "Philip Dougherty",
+      "",
+      "",
+      "Original Music & Sound",
+      "",
+      "Cyril Peck",
+      "",
+      "",
+      "Administration Support",
+      "",
+      "Angel Cartagena",
+      "",
+      "Adam Chase",
+      "",
+      "Ahna Holliday",
+      "",
+      "Becki Kohl",
+      "",
+      "Jim Lyne",
+      "",
+      "",
+      "Testing and Design Feedback",
+      "",
+      "Joe Rieder and the students of Wisconsin Rapids Public School",
+      "",
+      "Olivia Dachel and the students of Merril High School",
+      "",
+      "Jenny Karpelenia and the students of Bartles Middle School",
+      "",
+      "Marsella Aguila and the students of Waterford Graded School District",
+      "",
+    ],
   }
 
   self.set_mode = function(mode,skipping)
@@ -417,14 +604,14 @@ var GamePlayScene = function(game, stage)
         gg.outro_vid.done = 0;
         break;
       case MODE_CINEMATIC:
-        gg.cur_audio.pause();
+        gg.audwrangler.hold(); gg.audwrangler.stop_music();
         if(!skipping)
           gg.intro_vid.play();
         else gg.intro_vid.done = 1;
         break;
       case MODE_BOOT:
         gg.cur_audio = gg.console_audio;
-        if(gg.sound) gg.cur_audio.play();
+        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
         gg.monitor.boot_t = 0;
         if(skipping)
         {
@@ -445,6 +632,7 @@ var GamePlayScene = function(game, stage)
         screenSpace(gg.home_cam,gg.canv,gg.oxy);
         //assume pre_text_0 already enqueued
         gg.cur_level = gg.next_level;
+        if(!skipping) gtag('event', 'modeller_level', {'event_category':'begin', 'event_label':''+gg.cur_level.i});
         gg.graph.x_off = gg.cur_level.day*24;
         gg.graph.y0_min = gg.cur_level.y_min;
         if(gg.cur_level.i == 1 || gg.cur_level.i == 8)
@@ -476,9 +664,8 @@ var GamePlayScene = function(game, stage)
       case MODE_PRE1:
         break;
       case MODE_WORK_IN:
-        gg.cur_audio.pause();
         gg.cur_audio = gg.modeling_audio;
-        if(gg.sound) gg.cur_audio.play();
+        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
         if(gg.cur_level.skip_zoom)
         {
           gg.graph.zoom = 0;
@@ -511,9 +698,8 @@ var GamePlayScene = function(game, stage)
         }
         break;
       case MODE_WORK_OUT:
-        gg.cur_audio.pause();
         gg.cur_audio = gg.console_audio;
-        if(gg.sound) gg.cur_audio.play();
+        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
         gg.line.blur();
         gg.exposition_box.clear();
         break;
@@ -544,9 +730,6 @@ var GamePlayScene = function(game, stage)
       case MODE_POST1:
         break;
       case MODE_LAB_OUT:
-        //gg.cur_audio.pause();
-        //gg.cur_audio = gg.pano_audio;
-        //if(gg.sound) gg.cur_audio.play();
         break;
       case MODE_NIGHT:
         break;
@@ -557,6 +740,7 @@ var GamePlayScene = function(game, stage)
         if(gg.cur_level.i < gg.levels.length-1)
         {
           gg.next_level = gg.levels[gg.cur_level.i+1];
+          if(!skipping) gtag('event', 'modeller_level', {'event_category':'complete', 'event_label':''+gg.cur_level.i});
           gg.exposition_box.clear();
           if(!skipping) gg.exposition_box.nq_group(gg.next_level.text.pre_context);
           gg.cur_level.progress++;
@@ -571,14 +755,16 @@ var GamePlayScene = function(game, stage)
   self.skip_to_mode = function(mode)
   {
     var nmode;
+    gg.skipping = 1;
     while(gg.mode != mode)
     {
       nmode = gg.mode+1;
       if(gg.mode == MODE_LAB_IN) nmode = MODE_PRE0;
 
       if(mode == nmode) self.set_mode(nmode,0)
-      else self.set_mode(nmode,1)
+      else { gg.skipping = 0; self.set_mode(nmode,1) }
     }
+    gg.skipping = 0;
   }
 
   self.tick_mode = function()
@@ -648,7 +834,7 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CTX:
       {
-        gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.context_imgs.length*gg.ctxf_loop);
+        gg.mode_p = gg.mode_t/(gg.ctxf_t*context_indexs[gg.cur_level.i].length*gg.ctxf_loop);
         if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_CTX_OUT,0);
@@ -861,8 +1047,8 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_IMPROVE:
       {
-        gg.mode_p = gg.mode_t/(gg.systemf_t*gg.cur_level.system_imgs.length*gg.systemf_loop);
-        if(gg.cur_level.special) gg.mode_p = gg.mode_t/(gg.ctxf_t*gg.cur_level.system_imgs.length*gg.ctxf_loop);
+        gg.mode_p = gg.mode_t/(gg.systemf_t*system_indexs[gg.cur_level.i].length*gg.systemf_loop);
+        if(gg.cur_level.special) gg.mode_p = gg.mode_t/(gg.ctxf_t*system_indexs[gg.cur_level.i].length*gg.ctxf_loop);
         if(!clicker.filter(gg.exposition_box) && (gg.screenclicker.clicked || gg.autoclick)) gg.exposition_box.click({});
         if((gg.mode_p >= 1 && gg.exposition_box.displayed_i >= gg.exposition_box.texts.length) || gg.keylistener.advance())
           self.set_mode(MODE_IMPROVE_OUT,0);
@@ -973,9 +1159,9 @@ var GamePlayScene = function(game, stage)
         */
         gg.ctx.fillStyle = white;
         gg.ctx.strokeStyle = white;
-        gg.ctx.font = (gg.continue_button.h*2/3)+"px Lato";
+        gg.ctx.textAlign = "left";
+        gg.ctx.font = (gg.continue_button.h*1/3)+"px Lato";
         var txtbump = gg.continue_button.h/5;
-        gg.ctx.fillText("STRANDED AT THE FOREVER MINE",gg.continue_button.x,10+gg.continue_button.h-txtbump);
         gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
         gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
         gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y+gg.code_txt.h-txtbump);
@@ -998,7 +1184,7 @@ var GamePlayScene = function(game, stage)
         if(gg.mode_t%100 < 50)
           gg.ctx.drawImage(gg.button_glow_img,gg.stage.width-210, gg.stage.height-135, 210, 140);
         var s = 30;
-        gg.ctx.drawImage(gg.notice_img,gg.stage.width-80,gg.stage.height-120,s,s);
+        //gg.ctx.drawImage(gg.notice_img,gg.stage.width-80,gg.stage.height-120,s,s); //was told to remove
         /*
         gg.ctx.fillStyle = white;
         gg.ctx.font = "20px DisposableDroidBB";
@@ -1155,13 +1341,11 @@ var GamePlayScene = function(game, stage)
         break;
       case MODE_CREDITS:
         var c_t = clamp(0,1,(gg.mode_t-gg.fade_t)/gg.credits_t);
-        //draw credits between c_t = 0 and c_t = 1;
-        {
-        }
         if(gg.mode_t < gg.fade_t)
         {
           var t = 1-(gg.mode_t/gg.fade_t); //fade in
           gg.ctx.globalAlpha = t;
+          gg.ctx.globalAlpha = 1; //just start black actually
           gg.ctx.fillStyle = black;
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
@@ -1174,31 +1358,57 @@ var GamePlayScene = function(game, stage)
           gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
           gg.ctx.globalAlpha = 1;
         }
+        else
+        //draw credits between c_t = 0 and c_t = 1;
+        {
+          gg.ctx.fillStyle = black;
+          gg.ctx.fillRect(0,0,gg.canv.width,gg.canv.height);
+
+          gg.ctx.font = "30px DisposableDroidBB";
+          var bottom = gg.canv.height;
+          var top = 0-self.credits_o.spacing*self.credits_o.lines.length;
+          var p = lerp(bottom,top,c_t);
+          gg.ctx.fillStyle = white;
+          gg.ctx.textAlign = "center";
+          for(var i = 0; i < self.credits_o.lines.length; i++)
+          {
+            if(p > 10 && p < gg.canv.height+self.credits_o.spacing)
+            {
+              if(p < 110) gg.ctx.globalAlpha = (p-10)/100;
+              gg.ctx.fillText(self.credits_o.lines[i],gg.canv.width/2,p);
+              gg.ctx.globalAlpha = 1;
+            }
+            p += self.credits_o.spacing;
+          }
+
+        }
         break;
     }
   }
 
   self.ready = function()
   {
-    gg.logos_and_menu_audio = GenWAudio("assets/audio/logos_and_menu.mp3"); gg.logos_and_menu_audio.loop = true;
-    gg.console_audio = GenWAudio("assets/audio/console.mp3"); gg.console_audio.loop = true;
-    gg.modeling_audio = GenWAudio("assets/audio/modeling.mp3"); gg.modeling_audio.loop = true;
-    gg.pano_audio = GenWAudio("assets/audio/pano.mp3"); gg.pano_audio.loop = true;
-    gg.credits_audio = GenWAudio("assets/audio/credits.mp3"); gg.credits_audio.loop = true;
-    gg.modeling_stress_audio = GenWAudio("assets/audio/modeling_stress.mp3"); gg.modeling_stress_audio.loop = true;
-    gg.console_stress_audio = GenWAudio("assets/audio/console_stress.mp3"); gg.console_stress_audio.loop = true;
-    gg.hacking_audio = GenWAudio("assets/audio/hacking.mp3"); gg.hacking_audio.loop = true;
-    gg.audios = [];
-    gg.audios.push(gg.logos_and_menu_audio);
-    gg.audios.push(gg.console_audio);
-    gg.audios.push(gg.credits_audio);
-    gg.audios.push(gg.modeling_stress_audio);
-    gg.audios.push(gg.console_stress_audio);
-    gg.audios.push(gg.hacking_audio);
-    gg.audios.push(gg.modeling_audio);
-    gg.audios.push(gg.pano_audio);
-    gg.cur_audio = gg.logos_and_menu_audio;
-    gg.cur_audio.play();
+    //music
+    gg.menu_audio            = gg.audwrangler.register_music("assets/audio/menu.mp3");
+    gg.console_audio         = gg.audwrangler.register("assets/audio/console.mp3");
+    gg.modeling_audio        = gg.audwrangler.register("assets/audio/modeling.mp3");
+    gg.credits_audio         = gg.audwrangler.register("assets/audio/credits.mp3");
+    gg.modeling_stress_audio = gg.audwrangler.register("assets/audio/modeling_stress.mp3");
+    gg.console_stress_audio  = gg.audwrangler.register("assets/audio/console_stress.mp3");
+    gg.hacking_audio         = gg.audwrangler.register("assets/audio/hacking.mp3");
+    gg.audwrangler.play_music();
+
+    //fx
+    gg.voices = {clean:[],angry:[],glitchy:[]};
+    for(var i = 0; i < 9; i++) gg.voices.clean.push(  gg.audwrangler.register("assets/audio/voice/clean/"  +i+".mp3"));
+    for(var i = 0; i < 5; i++) gg.voices.angry.push(  gg.audwrangler.register("assets/audio/voice/angry/"  +i+".mp3"));
+    for(var i = 0; i < 9; i++) gg.voices.glitchy.push(gg.audwrangler.register("assets/audio/voice/glitchy/"+i+".mp3"));
+    gg.weld_audio  = gg.audwrangler.register("assets/audio/weld.mp3");
+    gg.build_audio = gg.audwrangler.register("assets/audio/build.mp3");
+    gg.emp_audio   = gg.audwrangler.register("assets/audio/EMP.mp3");
+
+    gg.cur_audio = gg.menu_audio;
+    gg.audwrangler.play(gg.cur_audio);
 
     gg.max_days = 8;
     gg.needed_fuel = 350;
@@ -1213,24 +1423,55 @@ var GamePlayScene = function(game, stage)
     gg.ctxf_loop = 1;
     gg.systemf_t = 8;
     gg.systemf_loop = 10;
-    gg.pano_t = 250;
+    gg.pano_t = 350;
     gg.emp_t = 250;
     gg.emp_start_boot_t = 10;
-    gg.blackout_t = 100;
-    gg.credits_t = 100;
+    gg.blackout_t = 150;
+    gg.recover_t = 50;
+    gg.credits_t = 5000;
     gg.sound = 1;
     gg.fullscreen = 0;
 
-    gg.keylistener = {last_key:0,key_down:function(evt){ gg.keylistener.last_key = evt.keyCode; },advance:function(){if(gg.keylistener.last_key == 32 /*space*/) { if(!gg.intro_vid.done) gg.intro_vid.stop(); gg.keylistener.last_key = 0; return 1; } else { gg.keylistener.last_key = 0; return 0; } }};
+    gg.keylistener = {
+      last_key:0,
+      advanceable:0,
+      secretprogress:0,
+      key_down:function(evt)
+      {
+        gg.keylistener.last_key = evt.keyCode;
+        if(!gg.keylistener.advanceable)
+        {
+          var secret = "spyparty";
+          if(secret[gg.keylistener.secretprogress] == String.fromCharCode(evt.keyCode).toLowerCase()) gg.keylistener.secretprogress++;
+          else                                                                          gg.keylistener.secretprogress = 0;
+          if(gg.keylistener.secretprogress == secret.length) gg.keylistener.advanceable = 1;
+        }
+      },
+      advance:function()
+      {
+        if(gg.keylistener.advanceable && gg.keylistener.last_key == 32 /*space*/)
+        {
+          if(!gg.intro_vid.done) gg.intro_vid.stop();
+          gg.keylistener.last_key = 0;
+          return 1;
+        }
+        else
+        {
+          gg.keylistener.last_key = 0;
+          return 0;
+        }
+      }
+    };
     gg.screenclicker = {x:0,y:0,w:0,h:0,click:function(evt){gg.screenclicker.clicked = 1;}};
 
     gg.fmlogo_img = GenImg("assets/fmlogo.png");
-    gg.menu_bg_img = GenImg("assets/menu/background.png");
+    gg.menu_bg_img = GenImg("assets/menu/background.jpg");
     gg.menu_go_img = GenImg("assets/menu/button_go.png");
     gg.menu_box_img = GenImg("assets/menu/check_box.png");
     gg.menu_check_img = GenImg("assets/menu/check_box_fill.png");
     gg.menu_text_img = GenImg("assets/menu/text_area.png");
     gg.iframe_img = GenImg("assets/iframe_img.jpg");
+    gg.glitch_bg_img = GenImg("assets/glitch_bg.jpg");
     gg.button_glow_img = GenImg("assets/button_glow.png");
     gg.reply_button_img = GenImg("assets/reply_button.png");
     gg.return_button_img = GenImg("assets/return_button.png");
@@ -1254,6 +1495,7 @@ var GamePlayScene = function(game, stage)
     gg.ui_chart_overlay_img = GenImg("assets/ui_chart_overlay.png");
     gg.constant_bg_img = GenImg("assets/card_editable.png");
     gg.variable_bg_img = GenImg("assets/card_not_editable.png");
+    gg.chat_constant_bg_img = GenImg("assets/chat_card.png");
     gg.crycollected_img = GenImg("assets/crycollected.png");
     gg.battery_charge_img = GenImg("assets/battery_charge.png");
     gg.cryinitial_img = GenImg("assets/cryinitial.png");
@@ -1289,9 +1531,24 @@ var GamePlayScene = function(game, stage)
     gg.continue_code = getCookie("level");
     gg.input_code = 0;
     gg.input_code_valid = 0;
+    gg.input_codes = [
+      "stranded", //0
+      "goodnews", //1
+      "badnews", //2
+      "icanfixit", //3
+      "status", //4
+      "leftovers", //5
+      "willitwork", //6
+      "solar", //7
+      "goodenough", //8
+      "dontgo", //9
+    ];
     gg.input_output = function(input)
     {
       input = input.toLowerCase();
+      for(var i = 0; i < gg.input_codes.length; i++)
+        if(input == gg.input_codes[i]) return i;
+
       //for debugging
       switch(input)
       {
@@ -1306,20 +1563,7 @@ var GamePlayScene = function(game, stage)
         case "8": return 8;
         case "9": return 9;
       }
-      switch(input)
-      {
-        case "begin": return 0;
-        case "goodnews": return 1;
-        case "badnews": return 2;
-        case "engineer": return 3;
-        case "checkup": return 4;
-        case "prefilled": return 5;
-        case "recheckup": return 6;
-        case "panels": return 7;
-        case "goodenough": return 8;
-        case "emp": return 9;
-      }
-      return "blah";
+      return "NOT A NUMBER";
     }
     gg.continuable = 0;
     gg.continue_button = new ButtonBox( 0,0,0,0, function(evt){ if(!gg.continue_code) gg.new_button.click({}); else { gg.input_code = gg.continue_code; gg.code_button.click({}); } });
@@ -1338,6 +1582,7 @@ var GamePlayScene = function(game, stage)
       if(!gg.input_code_valid) gg.new_button.click({});
       else
       {
+        gtag('event', 'modeller_level', {'event_category':'jump', 'event_label':''+gg.input_code});
         self.set_mode(MODE_CINEMATIC,1);
         self.set_mode(MODE_BOOT,1);
         self.set_mode(MODE_PRE0,1);
@@ -1351,9 +1596,9 @@ var GamePlayScene = function(game, stage)
     });
     gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){
       gg.sound = v;
-      gg.cur_audio.pause();
-      if(!gg.sound && !gg.cur_audio.paused) gg.cur_audio.pause();
-      if(gg.sound && gg.cur_audio.paused) gg.cur_audio.play();
+
+      if(!gg.sound) { gg.audwrangler.hold();   gg.audwrangler.stop_music(); }
+      if( gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
     });
 
     gg.fullscreen_button = new ToggleBox(0,0,0,0, 0, function(v){ gg.fullscreen = !gg.fullscreen; if(gg.fullscreen) fullscreen(); else unfullscreen();});
@@ -1365,8 +1610,6 @@ var GamePlayScene = function(game, stage)
     gg.timeline = new timeline();
     gg.table = new table();
     gg.line = new editable_line();
-    gg.intro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){ gg.intro_vid.done = 1; })
-    gg.intro_vid.load();
     gg.outro_vid = new Vid(document.getElementById(gg.stage.container), "assets/outro.mp4", function(){ gg.outro_vid.done = 1; })
     gg.outro_vid.load();
 
@@ -1394,11 +1637,11 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 0;
     l.y_min = 0;
-    for(var j = 0; j < 90; j++)
+    for(var j = 0; j < 50; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1431,11 +1674,11 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 1;
     l.y_min = floor(l.b_correct_total/10)*10;
-    for(var j = 0; j < 90; j++)
+    for(var j = 0; j < 51; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1468,13 +1711,13 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 2;
     l.y_min = floor(l.b_correct_total/10)*10;
-    for(var j = 0; j < 90; j++)
+    for(var j = 0; j < 50; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     for(var j = 0; j < 1; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 1;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1507,11 +1750,11 @@ var GamePlayScene = function(game, stage)
     l.y_label = "CHARGE";
     l.day = 3;
     l.y_min = 0;
-    for(var j = 0; j < 53; j++)
+    for(var j = 0; j < 34; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 1;
     l.perma_zoom = 0;
@@ -1548,7 +1791,7 @@ var GamePlayScene = function(game, stage)
       l.system_imgs.push(GenImg("assets/system/"+(i+2)+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1581,11 +1824,11 @@ var GamePlayScene = function(game, stage)
     l.y_label = "CHARGE";
     l.day = 4;
     l.y_min = 0;
-    for(var j = 0; j < 53; j++)
+    for(var j = 0; j < 36; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 1;
     l.perma_zoom = 0;
@@ -1622,7 +1865,7 @@ var GamePlayScene = function(game, stage)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 1;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1655,11 +1898,11 @@ var GamePlayScene = function(game, stage)
     l.y_label = "CHARGE";
     l.day = 5;
     l.y_min = 0;
-    for(var j = 0; j < 53; j++)
+    for(var j = 0; j < 37; j++)
       l.context_imgs.push(GenImg("assets/context/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 0;
     l.skip_zoom = 1;
     l.perma_zoom = 0;
@@ -1696,7 +1939,7 @@ var GamePlayScene = function(game, stage)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 0;
@@ -1729,11 +1972,11 @@ var GamePlayScene = function(game, stage)
     l.y_label = "FUEL (kg)";
     l.day = 6;
     l.y_min = 0;
-    for(var j = 0; j < 90; j++)
+    for(var j = 0; j < 44; j++)
       l.system_imgs.push(GenImg("assets/system/"+i+"-"+j+".png"));
     l.pano = 0;
     l.pano_st = 0;
-    l.pano_et = 0.05;
+    l.pano_et = 1;
     l.skip_context = 1;
     l.skip_zoom = 0;
     l.perma_zoom = 1;
@@ -1811,4 +2054,3 @@ var GamePlayScene = function(game, stage)
   };
 
 };
-

@@ -17,6 +17,7 @@ var monitor = function()
   self.talk_t = 99999;
 
   self.mode = 0; //0- normal, 1- angry, 2- glitched
+  self.dead = 0;
 
   self.bg_color = [];
   self.eye_img = [];
@@ -89,7 +90,7 @@ var monitor = function()
   self.eye_img.push(GenImg("assets/eye_2.png"));
   self.mouth_img.push(GenImg("assets/mouth_2.png"));
 
-  self.boot_t = 0;
+  self.boot_t = 500;
 
   self.clicked = 0;
 
@@ -112,8 +113,17 @@ var monitor = function()
 
     self.look_t++;  if(self.look_t  > self.look_t_thresh) { self.look_t = randIntBelow(1000); self.look_t_thresh = self.look_t+randIntBelow(500); }
     self.blink_t++; if(self.blink_t > 300) self.blink_t = randIntBelow(250);
-    self.talk_t++;
     self.boot_t++; if(self.boot_t > 500) self.boot_t = 500;
+    if(self.boot_t > 250) self.talk_t++;
+    if(self.boot_t == 249)
+    {
+      if(gg.sound && !gg.skipping)
+      {
+             if(gg.monitor.mode == 0) gg.audwrangler.play(gg.voices.clean[randIntBelow(gg.voices.clean.length)]);
+        else if(gg.monitor.mode == 1) gg.audwrangler.play(gg.voices.angry[randIntBelow(gg.voices.angry.length)]);
+        else                          gg.audwrangler.play(gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)]);
+      }
+    }
 
     var face_nx = (sin(self.look_t/50 )/5+1)/2;
     var face_ny = (sin(self.look_t/190)/5+1)/2;
@@ -147,6 +157,14 @@ var monitor = function()
     //c.strokeStyle = red;
     //c.strokeRect(0,0,s.width,s.height);
 
+    if(self.dead)
+    {
+    c.fillStyle = black;
+    c.fillRect(0,0,s.width,s.height);
+    return;
+    }
+
+
     var tmode = self.mode;
     if(tmode == 2)
     {
@@ -154,7 +172,10 @@ var monitor = function()
     }
 
     c.fillStyle = self.bg_color[tmode];
-    c.fillRect(0,0,s.width,s.height);
+    if(self.mode == 2)
+      c.drawImage(gg.glitch_bg_img,0,0,s.width,s.height);
+    else
+      c.fillRect(0,0,s.width,s.height);
 
     c.fillStyle = blue;
     var w;
@@ -290,7 +311,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
+        y += mb.font_h*mb.bubbles[i].length+mb.pad*2;
       y += mb.pad;
     }
     return 0;
@@ -325,7 +346,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
+        y += mb.font_h*mb.bubbles[i].length+mb.pad*2;
       y += mb.pad;
     }
     return 0;
@@ -355,7 +376,7 @@ var content_dragger = function()
       else if(mb.types[i] == CONTENT_CONSTANT)
         y += mb.font_h*4-mb.pad;
       else
-        y += (mb.font_h+mb.pad)*mb.bubbles[i].length+mb.pad;
+        y += mb.font_h*mb.bubbles[i].length+mb.pad*2;
       y += mb.pad;
     }
     return 0;
@@ -644,6 +665,7 @@ var exposition_box = function()
   self.displayed_i = 0;
 
   self.blackout_t = 0;
+  self.recover_t = 0;
   self.change_t = 0;
   self.emp_t = 0;
 
@@ -668,7 +690,25 @@ var exposition_box = function()
     else self.bubbles.push(textToLines(self.player_font,self.text_w,text,gg.ctx));
     self.types.push(type);
     self.metas.push(meta);
-    if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
+    if(self.displayed_i == self.texts.length-1)
+    {
+      //disabling all but "DIE" (at time of adding this code) because I know it works w/o them, and only for-sure need "DIE" to work here #HACKS
+      //if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
+      //if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
+      //if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
+      //if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
+      if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
+      if(self.texts.length == 1 && self.types[0] == CONTENT_AI) gg.monitor.talk_t = 0;
+      if(self.types[self.displayed_i] == CONTENT_AI)
+      {
+        if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound && !gg.skipping)
+        {
+               if(gg.monitor.mode == 0) gg.audwrangler.play(gg.voices.clean[randIntBelow(gg.voices.clean.length)]);
+          else if(gg.monitor.mode == 1) gg.audwrangler.play(gg.voices.angry[randIntBelow(gg.voices.angry.length)]);
+          else                          gg.audwrangler.play(gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)]);
+        }
+      }
+    }
   }
 
   self.nq_group = function(text)
@@ -683,8 +723,20 @@ var exposition_box = function()
     if(self.displayed_i < self.texts.length && self.types[self.displayed_i] == CONTENT_AI) gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
     if(self.metas[self.displayed_i] == EMOTE_BLACKOUT) self.blackout_t = 1;
+    if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
-    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; }
+    if(self.metas[self.displayed_i] == EMOTE_BUILD)  { if(gg.sound) gg.audwrangler.play(gg.build_audio); }
+    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; if(!gg.build_audio.paused) gg.build_audio.pause(); if(gg.sound) gg.audwrangler.play(gg.emp_audio); }
+    if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
+    if(self.types[self.displayed_i] == CONTENT_AI)
+    {
+      if(self.metas[self.displayed_i] != EMOTE_SILENT && self.metas[self.displayed_i] != EMOTE_EMP && gg.sound && !gg.skipping)
+      {
+             if(gg.monitor.mode == 0) gg.audwrangler.play(gg.voices.clean[randIntBelow(gg.voices.clean.length)]);
+        else if(gg.monitor.mode == 1) gg.audwrangler.play(gg.voices.angry[randIntBelow(gg.voices.angry.length)]);
+        else                          gg.audwrangler.play(gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)]);
+      }
+    }
   }
 
   self.click = function(evt)
@@ -696,6 +748,7 @@ var exposition_box = function()
   self.tick = function()
   {
     if(self.blackout_t) { self.blackout_t++; if(self.blackout_t == gg.blackout_t) { self.blackout_t = 0; self.advance(); } }
+    if(self.recover_t) { self.recover_t++; if(self.recover_t == gg.recover_t) self.recover_t = 0; }
     if(self.change_t) self.change_t++;
     if(self.emp_t)  { self.emp_t++; if(self.emp_t == gg.emp_t) { self.emp_t = 0; self.advance(); } }
   }
@@ -811,7 +864,7 @@ var graph = function()
     gg.ctx.textAlign = "center";
 
     //grid
-    gg.ctx.strokeStyle = "rgba(255,255,255,0.5)";
+    gg.ctx.strokeStyle = "rgba(0,0,0,0.2)";
     gg.ctx.lineWidth = 2;
       //vertical lines
     var lw = 100;
@@ -826,7 +879,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.x0_min; i <= self.x0_max; i += self.x0_grid)
       {
-        x = self.off_x_for_x(i);
+        x = floor(self.off_x_for_x(i));
         if(x < self.x || x > self.x+self.w) continue;
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
@@ -846,7 +899,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.x1_min; i <= self.x1_max; i += self.x1_grid)
       {
-        x = self.x_for_x(i);
+        x = floor(self.x_for_x(i));
         if(x < self.x || x > self.x+self.w) continue;
         gg.ctx.moveTo(x,self.y);
         gg.ctx.lineTo(x,self.y+self.h);
@@ -871,7 +924,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.y0_min; i <= self.y0_max; i += self.y0_grid)
       {
-        y = self.y_for_y(i);
+        y = floor(self.y_for_y(i));
         gg.ctx.moveTo(self.x,y);
         gg.ctx.lineTo(self.x+self.w,y);
         gg.ctx.fillText(i,self.x-15,y+5);
@@ -891,7 +944,7 @@ var graph = function()
       gg.ctx.beginPath();
       for(var i = self.y1_min; i <= self.y1_max; i += self.y1_grid)
       {
-        y = self.y_for_y(i);
+        y = floor(self.y_for_y(i));
         if(y > self.y)
         {
           gg.ctx.moveTo(self.x,y);
@@ -1172,7 +1225,7 @@ var editable_line = function()
 
   self.size = function()
   {
-    gg.ctx.font = self.font;
+    gg.ctx.font = self.font_h+"px Lato";
     self.eqn_strings = [];
     self.eqn_xs = [];
     var eqn_i = 0;
@@ -1195,7 +1248,7 @@ var editable_line = function()
       self.m_btn[m_i].w = self.btn_w;
       self.eqn_w += self.m_btn[m_i].w;
       m_i++;
-      self.eqn_strings[eqn_i] = "*";
+      self.eqn_strings[eqn_i] = "×";
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -1228,7 +1281,7 @@ var editable_line = function()
       self.m_btn[m_i].w = self.btn_w;
       self.eqn_w += self.m_btn[m_i].w;
       m_i++;
-      self.eqn_strings[eqn_i] = ")*";
+      self.eqn_strings[eqn_i] = ")×";
       self.eqn_ws[eqn_i] = gg.ctx.measureText(self.eqn_strings[eqn_i]).width;
       self.eqn_w += self.eqn_ws[eqn_i];
       eqn_i++;
@@ -1461,7 +1514,7 @@ var editable_line = function()
     {
       gg.ctx.fillStyle = white;
       gg.ctx.font = self.font;
-      gg.ctx.lineWidth = 2;
+      gg.ctx.lineWidth = 4;
       gg.ctx.strokeStyle = white;
 
         //line
@@ -1472,7 +1525,6 @@ var editable_line = function()
       var sy;
       var ex;
       var ey;
-      gg.ctx.strokeStyle = dark_gray;
       if(gg.graph.zoom > 0)
       {
         var imax = min(self.day_m.length,gg.cur_level.day);
@@ -1547,7 +1599,8 @@ var editable_line = function()
       var mlen = gg.cur_level.m_label.length;
 
       //eqn strings
-      gg.ctx.font = self.font;
+      //gg.ctx.font = self.font;
+      gg.ctx.font = self.font_h+"px Lato";
       gg.ctx.fillStyle = white;
       gg.ctx.textAlign = "left";
       if(gg.cur_level.special)
@@ -1558,21 +1611,21 @@ var editable_line = function()
           if(overwrite)
           {
             if(self.eqn_strings[i] == "+")
-              gg.ctx.fillText("*",self.eqn_xs[i],self.eqn_y+self.font_h);
+              gg.ctx.fillText("×",self.eqn_xs[i],self.eqn_y+self.font_h*2);
             else
             {
-              if(self.eqn_strings[i] == "*" || self.eqn_strings[i] == ")*") overwrite = 0;
-              gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+              if(self.eqn_strings[i] == "×" || self.eqn_strings[i] == ")×") overwrite = 0;
+              gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h*2);
             }
           }
           else
-            gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+            gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h*2);
         }
       }
       else
       {
         for(var i = 0; i < self.eqn_strings.length; i++)
-          gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h);
+          gg.ctx.fillText(self.eqn_strings[i],self.eqn_xs[i],self.eqn_y+self.font_h*2);
       }
       gg.ctx.font = self.label_font;
 
@@ -1580,13 +1633,13 @@ var editable_line = function()
         self.y_draw_h = lerp(self.y_draw_h,50,0.1);
       else
         self.y_draw_h = lerp(self.y_draw_h,self.btn_h,0.1);
-      gg.ctx.drawImage(gg.variable_bg_img,self.y_x,self.eqn_y+yoff,self.btn_w,self.y_draw_h);
+      gg.ctx.drawImage(gg.variable_bg_img,self.y_x,self.eqn_y+yoff+(self.btn_h-self.y_draw_h)/2,self.btn_w,self.y_draw_h);
 
       if(gg.cur_level.progress < 5 || (!gg.content_dragger.dragging_x && !self.x_set))
         self.x_draw_h = lerp(self.x_draw_h,50,0.1);
       else
         self.x_draw_h = lerp(self.x_draw_h,self.btn_h,0.1);
-      gg.ctx.drawImage(gg.variable_bg_img,self.x_x,self.eqn_y+yoff,self.btn_w,self.x_draw_h);
+      gg.ctx.drawImage(gg.variable_bg_img,self.x_x,self.eqn_y+yoff+(self.btn_h-self.x_draw_h)/2,self.btn_w,self.x_draw_h);
 
       gg.ctx.textAlign = "center";
       gg.ctx.fillStyle = black;
@@ -1609,7 +1662,7 @@ var editable_line = function()
           self.m_btn_draw_h[i] = lerp(self.m_btn_draw_h[i],50,0.1);
         else
           self.m_btn_draw_h[i] = lerp(self.m_btn_draw_h[i],b.h,0.1);
-        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,self.m_btn_draw_h[i]);
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+(b.h-self.m_btn_draw_h[i])/2,b.w,self.m_btn_draw_h[i]);
       }
       for(var i = 0; i < self.b_btn.length; i++)
       {
@@ -1618,7 +1671,7 @@ var editable_line = function()
           self.b_btn_draw_h[i] = lerp(self.b_btn_draw_h[i],50,0.1);
         else
           self.b_btn_draw_h[i] = lerp(self.b_btn_draw_h[i],b.h,0.1);
-        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff,b.w,self.b_btn_draw_h[i]);
+        gg.ctx.drawImage(gg.constant_bg_img,b.x,b.y+yoff+(b.h-self.b_btn_draw_h[i])/2,b.w,self.b_btn_draw_h[i]);
       }
 
       //selector
@@ -2037,8 +2090,8 @@ var message_box = function()
       else //CONTENT_PLAYER || CONTENT_AI
       {
         for(var j = 0; j < self.bubbles[i].length; j++)
-          self.max_top_y -= self.font_h+self.pad;
-        self.max_top_y -= self.pad;
+          self.max_top_y -= self.font_h;
+        self.max_top_y -= self.pad*2;
       }
       self.max_top_y -= self.pad;
     }
@@ -2050,11 +2103,18 @@ var message_box = function()
   {
     self.prompt_ai_typing = 0;
     self.advance_t = 0;
+    if(self.types[self.displayed_i] == CONTENT_AI && gg.sound && !gg.skipping)
+    {
+           if(gg.monitor.mode == 0) gg.audwrangler.play(gg.voices.clean[randIntBelow(gg.voices.clean.length)]);
+      else if(gg.monitor.mode == 1) gg.audwrangler.play(gg.voices.angry[randIntBelow(gg.voices.angry.length)]);
+      else                          gg.audwrangler.play(gg.voices.glitchy[randIntBelow(gg.voices.glitchy.length)]);
+    }
     self.displayed_i++;
     self.calculate_top();
     if(self.types[self.displayed_i-1] != CONTENT_PLAYER)
       gg.monitor.talk_t = 0;
     if(self.displayed_i == self.texts.length) gg.cur_level.msg_progress = gg.cur_level.progress;
+
   }
 
   self.click = function(evt)
@@ -2131,7 +2191,9 @@ var message_box = function()
     else if(self.displayed_i == self.texts.length) self.prompt_end = 1;
 
     if(old_prompt_ai_typing != self.prompt_ai_typing)
+    {
       self.calculate_top();
+    }
   }
 
   self.draw = function()
@@ -2147,12 +2209,12 @@ var message_box = function()
       if(self.types[i] == CONTENT_PLAYER)
       {
         gg.ctx.fillStyle = self.you_text_color;
-        gg.ctx.fillRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
-        gg.ctx.strokeRect(self.x+self.pad*2,y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.fillRect(self.x+self.pad*2,y,self.bubble_w,self.pad*2+self.font_h*self.bubbles[i].length);
+        gg.ctx.strokeRect(self.x+self.pad*2,y,self.bubble_w,self.pad*2+self.font_h*self.bubbles[i].length);
         gg.ctx.beginPath();
-        gg.ctx.moveTo(self.x+self.pad*2+self.bubble_w-self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
-        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
-        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.moveTo(self.x+self.pad*2+self.bubble_w-self.pad,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad*2+self.font_h*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad*2+self.bubble_w         ,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
         gg.ctx.fill();
         gg.ctx.stroke();
 
@@ -2161,25 +2223,25 @@ var message_box = function()
         y += self.pad;
         for(var j = 0; j < self.bubbles[i].length; j++)
         {
-          gg.ctx.fillText(self.bubbles[i][j], self.x+self.w-self.pad*2, y+self.font_h);
-          y += self.font_h+self.pad;
+          gg.ctx.fillText(self.bubbles[i][j], self.x+self.w-self.pad*2, y+self.font_h-self.pad/2);
+          y += self.font_h;
         }
-        y += self.pad;
+        y += self.pad*2;
       }
       else if(self.types[i] == CONTENT_AI)
       {
         gg.ctx.fillStyle = self.ai_text_color;
-        gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
-        gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad+(self.font_h+self.pad)*self.bubbles[i].length);
+        gg.ctx.fillRect(self.x+self.pad,  y,self.bubble_w,self.pad*2+self.font_h*self.bubbles[i].length);
+        gg.ctx.strokeRect(self.x+self.pad,  y,self.bubble_w,self.pad*2+self.font_h*self.bubbles[i].length);
         gg.ctx.beginPath();
-        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
-        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
-        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
+        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad*2+self.font_h*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
         gg.ctx.fill();
         gg.ctx.beginPath();
-        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length         -1);
-        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length+self.pad-1);
-        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad+(self.font_h+self.pad)*self.bubbles[i].length           );
+        gg.ctx.moveTo(self.x+self.pad         ,y+self.pad*2+self.font_h*self.bubbles[i].length         -1);
+        gg.ctx.lineTo(self.x+self.pad         ,y+self.pad*2+self.font_h*self.bubbles[i].length+self.pad-1);
+        gg.ctx.lineTo(self.x+self.pad+self.pad,y+self.pad*2+self.font_h*self.bubbles[i].length           );
         gg.ctx.stroke();
 
         gg.ctx.fillStyle = self.you_text_color;
@@ -2187,10 +2249,10 @@ var message_box = function()
         y += self.pad;
         for(var j = 0; j < self.bubbles[i].length; j++)
         {
-          gg.ctx.fillText(self.bubbles[i][j], self.x+self.pad*2, y+self.font_h);
-          y += self.font_h+self.pad;
+          gg.ctx.fillText(self.bubbles[i][j], self.x+self.pad*2, y+self.font_h-self.pad/2);
+          y += self.font_h;
         }
-        y += self.pad;
+        y += self.pad*2;
       }
       else if(self.types[i] == CONTENT_DATA)
       {
@@ -2220,7 +2282,7 @@ var message_box = function()
             if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; label = gg.cur_level.b_label_fmt[j]; break; }
         }
         var h = self.font_h*3;
-        gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
+        gg.ctx.drawImage(gg.chat_constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
         drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+h/2, h*0.8, gg.ctx);
 
         gg.ctx.textAlign = "left";
@@ -2241,7 +2303,7 @@ var message_box = function()
             if(self.bubbles[i][0] == gg.cur_level.b_label[j]) { icon = gg.cur_level.b_icon[j]; c = gg.cur_level.b_correct[j]; break; }
         }
         var h = self.font_h*4;
-        gg.ctx.drawImage(gg.constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
+        gg.ctx.drawImage(gg.chat_constant_bg_img, self.x+self.pad, y, self.bubble_w, h);
         drawImageSizeCentered(icon, self.x+self.pad*3+h/2, y+self.font_h+self.font_h*3/2, h*0.6, gg.ctx);
 
         gg.ctx.textAlign = "center";
@@ -2301,7 +2363,7 @@ var message_box = function()
       }
       else
       {
-        gg.ctx.globalAlpha = 0.6;
+        gg.ctx.globalAlpha = 0.4;
         gg.ctx.drawImage(gg.reply_button_img,self.input_x,self.input_y,self.input_w,self.input_h);
         gg.ctx.globalAlpha = 1;
       }
@@ -2315,10 +2377,11 @@ var message_box = function()
     if(self.prompt_end)
     {
       var s = 20;
-      gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y+s,s,s);
+      //gg.ctx.drawImage(gg.notice_img,self.monitor_x+self.monitor_w-s,self.monitor_y+s,s,s); //was told to remove
     }
     var h = gg.neck_heart_img.height/gg.neck_heart_img.width*self.monitor_w;
     gg.ctx.drawImage(gg.neck_heart_img,self.monitor_x,self.monitor_y+self.monitor_h-h/2,self.monitor_w,h);
   }
 
 }
+
