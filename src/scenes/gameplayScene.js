@@ -604,14 +604,14 @@ var system_indexs = [
         gg.outro_vid.done = 0;
         break;
       case MODE_CINEMATIC:
-        gg.audwrangler.hold(); gg.audwrangler.stop_music();
+        gg.audwrangler.stop_music();
         if(!skipping)
           gg.intro_vid.play();
         else gg.intro_vid.done = 1;
         break;
       case MODE_BOOT:
         gg.cur_audio = gg.console_audio;
-        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
+        if(gg.sound) { gg.audwrangler.set_music(gg.cur_audio); gg.audwrangler.play_music(); }
         gg.monitor.boot_t = 0;
         if(skipping)
         {
@@ -665,7 +665,7 @@ var system_indexs = [
         break;
       case MODE_WORK_IN:
         gg.cur_audio = gg.modeling_audio;
-        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
+        if(gg.sound) { gg.audwrangler.set_music(gg.cur_audio); gg.audwrangler.play_music(); }
         if(gg.cur_level.skip_zoom)
         {
           gg.graph.zoom = 0;
@@ -699,7 +699,7 @@ var system_indexs = [
         break;
       case MODE_WORK_OUT:
         gg.cur_audio = gg.console_audio;
-        if(gg.sound) { gg.audwrangler.unhold(); gg.audwrangler.play_music(); }
+        if(gg.sound) { gg.audwrangler.set_music(gg.cur_audio); gg.audwrangler.play_music(); }
         gg.line.blur();
         gg.exposition_box.clear();
         break;
@@ -1390,12 +1390,12 @@ var system_indexs = [
   {
     //music
     gg.menu_audio            = gg.audwrangler.register_music("assets/audio/menu.mp3");
-    gg.console_audio         = gg.audwrangler.register("assets/audio/console.mp3");
-    gg.modeling_audio        = gg.audwrangler.register("assets/audio/modeling.mp3");
-    gg.credits_audio         = gg.audwrangler.register("assets/audio/credits.mp3");
-    gg.modeling_stress_audio = gg.audwrangler.register("assets/audio/modeling_stress.mp3");
-    gg.console_stress_audio  = gg.audwrangler.register("assets/audio/console_stress.mp3");
-    gg.hacking_audio         = gg.audwrangler.register("assets/audio/hacking.mp3");
+    gg.console_audio         = gg.audwrangler.register_music("assets/audio/console.mp3");
+    gg.console_emp_audio     = gg.audwrangler.register_music("assets/audio/console_emp.mp3");
+    gg.modeling_audio        = gg.audwrangler.register_music("assets/audio/modeling.mp3");
+    gg.pano_audio            = gg.audwrangler.register_music("assets/audio/pano.mp3");
+    gg.welding_audio         = gg.audwrangler.register_music("assets/audio/welding.mp3");
+    gg.credits_audio         = gg.audwrangler.register_music("assets/audio/credits.mp3");
     gg.audwrangler.play_music();
 
     //fx
@@ -1403,9 +1403,7 @@ var system_indexs = [
     for(var i = 0; i < 9; i++) gg.voices.clean.push(  gg.audwrangler.register("assets/audio/voice/clean/"  +i+".mp3"));
     for(var i = 0; i < 5; i++) gg.voices.angry.push(  gg.audwrangler.register("assets/audio/voice/angry/"  +i+".mp3"));
     for(var i = 0; i < 9; i++) gg.voices.glitchy.push(gg.audwrangler.register("assets/audio/voice/glitchy/"+i+".mp3"));
-    gg.weld_audio  = gg.audwrangler.register("assets/audio/weld.mp3");
-    gg.build_audio = gg.audwrangler.register("assets/audio/build.mp3");
-    gg.emp_audio   = gg.audwrangler.register("assets/audio/EMP.mp3");
+    gg.emp_audio   = gg.audwrangler.register("assets/audio/emp_sfx.mp3");
 
     gg.cur_audio = gg.menu_audio;
     gg.audwrangler.play(gg.cur_audio);

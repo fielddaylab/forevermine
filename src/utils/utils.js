@@ -465,9 +465,10 @@ var AudWrangler = function(silence_src)
   var aud_data = [];
   var aud_buffer = [];
 
-  var music_src = 0;
-  var music_data = 0;
-  var music_buffer = 0;
+  var music_src = [];
+  var music_data = [];
+  var music_buffer = [];
+  var music_i = 0;
   var music_track = 0;
   var music_shouldbeplaying = 0;
 
@@ -521,12 +522,12 @@ var AudWrangler = function(silence_src)
       }
       if(!aud_buffer[i]) all_ready = 0;
     }
-    if(music_data && !music_buffer)
+    if(music_data[i] && !music_buffer[i])
     {
-      ctx.decodeAudioData(music_data, function(b){ music_buffer = b; if(music_shouldbeplaying) self.play_music(); },
+      ctx.decodeAudioData(music_data[i], function(b){ music_buffer[i] = b; if(music_shouldbeplaying) self.play_music(); },
       function(e){ console.log("Error with decoding music data" + e.err); });
-      music_data = 0;
-      if(!music_buffer) all_ready = 0;
+      music_data[i] = 0;
+      if(!music_buffer[i]) all_ready = 0;
     }
     if(all_ready)
     {
@@ -574,32 +575,45 @@ var AudWrangler = function(silence_src)
 
   self.register_music = function(src)
   {
-    music_src = src;
+    var i = music_src.length;
+
+    music_src[i] = src;
     var xhr = new XMLHttpRequest();
     xhr.open('GET', src, true);
     xhr.responseType = 'arraybuffer';
     xhr.onload = function() {
       xhr.onload = 0;
-      music_data = xhr.response;
+      music_data[i] = xhr.response;
       if(ctx)
       {
-        ctx.decodeAudioData(music_data, function(b){ music_buffer = b; if(music_shouldbeplaying) self.play_music(); },
+        ctx.decodeAudioData(music_data[i], function(b){ music_buffer[i] = b; if(music_shouldbeplaying) self.play_music(); },
         function(e){ console.log("Error with decoding music data" + e.err); });
-        music_data = 0;
+        music_data[i] = 0;
       }
     };
     xhr.send();
 
-    return 0;
+    return i;
+  }
+  self.set_music = function(i)
+  {
+    if(music_shouldbeplaying && music_i != i)
+    {
+      self.stop_music();
+      music_i = i;
+      self.play_music();
+    }
+    music_i = i;
   }
   self.play_music = function()
   {
     music_shouldbeplaying = 1;
     if(ctx && ctx.state === 'suspended') ctx.resume();
-    if(ctx && music_buffer)
+    if(music_track) return;
+    if(ctx && music_buffer[music_i])
     {
       music_track = ctx.createBufferSource();
-      music_track.buffer = music_buffer;
+      music_track.buffer = music_buffer[music_i];
       music_track.connect(ctx.destination);
       music_track.loop = true;
       music_track.start(0);

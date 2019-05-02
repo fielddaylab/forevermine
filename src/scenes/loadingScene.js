@@ -282,7 +282,7 @@ var LoadingScene = function(game, stage)
     loading_percent_loaded = n_loading_imgs_loaded/(loading_img_srcs.length+1);
     if(loading_percent_loaded >= 1.0) ticks_since_loading_ready++;
     percent_loaded = (n_imgs_loaded+n_fonts_loaded+n_audios_loaded+n_videos_loaded)/((img_srcs.length+1)+(font_srcs.length+1)+(audio_srcs.length+1)+(video_srcs.length+1));
-    if(chase_percent_loaded <= percent_loaded) chase_percent_loaded += 0.01;
+    if(chase_percent_loaded <= percent_loaded) chase_percent_loaded += 0.005;
     lerp_percent_loaded = lerp(lerp_percent_loaded,percent_loaded,0.1);
     lerp_chase_percent_loaded = lerp(lerp_chase_percent_loaded,chase_percent_loaded,0.1);
     if(percent_loaded >= 1.0) ticks_since_ready++;
