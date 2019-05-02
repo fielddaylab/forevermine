@@ -459,7 +459,7 @@ var system_indexs = [
       gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
       gg.ctx.font = "20px DisposableDroidBB";
       var dyz = (gg.max_days-gg.cur_level.day-2);
-      if(dyz == 1) gg.ctx.fillText(dyz+" day of oxygen remain", 20,gg.canv.height-80+30);
+      if(dyz == 1) gg.ctx.fillText(dyz+" day of oxygen remains", 20,gg.canv.height-80+30);
       else         gg.ctx.fillText(dyz+" days of oxygen remain", 20,gg.canv.height-80+30);
       gg.ctx.globalAlpha = 1;
     }
@@ -468,7 +468,7 @@ var system_indexs = [
       gg.ctx.fillText("Day "+(gg.cur_level.day+1), 20,gg.canv.height-80);
       gg.ctx.font = "20px DisposableDroidBB";
       var dyz = (gg.max_days-gg.cur_level.day-2);
-      if(dyz == 1) gg.ctx.fillText(dyz+" day of oxygen remain", 20,gg.canv.height-80+30);
+      if(dyz == 1) gg.ctx.fillText(dyz+" day of oxygen remains", 20,gg.canv.height-80+30);
       else         gg.ctx.fillText(dyz+" days of oxygen remain", 20,gg.canv.height-80+30);
     }
   }
