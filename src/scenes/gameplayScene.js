@@ -1204,6 +1204,8 @@ var system_indexs = [
       case MODE_CINEMATIC:
       {
         self.draw_home();
+        gg.ctx.fillStyle = black;
+        gg.ctx.fillRect(gg.monitor.x,gg.monitor.y,gg.monitor.w,gg.monitor.h);
         drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
         if(gg.mode_t%100 < 50)
           gg.ctx.drawImage(gg.button_glow_img,gg.stage.width-210, gg.stage.height-135, 210, 140);
