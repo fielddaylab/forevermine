@@ -595,6 +595,7 @@ var system_indexs = [
     switch(mode)
     {
       case MODE_MENU:
+        if(gg.sound) { gg.audwrangler.set_music(gg.menu_audio); gg.audwrangler.play_music(); }
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
         gg.home_cam.ww = gg.lab.ww;
@@ -613,8 +614,7 @@ var system_indexs = [
         else gg.intro_vid.done = 1;
         break;
       case MODE_BOOT:
-        gg.cur_audio = gg.console_audio;
-        if(gg.sound) { gg.audwrangler.set_music(gg.cur_audio); gg.audwrangler.play_music(); }
+        if(gg.sound) { gg.audwrangler.set_music(gg.console_audio); gg.audwrangler.play_music(); }
         gg.monitor.boot_t = 0;
         if(skipping)
         {
@@ -667,8 +667,7 @@ var system_indexs = [
       case MODE_PRE1:
         break;
       case MODE_WORK_IN:
-        gg.cur_audio = gg.modeling_audio;
-        if(gg.sound) { gg.audwrangler.set_music(gg.cur_audio); gg.audwrangler.play_music(); }
+        if(gg.sound) { gg.audwrangler.set_music(gg.modeling_audio); gg.audwrangler.play_music(); }
         if(gg.cur_level.skip_zoom)
         {
           gg.graph.zoom = 0;
@@ -701,8 +700,7 @@ var system_indexs = [
         }
         break;
       case MODE_WORK_OUT:
-        gg.cur_audio = gg.console_audio;
-        if(gg.sound) { gg.audwrangler.set_music(gg.cur_audio); gg.audwrangler.play_music(); }
+        if(gg.sound) { gg.audwrangler.set_music(gg.console_audio); gg.audwrangler.play_music(); }
         gg.line.blur();
         gg.exposition_box.clear();
         break;
@@ -733,13 +731,25 @@ var system_indexs = [
       case MODE_POST1:
         break;
       case MODE_LAB_OUT:
+        if(!skipping)
+        {
+          if(gg.sound)
+          {
+            if(gg.cur_level.pano == 1) gg.audwrangler.set_music(gg.welding_audio);
+            else                       gg.audwrangler.set_music(gg.pano_audio);
+            gg.audwrangler.play_music();
+          }
+        }
         break;
       case MODE_NIGHT:
         break;
       case MODE_LAB_IN: //sets next level
-        //gg.cur_audio.pause();
-        //gg.cur_audio = gg.console_audio;
-        //if(gg.sound) gg.cur_audio.play();
+        if(gg.sound)
+        {
+          if(gg.cur_level.i+1 == gg.levels.length) gg.audwrangler.set_music(gg.console_emp_audio);
+          else                                     gg.audwrangler.set_music(gg.console_audio);
+          gg.audwrangler.play_music();
+        }
         if(gg.cur_level.i < gg.levels.length-1)
         {
           gg.next_level = gg.levels[gg.cur_level.i+1];
@@ -1073,6 +1083,7 @@ var system_indexs = [
         {
           if(gg.cur_level.special)
           {
+            gg.audwrangler.stop_music();
             gg.outro_vid.play();
             self.set_mode(MODE_CREDITS,0);
           }
@@ -1131,6 +1142,10 @@ var system_indexs = [
         break;
       case MODE_CREDITS:
       {
+        if(gg.mode_t == 1)
+        {
+          if(gg.sound) { gg.audwrangler.set_music(gg.credits_audio); gg.audwrangler.play_music(); }
+        }
         gg.mode_p = gg.mode_t/(gg.fade_t+gg.fade_t);
         if(gg.mode_t < gg.fade_t) //fade from black
         {
@@ -1406,10 +1421,10 @@ var system_indexs = [
     for(var i = 0; i < 9; i++) gg.voices.clean.push(  gg.audwrangler.register("assets/audio/voice/clean/"  +i+".mp3"));
     for(var i = 0; i < 5; i++) gg.voices.angry.push(  gg.audwrangler.register("assets/audio/voice/angry/"  +i+".mp3"));
     for(var i = 0; i < 9; i++) gg.voices.glitchy.push(gg.audwrangler.register("assets/audio/voice/glitchy/"+i+".mp3"));
+    gg.build_audio   = gg.audwrangler.register("assets/audio/emp_sfx.mp3");
     gg.emp_audio   = gg.audwrangler.register("assets/audio/emp_sfx.mp3");
 
-    gg.cur_audio = gg.menu_audio;
-    gg.audwrangler.play(gg.cur_audio);
+    gg.audwrangler.play(gg.menu_audio);
 
     gg.max_days = 8;
     gg.needed_fuel = 350;

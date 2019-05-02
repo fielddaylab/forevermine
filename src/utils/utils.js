@@ -575,7 +575,14 @@ var AudWrangler = function(silence_src)
       track.buffer = aud_buffer[i];
       track.connect(ctx.destination);
       track.start(0);
+      return track;
     }
+    return 0;
+  }
+
+  self.stop = function(track)
+  {
+    track.stop();
   }
 
   self.register_music = function(src)
