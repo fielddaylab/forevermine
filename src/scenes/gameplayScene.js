@@ -298,7 +298,10 @@ var system_indexs = [
     else
       drawImageBox(gg.monitor.screen,gg.monitor,gg.ctx);
     gg.ctx.imageSmoothingEnabled = 1;
-    drawImageBox(gg.console_img,gg.lab,gg.ctx);
+    if(!gg.cur_level || gg.cur_level.i < gg.levels.length-1 || !gg.empd)
+      drawImageBox(gg.console_img,gg.lab,gg.ctx);
+    else
+      drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
     gg.ctx.fillStyle = red;
     gg.ctx.font = "30px DisposableDroidBB";
     if(gg.cur_level) gg.ctx.fillText(gg.input_codes[gg.cur_level.i],gg.lab.x+gg.lab.w*0.14,gg.lab.y+gg.lab.h*0.74);
@@ -602,6 +605,7 @@ var system_indexs = [
     {
       case MODE_MENU:
         if(gg.sound) { gg.audwrangler.set_music(gg.menu_audio); gg.audwrangler.play_music(); }
+        gg.empd = 0;
         gg.home_cam.wx = gg.lab.wx;
         gg.home_cam.wy = gg.lab.wy;
         gg.home_cam.ww = gg.lab.ww;
