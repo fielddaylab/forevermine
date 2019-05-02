@@ -134,23 +134,23 @@ var system_indexs = [
       gg.outro_vid.video.style.height = gg.canv.height;
       }
 
-      var btn_x = 10;
+      var btn_x = 50;
       var btn_y = 10;
       var btn_w = 80;
-      var btn_h = 50;
-
-      gg.continue_button.x = btn_x;
-      gg.continue_button.y = gg.canv.height/3;
-      gg.continue_button.w = btn_w*4;
-      gg.continue_button.h = btn_h;
+      var btn_h = 40;
 
       gg.new_button.x = btn_x;
-      gg.new_button.y = gg.continue_button.y+gg.continue_button.h*2;
-      gg.new_button.w = gg.continue_button.w;
+      gg.new_button.y = gg.canv.height/2-btn_h;
+      gg.new_button.w = btn_w*4;
       gg.new_button.h = btn_h;
 
-      gg.code_txt.x = gg.new_button.x+gg.new_button.w;
-      gg.code_txt.y = gg.new_button.y+gg.new_button.h*2;
+      gg.continue_button.x = btn_x;
+      gg.continue_button.y = gg.new_button.y+gg.new_button.h*2;
+      gg.continue_button.w = gg.new_button.w;
+      gg.continue_button.h = btn_h;
+
+      gg.code_txt.x = btn_x;
+      gg.code_txt.y = gg.continue_button.y+gg.continue_button.h*3;
       gg.code_txt.w = gg.continue_button.w;
       gg.code_txt.h = btn_h;
       gg.code_txt.size();
@@ -162,12 +162,12 @@ var system_indexs = [
 
       gg.sound_button.x = btn_x;
       gg.sound_button.y = gg.canv.height-btn_h*2;
-      gg.sound_button.w = gg.new_button.w*2/3;
+      gg.sound_button.w = gg.new_button.w*2/3-btn_h;
       gg.sound_button.h = btn_h;
 
-      gg.fullscreen_button.x = gg.sound_button.x+gg.sound_button.w+20;
+      gg.fullscreen_button.x = gg.sound_button.x+gg.sound_button.w+btn_h*2;
       gg.fullscreen_button.y = gg.canv.height-btn_h*2;
-      gg.fullscreen_button.w = gg.new_button.w*4/5;
+      gg.fullscreen_button.w = gg.new_button.w*2/3;
       gg.fullscreen_button.h = btn_h;
     }
 
@@ -1184,11 +1184,11 @@ var system_indexs = [
         gg.ctx.fillStyle = white;
         gg.ctx.strokeStyle = white;
         gg.ctx.textAlign = "left";
-        gg.ctx.font = (gg.continue_button.h*1/3)+"px Lato";
+        gg.ctx.font = (gg.continue_button.h*2/3)+"px Lato";
         var txtbump = gg.continue_button.h/5;
-        gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
         gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
-        gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y+gg.code_txt.h-txtbump);
+        gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
+        gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y-txtbump*1.5);
         if(gg.input_code_valid) gg.ctx.fillText(gg.code_txt.box.value,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
         gg.ctx.drawImage(gg.menu_text_img,gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
         gg.ctx.drawImage(gg.menu_go_img,gg.code_button.x,gg.code_button.y,gg.code_button.w,gg.code_button.h);
@@ -1204,6 +1204,8 @@ var system_indexs = [
       case MODE_CINEMATIC:
       {
         self.draw_home();
+        gg.ctx.fillStyle = black;
+        gg.ctx.fillRect(gg.monitor.x,gg.monitor.y,gg.monitor.w,gg.monitor.h);
         drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
         if(gg.mode_t%100 < 50)
           gg.ctx.drawImage(gg.button_glow_img,gg.stage.width-210, gg.stage.height-135, 210, 140);
@@ -1757,8 +1759,8 @@ var system_indexs = [
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/battery_charge.png");
-    l.m_starting = [0.5,];
-    l.m_correct = [1,];
+    l.m_starting = [1,];
+    l.m_correct = [2,];
     l.m_label = ["Charge Rate",];
     l.m_icon = [GenImg("assets/chrrate.png"),];
     l.b_starting = [0,];
@@ -1832,7 +1834,7 @@ var system_indexs = [
     l.i = i;
     l.y_icon = GenImg("assets/battery_charge.png");
     l.m_starting = [0,];
-    l.m_correct = [1,];
+    l.m_correct = [2,];
     l.m_label = ["Charge Rate",];
     l.m_icon = [GenImg("assets/chrrate.png"),];
     l.b_starting = [0,];
@@ -1905,8 +1907,8 @@ var system_indexs = [
     l = new level();
     l.i = i;
     l.y_icon = GenImg("assets/solar-charge.png");
-    l.m_starting = [1.2,];
-    l.m_correct = [1.5,];
+    l.m_starting = [2,];
+    l.m_correct = [2.5,];
     l.m_label = ["Charge Rate",];
     l.m_icon = [GenImg("assets/sdrrate.png"),];
     l.b_starting = [0,];
