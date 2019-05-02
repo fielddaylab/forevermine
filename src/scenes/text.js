@@ -77,7 +77,7 @@ var english_text =
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
       get_timer(60), "Now label the constants in the equation.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Here are the constants:", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Here are your constants:", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
       get_timer(60), "Mining Rate", CONTENT_LABEL, 0,
     ],
@@ -94,7 +94,7 @@ var english_text =
       get_timer(80), "I already had some fuel before you got here.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(100), "Drag the Existing Fuel into the equation.", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Then adjust the rate so the data matches.", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "Then adjust the rate so the model matches the data.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
@@ -126,11 +126,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -153,7 +153,7 @@ var english_text =
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
       "Do you think we'll get enough fuel before my oxygen runs out?", CONTENT_PLAYER, EMOTE_NULL,
-      "You can use my Modeling Program to find out.", CONTENT_AI, EMOTE_NULL,
+      "You can use the Modeling Program to find out.", CONTENT_AI, EMOTE_NULL,
       "Unless you'd rather take another nap. You're good at that.", CONTENT_AI, EMOTE_NULL,
       "MAL, I swear. I will switch you off.", CONTENT_PLAYER, EMOTE_NULL,
       "Awwwwww, grumpy human. How cute.", CONTENT_AI, EMOTE_NULL,
@@ -161,11 +161,9 @@ var english_text =
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(120), "The graph shows yesterday's model!", CONTENT_AI, EMOTE_NULL,
-      trigger_click, "Okay. That rate isn't accurate anymore.", CONTENT_PLAYER, EMOTE_NULL,
-      trigger_click, "Can we fix up the model?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(120), "Yep!", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "First update the model to fit our new data.", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Then use the model to predict if you're gonna survive!", CONTENT_AI, EMOTE_NULL,
+      trigger_click, "Okay. Since the bots are mining faster, that graph isn't accurate anymore.", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Can we update the model and make a new prediction?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(120), "That's the plan!", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -174,22 +172,22 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(100), "Now figure out how fast the bots are actually mining!", CONTENT_AI, EMOTE_NULL,
       trigger_click, "How?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(100), "We know all the other numbers, so this'll be easy!", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Update the existing fuel.", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "We know all the other numbers, so it should be easy!", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "First update the existing fuel.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(100), "Then adjust the mining rate in the equation until the data matches.", CONTENT_AI, EMOTE_NULL,
     ],
@@ -221,15 +219,14 @@ var english_text =
       "My old humans used to say this place was nearly impossible to leave.", CONTENT_AI, EMOTE_NULL,
       "Sorry, MAL. I just want to get home.", CONTENT_PLAYER, EMOTE_NULL,
       "I'll come back to check on our progress tomorrow.", CONTENT_PLAYER, EMOTE_NULL,
-      "I'll be waiting! See you tomorrow, friend!", CONTENT_AI, EMOTE_NULL,
     ],
     improve: //LAB: [skip_system] show system
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -268,26 +265,26 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(60), "Drag the existing fuel into the equation.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(60), "Then adjust the mining rate in the equation.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "We need to figure out how fast the robots are actually mining.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "We need to figure out how fast the robots are mining now.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
-      get_timer(80), "Great job, human! Your model matches the data!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Great job, human!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag your modeled data over here and we'll make a new prediction.", CONTENT_AI, EMOTE_NULL,
     ],
     submitted_incorrect: //WORKSPACE: submitted before values correct; reset
@@ -333,8 +330,8 @@ var english_text =
     context: //LAB: [skip_context] context animation on-screen
     [
       "Wow! You built that?", CONTENT_AI, EMOTE_NULL,
-      "You're, like, the coolest human ever! I'm so glad you got stuck here.", CONTENT_AI, EMOTE_NULL,
-      "Um.... thanks. I guess.", CONTENT_PLAYER, EMOTE_NULL,
+      "You're, like, the coolest human ever! I'm so glad you got stuck here!", CONTENT_AI, EMOTE_NULL,
+      "Um... thanks, I guess.", CONTENT_PLAYER, EMOTE_NULL,
       "Can I use the Modeling Program to see how the charger is working?", CONTENT_PLAYER, EMOTE_NULL,
       "Yeah! Let's do it!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -343,21 +340,21 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
       get_timer(80), "Build a new model to find the charging speed.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "Drag the charging data onto the table.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "First drag the charging data onto the table.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(80), "Drag the labels from the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Now drag the labels from the graph into the equation.", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(80), "Now label the constants.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Great! Now label the constants.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Starting Charge", CONTENT_LABEL, 0,
       get_timer(60), "Charge Rate", CONTENT_LABEL, 0,
     ],
@@ -400,11 +397,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -412,15 +409,15 @@ var english_text =
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
@@ -434,15 +431,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -516,7 +513,7 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -526,15 +523,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -566,11 +563,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -578,15 +575,15 @@ var english_text =
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
@@ -600,15 +597,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -671,7 +668,7 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -747,15 +744,15 @@ var english_text =
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
@@ -769,15 +766,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -816,11 +813,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -933,8 +930,7 @@ var english_text =
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(20), "Surface Area", CONTENT_CONSTANT, 4,
       get_timer(20), "Crystal Density", CONTENT_CONSTANT, 4,
-      get_timer(80), "Then increase the drill rate.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "Keep going until the graph shows you're gonna survive!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Then increase the drill rate until you survive!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
