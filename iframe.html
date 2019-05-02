@@ -103,17 +103,6 @@ function begin()
 
   gg.audwrangler = new AudWrangler("assets/audio/silence.mp3");
 
-  var play_first_audio = function()
-  {
-    gg.audwrangler.init();
-    game_first_audio_played = 1;
-    if(platform == DO_PLATFORM_PC)          stage_container.removeEventListener('mouseup',  play_first_audio);
-    else if(platform == DO_PLATFORM_MOBILE) stage_container.removeEventListener('touchend', play_first_audio);
-  }
-  if(platform == DO_PLATFORM_PC)          stage_container.addEventListener('mouseup',  play_first_audio);
-  else if(platform == DO_PLATFORM_MOBILE) stage_container.addEventListener('touchend', play_first_audio);
-  game_first_audio_played = 1; play_first_audio(); //uncomment this if loaded through click-to-init iframe
-
   gg.g = new Game({width:w,height:h,container:"stage_container"});
   resize();
   gg.g.begin();

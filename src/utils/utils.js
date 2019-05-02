@@ -630,7 +630,6 @@ var AudWrangler = function(silence_src)
   self.registerevt();
 }
 
-
 var Vid = function(container, source, callback)
 {
   var self = this;
