@@ -726,7 +726,7 @@ var exposition_box = function()
     if(self.metas[self.displayed_i] == EMOTE_RECOVER) self.recover_t = 1;
     if(self.metas[self.displayed_i] == EMOTE_CHANGE) { self.change_t = 1; gg.monitor.mode = 1; }
     if(self.metas[self.displayed_i] == EMOTE_BUILD)  { if(gg.sound) gg.build_track = gg.audwrangler.play(gg.build_audio); }
-    if(self.metas[self.displayed_i] == EMOTE_EMP)    { self.emp_t = 1; if(gg.build_track) gg.audwrangler.stop(gg.build_track); if(gg.sound) gg.audwrangler.play(gg.emp_audio); gg.audwrangler.stop_music(); gg.build_track = 0; }
+    if(self.metas[self.displayed_i] == EMOTE_EMP)    { gg.empd = 1; self.emp_t = 1; if(gg.build_track) gg.audwrangler.stop(gg.build_track); if(gg.sound) gg.audwrangler.play(gg.emp_audio); gg.audwrangler.stop_music(); gg.build_track = 0; }
     if(self.metas[self.displayed_i] == EMOTE_DIE)    { gg.monitor.dead = 1; }
     if(self.types[self.displayed_i] == CONTENT_AI)
     {
