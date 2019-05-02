@@ -299,7 +299,7 @@ var system_indexs = [
     drawImageBox(gg.console_img,gg.lab,gg.ctx);
     gg.ctx.fillStyle = red;
     gg.ctx.font = "30px DisposableDroidBB";
-    if(gg.cur_level) gg.ctx.fillText(gg.input_codes[gg.cur_level.i],gg.lab.x+gg.lab.w*0.13,gg.lab.y+gg.lab.h*0.74);
+    if(gg.cur_level) gg.ctx.fillText(gg.input_codes[gg.cur_level.i],gg.lab.x+gg.lab.w*0.14,gg.lab.y+gg.lab.h*0.74);
     if(!gg.monitor.boot_t || gg.monitor.boot_t > 250) gg.exposition_box.draw();
     if(gg.exposition_box.blackout_t)
     {
