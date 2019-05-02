@@ -510,6 +510,7 @@ var AudWrangler = function(silence_src)
       if(window.AudioContext) ctx = new AudioContext();
       else if(window.webkitAudioContext) ctx = new webkitAudioContext();
     }
+    if(!aud_data.length && !music_data.length) return;
     var all_ready = 1;
     for(var i = 0; i < aud_src.length; i++)
     {
