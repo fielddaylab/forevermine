@@ -1421,8 +1421,8 @@ var system_indexs = [
     for(var i = 0; i < 9; i++) gg.voices.clean.push(  gg.audwrangler.register("assets/audio/voice/clean/"  +i+".mp3"));
     for(var i = 0; i < 5; i++) gg.voices.angry.push(  gg.audwrangler.register("assets/audio/voice/angry/"  +i+".mp3"));
     for(var i = 0; i < 9; i++) gg.voices.glitchy.push(gg.audwrangler.register("assets/audio/voice/glitchy/"+i+".mp3"));
-    gg.build_audio   = gg.audwrangler.register("assets/audio/emp_sfx.mp3");
-    gg.emp_audio   = gg.audwrangler.register("assets/audio/emp_sfx.mp3");
+    gg.build_audio   = gg.audwrangler.register("assets/audio/emp_charge.mp3");
+    gg.emp_audio   = gg.audwrangler.register("assets/audio/emp_hit.mp3");
 
     gg.audwrangler.play(gg.menu_audio);
 
