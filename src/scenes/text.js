@@ -126,11 +126,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -174,15 +174,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -225,11 +225,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -268,15 +268,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -343,7 +343,7 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -400,11 +400,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -412,15 +412,15 @@ var english_text =
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
@@ -434,15 +434,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -516,7 +516,7 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -526,15 +526,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -566,11 +566,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -578,15 +578,15 @@ var english_text =
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
@@ -600,15 +600,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -671,7 +671,7 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -747,15 +747,15 @@ var english_text =
   { //one level. copy and paste from this { to the following } to create a new level
     pre_context: //LAB: [skip_night] you've just awoken. lead into show context animation.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
@@ -769,15 +769,15 @@ var english_text =
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     labels_incorrect: //WORKSPACE: [skip_labels] labels chosen incorrectly; reset
     [
-      get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
+      //get_timer(0), "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
@@ -816,11 +816,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "SKIP", CONTENT_AI, EMOTE_NULL,
+      //"SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
