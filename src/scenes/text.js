@@ -77,7 +77,7 @@ var english_text =
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
       get_timer(60), "Now label the constants in the equation.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Here are the constants:", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Here are your constants:", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_LABEL, 0,
       get_timer(60), "Mining Rate", CONTENT_LABEL, 0,
     ],
@@ -94,7 +94,7 @@ var english_text =
       get_timer(80), "I already had some fuel before you got here.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(100), "Drag the Existing Fuel into the equation.", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Then adjust the rate so the data matches.", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "Then adjust the rate so the model matches the data.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
@@ -153,7 +153,7 @@ var english_text =
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
       "Do you think we'll get enough fuel before my oxygen runs out?", CONTENT_PLAYER, EMOTE_NULL,
-      "You can use my Modeling Program to find out.", CONTENT_AI, EMOTE_NULL,
+      "You can use the Modeling Program to find out.", CONTENT_AI, EMOTE_NULL,
       "Unless you'd rather take another nap. You're good at that.", CONTENT_AI, EMOTE_NULL,
       "MAL, I swear. I will switch you off.", CONTENT_PLAYER, EMOTE_NULL,
       "Awwwwww, grumpy human. How cute.", CONTENT_AI, EMOTE_NULL,
@@ -161,11 +161,9 @@ var english_text =
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(120), "The graph shows yesterday's model!", CONTENT_AI, EMOTE_NULL,
-      trigger_click, "Okay. That rate isn't accurate anymore.", CONTENT_PLAYER, EMOTE_NULL,
-      trigger_click, "Can we fix up the model?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(120), "Yep!", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "First update the model to fit our new data.", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Then use the model to predict if you're gonna survive!", CONTENT_AI, EMOTE_NULL,
+      trigger_click, "Okay. Since the bots are mining faster, that graph isn't accurate anymore.", CONTENT_PLAYER, EMOTE_NULL,
+      trigger_click, "Can we update the model and make a new prediction?", CONTENT_PLAYER, EMOTE_NULL,
+      get_timer(120), "That's the plan!", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
@@ -188,8 +186,8 @@ var english_text =
     [
       get_timer(100), "Now figure out how fast the bots are actually mining!", CONTENT_AI, EMOTE_NULL,
       trigger_click, "How?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(100), "We know all the other numbers, so this'll be easy!", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "Update the existing fuel.", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "We know all the other numbers, so it should be easy!", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "First update the existing fuel.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(100), "Then adjust the mining rate in the equation until the data matches.", CONTENT_AI, EMOTE_NULL,
     ],
@@ -283,11 +281,11 @@ var english_text =
       get_timer(60), "Drag the existing fuel into the equation.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(60), "Then adjust the mining rate in the equation.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "We need to figure out how fast the robots are actually mining.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "We need to figure out how much the mining rate slowed down.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
-      get_timer(80), "Great job, human! Your model matches the data!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Great job, human!", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag your modeled data over here and we'll make a new prediction.", CONTENT_AI, EMOTE_NULL,
     ],
     submitted_incorrect: //WORKSPACE: submitted before values correct; reset
