@@ -811,12 +811,11 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "The drills are programmed to mine at a slow and steady rate, so they'll last... you know... forever.", CONTENT_AI, EMOTE_NULL,
-      "I can divert power to the drills to speed them up, but not too much, or they'll burn out.", CONTENT_AI, EMOTE_NULL,
+      "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
-      "Great. We just need to find the right drill speed, and I should be able to survive!", CONTENT_PLAYER, EMOTE_NULL,
+      "SKIP", CONTENT_AI, EMOTE_NULL,
     ],
   },
 
@@ -861,9 +860,11 @@ var english_text =
     ],
     context: //LAB: [skip_context] context animation on-screen
     [
+      "DON'T SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     lets_go: //LAB: [skip_context] just shown context animation. lead into going to workspace.
     [
+      "DON'T SKIP", CONTENT_AI, EMOTE_NULL,
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
