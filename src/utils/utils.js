@@ -523,11 +523,15 @@ var AudWrangler = function(silence_src)
       }
       if(!aud_buffer[i]) all_ready = 0;
     }
-    if(music_data[i] && !music_buffer[i])
+    for(var i = 0; i < aud_src.length; i++)
     {
-      ctx.decodeAudioData(music_data[i], function(b){ music_buffer[i] = b; if(music_shouldbeplaying) self.play_music(); },
-      function(e){ console.log("Error with decoding music data" + e.err); });
-      music_data[i] = 0;
+      if(music_data[i] && !music_buffer[i])
+      {
+        (function(i){ctx.decodeAudioData(music_data[i], function(b){ music_buffer[i] = b; if(music_shouldbeplaying) self.play_music(); },
+        function(e){ console.log("Error with decoding music data" + e.err); });
+        })(i);
+        music_data[i] = 0;
+      }
       if(!music_buffer[i]) all_ready = 0;
     }
     if(all_ready)
