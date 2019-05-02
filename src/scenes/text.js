@@ -219,7 +219,6 @@ var english_text =
       "My old humans used to say this place was nearly impossible to leave.", CONTENT_AI, EMOTE_NULL,
       "Sorry, MAL. I just want to get home.", CONTENT_PLAYER, EMOTE_NULL,
       "I'll come back to check on our progress tomorrow.", CONTENT_PLAYER, EMOTE_NULL,
-      "I'll be waiting! See you tomorrow, friend!", CONTENT_AI, EMOTE_NULL,
     ],
     improve: //LAB: [skip_system] show system
     [
@@ -281,7 +280,7 @@ var english_text =
       get_timer(60), "Drag the existing fuel into the equation.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(60), "Then adjust the mining rate in the equation.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "We need to figure out how much the mining rate slowed down.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "We need to figure out how fast the robots are mining now.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
@@ -331,8 +330,8 @@ var english_text =
     context: //LAB: [skip_context] context animation on-screen
     [
       "Wow! You built that?", CONTENT_AI, EMOTE_NULL,
-      "You're, like, the coolest human ever! I'm so glad you got stuck here.", CONTENT_AI, EMOTE_NULL,
-      "Um.... thanks. I guess.", CONTENT_PLAYER, EMOTE_NULL,
+      "You're, like, the coolest human ever! I'm so glad you got stuck here!", CONTENT_AI, EMOTE_NULL,
+      "Um... thanks, I guess.", CONTENT_PLAYER, EMOTE_NULL,
       "Can I use the Modeling Program to see how the charger is working?", CONTENT_PLAYER, EMOTE_NULL,
       "Yeah! Let's do it!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -346,16 +345,16 @@ var english_text =
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
       get_timer(80), "Build a new model to find the charging speed.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "Drag the charging data onto the table.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "First drag the charging data onto the table.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
     [
-      get_timer(80), "Drag the labels from the graph into the equation.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Now drag the labels from the graph into the equation.", CONTENT_AI, EMOTE_NULL,
     ],
     labels: //WORKSPACE: [skip_labels] variables labelled, need to label constants
     [
-      get_timer(80), "Now label the constants.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Great! Now label the constants.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Starting Charge", CONTENT_LABEL, 0,
       get_timer(60), "Charge Rate", CONTENT_LABEL, 0,
     ],
@@ -931,8 +930,7 @@ var english_text =
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(20), "Surface Area", CONTENT_CONSTANT, 4,
       get_timer(20), "Crystal Density", CONTENT_CONSTANT, 4,
-      get_timer(80), "Then increase the drill rate.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "Keep going until the graph shows you're gonna survive!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Then increase the drill rate until you survive!", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
