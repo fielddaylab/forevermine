@@ -218,7 +218,7 @@ var system_indexs = [
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     gg.line.consume_cur_level();
-    setCookie("level", ""+gg.cur_level.i, 999)
+    setCookie("level", gg.input_codes[gg.cur_level.i], 999)
   }
 
   self.draw_home = function()
