@@ -128,10 +128,10 @@ var system_indexs = [
 
       if(gg.intro_vid.video)
       {
-      gg.intro_vid.video.style.width = gg.canv.width;
-      gg.intro_vid.video.style.height = gg.canv.height;
-      gg.outro_vid.video.style.width = gg.canv.width;
-      gg.outro_vid.video.style.height = gg.canv.height;
+      gg.intro_vid.video.style.width = gg.canv.width*game_stretch;
+      gg.intro_vid.video.style.height = gg.canv.height*game_stretch;
+      gg.outro_vid.video.style.width = gg.canv.width*game_stretch;
+      gg.outro_vid.video.style.height = gg.canv.height*game_stretch;
       }
 
       var btn_x = 50;

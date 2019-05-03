@@ -12,22 +12,22 @@ var Game = function(init)
   var self = this;
   doMapInitDefaults(init,init,default_init);
 
-  var stage = new Stage({width:init.width,height:init.height,container:init.container});
+  self.stage = new Stage({width:init.width,height:init.height,container:init.container});
   self.scenes = [
-    new NullScene(self, stage),
-    new LoadingScene(self, stage),
-    new GamePlayScene(self, stage),
+    new NullScene(self, self.stage),
+    new LoadingScene(self, self.stage),
+    new GamePlayScene(self, self.stage),
   ];
   self.cur_scene     =  0;
   self.old_cur_scene = -1;
 
   self.resize = function(args)
   {
-    document.getElementById(init.container).removeChild(stage.canv.canvas);
-    if(args.stage) stage = args.stage;
-    else stage = new Stage({width:args.width,height:args.height,container:init.container});
+    document.getElementById(init.container).removeChild(self.stage.canv.canvas);
+    if(args.stage) self.stage = args.stage;
+    else self.stage = new Stage({width:args.width,height:args.height,container:init.container});
     for(var i = 0; i < self.scenes.length; i++)
-      self.scenes[i].resize(stage);
+      self.scenes[i].resize(self.stage);
   }
 
   var flip;
@@ -42,7 +42,7 @@ var Game = function(init)
   self.already_ticked = 0;
   var tick = function()
   {
-    requestAnimFrame(tick,stage.canv.canvas);
+    requestAnimFrame(tick,self.stage.canv.canvas);
     if(!self.already_ticked)
       self.dotick();
     self.already_ticked = 0;
@@ -65,7 +65,7 @@ var Game = function(init)
     }
     if(self.old_cur_scene == self.cur_scene) //still in same scene- draw
     {
-      stage.clear();
+      self.stage.clear();
       self.scenes[self.cur_scene].draw();
     }
     self.old_cur_scene = self.cur_scene;

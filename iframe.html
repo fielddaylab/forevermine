@@ -60,7 +60,7 @@ body,div,canvas
 <script type="text/javascript">
 var game_width  = 1024;
 var game_height = 660;
-var game_first_audio_played = 0;
+var game_stretch = 1;
 
 function size_containers(w,h)
 {
@@ -74,12 +74,43 @@ function fullscreen()
   var el = document.body;
   var requestMethod = el.requestFullscreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
   if(requestMethod) requestMethod.call(el);
+
 }
 function unfullscreen()
 {
   var el = document;
   var exitMethod = el.exitFullscreen || el.webkitExitFullscreen || el.mozCancelFullScreen || el.msExitFullscreen;
   if(exitMethod) exitMethod.call(el);
+}
+
+function changefullscreen(evt)
+{
+  var w = window.innerWidth;
+  var h = window.innerHeight;
+  if(w/h > game_width/game_height)
+    w = h*game_width/game_height;
+  else if(w/h < game_width/game_height)
+    h = game_height/w*game_width;
+
+  game_stretch = w/game_width;
+  console.log(game_stretch);
+  size_containers(w,h);
+  if(gg.g)
+  {
+    gg.g.stage.canv.canvas.style.width  = floor(gg.g.stage.width *game_stretch)+"px";
+    gg.g.stage.canv.canvas.style.height = floor(gg.g.stage.height*game_stretch)+"px";
+
+    if(gg.intro_vid)
+    {
+      gg.intro_vid.video.style.width  = gg.canv.width*game_stretch;
+      gg.intro_vid.video.style.height = gg.canv.height*game_stretch;
+    }
+    if(gg.outro_vid)
+    {
+      gg.outro_vid.video.style.width  = gg.canv.width*game_stretch;
+      gg.outro_vid.video.style.height = gg.canv.height*game_stretch;
+    }
+  }
 }
 
 function resize()
@@ -111,6 +142,7 @@ function begin()
 window.addEventListener("load",begin,false);
 window.addEventListener("resize",resize,false);
 window.addEventListener("click",window.focus,false);
+document.addEventListener("fullscreenchange",changefullscreen,false);
 </script>
 
 </head>

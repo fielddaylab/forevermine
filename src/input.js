@@ -135,14 +135,14 @@ function DomTextBox(x,y,w,h,canv,txt,callback)
   self.box = document.createElement('input');
   self.box.type = "text";
   self.box.style.position = "absolute";
-  self.box.style.width = self.w+"px";
-  self.box.style.height = self.h+"px";
+  self.box.style.width = (self.w*game_stretch)+"px";
+  self.box.style.height = (self.h*game_stretch)+"px";
   self.box_on = 0; //0 = canv, 1 = DOM
 
   self.size = function()
   {
-    self.box.style.width = self.w+"px";
-    self.box.style.height = self.h+"px";
+    self.box.style.width  = (self.w*game_stretch)+"px";
+    self.box.style.height = (self.h*game_stretch)+"px";
   }
 
   self.box.onchange = function()
@@ -166,8 +166,8 @@ function DomTextBox(x,y,w,h,canv,txt,callback)
   self.focus = function()
   {
     self.box_on = 1;
-    self.box.style.top = self.y;
-    self.box.style.left = self.x;
+    self.box.style.top = self.y*game_stretch;
+    self.box.style.left = self.x*game_stretch;
     self.canv.canvas.parentElement.appendChild(self.box);
     self.box.focus();
   }
