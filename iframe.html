@@ -72,7 +72,7 @@ function size_containers(w,h)
 function fullscreen()
 {
   var el = document.body;
-  var requestMethod = el.requestFullscreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  var requestMethod = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
   if(requestMethod) requestMethod.call(el);
 
 }
@@ -142,7 +142,7 @@ function begin()
 window.addEventListener("load",begin,false);
 window.addEventListener("resize",resize,false);
 window.addEventListener("click",window.focus,false);
-document.addEventListener("fullscreenchange",changefullscreen,false);
+document.addEventListener("webkitfullscreenchange",changefullscreen,false);
 </script>
 
 </head>
