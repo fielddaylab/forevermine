@@ -1952,8 +1952,8 @@ var system_indexs = [
     l.m_correct = [2.5,];
     l.m_label = ["Charge Rate",];
     l.m_icon = [GenImg("assets/sdrrate.png"),];
-    l.b_starting = [0,];
-    l.b_correct = [0,];
+    l.b_starting = [0.2,];
+    l.b_correct = [0.2,];
     l.b_label = ["Starting Charge",];
     l.b_icon = [GenImg("assets/chrinitial.png"),];
     l.commit();
