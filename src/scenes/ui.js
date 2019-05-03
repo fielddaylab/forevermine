@@ -429,7 +429,7 @@ var content_dragger = function()
   }
   self.dragFinish = function(evt)
   {
-    if(!evt) evt = self.last_evt;
+    /*if(!evt)*/ evt = self.last_evt; //just always do this
     if(self.dragging_x && self.ptWithinEqnX(evt))
     {
       gg.line.x_set = 1;
