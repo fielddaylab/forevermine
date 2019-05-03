@@ -1014,7 +1014,7 @@ var timeline = function()
   {
     if(gg.cur_level.progress < 8) { self.t = 0; return; }
     var t = clampMapVal(self.sx,self.ex,0,self.t_max,evt.doX);
-    self.t_target = ceil(t);
+    self.t_target = self.t_max;
     self.t = t;
   }
   self.dragFinish = function(evt)
