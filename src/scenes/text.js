@@ -937,7 +937,7 @@ var english_text =
     review: //WORKSPACE: submitted correct equation; lead to review survival chances
     [
       get_timer(80), "You did it, human!!!", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "We learned a drill rate above 3.4 should work!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "We learned a drill rate of 2.3 or above should work!", CONTENT_AI, EMOTE_NULL,
     ],
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
