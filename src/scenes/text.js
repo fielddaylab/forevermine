@@ -618,7 +618,7 @@ var english_text =
     ],
     submitted_incorrect: //WORKSPACE: submitted before values correct; reset
     [
-      get_timer(60), "Those numbers don't match. Try again!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "The model doesn't fit the data. No way it can predict what's next. Try again!", CONTENT_AI, EMOTE_NULL,
     ],
     review: //WORKSPACE: submitted correct equation; lead to review survival chances
     [
@@ -673,7 +673,7 @@ var english_text =
     [
       get_timer(80), "Build a new model.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "Use it to see if your solar panels are improving the charge rate.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "Drag the data over to the table.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Drag this morning's data over to the table.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
@@ -711,7 +711,7 @@ var english_text =
     review: //WORKSPACE: submitted correct equation; lead to review survival chances
     [
       get_timer(80), "Nice job, human!", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "The solar panels added 0.2 to the charging rate!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "The solar panels increased the charging rate from 2.3 to 2.5!", CONTENT_AI, EMOTE_NULL,
     ],
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
@@ -755,11 +755,11 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(80), "You need enough fuel by Day 7.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Figure out the new mining rate to predict if you will have enough fuel by Day 7.", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
-      get_timer(80), "Drag the data onto the table.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Here is today's mining data.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
@@ -776,9 +776,9 @@ var english_text =
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
-      get_timer(80), "Here's the existing fuel.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Here's the existing fuel from today.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
-      get_timer(60), "Match the data.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Match the rate.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Or not. I don't really care.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -883,7 +883,7 @@ var english_text =
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
-      get_timer(20), "Drag the data onto the table.", CONTENT_AI, EMOTE_NULL,
+      get_timer(20), "Drag the mining data onto the table.", CONTENT_AI, EMOTE_NULL,
       get_timer(20), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
