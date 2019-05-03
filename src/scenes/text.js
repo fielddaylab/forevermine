@@ -755,7 +755,6 @@ var english_text =
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
       get_timer(80), "You need enough fuel by Day 7.", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "Blah, blah, blah. You know the drill.", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
