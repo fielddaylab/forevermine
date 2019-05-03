@@ -1466,6 +1466,7 @@ var system_indexs = [
     gg.pano_audio            = gg.audwrangler.register_music("assets/audio/pano.mp3");
     gg.welding_audio         = gg.audwrangler.register_music("assets/audio/welding.mp3");
     gg.credits_audio         = gg.audwrangler.register_music("assets/audio/credits.mp3");
+    gg.audwrangler.set_music(gg.menu_audio);
     gg.audwrangler.play_music();
 
     //fx
@@ -1475,8 +1476,6 @@ var system_indexs = [
     for(var i = 0; i < 9; i++) gg.voices.glitchy.push(gg.audwrangler.register("assets/audio/voice/glitchy/"+i+".mp3"));
     gg.build_audio   = gg.audwrangler.register("assets/audio/emp_charge.mp3");
     gg.emp_audio   = gg.audwrangler.register("assets/audio/emp_hit.mp3");
-
-    gg.audwrangler.play(gg.menu_audio);
 
     gg.max_days = 8;
     gg.needed_fuel = 350;
