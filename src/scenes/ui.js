@@ -498,7 +498,7 @@ var content_dragger = function()
     }
     if(self.dragging_sim && self.ptWithinChat(evt))
     {
-      gg.message_box.nq(get_timer(0),"SIM:",CONTENT_SIM,EMOTE_NULL);
+      gg.message_box.nq(get_timer(0),"Modeled Data:",CONTENT_SIM,EMOTE_NULL);
       if(gg.table.correct)
       {
         gg.cur_level.correct = 1;
@@ -2323,7 +2323,9 @@ var message_box = function()
         y += self.pad;
         gg.ctx.textAlign = "left";
         gg.ctx.fillStyle = self.data_text_color;
-        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+        //gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+        gg.ctx.fillText("Modeled",self.x+self.pad*2,y+self.font_h*0.5);
+        gg.ctx.fillText("Data:",  self.x+self.pad*2,y+self.font_h*1.5);
         y += self.font_h+self.pad;
       }
 
