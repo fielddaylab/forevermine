@@ -2139,6 +2139,7 @@ var message_box = function()
   self.wheel = function(evt)
   {
     self.target_top_y -= evt.deltaY;
+    if(navigator.userAgent.match(/Safari/i)) self.target_top_y -= evt.deltaY*20;
     if(self.target_top_y > self.y+self.w+self.pad) self.target_top_y = self.y+self.w+self.pad;
     if(self.target_top_y < self.max_top_y) self.target_top_y = self.max_top_y;
   }
