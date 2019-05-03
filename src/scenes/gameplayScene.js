@@ -1691,7 +1691,7 @@ var system_indexs = [
     gg.timeline = new timeline();
     gg.table = new table();
     gg.line = new editable_line();
-    gg.outro_vid = new Vid(document.getElementById(gg.stage.container), "assets/outro.mp4", function(){ gg.outro_vid.done = 1; })
+    gg.outro_vid = new Vid(document.getElementById(gg.stage.container), "assets/outro.mp4", function(){ gg.outro_vid.done = 1; },noop)
     gg.outro_vid.load();
 
     gg.levels = [];

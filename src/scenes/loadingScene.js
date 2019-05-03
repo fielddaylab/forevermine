@@ -233,9 +233,7 @@ var LoadingScene = function(game, stage)
     audioLoaded(); //call once to prevent 0/0 != 100% bug
 
     video_srcs.push("assets/intro.mp4"); //only really used to keep track of "n videos"
-    gg.intro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){ gg.intro_vid.done = 1; })
-    //gg.intro_vid.video.addEventListener('loadeddata', videoLoaded, false);
-    gg.intro_vid.video.addEventListener('canplaythrough', videoLoaded, false);
+    gg.intro_vid = new Vid(document.getElementById(gg.stage.container), "assets/intro.mp4", function(){ gg.intro_vid.done = 1; }, videoLoaded)
 
 /*
     gg.intro_vid.video.addEventListener('loadstart',     function(){videoLoaded();console.log('loadstart');     },false);
