@@ -294,6 +294,8 @@ var LoadingScene = function(game, stage)
 
   self.draw = function()
   {
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0,0,canv.width,canv.height);
     if(chase_percent_loaded < 1)
     {
       ctx.fillStyle = "#888888";
