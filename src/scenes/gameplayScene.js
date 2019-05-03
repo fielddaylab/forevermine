@@ -134,13 +134,13 @@ var system_indexs = [
       gg.outro_vid.video.style.height = gg.canv.height*game_stretch;
       }
 
-      var btn_x = 50;
+      var btn_x = 80;
       var btn_y = 10;
       var btn_w = 80;
       var btn_h = 30;
 
       gg.new_button.x = btn_x;
-      gg.new_button.y = gg.canv.height/2+btn_h*1.5;
+      gg.new_button.y = gg.canv.height/2+btn_h/2;
       gg.new_button.w = btn_w*4;
       gg.new_button.h = btn_h;
 
@@ -150,8 +150,8 @@ var system_indexs = [
       gg.continue_button.h = btn_h;
 
       gg.code_txt.x = btn_x;
-      gg.code_txt.y = gg.continue_button.y+gg.continue_button.h*3;
-      gg.code_txt.w = gg.continue_button.w;
+      gg.code_txt.y = gg.continue_button.y+gg.continue_button.h*3.5;
+      gg.code_txt.w = gg.continue_button.w*3/4;
       gg.code_txt.h = btn_h;
       gg.code_txt.size();
 
@@ -1232,7 +1232,7 @@ var system_indexs = [
         var txtbump = gg.continue_button.h/5;
         gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
         gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
-        gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y-txtbump*1.5);
+        gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y-txtbump*1.5-gg.code_txt.h/2);
         if(gg.input_code_valid) gg.ctx.fillText(gg.code_txt.box.value,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
         gg.ctx.drawImage(gg.menu_text_img,gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
         gg.ctx.drawImage(gg.menu_go_img,gg.code_button.x,gg.code_button.y,gg.code_button.w,gg.code_button.h);

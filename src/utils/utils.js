@@ -660,13 +660,15 @@ var Vid = function(container, source, callback, loadcallback)
   self.video.style.top = "0px";
   self.video.style.left = "0px";
   self.video.style.zIndex = "999";
-  self.video.controls = true;
   if(
    navigator.userAgent.match(/iPhone/i) ||
    navigator.userAgent.match(/iPad/i) ||
    navigator.userAgent.match(/iPod/i)
   )
+  {
+    self.video.controls = true;
     self.video.autoplay = true;
+  }
   self.video.loop = false;
   self.video.preload = "auto";
   self.video.playsinline = true;
