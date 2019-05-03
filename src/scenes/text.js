@@ -918,7 +918,7 @@ var english_text =
       get_timer(80), "You're not matching up data this time.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "You're figuring out the rate we need.", CONTENT_AI, EMOTE_NULL,
       trigger_click, "Ok. How?", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(80), "First plug in the data:", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "First plug in the known values:", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(20), "Surface Area", CONTENT_CONSTANT, 4,
       get_timer(20), "Crystal Density", CONTENT_CONSTANT, 4,
@@ -936,7 +936,7 @@ var english_text =
     review: //WORKSPACE: submitted correct equation; lead to review survival chances
     [
       get_timer(80), "You did it, human!!!", CONTENT_AI, EMOTE_NULL,
-      get_timer(80), "We know how fast to set the drills!", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "We learned a drill rate above 3.4 should work!", CONTENT_AI, EMOTE_NULL,
     ],
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
@@ -953,7 +953,7 @@ var english_text =
       "No! I can't believe this. We were so close.... ", CONTENT_PLAYER, EMOTE_NULL,
       "Don't worry, human. There's one more thing I can try.", CONTENT_AI, EMOTE_NULL,
       "My EMP wrecked most of the base. But I've still got a little power left.", CONTENT_AI, EMOTE_NULL,
-      "If I give up the last of my power, it might be enough to speed up the drills.", CONTENT_AI, EMOTE_NULL,
+      "If I give up the last of MY power, it might be enough to speed up the drills.", CONTENT_AI, EMOTE_NULL,
       "Wait, MAL. Does that mean you'll be... gone?", CONTENT_PLAYER, EMOTE_NULL,
       "Hang in there, human. Here goes nothing!", CONTENT_AI, EMOTE_NULL,
     ],

@@ -71,7 +71,7 @@ var monitor = function()
   self.mouth_hy.push(0.64); //"home" y
   self.mouth_vy.push(0.25); //"variance" y
 
-  self.bg_color.push("#F1F9EB");
+  self.bg_color.push("#FF7A7A");
   self.eye_img.push(GenImg("assets/eye_1.png"));
   self.mouth_img.push(GenImg("assets/mouth_1.png"));
 
