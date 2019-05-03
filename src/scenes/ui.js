@@ -2136,6 +2136,13 @@ var message_box = function()
     return 0;
   }
 
+  self.wheel = function(evt)
+  {
+    self.target_top_y -= evt.deltaY;
+    if(self.target_top_y > self.y+self.w+self.pad) self.target_top_y = self.y+self.w+self.pad;
+    if(self.target_top_y < self.max_top_y) self.target_top_y = self.max_top_y;
+  }
+
   self.dragging = 0;
   self.drag_start_y = 0;
   self.dragStart = function(evt)
