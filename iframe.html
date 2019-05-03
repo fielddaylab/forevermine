@@ -83,8 +83,9 @@ function unfullscreen()
   if(exitMethod) exitMethod.call(el);
 }
 
-function changefullscreen(evt)
+function resize()
 {
+
   var w = window.innerWidth;
   var h = window.innerHeight;
   if(w/h > game_width/game_height)
@@ -93,8 +94,9 @@ function changefullscreen(evt)
     h = game_height/w*game_width;
 
   game_stretch = w/game_width;
-  console.log(game_stretch);
+  if(gg.g) gg.g.resize({width:game_width,height:game_height});
   size_containers(w,h);
+
   if(gg.g)
   {
     gg.g.stage.canv.canvas.style.width  = floor(gg.g.stage.width *game_stretch)+"px";
@@ -112,20 +114,6 @@ function changefullscreen(evt)
     }
   }
 }
-
-function resize()
-{
-  //var w = window.innerWidth;
-  //var h = window.innerHeight;
-  //if(w > game_width)  w = game_width;
-  //if(h > game_height) h = game_height;
-  //if(h < game_height) w = h/game_height*game_width;
-  //w = h/game_height*game_width;
-  var w = game_width;
-  var h = game_height;
-  if(gg.g) gg.g.resize({width:w,height:h});
-  size_containers(w,h);
-}
 function begin()
 {
   var w = game_width;
@@ -142,7 +130,6 @@ function begin()
 window.addEventListener("load",begin,false);
 window.addEventListener("resize",resize,false);
 window.addEventListener("click",window.focus,false);
-document.addEventListener("fullscreenchange",changefullscreen,false);
 </script>
 
 </head>
