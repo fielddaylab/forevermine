@@ -43,6 +43,7 @@ body,div,canvas
 <script type="text/javascript" src="src/input.js"></script>
 
 <script type="text/javascript" src="src/dofilters/clicker.js"></script>
+<script type="text/javascript" src="src/dofilters/wheeler.js"></script>
 <script type="text/javascript" src="src/dofilters/blurer.js"></script>
 <script type="text/javascript" src="src/dofilters/keyer.js"></script>
 <script type="text/javascript" src="src/dofilters/dragger.js"></script>
@@ -60,7 +61,7 @@ body,div,canvas
 <script type="text/javascript">
 var game_width  = 1024;
 var game_height = 660;
-var game_first_audio_played = 0;
+var game_stretch = 1;
 
 function size_containers(w,h)
 {
@@ -72,8 +73,9 @@ function size_containers(w,h)
 function fullscreen()
 {
   var el = document.body;
-  var requestMethod = el.requestFullscreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  var requestMethod = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
   if(requestMethod) requestMethod.call(el);
+
 }
 function unfullscreen()
 {
@@ -84,16 +86,34 @@ function unfullscreen()
 
 function resize()
 {
-  //var w = window.innerWidth;
-  //var h = window.innerHeight;
-  //if(w > game_width)  w = game_width;
-  //if(h > game_height) h = game_height;
-  //if(h < game_height) w = h/game_height*game_width;
-  //w = h/game_height*game_width;
-  var w = game_width;
-  var h = game_height;
-  if(gg.g) gg.g.resize({width:w,height:h});
+
+  var w = window.innerWidth;
+  var h = window.innerHeight;
+  if(w/h > game_width/game_height)
+    w = h*game_width/game_height;
+  else if(w/h < game_width/game_height)
+    h = game_height/w*game_width;
+
+  game_stretch = w/game_width;
+  if(gg.g) gg.g.resize({width:game_width,height:game_height});
   size_containers(w,h);
+
+  if(gg.g)
+  {
+    gg.g.stage.canv.canvas.style.width  = floor(gg.g.stage.width *game_stretch)+"px";
+    gg.g.stage.canv.canvas.style.height = floor(gg.g.stage.height*game_stretch)+"px";
+
+    if(gg.intro_vid)
+    {
+      gg.intro_vid.video.style.width  = gg.canv.width*game_stretch;
+      gg.intro_vid.video.style.height = gg.canv.height*game_stretch;
+    }
+    if(gg.outro_vid)
+    {
+      gg.outro_vid.video.style.width  = gg.canv.width*game_stretch;
+      gg.outro_vid.video.style.height = gg.canv.height*game_stretch;
+    }
+  }
 }
 function begin()
 {

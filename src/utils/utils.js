@@ -642,7 +642,7 @@ var AudWrangler = function(silence_src)
   self.registerevt();
 }
 
-var Vid = function(container, source, callback)
+var Vid = function(container, source, callback, loadcallback)
 {
   var self = this;
 
@@ -651,6 +651,9 @@ var Vid = function(container, source, callback)
   self.callback  = callback;
 
   self.video = document.createElement('video');
+
+  //self.video.addEventListener('loadeddata', loadcallback, false);
+  self.video.addEventListener('canplaythrough', loadcallback, false);
   self.video.style.width = container.style.width;
   self.video.style.height = container.style.height;
   self.video.style.position = "absolute";

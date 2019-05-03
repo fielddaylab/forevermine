@@ -128,10 +128,10 @@ var system_indexs = [
 
       if(gg.intro_vid.video)
       {
-      gg.intro_vid.video.style.width = gg.canv.width;
-      gg.intro_vid.video.style.height = gg.canv.height;
-      gg.outro_vid.video.style.width = gg.canv.width;
-      gg.outro_vid.video.style.height = gg.canv.height;
+      gg.intro_vid.video.style.width = gg.canv.width*game_stretch;
+      gg.intro_vid.video.style.height = gg.canv.height*game_stretch;
+      gg.outro_vid.video.style.width = gg.canv.width*game_stretch;
+      gg.outro_vid.video.style.height = gg.canv.height*game_stretch;
       }
 
       var btn_x = 50;
@@ -174,6 +174,7 @@ var system_indexs = [
     if(keyer)   keyer.detach();   keyer   = new Keyer({source:gg.canvas});
     if(hoverer) hoverer.detach(); hoverer = new PersistentHoverer({source:gg.canvas});
     if(clicker) clicker.detach(); clicker = new Clicker({source:gg.canvas});
+    if(wheeler) wheeler.detach(); wheeler = new Wheeler({source:gg.canvas});
     if(dragger) dragger.detach(); dragger = new Dragger({source:gg.canvas});
     if(blurer)  blurer.detach();  blurer  = new Blurer({source:gg.canvas});
   }
@@ -181,6 +182,7 @@ var system_indexs = [
   var keyer;
   var hoverer;
   var clicker;
+  var wheeler;
   var dragger;
   var blurer;
 
@@ -955,6 +957,7 @@ var system_indexs = [
           gg.line.tick();
           if(check) check = !gg.timeline.filter(dragger,clicker);
           if(check) { check = !dragger.filter(gg.message_box); if(check && gg.autoclick) gg.message_box.click({}); }
+          if(check) wheeler.filter(gg.message_box);
         }
 
         switch(gg.cur_level.progress)
@@ -1691,7 +1694,7 @@ var system_indexs = [
     gg.timeline = new timeline();
     gg.table = new table();
     gg.line = new editable_line();
-    gg.outro_vid = new Vid(document.getElementById(gg.stage.container), "assets/outro.mp4", function(){ gg.outro_vid.done = 1; })
+    gg.outro_vid = new Vid(document.getElementById(gg.stage.container), "assets/outro.mp4", function(){ gg.outro_vid.done = 1; },noop)
     gg.outro_vid.load();
 
     gg.levels = [];
@@ -2104,6 +2107,7 @@ var system_indexs = [
     keyer.flush();
     hoverer.flush();
     clicker.flush();
+    wheeler.flush();
     dragger.flush();
     blurer.flush();
 
@@ -2130,6 +2134,7 @@ var system_indexs = [
     if(keyer)   keyer.detach();   keyer   = 0;
     if(hoverer) hoverer.detach(); hoverer = 0;
     if(clicker) clicker.detach(); clicker = 0;
+    if(wheeler) wheeler.detach(); wheeler = 0;
     if(dragger) dragger.detach(); dragger = 0;
     if(blurer)  blurer.detach();  blurer  = 0;
   };
