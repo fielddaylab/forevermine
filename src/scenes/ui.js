@@ -71,7 +71,7 @@ var monitor = function()
   self.mouth_hy.push(0.64); //"home" y
   self.mouth_vy.push(0.25); //"variance" y
 
-  self.bg_color.push("#F1F9EB");
+  self.bg_color.push("#FF7A7A");
   self.eye_img.push(GenImg("assets/eye_1.png"));
   self.mouth_img.push(GenImg("assets/mouth_1.png"));
 
@@ -1014,7 +1014,7 @@ var timeline = function()
   {
     if(gg.cur_level.progress < 8) { self.t = 0; return; }
     var t = clampMapVal(self.sx,self.ex,0,self.t_max,evt.doX);
-    self.t_target = ceil(t);
+    self.t_target = self.t_max;
     self.t = t;
   }
   self.dragFinish = function(evt)
@@ -2256,18 +2256,19 @@ var message_box = function()
       }
       else if(self.types[i] == CONTENT_DATA)
       {
-        gg.ctx.drawImage(gg.data_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
+        gg.ctx.drawImage(gg.data_img,self.x+self.pad*2+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
         if(!gg.content_dragger.dragging_data && !gg.table.data_visible)
         {
           var s = 30;
-          gg.ctx.drawImage(gg.notice_img,self.x+self.pad+self.bubble_w-s,y,s,s);
+          gg.ctx.drawImage(gg.notice_img,self.x+self.pad*2+self.bubble_w-s,y,s,s);
         }
         self.data_y = y;
 
         y += self.pad;
         gg.ctx.textAlign = "left";
         gg.ctx.fillStyle = self.data_text_color;
-        gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+        //gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
+        gg.ctx.fillText("DATA:",self.x+self.pad*2,y+self.font_h);
         y += self.font_h+self.pad;
       }
       else if(self.types[i] == CONTENT_LABEL)
@@ -2318,14 +2319,14 @@ var message_box = function()
       }
       else if(self.types[i] == CONTENT_SIM)
       {
-        gg.ctx.drawImage(gg.submit_img,self.x+self.pad+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
+        gg.ctx.drawImage(gg.submit_img,self.x+self.pad*2+self.bubble_w/2-30, y+(self.pad+self.font_h+self.pad)/2-30, 60, 60);
 
         y += self.pad;
         gg.ctx.textAlign = "left";
         gg.ctx.fillStyle = self.data_text_color;
         //gg.ctx.fillText(self.bubbles[i][0],self.x+self.pad*2,y+self.font_h);
-        gg.ctx.fillText("Modeled",self.x+self.pad*2,y+self.font_h*0.5);
-        gg.ctx.fillText("Data:",  self.x+self.pad*2,y+self.font_h*1.5);
+        gg.ctx.fillText("MODELED",self.x+self.pad*2,y+self.font_h*0.3);
+        gg.ctx.fillText("DATA:",  self.x+self.pad*2,y+self.font_h*1.3);
         y += self.font_h+self.pad;
       }
 

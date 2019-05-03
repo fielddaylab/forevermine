@@ -218,7 +218,7 @@ var system_indexs = [
     gg.timeline.t = 0;
     gg.timeline.t_target = 0;
     gg.line.consume_cur_level();
-    setCookie("level", ""+gg.cur_level.i, 999)
+    setCookie("level", gg.input_codes[gg.cur_level.i], 999)
   }
 
   self.draw_home = function()
@@ -666,6 +666,7 @@ var system_indexs = [
         if(skipping)
         {
           gg.next_level = gg.levels[0];
+          gg.exposition_box.clear();
           //gg.exposition_box.nq_group(gg.next_level.text.pre_context);
           gg.next_level.progress++;
           gg.stage_t = 0;
@@ -816,14 +817,13 @@ var system_indexs = [
   {
     var nmode;
     gg.skipping = 1;
-    while(gg.mode != mode)
+    do
     {
       nmode = gg.mode+1;
       if(gg.mode == MODE_LAB_IN) nmode = MODE_PRE0;
+      self.set_mode(nmode,(mode != nmode))
 
-      if(mode == nmode) self.set_mode(nmode,0)
-      else { gg.skipping = 0; self.set_mode(nmode,1) }
-    }
+    } while(gg.mode != mode)
     gg.skipping = 0;
   }
 
@@ -1631,7 +1631,10 @@ var system_indexs = [
       return "NOT A NUMBER";
     }
     gg.continuable = 0;
-    gg.continue_button = new ButtonBox( 0,0,0,0, function(evt){ if(!gg.continue_code) gg.new_button.click({}); else { gg.input_code = gg.continue_code; gg.code_button.click({}); } });
+    gg.continue_button = new ButtonBox( 0,0,0,0,
+      function(evt){
+        if(!gg.continue_code) gg.new_button.click({}); else { gg.input_code = gg.input_output(gg.continue_code); gg.input_code_valid = 1; gg.code_button.click({}); }
+      });
     gg.new_button      = new ButtonBox( 0,0,0,0, function(evt){ self.set_mode(MODE_CINEMATIC,0); });
     gg.code_txt        = new DomTextBox(0,0,0,0, gg.canv,"",function(txt){
            if(txt == "")                                                 { gg.code_txt.bg_color = "rgba(255,255,255,0.1)"; gg.input_code_valid = 0; }
@@ -1644,19 +1647,32 @@ var system_indexs = [
         gg.code_txt.set(gg.code_txt.box.value);
         gg.code_txt.blur();
       }
-      if(!gg.input_code_valid) gg.new_button.click({});
+      if(!gg.input_code_valid || !gg.input_code) gg.new_button.click({});
       else
       {
         gtag('event', 'modeller_level', {'event_category':'jump', 'event_label':''+gg.input_code});
         self.set_mode(MODE_CINEMATIC,1);
         self.set_mode(MODE_BOOT,1);
         self.set_mode(MODE_PRE0,1);
-        while(gg.cur_level.i < gg.input_code-1)
+        if(gg.input_code == 1)
         {
           self.skip_to_mode(MODE_NIGHT);
           self.skip_to_mode(MODE_LAB_IN);
+          gg.exposition_box.clear();
+          gg.exposition_box.nq_group(gg.next_level.text.pre_context);
+          self.set_mode(MODE_PRE0,0);
         }
-        self.skip_to_mode(MODE_PRE0);
+        else
+        {
+          while(gg.cur_level.i < gg.input_code-1)
+          {
+            self.skip_to_mode(MODE_NIGHT);
+            self.skip_to_mode(MODE_LAB_IN);
+          }
+          gg.exposition_box.clear();
+          gg.exposition_box.nq_group(gg.next_level.text.pre_context);
+          self.skip_to_mode(MODE_PRE0);
+        }
       }
     });
     gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){
@@ -1952,8 +1968,8 @@ var system_indexs = [
     l.m_correct = [2.5,];
     l.m_label = ["Charge Rate",];
     l.m_icon = [GenImg("assets/sdrrate.png"),];
-    l.b_starting = [0,];
-    l.b_correct = [0,];
+    l.b_starting = [0.2,];
+    l.b_correct = [0.2,];
     l.b_label = ["Starting Charge",];
     l.b_icon = [GenImg("assets/chrinitial.png"),];
     l.commit();
