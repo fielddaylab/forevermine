@@ -35,7 +35,7 @@ var english_text =
       "Aren't you here to get the mine running again?", CONTENT_AI, EMOTE_NULL,
       "Oh.", CONTENT_PLAYER, EMOTE_NULL,
       "MAL, I'm so sorry. The fuel on this planet is sort of... outdated.", CONTENT_PLAYER, EMOTE_NULL,
-      "I'm just here to salvage for parts.", CONTENT_PLAYER, EMOTE_NULL,
+      "I'm a material scientist. I'm just here to salvage for parts.", CONTENT_PLAYER, EMOTE_NULL,
       "What?!", CONTENT_AI, EMOTE_NULL,
       "But now I'm in trouble. A pulse messed up my equipment on the way down.", CONTENT_PLAYER, EMOTE_NULL,
       "My ship is dead and I'm running out of oxygen.", CONTENT_PLAYER, EMOTE_NULL,
@@ -91,8 +91,8 @@ var english_text =
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
       get_timer(80), "Now match the equation to the known data.", CONTENT_AI, EMOTE_NULL,
-      get_timer(100), "I already had some fuel before you got here. Drag the number into the equation.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4, 
+      get_timer(120), "I already had some fuel before you got here. Drag the number into the equation.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Existing Fuel", CONTENT_CONSTANT, 4, 
       get_timer(100), "Then adjust the mining rate so the model fits the known data.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
@@ -187,12 +187,12 @@ var english_text =
       trigger_click, "How?", CONTENT_PLAYER, EMOTE_NULL,
       get_timer(100), "We know all the numbers except the mining rate, so it should be easy!", CONTENT_AI, EMOTE_NULL,
       get_timer(120), "First update the existing fuel using this morning's count.", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Existing Fuel", CONTENT_CONSTANT, 4,
+      get_timer(100), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(100), "Then adjust the mining rate in the equation until the data matches.", CONTENT_AI, EMOTE_NULL,
     ],
     submit: //WORKSPACE: values matched; lead to submit
     [
-      get_timer(120), "Ready? Drag your modeled data over to the chat box!", CONTENT_AI, EMOTE_NULL,
+      get_timer(120), "Ready? Drag your Modeled Data file over to the chat box!", CONTENT_AI, EMOTE_NULL,
     ],
     submitted_incorrect: //WORKSPACE: submitted before values correct; reset
     [
@@ -309,7 +309,7 @@ var english_text =
     improve: //LAB: [skip_system] show system
     [
       "This is the robots' control center.", CONTENT_AI, EMOTE_NULL,
-      "It's another form of a model. Like the equations, it describes how things are connected.", CONTENT_AI, EMOTE_NULL,
+      "It's another type of model. It describes how things are connected, just like the equations!", CONTENT_AI, EMOTE_NULL,
       "If you want to speed up the bots, you can work on the battery charger, the solar panels, or the drills.", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
@@ -456,8 +456,8 @@ var english_text =
     ],
     review: //WORKSPACE: submitted correct equation; lead to review survival chances
     [
-      get_timer(20), "Great job!", CONTENT_AI, EMOTE_NULL,
-      get_timer(20), "You're getting super good at this. And the rate increased!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Great job!", CONTENT_AI, EMOTE_NULL,
+      get_timer(100), "You're getting super good at this. And the mining rate increased by 0.2!", CONTENT_AI, EMOTE_NULL,
     ],
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
@@ -470,7 +470,7 @@ var english_text =
     ],
     improve: //LAB: [skip_system] show system
     [
-      "Look! At least we improved the charge rate by 0.2!", CONTENT_AI, EMOTE_NULL,
+      "At least you improved the battery charger!", CONTENT_AI, EMOTE_NULL,
     ],
     post: //LAB: [skip_system] send to bed
     [
@@ -493,7 +493,7 @@ var english_text =
       "Good morning, human! Sleep well?", CONTENT_AI, EMOTE_NULL,
       "Not exactly.", CONTENT_PLAYER, EMOTE_NULL,
       "I'm counting on you, MAL. You can't just kick me out when you feel like it.", CONTENT_PLAYER, EMOTE_NULL,
-      "Well, actually, I can!", CONTENT_AI, EMOTE_NULL,
+      "Actually, I can!", CONTENT_AI, EMOTE_NULL,
       "But enough about that. I've got good news!", CONTENT_AI, EMOTE_NULL,
     ],
     context: //LAB: [skip_context] context animation on-screen
@@ -586,11 +586,11 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
+      get_timer(60), "The robots are charging faster than we thought!", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Let's see how that affects the overall mining rate.", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
-      get_timer(60), "The robots are charging faster than we thought!", CONTENT_AI, EMOTE_NULL,
-      get_timer(60), "Let's see how that affects the overall mining rate.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "Drag today's data onto the table.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
@@ -608,7 +608,7 @@ var english_text =
     ],
     constants: //WORKSPACE: labels chosen. show known constants, lead into "define unknowns"
     [
-      get_timer(60), "Update the existing fuel value to match our count from this morning.", CONTENT_AI, EMOTE_NULL,
+      get_timer(60), "Update the existing fuel to match our count from this morning.", CONTENT_AI, EMOTE_NULL,
       get_timer(80), "Existing Fuel", CONTENT_CONSTANT, 4,
       get_timer(80), "Then find the updated mining rate!", CONTENT_AI, EMOTE_NULL,
     ],
@@ -755,11 +755,11 @@ var english_text =
     ],
     status: //WORKSPACE: [skip_zoom] full "7 days" graph shown, w/ "survive/die" zones (unknown where you will land).
     [
-      get_timer(80), "Figure out the new mining rate to predict if you will have enough fuel by Day 7.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Figure out the new mining rate to predict if you'll have enough fuel by Day 7.", CONTENT_AI, EMOTE_NULL,
     ],
     data: //WORKSPACE: graph zoomed into 10-hour scope. give data
     [
-      get_timer(80), "Here is today's mining data.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Drag today's mining data over to the table.", CONTENT_AI, EMOTE_NULL,
       get_timer(60), "DATA:", CONTENT_DATA, EMOTE_NULL,
     ],
     axis: //WORKSPACE: [skip_axis] data imported, empty model framework shown. lead into "drag axis"
@@ -794,7 +794,7 @@ var english_text =
     debrief: //WORKSPACE: draw conclusion based on review; lead back to lab
     [
       trigger_click, "MAL, we did it! I'm gonna survive!", CONTENT_PLAYER, EMOTE_NULL,
-      get_timer(20), "Good for you.", CONTENT_AI, EMOTE_NULL,
+      get_timer(80), "Good for you.", CONTENT_AI, EMOTE_NULL,
     ],
     pre_improve: //LAB: about to show system
     [
