@@ -610,7 +610,7 @@ var system_indexs = [
       "",
       "Testing and Design Feedback",
       "",
-      "Joe Rieder and the students of Wisconsin Rapids Public School",
+      "Joe Riederer and the students of Wisconsin Rapids Public School",
       "",
       "Olivia Dachel and the students of Merril High School",
       "",
