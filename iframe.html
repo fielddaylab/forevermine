@@ -58,6 +58,9 @@ body,div,canvas
 <script type="text/javascript" src="src/scenes/gameplayScene.js"></script>
 <script type="text/javascript" src="src/scenes/text.js"></script>
 
+<script src="https://cdn.brainpop.com/games/assets/js/html2canvas.js"></script>
+<script src="https://cdn.brainpop.com/games/assets/js/cameraProxyDOMCrossDomain.js"></script>
+
 <script type="text/javascript">
 var game_width  = 1024;
 var game_height = 660;
@@ -65,7 +68,7 @@ var game_stretch = 1;
 
 function size_containers(w,h)
 {
-  var stage_container_container = document.getElementById("stage_container_container");
+  var stage_container_container = document.getElementById("BrainPOPsnapArea");
   stage_container_container.style.width = w; stage_container_container.style.height = h;
   var stage_container = document.getElementById("stage_container");
   stage_container.style.width = w; stage_container.style.height = h;
@@ -136,7 +139,7 @@ window.addEventListener("click",window.focus,false);
 </head>
 <body id="body" style="width:100%; background-color:#000000;">
 
-<div id="stage_container_container" style="position:relative; margin:0px auto; padding:0px; user-select:none; background-color:#000000;">
+<div id="BrainPOPsnapArea" style="position:relative; margin:0px auto; padding:0px; user-select:none; background-color:#000000;">
 <div id="stage_container" style="position:absolute; top:0px; left:0px; margin:0px; padding:0px; user-select:none; background-color:#000000;"> </div>
 </div>
 
