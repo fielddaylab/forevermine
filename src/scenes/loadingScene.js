@@ -82,6 +82,8 @@ var LoadingScene = function(game, stage)
   var keylistener;
   self.ready = function()
   {
+    gameStart(); //send gameIsReady to LoL API
+
     pad = 20;
     barw = (canv.width/4);
 

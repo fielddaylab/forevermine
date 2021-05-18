@@ -22,6 +22,39 @@ var GamePlayScene = function(game, stage)
   }
 */
 
+function loadLevel(prog)
+{
+    if ((prog < 0) || (prog>9))
+      console.log("Invalid prog of "+prog);
+    console.log("prog is "+prog);
+    gg.input_code = prog;
+        gtag('event', 'modeller_level', {'event_category':'jump', 'event_label':''+gg.input_code});
+        self.set_mode(MODE_CINEMATIC,1);
+        self.set_mode(MODE_BOOT,1);
+        self.set_mode(MODE_PRE0,1);
+        if (gg.input_code == 0)
+          return;
+        if(gg.input_code == 1)
+        {
+          self.skip_to_mode(MODE_NIGHT);
+          self.skip_to_mode(MODE_LAB_IN);
+          gg.exposition_box.clear();
+          gg.exposition_box.nq_group(gg.next_level.text.pre_context);
+          self.set_mode(MODE_PRE0,0);
+        }
+        else
+        {
+          while(gg.cur_level.i < gg.input_code-1)
+          {
+            self.skip_to_mode(MODE_NIGHT);
+            self.skip_to_mode(MODE_LAB_IN);
+          }
+          gg.exposition_box.clear();
+          gg.exposition_box.nq_group(gg.next_level.text.pre_context);
+          self.skip_to_mode(MODE_PRE0);
+        }
+}
+
 var context_indexs = [
 [0, 1, 2, 3, 4, 5, 4, 6, 4, 6, 4, 6, 4, 6, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 10, 14, 15, 16, 17, 14, 15, 16, 18, 14, 15, 19, 20, 21, 22, 23, 22, 23, 22, 23, 22, 23, 24, 23, 25, 26, 27, 28, 29, 30, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48, 49, 48],
 [0, 1, 2, 3, 4, 5, 4, 6, 4, 6, 4, 6, 4, 6, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 10, 14, 15, 16, 17, 14, 15, 16, 18, 14, 15, 19, 20, 21, 22, 23, 22, 23, 22, 23, 22, 23, 24, 23, 25, 26, 27, 28, 29, 30, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 48, 49, 48, 49, 50, 49, 50, 49, 50, 49, 50, 49, 50, 49, 50],
@@ -55,8 +88,8 @@ var system_indexs = [
     gg.canv = gg.stage.canv;
     gg.canvas = gg.canv.canvas;
     gg.ctx = gg.canv.context;
-    if(gg.code_txt && gg.code_txt.box_on) gg.code_txt.blur();
-    if(gg.code_txt) gg.code_txt.canv = gg.canv;
+    //if(gg.code_txt && gg.code_txt.box_on) gg.code_txt.blur();
+    //if(gg.code_txt) gg.code_txt.canv = gg.canv;
 
     if(self.was_ready)
     {
@@ -140,23 +173,23 @@ var system_indexs = [
       var btn_h = 30;
 
       gg.new_button.x = btn_x;
-      gg.new_button.y = gg.canv.height/2+btn_h/2;
+      gg.new_button.y = gg.canv.height/2+btn_h/2 + 15;
       gg.new_button.w = btn_w*4;
       gg.new_button.h = btn_h;
 
       gg.continue_button.x = btn_x;
-      gg.continue_button.y = gg.new_button.y+gg.new_button.h*2;
+      gg.continue_button.y = gg.new_button.y+gg.new_button.h*2 + 15;
       gg.continue_button.w = gg.new_button.w;
       gg.continue_button.h = btn_h;
 
-      gg.code_txt.x = btn_x;
-      gg.code_txt.y = gg.continue_button.y+gg.continue_button.h*3.5;
-      gg.code_txt.w = gg.continue_button.w*3/4;
-      gg.code_txt.h = btn_h;
-      gg.code_txt.size();
+      //gg.code_txt.x = btn_x;
+      //gg.code_txt.y = gg.continue_button.y+gg.continue_button.h*3.5;
+      //gg.code_txt.w = gg.continue_button.w*3/4;
+      //gg.code_txt.h = btn_h;
+      //gg.code_txt.size();
 
-      gg.code_button.x = gg.code_txt.x+gg.code_txt.w+20;
-      gg.code_button.y = gg.code_txt.y-btn_h/10;
+      //gg.code_button.x = gg.code_txt.x+gg.code_txt.w+20;
+      //gg.code_button.y = gg.code_txt.y-btn_h/10;
       gg.code_button.w = btn_w*2/3;
       gg.code_button.h = btn_h+btn_h/5;
 
@@ -187,28 +220,28 @@ var system_indexs = [
   var blurer;
 
   var ENUM = 0;
-  var MODE_NULL        = ENUM; ENUM++;
-  var MODE_MENU        = ENUM; ENUM++;
-  var MODE_CINEMATIC   = ENUM; ENUM++;
-  var MODE_BOOT        = ENUM; ENUM++;
-  var MODE_PRE0        = ENUM; ENUM++;
-  var MODE_CTX_IN      = ENUM; ENUM++;
-  var MODE_CTX         = ENUM; ENUM++;
-  var MODE_CTX_OUT     = ENUM; ENUM++;
-  var MODE_PRE1        = ENUM; ENUM++;
-  var MODE_WORK_IN     = ENUM; ENUM++;
-  var MODE_WORK        = ENUM; ENUM++;
-  var MODE_WORK_OUT    = ENUM; ENUM++;
-  var MODE_POST0       = ENUM; ENUM++;
-  var MODE_IMPROVE_IN  = ENUM; ENUM++;
-  var MODE_IMPROVE     = ENUM; ENUM++;
-  var MODE_IMPROVE_OUT = ENUM; ENUM++;
-  var MODE_POST1       = ENUM; ENUM++;
-  var MODE_LAB_OUT     = ENUM; ENUM++;
-  var MODE_NIGHT       = ENUM; ENUM++;
-  var MODE_LAB_IN      = ENUM; ENUM++;
-  var MODE_CREDITS     = ENUM; ENUM++;
-  var MODE_COUNT       = ENUM; ENUM++;
+  var MODE_NULL        = ENUM; ENUM++; //0
+  var MODE_MENU        = ENUM; ENUM++; //1
+  var MODE_CINEMATIC   = ENUM; ENUM++; //2
+  var MODE_BOOT        = ENUM; ENUM++; //3
+  var MODE_PRE0        = ENUM; ENUM++; //4
+  var MODE_CTX_IN      = ENUM; ENUM++; //5
+  var MODE_CTX         = ENUM; ENUM++; //6
+  var MODE_CTX_OUT     = ENUM; ENUM++; //7
+  var MODE_PRE1        = ENUM; ENUM++; //8
+  var MODE_WORK_IN     = ENUM; ENUM++; //9
+  var MODE_WORK        = ENUM; ENUM++; //10
+  var MODE_WORK_OUT    = ENUM; ENUM++; //11
+  var MODE_POST0       = ENUM; ENUM++; //12
+  var MODE_IMPROVE_IN  = ENUM; ENUM++; //13
+  var MODE_IMPROVE     = ENUM; ENUM++; //14
+  var MODE_IMPROVE_OUT = ENUM; ENUM++; //15
+  var MODE_POST1       = ENUM; ENUM++; //16
+  var MODE_LAB_OUT     = ENUM; ENUM++; //17
+  var MODE_NIGHT       = ENUM; ENUM++; //18
+  var MODE_LAB_IN      = ENUM; ENUM++; //19
+  var MODE_CREDITS     = ENUM; ENUM++; //20
+  var MODE_COUNT       = ENUM; ENUM++; //21
 
   self.reset_level = function()
   {
@@ -306,7 +339,11 @@ var system_indexs = [
       drawImageBox(gg.dark_console_img,gg.lab,gg.ctx);
     gg.ctx.fillStyle = red;
     gg.ctx.font = "30px DisposableDroidBB";
-    if(gg.cur_level) gg.ctx.fillText(gg.input_codes[gg.cur_level.i],gg.lab.x+gg.lab.w*0.14,gg.lab.y+gg.lab.h*0.74);
+    if(gg.cur_level) 
+    {
+        gg.ctx.fillText(gg.input_codes[gg.cur_level.i],gg.lab.x+gg.lab.w*0.14,gg.lab.y+gg.lab.h*0.74);
+        reachedSaveSpot(gg.cur_level.i);
+    }
     if(!gg.monitor.boot_t || gg.monitor.boot_t > 250) gg.exposition_box.draw();
     if(gg.exposition_box.blackout_t)
     {
@@ -831,14 +868,16 @@ var system_indexs = [
 
   self.tick_mode = function()
   {
+    if (gameIsPaused) return;
+
     switch(gg.mode)
     {
       case MODE_MENU:
-        blurer.filter(gg.code_txt);
+        //blurer.filter(gg.code_txt);
         if(
           !clicker.filter(gg.continue_button) &&
           !clicker.filter(gg.new_button) &&
-          !clicker.filter(gg.code_txt) &&
+          //!clicker.filter(gg.code_txt) &&
           !clicker.filter(gg.code_button) &&
           !clicker.filter(gg.sound_button) &&
           !clicker.filter(gg.fullscreen_button) &&
@@ -1136,6 +1175,7 @@ var system_indexs = [
             gg.audwrangler.stop_music();
             gg.outro_vid.play();
             self.set_mode(MODE_CREDITS,0);
+            reachedSaveSpot(10);
           }
           else
           {
@@ -1202,7 +1242,10 @@ var system_indexs = [
           var fade_p = 1-(gg.mode_t/gg.fade_t);
         }
         else if(gg.mode_t >= gg.credits_t+(gg.fade_t*2))
+        {
           self.set_mode(MODE_MENU,0);
+          endGame(); //Tell LoL API Game is over
+        }
       }
         break;
     }
@@ -1210,6 +1253,7 @@ var system_indexs = [
 
   self.draw_mode = function()
   {
+    console.log(gg.mode);
     switch(gg.mode)
     {
       case MODE_MENU:
@@ -1231,11 +1275,14 @@ var system_indexs = [
         gg.ctx.font = (gg.continue_button.h*2/3)+"px Lato";
         var txtbump = gg.continue_button.h/5;
         gg.ctx.fillText("NEW GAME",gg.new_button.x,gg.new_button.y+gg.new_button.h-txtbump);
+        if (currProgress == 0)
+          gg.ctx.fillStyle = 'grey';
         gg.ctx.fillText("CONTINUE",gg.continue_button.x,gg.continue_button.y+gg.continue_button.h-txtbump);
-        gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y-txtbump*1.5-gg.code_txt.h/2);
-        if(gg.input_code_valid) gg.ctx.fillText(gg.code_txt.box.value,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
-        gg.ctx.drawImage(gg.menu_text_img,gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
-        gg.ctx.drawImage(gg.menu_go_img,gg.code_button.x,gg.code_button.y,gg.code_button.w,gg.code_button.h);
+        gg.ctx.fillStyle = white;
+        //gg.ctx.fillText("ENTER SAVE CODE:",gg.new_button.x,gg.code_txt.y-txtbump*1.5-gg.code_txt.h/2);
+        //if(gg.input_code_valid) gg.ctx.fillText(gg.code_txt.box.value,gg.code_txt.x,gg.code_txt.y+gg.code_txt.h-txtbump);
+        //gg.ctx.drawImage(gg.menu_text_img,gg.code_txt.x-5,gg.code_txt.y-5,gg.code_txt.w+10,gg.code_txt.h+10);
+        //gg.ctx.drawImage(gg.menu_go_img,gg.code_button.x,gg.code_button.y,gg.code_button.w,gg.code_button.h);
         drawLine(gg.sound_button.x,gg.sound_button.y-10,gg.canv.width/2,gg.sound_button.y-10,gg.ctx);
         gg.ctx.fillText("MUSIC FX",gg.sound_button.x,gg.sound_button.y+gg.sound_button.h-txtbump);
         if(gg.sound) gg.ctx.drawImage(gg.menu_check_img,gg.sound_button.x+gg.sound_button.w-gg.sound_button.h+2,gg.sound_button.y+2,gg.sound_button.h-4,gg.sound_button.h-4);
@@ -1633,17 +1680,36 @@ var system_indexs = [
       return "NOT A NUMBER";
     }
     gg.continuable = 0;
-    gg.continue_button = new ButtonBox( 0,0,0,0,
-      function(evt){
-        if(!gg.continue_code) gg.new_button.click({}); else { gg.input_code = gg.input_output(gg.continue_code); gg.input_code_valid = 1; gg.code_button.click({}); }
-      });
+    gg.continue_button = new ButtonBox( 0,0,0,0, function(evt)
+    {
+      if ((currProgress > 0) && (currProgress < 11))
+      {
+        loadLevel(currProgress-1);
+      }
+      else
+      {
+       // gg.new_button.click({});
+      }
+      
+      /*if(!gg.continue_code) 
+        gg.new_button.click({}); 
+      else 
+      { 
+        gg.input_code = gg.input_output(gg.continue_code); 
+        gg.input_code_valid = 1; 
+        gg.code_button.click({}); 
+      }*/
+    });
     gg.new_button      = new ButtonBox( 0,0,0,0, function(evt){ self.set_mode(MODE_CINEMATIC,0); });
-    gg.code_txt        = new DomTextBox(0,0,0,0, gg.canv,"",function(txt){
+    /*gg.code_txt        = new DomTextBox(0,0,0,0, gg.canv,"",function(txt)
+    {
            if(txt == "")                                                 { gg.code_txt.bg_color = "rgba(255,255,255,0.1)"; gg.input_code_valid = 0; }
       else if(!isNaN(gg.input_output(txt)) && gg.input_output(txt) < 10) { gg.code_txt.bg_color = "rgba(0,255,0,0.1)";     gg.input_code_valid = 1; gg.input_code = gg.input_output(txt); }
       else                                                               { gg.code_txt.bg_color = "rgba(255,0,0,0.1)";     gg.input_code_valid = 0; gg.code_txt.box.value = ""; }
-    });
-    gg.code_button     = new ButtonBox( 0,0,0,0, function(evt){
+    });*/
+    gg.code_button     = new ButtonBox( 0,0,0,0, function(evt)
+    {
+      /*
       if(gg.code_txt.box_on)
       {
         gg.code_txt.set(gg.code_txt.box.value);
@@ -1675,7 +1741,7 @@ var system_indexs = [
           gg.exposition_box.nq_group(gg.next_level.text.pre_context);
           self.skip_to_mode(MODE_PRE0);
         }
-      }
+      }*/
     });
     gg.sound_button = new ToggleBox(0,0,0,0, 1, function(v){
       gg.sound = v;
@@ -2075,8 +2141,8 @@ var system_indexs = [
 
     self.was_ready = 1;
     self.resize(stage);
-    gg.code_txt.focus();
-    gg.code_txt.blur();
+    //gg.code_txt.focus();
+    //gg.code_txt.blur();
     self.set_mode(MODE_MENU,0);
     gg.urlp = jsonFromURL();
     gg.autoclick = gg.urlp.autoclick;

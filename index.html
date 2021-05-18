@@ -2,43 +2,147 @@
 <head>
 <meta charset="utf-8"></meta>
 <style>
-body,div
+@font-face {
+    font-family:"DisposableDroidBB";
+    src:url("assets/DisposableDroidBB.otf");
+}
+@font-face {
+    font-family:"Lato";
+    src:url("assets/Lato.ttf");
+}
+body,div,canvas
 {
   margin:0px;
   padding:0px;
-  font:12px Helvetica;
+  font:"30px DisposableDroidBB";
+  font-kerning:normal;
+  text-rendering:optimizeLegibility;
+  letter-spacing:0px;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  font-variant-ligatures: none;
 }
 </style>
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-72694027-10"></script>
 <script>
-window.onload = function()
-{
-  var clickload = document.getElementById("clickload");
-  var iframe = document.getElementById("content");
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-72694027-10');
+</script>
 
-  function loadiframe()
+<script type="text/javascript" src="src/LoLAPIHandler.js"></script>
+<script type="text/javascript" src="src/config.js"></script>
+<script type="text/javascript" src="src/utils/doutils.js"></script>
+<script type="text/javascript" src="src/utils/utils.js"></script>
+<script type="text/javascript" src="src/utils/webgl-utils.js"></script>
+<script type="text/javascript" src="src/canv.js"></script>
+<script type="text/javascript" src="src/stage.js"></script>
+<script type="text/javascript" src="src/game.js"></script>
+<script type="text/javascript" src="src/input.js"></script>
+
+<script type="text/javascript" src="src/dofilters/clicker.js"></script>
+<script type="text/javascript" src="src/dofilters/wheeler.js"></script>
+<script type="text/javascript" src="src/dofilters/blurer.js"></script>
+<script type="text/javascript" src="src/dofilters/keyer.js"></script>
+<script type="text/javascript" src="src/dofilters/dragger.js"></script>
+<script type="text/javascript" src="src/dofilters/hoverer.js"></script>
+<script type="text/javascript" src="src/dofilters/persistent_hoverer.js"></script>
+
+<script type="text/javascript" src="src/scenes/ui.js"></script>
+<script type="text/javascript" src="src/scenes/content.js"></script>
+
+<script type="text/javascript" src="src/scenes/nullScene.js"></script>
+<script type="text/javascript" src="src/scenes/loadingScene.js"></script>
+<script type="text/javascript" src="src/scenes/gameplayScene.js"></script>
+<script type="text/javascript" src="src/scenes/text.js"></script>
+
+<script src="https://cdn.brainpop.com/games/assets/js/html2canvas.js"></script>
+<script src="https://cdn.brainpop.com/games/assets/js/cameraProxyDOMCrossDomain.js"></script>
+
+<script type="text/javascript">
+var game_width  = 1024;
+var game_height = 660;
+var game_stretch = 1;
+
+function size_containers(w,h)
+{
+  var stage_container_container = document.getElementById("BrainPOPsnapArea");
+  stage_container_container.style.width = w; stage_container_container.style.height = h;
+  var stage_container = document.getElementById("stage_container");
+  stage_container.style.width = w; stage_container.style.height = h;
+}
+function fullscreen()
+{
+  var el = document.body;
+  var requestMethod = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  if(requestMethod) requestMethod.call(el);
+
+}
+function unfullscreen()
+{
+  var el = document;
+  var exitMethod = el.exitFullscreen || el.webkitExitFullscreen || el.mozCancelFullScreen || el.msExitFullscreen;
+  if(exitMethod) exitMethod.call(el);
+}
+
+function resize()
+{
+
+  var w = window.innerWidth;
+  var h = window.innerHeight;
+  if(w/h > game_width/game_height)
+    w = h*game_width/game_height;
+  else if(w/h < game_width/game_height)
+    h = game_height/w*game_width;
+
+  game_stretch = w/game_width;
+  if(gg.g) gg.g.resize({width:game_width,height:game_height});
+  size_containers(w,h);
+
+  if(gg.g)
   {
-    iframe.style.display = "block";
-    if(location.href.indexOf("?") > -1)
-      iframe.src = "iframe.html"+location.href.substring(location.href.indexOf("?"))
-    else
-      iframe.src = "iframe.html";
-    clickload.removeEventListener("click",loadiframe);
-    clickload.parentNode.removeChild(clickload);
-    clickload = null;
+    gg.g.stage.canv.canvas.style.width  = floor(gg.g.stage.width *game_stretch)+"px";
+    gg.g.stage.canv.canvas.style.height = floor(gg.g.stage.height*game_stretch)+"px";
+
+    if(gg.intro_vid)
+    {
+      gg.intro_vid.video.style.width  = gg.canv.width*game_stretch;
+      gg.intro_vid.video.style.height = gg.canv.height*game_stretch;
+    }
+    if(gg.outro_vid)
+    {
+      gg.outro_vid.video.style.width  = gg.canv.width*game_stretch;
+      gg.outro_vid.video.style.height = gg.canv.height*game_stretch;
+    }
   }
-  clickload.addEventListener("click",loadiframe);
-};
+}
+function begin()
+{
+  var w = game_width;
+  var h = game_height;
+  size_containers(w,h);
+
+  gg.audwrangler = new AudWrangler("assets/audio/silence.mp3");
+
+  gg.g = new Game({width:w,height:h,container:"stage_container"});
+  resize();
+  gg.g.begin();
+}
+//window.addEventListener("touchstart", function(e){ e.preventDefault() }); //prevent browser from doing anything funny
+window.addEventListener("load",begin,false);
+window.addEventListener("resize",resize,false);
+window.addEventListener("click",window.focus,false);
 </script>
 
 </head>
+<body id="body" style="width:100%; background-color:#000000;">
 
-<body style="width:100%; height:100%; background-color:#000000; position:absolute; top:0px; left:0px;">
-
-  <div id="background" style="width:100%; height:100%; background-color:#000000; position:absolute; top:0px; left:0px;">
-    <div id="clickload" scrolling="no" style="background-size: cover; width:1024px; height:660px; display:block; margin:0px auto; overflow:hidden; border:0px; background-image:url('assets/iframe_img.jpg');"> </div>
-    <iframe id="content" scrolling="no" style="display:none; width:1024px; height:660px; margin:0px auto; overflow:hidden; border:0px;"></iframe>
-  </div>
+<div id="BrainPOPsnapArea" style="position:relative; margin:0px auto; padding:0px; user-select:none; background-color:#000000;">
+<div id="stage_container" style="position:absolute; top:0px; left:0px; margin:0px; padding:0px; user-select:none; background-color:#000000;"> </div>
+</div>
 
 </body>
 </html>
