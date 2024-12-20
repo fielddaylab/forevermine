@@ -48,6 +48,18 @@ var system_indexs = [
 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 10, 9, 11, 12, 13, 14, 15, 16, 17, 14, 15, 16, 17, 14, 18, 19, 20, 21, 18, 19, 20, 22, 18, 19, 23, 24, 25, 26, 27, 26, 27, 26, 27, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 35, 36, 35, 36, 35, 36, 35, 36, 35, 36, 35, 36, 35, 37, 38, 39, 40, 41, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42, 43, 42],
 ];
 
+  self.remove_vault_button = function() {
+    const vaultDropdown =
+      window.parent.document.querySelector("floating-dropdown");
+    if (vaultDropdown) {
+      vaultDropdown.remove();
+    } else {
+      console.warn(
+        "[Vault Plugin] Failed attempt to remove element <floating-dropdown>"
+      );
+    }
+  }
+
   self.resize = function(s)
   {
     stage = s;
@@ -635,6 +647,8 @@ var system_indexs = [
 
   self.set_mode = function(mode,skipping)
   {
+    if (mode != 1) self.remove_vault_button();
+
     gg.mode = mode;
     gg.mode_t = 0;
     gg.mode_p = 0;
